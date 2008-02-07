@@ -1,0 +1,53 @@
+#ifndef H_ARCS_EVENTDATA_MSLICE_FORMATING
+#error mslice_formating.icc not meaningful outside mslice_formating.h
+#else
+
+#include <sstream>
+#include <iomanip>
+
+
+namespace ARCS_EventData {
+
+  template <typename Iterator>
+  const char * SGrid_str
+  ( const Iterator Spe, const Iterator SEpe,
+    size_t ntotpixels, size_t nEbins)
+  {
+    using namespace std;
+
+    ostringstream oss;
+
+    const char * STitle = "### S(Phi,w)";
+    const char * SerrTitle = "### Errors";
+
+    oss.setf(ios::fixed);
+    oss.precision(3);
+    
+    for (size_t i=0; i<ntotpixels; i++) {
+      size_t j;
+
+      oss << STitle << endl;
+      for (j=0; j<nEbins; j++) {
+	oss << setw(10) << *(Spe + i*nEbins + j) ;
+	if (j%8==7) oss << endl;
+      }
+      if (j%8!=0) oss << endl;
+
+      oss << SerrTitle << endl;
+      for (j=0; j<nEbins; j++) {
+	oss << setw(10) << *(SEpe + i*nEbins + j) ;
+	if (j%8==7) oss << endl;
+      }
+      if (j%8!=0) oss << endl;
+    }
+
+    char * s = new char[ oss.str().size() + 1];
+    strcpy( s, oss.str().c_str() );
+
+    return s;
+  }
+  
+}
+
+
+#endif// H_ARCS_EVENTDATA_MSLICE_FORMATING
