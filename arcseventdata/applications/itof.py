@@ -61,24 +61,22 @@ class Engine(AbstractHistogrammer):
         infos = getinstrumentinfo(ARCSxml)
         npacks, ndetsperpack, npixelsperdet = infos[
             'detector-system-dimensions']
+        import arcseventdata
+        ntotpixels = arcseventdata.npixels( npacks, ndetsperpack, npixelsperdet )
+        
         mod2sample = infos['moderator-sample distance']
-        pixelPositionsFilename = infos[
-            'pixelID-position mapping binary file']
 
         self._info.log( "eventdatafilename = %s" % eventdatafilename )
         self._info.log( "nevents = %s" % nevents )
         self._info.log( 'tof_params (unit: us) = %s' % (tof_params, ) )
         
-        import arcseventdata
         events, nevents = arcseventdata.readevents( eventdatafilename, nevents, start )
     
         tof_begin, tof_end, tof_step = tof_params
 
         h = arcseventdata.e2Itof(
-            events, nevents,
-            tof_params = tof_params,
-            npacks = npacks, ndetsperpack = ndetsperpack,
-            npixelsperdet = npixelsperdet)
+            events, nevents, ntotpixels,
+            tof_params = tof_params)
         
         return h
 

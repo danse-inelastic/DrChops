@@ -1,0 +1,240 @@
+= Tutorial for Reduction of ARCS Event Mode Data =
+[[PageOutline]]
+
+== Connect to arcs2.sns.gov ==
+At this time, we need to ssh to arcs2 or arcs1 to do data reduction.
+
+Users in sns should not have any problem.
+
+Users outside must have set up  [http://danse.us/trac/tickets/wiki/ornlvpn ornl vpn]
+
+== Set up environment vars ==
+If you are using bash variants, you can run
+{{{
+ source ~lj7/arcs-event-mode-reduction.sh
+}}}
+to set up the environment variable.
+
+If you are using other shell, please contact [mailto:linjiao@caltech.edu me]
+
+== Get ARCS.xml ==
+ARCS.xml is a file containing details about configuration of ARCS instrument. It can be generated from an excel sheet by [wiki:makeARCSxml this command].
+
+In most cases, you don't need to generate ARCS.xml yourself. You can just reuse existing standard ARCS.xml. The following command is a typical one to make ARCS.xml available: 
+
+{{{
+ $ ln -s ~lj7/reduction/runs/88/ARCS.xml .
+}}}
+
+=== Optional: generate intermediate instrument info data files ===
+This step is useful for instrument scientists and users who are interested in detailed information about ARCS iinstrument configuration, for example, pixel-sample distances, scattering angles of pixels, etc
+
+Please run 
+{{{
+getARCSinstrumentinfo.py ARCS.xml
+}}}
+
+This command generate a bunch of files in a directory named "ARCSinfo-cache" (Note: if the ARCS.xml file is a symbolic link, your must follow the link to find the real directory where the ARCS.xml is located, and the directory "ARCSinfo-cache" will be placed there, instead of current directory) :
+
+ * phi_pdp.pkl: phi(pack, tube, pixel). phi is scattering angle.
+ * psi_pdp.pkl: psi(pack, tube, pixel). psi is azimuthal angle.
+ * dist_pdp.pkl: dist(pack, tube, pixel). dist is distance from sample to pixel
+ * pixelID2position.pkl: an array of pixel positions. Its shape is (npixels, 3). positions[pixelID] gives position of the given pixel. The coordinate system: z: vertical up; x: neutron beam.
+ * ARCS-instrument-info.pkl: a dictionary of misc. info
+   * dimensions of detector system: number of packs, number of tubes per pack, number of pixels per tube
+   * moderator-sample distance
+   * moderator-monitor1 distance
+   * moderator-monitor2 distance
+ 
+==== phi and psi of pixels ====
+The scattering angle and the azimuthal angles are defined in the following figure:
+
+[[Image(source:/trunk/arcseventdata/docs/define-scatteringangles.png, 400)]]
+
+Here, x is the direction of incident neutron beam (downstream). z is vertically upward, and x-y-z form a right-hand coordinate system. 
+The phi angle is called scattering angle (corresponds to 2theta in diffraction terminology), and the psi angle is called azimuthal angle.
+
+Those two angles are stored in phi_pdp.pkl and psi_pdp.pkl, and they can be view in the Histogram GUI:
+ 1. In the GUI, click "File" menu and then "Open histogram", select "phi_pdp.pkl". 
+ 1. Now in the embedded python command line of "HistogramGUI", type
+  {{{
+  >>> pack1phis = phi_pdp[ 1, ( ), ( ) ] # get the slice for detector pack #1
+  }}}
+
+In the plot window of "HistogramGUI", you can see the scattering angles of detector pack 1 
+
+[[Image(source:/trunk/arcseventdata/docs/ARCSpack1-scattering-angles.png, 600)]]
+
+Similarly we can get a plot of azimuthal angles of ARCS detector pack 1:
+
+ 1. In the GUI, click "File" menu and then "Open histogram", select "psi_pdp.pkl". 
+ 1. In the embedded python command line of "HistogramGUI", type
+  {{{
+  >>> pack1psis = psi_pdp[ 1, ( ), ( ) ] # get the slice for detector pack #1
+  }}}
+
+[[Image(source:/trunk/arcseventdata/docs/ARCSpack1-azimuthal-angles.png, 600)]]
+
+
+== Start playing with data ==
+
+Several commands are provided for extracting histograms out of event pre-NeXus data file. Those commands have similar syntax. For example, for any command, you can ask for help by
+
+{{{
+$ <command> -h
+}}}
+
+Here is a [wiki:ARCS-event-reduction-commands list] of all available commands.
+
+
+For now, let us use command "ipdpE.py" as an example to explain some common features of those commands and related tools. 
+
+This command
+{{{
+$ ipdpE.py -o IpdpE.h5 -n 100000 -E-50,50,1. -x ARCS.xml -I60 events.dat
+}}}
+
+reads events from the data file "events.dat" and accumulates them into a histogram I(pack, det, pix, E).  This command has one argument, which is the [wiki:ARCS-pre-NeXus] event-mode data-file. This command has several options  to control the behavior of histogramming:
+
+{{{
+ -h: print out a help texts, including a full list of available options and their functions
+ -o: specify output histogram file
+ -n: specify number of events to reduce
+ -E: specify the parameters of the energy axis (begin, end, step)
+ -x: specify the ARCS instrument xml file
+ -I: specify the incident neutron energy
+}}}
+
+Note: The ARCS.xml file is generated from the excel sheet of the ARCS instrument detector configuration, which is provided by Doug Abernathy. The command to create ARCS.xml is [wiki:makeARCSxml].
+
+
+You can then take a closer look at the histogram you just obtained. First, launch the histogram GUI:
+
+{{{
+$ HistogramGUIApp.py 
+}}}
+
+For more details about Histogram Gui, please read Chapter 11 of the [http://arcscluster.caltech.edu:5001/docs/reduction/Software-UserGuide/latex/main.pdf DrChops User Guide].
+
+In the python shell embedded in the Histogram GUI, you can first load the histogram you just generated
+{{{
+>>> import histogram.hdf as hh
+>>> IpdpE = hh.load( 'IpdpE.h5/I(pdpE)' )
+}}}
+
+and then you could sum the histogram over all pixels and obtain I(E) 
+
+{{{
+>>> IE = IpdpE.sum('detectorpackID').sum('detectorID').sum('pixelID')
+}}}
+
+This new histogram, IE, is a 1D curve, and it will be automatically displayed in the plot window of Histogram GUI.
+
+
+== Monitor data ==
+Beam monitor data provide 
+ 1. one way to determine incident energy
+ 1. one way to determine neutron flux
+
+To understand histogram-mode monitor data files, please read [wiki:ARCS-monitor-data-histogram-mode]
+
+== tof region of interest ==
+It is useful to have a quick look of I(tof) histogram of the event-data of the ARCS detector system  to determine the region of interest. The command to create I(tof) histogram out of events is:
+
+{{{
+$ itof.py -o Itof.h5 -n 1000000 -t 0,10000,100 -x ARCS.xml events.dat > run.log 
+}}}
+
+To plot the histogram directly without invoking HistogramGUIApp, run
+{{{
+$ PlotHist.py Itof.h5 "I(tof)"
+}}}
+
+Note: the second argument 'I(tof)' is the path of the histogram in the hdf5 file "Idspacing.h5". You can find out the path by using standard hdf5 command:
+{{{
+$ h5ls Itof.h5
+}}}
+
+== Diffraction data ==
+Some times we take diffraction data for calibration and testing purposes. 
+You can quickly reduce a diffraction data to get I(d spacing) by
+
+{{{
+$ idspacing.py -o Idspacing.h5 -n90000000 -t0,4.0,0.002 -x ARCS.xml ARCS_5_neutron_event.dat > run.log
+}}}
+
+Read more about this command [wiki:idspacing.py here].
+
+Because the reduced histogram is a 1D curve, we can plot it in command line:
+
+{{{
+PlotHist.py Idspacing.h5 'I(d spacing)'
+}}}
+
+Note: the second argument 'I(d spacing)' is the path of the histogram in the hdf5 file "Idspacing.h5". You can find out the path by using standard hdf5 command
+
+{{{
+$ h5ls <h5filename>
+}}}
+
+You can certainly load the histogram into the Histogram GUI as well: 
+
+{{{
+>>> import histogram.hdf as hh
+>>> Id = hh.load( "Idspacing.h5/I(d spacing)" ) #load histogram
+}}}
+
+and you can make the plot look better by running pylab commands in the embedded python shell; for example:
+{{{
+>>> pylab.title('Silicon diffraction - I(d spacing)')
+}}}
+An example of reduced diffraction data can be found [wiki:ARCS-run5 here]
+
+== Create mslice data files from events ==
+Mslice data files are handy when reducing single crystal data. A command is provided to
+generate mslice data files from events:
+{{{
+$ events2mslicefiles.py -o IpdpE.h5 --mslice-prefix=mslice  -n1000000 -E-50,50,5. -x ARCS.xml -I60 events.dat
+}}}
+
+A side effect of this command is a I(pack, tube, pixel, E) histogram, and it will be stored in the filename
+specified by option "-o".
+
+== Convert event data to histograms I(pack, det, pix, tof) ==
+It is always useful to look at histogrammed raw data. The following command
+integrate events to histogram I(pack, det, pix, tof):
+
+{{{
+$ ipdpt.py -o Ipdpt.h5 -n 1000000 -t 0,1000,1 -x ARCS.xml events.dat
+}}}
+
+This type of histograms are also used by the traditional histogram-to-histogram reduction procedures.
+
+== Parallel reduction: event mode ==
+You need to setup your mpi environment to run reduction commands parallely. In arcs2.sns.gov, you should follow this [wiki:Prepare-for-Parallel-Reduction-on-arcs2 instruction].
+
+Event-mode reduction commands can be run parallely. The trick is to add the option 
+{{{
+  --mpirun.nodes=<number of nodes>
+}}}
+
+For example, you can run command idspacing.py parallely by 
+
+{{{
+$ idspacing.py --mpirun.nodes=10 -o Idspacing.h5 -n90000000 -t0,4.0,0.002 -x ARCS.xml ARCS_5_neutron_event.dat > run.log
+}}}
+
+
+== Histogram-mode reduction: Reduction of ARCS histogram data I(pack, det, pix, tof) ==
+Histogram-mode reduction is the traditional mode of reduction supported by DrChops. 
+
+Continue from last section, we can do traditional reduction by running a command like this:
+{{{
+$ mpirun -n 4 mpipython.exe `which MCSimReductionApp.py` 2>error.log
+}}}
+
+This traditional reduction command works a little differently than  previous commands. It is an application with a lot of options and has a GUI to help you go through configurable items. For the purpose of this tutorial, we will only explain how you should organize your data files. For more details, please read 
+[wiki:MCSimReductionApp.py].
+
+The histogrammed I(pack,det,pix,tof) hdf5 file must be kept inside a directory. This directory will be the "input-data" directory. In that directory, there must be an instrument xml file. For ARCS instrument, you will need "ARCS.xml", which can be found under ~lj7/reduction/runs/.../ARCS.xml
+

@@ -21,7 +21,7 @@ def events2Ipdp(events, n, Ipdp):
     assert axes[1].binCenters()[0] == 0
     assert axes[1].binCenters()[-1] == 7
     assert axes[2].name() == 'pixelID'
-    assert len(axes[2].binCenters()) in [128, 256]
+    assert axes[2].size() in [128, 256]
     import arcseventdata as binding
     return binding.events2Ipix_numpyarray(
         events, n, 0, Ipdp.size(), 1, Ipdp.data().storage().asNumarray() )

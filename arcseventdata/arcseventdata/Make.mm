@@ -48,12 +48,14 @@ EXPORT_PYTHON_MODULES = \
 	getinstrumentinfo.py \
 	getpixelinfo.py \
 	histogramFrom2colascii.py \
+	longpixelID.py \
 	monitorData.py \
 	mslice_spe_writer.py \
 	pixelpositions2angles.py \
 	read2colascii.py \
 	units.py \
 	__init__.py \
+	GetDetectorAxesInfo.py \
 	ParallelComponent.py \
 	ParallelHistogrammer.py \
 

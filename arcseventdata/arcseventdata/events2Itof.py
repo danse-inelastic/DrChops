@@ -13,11 +13,9 @@
 
 
 def events2Itof(
-    events, n, Itof,
-    npacks = 115, ndetsperpack = 8, npixelsperdet = 128,
+    events, n, ntotpixels,
+    Itof,
     tofUnit = 1.e-7):
-
-    ntotpixels = (npacks+1)*ndetsperpack*npixelsperdet
     
     axes = Itof.axes()
     assert len(axes) == 1
@@ -32,8 +30,6 @@ def events2Itof(
     tof_step = (tof_boundaries[1] - tof_boundaries[0]) * unit
     tof_end = tof_boundaries[-1] * unit
 
-    print tof_begin, tof_end, tof_step
-    
     import arcseventdata as binding
     return binding.events2Itof_numpyarray(
         events, n,

@@ -14,17 +14,10 @@
 
 def createmap( arcs, nPixelsPerDetector, nDetectorsPerPack, nPacks ):
 
-    nPixelsPerPack = nDetectorsPerPack * nPixelsPerDetector
-
-    assert nPixelsPerPack%1024==0
-    assert nDetectorsPerPack==8
-
-    # number of bits to shift
-    from math import log
-    nbits_pack = int( log( nPixelsPerPack, 2 ) )
-    nbits_det = int( log( nPixelsPerDetector, 2 ) )
-    ntotpixels = (nPacks+1) << nbits_pack
-
+    from longpixelID import PixelIDMapper
+    ids2longpixelID = PixelIDMapper( nPixelsPerDetector, nDetectorsPerPack, nPacks )
+    ntotpixels = ids2longpixelID.ntotpixels
+    
     # array to hold results
     import numpy
     res = numpy.zeros( ntotpixels * 3, 'd' )
@@ -48,7 +41,7 @@ def createmap( arcs, nPixelsPerDetector, nDetectorsPerPack, nPacks ):
 
             packID, detID, pixelID = detindexes
             
-            longpixelID = pixelID + (detID << nbits_det) + ( (packID-1) << nbits_pack )
+            longpixelID = ids2longpixelID.longpixelID( packID, detID, pixelID )
 
             res[longpixelID] = position/meter
 

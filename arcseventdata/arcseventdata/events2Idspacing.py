@@ -13,7 +13,6 @@
 
 
 def events2Idspacing(events, n, Idspacing, pixelpositions,
-                     npacks = 115, ndetsperpack = 8, npixelsperdet = 128,
                      tofUnit = 1.e-7, mod2sample = 13.5):
     '''events2Idspacing(events, n, Idspacing, pixelpositions,
     npacks = 115, ndetsperpack = 8, npixelsperdet = 128,
@@ -42,8 +41,11 @@ def events2Idspacing(events, n, Idspacing, pixelpositions,
     step = boundaries[1] - boundaries[0]
     end = boundaries[-1]
 
-    ntotpixels = (npacks+1)*ndetsperpack*npixelsperdet
-    
+    ntotpixels = len( pixelpositions )
+
+    from numpyext import getdataptr
+    pixelpositions = getdataptr( pixelpositions )
+
     import arcseventdata as binding
     return binding.events2Idspacing_numpyarray(
         events, n, begin, end, step, Idspacing.data().storage().asNumarray(),

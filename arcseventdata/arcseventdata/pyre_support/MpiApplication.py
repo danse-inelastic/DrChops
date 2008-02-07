@@ -17,6 +17,7 @@
 ##  1. use mpich2 launcher
 ##  2. support -o output and -o=output
 ##  3. inherit also from ParallelComponent so we have access to self.mpiRank and other mpi thing.
+##  4. build a help message out of meta['tip']
 
 
 from mpi.Application import Application as base
@@ -57,7 +58,7 @@ class Application(base, ParallelComponent):
             if name in excluded: continue
             trait = self.inventory.getTrait( name )
             print '  -%s: %s, default = %s' % (
-                name, trait.meta['tip'], trait.default )
+                name, trait.meta.get('tip') or '', trait.default )
         return
 
 

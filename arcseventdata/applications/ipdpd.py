@@ -80,26 +80,22 @@ class Engine(AbstractHistogrammer):
         import arcseventdata, histogram 
         d_axis = histogram.axis('d spacing', boundaries = histogram.arange(
             d_begin, d_end, d_step) )
+        detaxes = infos['detector axes']
         h = histogram.histogram(
             'I(pdpd)',
-            [
-            ('detectorpackID', range(npacks)),
-            ('detectorID', range(ndetsperpack)),
-            ('pixelID', range(npixelsperdet) ),
-            d_axis,
-            ],
+            detaxes + [d_axis],
             data_type = 'int',
             )
 
         self._info.log( "reading %d events..." % nevents )
         events, nevents = arcseventdata.readevents( eventdatafilename, nevents, start )
         self._info.log( "reading pixelID->position map..." )
-        pixelPositions = arcseventdata.readpixelpositions( pixelPositionsFilename )
+        pixelPositions = arcseventdata.readpixelpositions(
+            pixelPositionsFilename, npacks, ndetsperpack, npixelsperdet)
 
         self._info.log( "histograming..." )
         arcseventdata.events2Ipdpd(
             events, nevents, h, pixelPositions,
-            npacks = npacks, ndetsperpack = ndetsperpack, npixelsperdet = npixelsperdet,
             mod2sample = mod2sample,
             emission_time = emission_time,
             )

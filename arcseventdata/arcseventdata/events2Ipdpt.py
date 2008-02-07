@@ -13,7 +13,6 @@
 
 
 def events2Ipdpt(events, n, Ipdpt, 
-                 npacks = 115, ndetsperpack = 8, npixelsperdet = 128,
                  tofUnit = 1.e-7):
     axes = Ipdpt.axes()
     assert len(axes) == 4
@@ -32,10 +31,7 @@ def events2Ipdpt(events, n, Ipdpt,
     tof_step = tof_boundaries[1] - tof_boundaries[0]
     tof_end = tof_boundaries[-1]
 
-    assert npacks == axes[0].size()-1
-    assert ndetsperpack == axes[1].size()
-    assert npixelsperdet == axes[2].size()
-    ntotpixels = (npacks+1)*ndetsperpack*npixelsperdet
+    ntotpixels = Ipdpt.size() / tof_axis.size()
     
     import arcseventdata as binding
     return binding.events2Ipixtof_numpyarray(

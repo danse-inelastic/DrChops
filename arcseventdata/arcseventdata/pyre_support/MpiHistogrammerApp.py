@@ -50,8 +50,8 @@ class Application(base):
 
 
     def help(self):
-        import sys
-        print "%s [options] event-file-name" % sys.argv[0]
+        import sys, os
+        print "%s [options] event-file-name" % os.path.split( sys.argv[0] )[-1]
         print
         print "Options: "
         base.help(self)

@@ -74,23 +74,17 @@ class Engine(AbstractHistogrammer):
         import arcseventdata, histogram 
         tof_axis = histogram.axis('tof', boundaries = histogram.arange(
             tof_begin, tof_end, tof_step) )
+        detaxes = infos['detector axes']
         h = histogram.histogram(
             'I(pdpt)',
-            [
-            ('detectorpackID', range(npacks+1)),
-            ('detectorID', range(ndetsperpack)),
-            ('pixelID', range(npixelsperdet) ),
-            tof_axis,
-            ],
+            detaxes + [tof_axis],
             data_type = 'int',
             )
 
         events, nevents = arcseventdata.readevents( eventdatafilename, nevents, start )
 
         arcseventdata.events2Ipdpt(
-            events, nevents, h, 
-            npacks = npacks, ndetsperpack = ndetsperpack,
-            npixelsperdet = npixelsperdet)
+            events, nevents, h )
         
         return h
 

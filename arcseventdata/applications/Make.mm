@@ -47,7 +47,7 @@ EXPORT_PYTHON_MODULES = \
 
 
 
-l2b: events2Id.cc $(BLD_LIBDIR)/libarcseventdata.$(EXT_SAR)
+l2b: l2b.cc $(BLD_LIBDIR)/libarcseventdata.$(EXT_SAR)
 	$(CXX) $(CXXFLAGS) $(LCXXFLAGS) -o $@ l2b.cc
 
 

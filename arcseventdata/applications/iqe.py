@@ -105,12 +105,10 @@ class Engine(AbstractHistogrammer):
 
         events, nevents = arcseventdata.readevents( eventdatafilename, nevents, start )
         pixelPositions = arcseventdata.readpixelpositions(
-            pixelPositionsFilename )
+            pixelPositionsFilename, npacks, ndetsperpack, npixelsperdet )
         
         arcseventdata.events2IQE(
             events, nevents, h, Ei, pixelPositions,
-            npacks = npacks, ndetsperpack = ndetsperpack,
-            npixelsperdet = npixelsperdet,
             mod2sample = mod2sample,
             emission_time = emission_time,
             )

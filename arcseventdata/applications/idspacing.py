@@ -68,12 +68,15 @@ class Engine(AbstractHistogrammer):
         
         import arcseventdata, histogram 
         events, nevents = arcseventdata.readevents( eventdatafilename, nevents, start )
-        pixelPositions = arcseventdata.readpixelpositions( pixelPositionsFilename )
+        pixelPositions = arcseventdata.readpixelpositions(
+            pixelPositionsFilename, npacks, ndetsperpack, npixelsperdet )
+
+        from arcseventdata.longpixelID import PixelIDMapper
+        m = PixelIDMapper( npixelsperdet, ndetsperpack, npacks )
+        assert m.ntotpixels == len( pixelPositions )
         
         h = arcseventdata.e2Id(
             events, nevents, pixelPositions, dspacingparams,
-            npacks = npacks, ndetsperpack = ndetsperpack,
-            npixelsperdet = npixelsperdet,
             mod2sample = mod2sample )
         
         return h

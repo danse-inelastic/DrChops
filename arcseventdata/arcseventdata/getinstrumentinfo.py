@@ -77,7 +77,7 @@ def _updateCache(ARCSxml):
     geometer = instrument.geometer
 
     print "generating ARCS instrument info dictionary"
-    from reduction.core.getPixelInfo import getDetectorAxes
+    from GetDetectorAxesInfo import getDetectorAxes
     detaxes = getDetectorAxes( instrument )
 
     packAxis, tubeAxis, pixelAxis = detaxes
@@ -112,9 +112,7 @@ def _updateCache(ARCSxml):
 
     from getpixelinfo import getpixelinfo
     phi_p, psi_p, dist_p = getpixelinfo(
-        pixelID2position, 
-        npacks = nPacks, ndetsperpack = nDetectorsPerPack,
-        npixelsperdet = nPixelsPerDetector )
+        pixelID2position, detaxes )
 
     pickle.dump( phi_p, open('phi_pdp.pkl', 'w') )
     pickle.dump( psi_p, open('psi_pdp.pkl', 'w') )
@@ -129,7 +127,13 @@ def _getInfoFromCache( ARCSxml ):
     cache_dir = cache_path( ARCSxml )
     os.chdir( cache_dir )
     infos = pickle.load( open('ARCS-instrument-info.pkl' ) )
+    phis = pickle.load( open('phi_pdp.pkl') )
+    psis = pickle.load( open('psi_pdp.pkl') )
+    dists = pickle.load( open('dist_pdp.pkl') )
     os.chdir( cwd )
+    infos[ 'phis' ] = phis
+    infos[ 'psis' ] = psis
+    infos[ 'dists' ] = dists
     infos[ 'pixelID-position mapping binary file' ] =  os.path.join(
         cache_dir, 'pixelID2position.bin' )
     import units
@@ -137,7 +141,17 @@ def _getInfoFromCache( ARCSxml ):
     for k,v in infos.iteritems():
         if k.endswith('distance'): infos[k] = infos[k] / meter
         pass
+    infos['detector axes'] = _getdetaxes( ARCSxml )
     return infos
+
+
+def _getdetaxes( ARCSxml ):
+    from instrument.nixml import parse_file
+    instrument = parse_file( ARCSxml )
+    from GetDetectorAxesInfo import getDetectorAxes
+    detaxes = getDetectorAxes( instrument )
+    return detaxes
+    
 
 files = [
     'pixelID2position.pkl',

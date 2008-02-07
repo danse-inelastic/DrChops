@@ -12,9 +12,14 @@
 # 
 
 
+## obtain histograms about pixel h(pack, tube, pixel)
+##   - phi. scattering angle
+##   - psi. azimuthal angle
+##   - dist. distance from sample to pixel.
+
+
 def getpixelinfo(
-    positions, 
-    npacks = 115, ndetsperpack = 8, npixelsperdet = 128):
+    positions, detaxes):
     
     '''convert pixel positions to angles of pixels
     
@@ -26,34 +31,18 @@ def getpixelinfo(
     '''
 
     from numpy import sqrt, sum, arccos, arctan2, fromstring, array, pi
-    
-    ntotpxls = (npacks+1)*ndetsperpack*npixelsperdet 
-    positions.shape = ntotpxls, 3
+
+    positions.shape = -1, 3
 
     import histogram
     phi_p = histogram.histogram(
-        'phi_pdp',
-        [
-        ('detectorpackID', range(npacks+1)),
-        ('detectorID', range(ndetsperpack) ),
-        ('pixelID', range(npixelsperdet) ),
-        ] )
+        'phi_pdp', detaxes )
     
     psi_p = histogram.histogram(
-        'psi_pdp',
-        [
-        ('detectorpackID', range(npacks+1)),
-        ('detectorID', range(ndetsperpack) ),
-        ('pixelID', range(npixelsperdet) ),
-        ] )
+        'psi_pdp', detaxes )
 
     dist_p = histogram.histogram(
-        'dist_pdp',
-        [
-        ('detectorpackID', range(npacks+1)),
-        ('detectorID', range(ndetsperpack) ),
-        ('pixelID', range(npixelsperdet) ),
-        ] )
+        'dist_pdp', detaxes )
 
     phi_arr = array( phi_p.data().storage().asNumarray(), copy = 0 )
     phi_arr.shape = -1, 
@@ -62,6 +51,8 @@ def getpixelinfo(
     dist_arr = array( dist_p.data().storage().asNumarray(), copy = 0 )
     dist_arr.shape = -1,
 
+    ntotpxls = len( positions )
+    
     for i in range(ntotpxls):
         x,y,z = r = positions[i]
         #phi is the angle between the scattered neutron and the incident beam

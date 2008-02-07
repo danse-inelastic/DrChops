@@ -41,7 +41,7 @@ def run( monitordatafilename, h5filename,
 
 def main():
     from optparse import OptionParser
-    usage = "usage: %prog [options] event-data-file"
+    usage = "usage: %prog [options] monitor-data-file"
     parser = OptionParser(usage)
 
     parser.add_option(

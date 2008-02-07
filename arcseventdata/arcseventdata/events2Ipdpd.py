@@ -13,7 +13,6 @@
 
 
 def events2Ipdpd(events, n, Ipdpd, pixelpositions,
-                 npacks = 115, ndetsperpack = 8, npixelsperdet = 128,
                  tofUnit = 1.e-7, mod2sample = 13.5,
                  emission_time = 0.0):
     axes = Ipdpd.axes()
@@ -33,10 +32,9 @@ def events2Ipdpd(events, n, Ipdpd, pixelpositions,
     d_step = d_boundaries[1] - d_boundaries[0]
     d_end = d_boundaries[-1]
 
-    assert npacks == axes[0].size()
-    assert ndetsperpack == axes[1].size()
-    assert npixelsperdet == axes[2].size()
-    ntotpixels = (npacks)*ndetsperpack*npixelsperdet
+    ntotpixels = len( pixelpositions )
+    from numpyext import getdataptr
+    pixelpositions = getdataptr( pixelpositions )
     
     import arcseventdata as binding
     return binding.events2Ipixd_numpyarray(

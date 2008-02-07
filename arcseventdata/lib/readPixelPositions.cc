@@ -40,7 +40,7 @@ namespace ARCS_EventData{
     
     //check
     static const int nbytesperdouble=8, ndoublepervector=3;
-    assert(length==(npacks+1)*ndetsperpack*npixelsperdet*ndoublepervector*nbytesperdouble);
+    assert(length==(npacks)*ndetsperpack*npixelsperdet*ndoublepervector*nbytesperdouble);
     
     // read
     char *buffer = new char[length];

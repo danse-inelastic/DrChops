@@ -27,8 +27,6 @@ def getnumberofevents( eventdatafilename ):
     return nevents
 
 
-import arcseventdata as binding
-
 def readevents( filename, n, start = 0):
     ntotal = getnumberofevents( filename )
     if start >= ntotal : raise IOError, "no neutrons to read"
@@ -37,16 +35,33 @@ def readevents( filename, n, start = 0):
     return events, n
 
 
-def readpixelpositions( filename, npacks = 115, ndetsperpack = 8, npixelsperdet = 128 ):
-    return binding.readpixelpositions( filename, npacks, ndetsperpack, npixelsperdet )
+def readpixelpositions( filename, npacks, ndetsperpack, npixelsperdet):
+    s = open(filename).read()
+    import numpy
+    arr = numpy.fromstring( s, numpy.double )
+    arr.shape = -1,3
+    checkpixelpositions( arr, npacks, ndetsperpack, npixelsperdet )
+    return arr
 
+
+def npixels( npacks, ndetsperpack, npixelsperdet ):
+    '''return number of "pixels". this is actually the maximum longpixelID + 1
+    see longpixelID.py for more details.
+    '''
+    from longpixelID import PixelIDMapper
+    m = PixelIDMapper( npixelsperdet, ndetsperpack, npacks )
+    return m.ntotpixels
+
+
+def checkpixelpositions( pixelpositions, npacks, ndetsperpack, npixelsperdet ):
+    assert npixels(npacks, ndetsperpack, npixelsperdet) == len( pixelpositions )
+    return
 
 
 def e2Id(
     events, n, pixelpositions, 
     dspacing_params = None,
     Idspacing = None,
-    npacks = 115, ndetsperpack = 8, npixelsperdet = 128,
     preNeXus_tofUnit = 1.e-7, mod2sample = 13.5):
     '''e2Id(events, n, pixelpositions, Idspacing = None,
     dspacing_params = None,
@@ -99,7 +114,6 @@ def e2Id(
 
     events2Idspacing(
         events, n, Idspacing, pixelpositions,
-        npacks = npacks, ndetsperpack = ndetsperpack, npixelsperdet = npixelsperdet,
         tofUnit = preNeXus_tofUnit, mod2sample = mod2sample)
 
     return Idspacing
@@ -107,13 +121,11 @@ def e2Id(
 
 
 def e2Itof(
-    events, nevents, 
-    tof_params = None, Itof = None,
-    npacks = 115, ndetsperpack = 8, npixelsperdet = 128,
+    events, nevents, ntotpixels,
+    tof_params = None, Itof = None, 
     preNeXus_tofUnit = 1.e-7):
     '''e2Itof(events, nevents, 
     tof_params = None, Itof = None,
-    npacks = 115, ndetsperpack = 8, npixelsperdet = 128,
     preNeXus_tofUnit = 1.e-7) --> integrate events into I(tof) histogram
 
     Either tof_params or Itof must be given
@@ -152,8 +164,8 @@ def e2Itof(
         pass
     
     events2Itof(
-        events, nevents, Itof,
-        npacks = npacks, ndetsperpack = ndetsperpack, npixelsperdet = npixelsperdet,
+        events, nevents, ntotpixels,
+        Itof,
         tofUnit = preNeXus_tofUnit)
     
     return Itof
@@ -176,6 +188,10 @@ from events2Ipdpd import events2Ipdpd
 from events2IQE import events2IQE
 from events2Ipdpt import events2Ipdpt
 from events2Itof import events2Itof
+
+
+import arcseventdata as binding
+
 
 
 # version
