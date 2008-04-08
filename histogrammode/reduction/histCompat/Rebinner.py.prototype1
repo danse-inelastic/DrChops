@@ -1,0 +1,108 @@
+#!/usr/bin/env python
+#
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#
+#                                   Jiao Lin
+#                      California Institute of Technology
+#                       (C) 2005 All Rights Reserved
+#
+# {LicenseText}
+#
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#
+
+## \namespace reduction::histCompat::Rebinner
+## generic rebinner
+##
+## this is still in experiment stage
+
+
+class Rebinner( object):
+
+    """Rebinner that converts one histogram to another
+
+    Example 1:
+
+      I(tof) --> I(E)
+
+      can be done by rebinner.rebin( ItofHist, mapper, IEHist)
+
+      here mapper is a function that has an interface: mapper( tof ) --> E
+
+    Example 2:
+
+      I(x,y) --> I(r)
+
+    Example 3:
+
+      I(tube, pixel, tof) -> I(phi, E)
+    """
+
+    def rebin( self, inHist, mapper, outHist):
+
+        indata = inHist.data().storage()
+        inerrs = inHist.errors().storage()
+        indataNA = indata.asNumarray(); indataNA.shape = inHist.shape()
+        inerrsNA = inerrs.asNumarray(); inerrsNA.shape = inHist.shape()
+
+        outdata = outHist.data().storage()
+        outerrs = outHist.errors().storage()
+        outdataNA = outdata.asNumarray(); outdataNA.shape = outHist.shape()
+        outerrsNA = outerrs.asNumarray(); outerrsNA.shape = outHist.shape()
+
+        inHistBinCentersList = [ ]
+        for axisName in inHist.axisNameList():
+            inHistBinCentersList.append( inHist.axisFromName( axisName ).binCenters() )
+            continue
+
+        inHistShape = inHist.shape()
+        indexes = [ 0 for i in range(len(inHistShape)) ]
+
+        count = 0
+        v = volume(inHistShape)
+        while count < v:
+            Xs = [ binCenters[index] for index, binCenters in zip(indexes,inHistBinCentersList) ]
+            Ys = mapper(Xs)
+            try:
+                yindexes = outHist.indexes( Ys )
+                if len(indexes) == 1: xInds = indexes[0]
+                else: xInds = tuple(indexes)
+                if len(yindexes) == 1: yInds = yindexes[0]
+                else: yInds = tuple(yindexes)
+
+                outdataNA[yInds] += indataNA[xInds]
+                outerrsNA[yInds] += inerrsNA[xInds]
+            except IndexError : pass
+            except KeyError : pass
+            increment( indexes, inHistShape )
+            count += 1
+        return
+
+    pass # end of Rebinner
+
+
+
+def increment( indexes, limits ):
+    """increase indexes up to limits
+    increment( [1,4,3], [3,10,8] ) --> indexes becomes [2,4,3]
+    increment( [2,4,3], [3,10,8] ) --> indexes becomes [0,5,3]
+    """
+    for i, index in enumerate(indexes):
+        if index < limits[i]-1:
+            indexes[i] += 1
+            break
+        else :
+            indexes[i] = 0
+
+
+def volume(shape):
+    from operator import mul
+    return reduce(mul, shape)
+
+
+rebinner = Rebinner()
+
+# version
+__id__ = "$Id: Rebinner.py.prototype1 1268 2007-06-18 15:23:42Z linjiao $"
+
+# End of file

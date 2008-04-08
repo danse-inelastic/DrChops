@@ -1,0 +1,4 @@
+from measurement.ins.Pharos.components.Run import Run as factory
+
+def instrument( ): return factory('pharos')
+

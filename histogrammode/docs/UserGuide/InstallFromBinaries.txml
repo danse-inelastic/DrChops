@@ -1,0 +1,593 @@
+<!--
+
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+                                   Jiao Lin
+                      California Institute of Technology
+                        (C) 2007 All Rights Reserved
+
+ {LicenseText}
+
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+-->
+
+
+<sect1 id='InstallFromBinaries'>
+  <title >
+    Install DRCS from Binaries
+  </title>
+  
+<!--
+  <note>
+    Reduction software is upgrading to version 1.2 ...
+    Please come back 1 day or two to download the most
+    up-to-date binaries.
+    
+    <para>
+    
+    If you need DRCS right now, please
+    follow instructions on 
+    <xref linkend='Install_ARCS_software_from_SvnRepository'/>.
+    
+    </para>
+  </note>
+-->
+<note>
+  Reduction software is upgrading to version 1.2.
+  There are now only two binary installers available.
+  The installation instructions might be not detailed enough
+  for a smooth installation. Please send all your complaints
+  to linjiao@caltech.edu so that the installers and the installation
+  instructions can be improved. Thanks!
+</note>
+
+  <para >
+    Prebuilt binaries are available for 
+<!--
+    modern Windows and
+-->
+    Mac OS X and some linux platforms.
+    These versions of the DRCS make use of many existing packages
+    including HDF and
+    numpy, and
+    all of these are included in the
+    DRCS binary installers (so you don't
+    have to install them yourself).
+  </para>
+  
+  
+  <para >
+<!--
+    After the installation, please follow the instructions below
+    to set up environment variables before you start
+    using the DRCS.
+-->
+    You will also need sample data sets, which you can download below.
+    The reduced data will be displayed in the matplotlib environment,
+    which is an open-source variant of Matlab.
+<!--
+    You are also given options to save the reduced S(Q,E) in various
+    formats, including one compatible with Mslice.
+-->
+  </para>
+  
+  
+  <para >
+    We have a
+    
+    <ulink url='xxxWEBSITExxx/reduction/Software-UserGuide/movies/reduction-installation-demo.html'>
+      <citetitle>movie</citetitle>
+    </ulink>
+    
+    of installation of DRCS and a quick reduction session
+    on Mac OS X.
+  </para>
+  
+  
+<!--
+  <sect2 id='Install_ARCS_software_from_Binaries.Microsoft_Windows'>
+    <title >
+      Microsoft Windows
+    </title>
+    
+    The Windows version of the
+    DRCS is distributed as a standard installer for
+    Windows python packages (an executable with an installation wizard).
+    After downloading the installer, please double click the installer from
+    Windows Explorer and follow the instructions.
+    
+    <para >
+      
+      <table id='Install_ARCS_software_from_Binaries.Microsoft_Windows.Windows_Downloads'>
+	<title >
+	  Windows Downloads
+	</title>
+	
+	<tgroup cols='2' align='left' colsep='1' rowsep='1'>
+
+	  <colspec colname='description' colwidth="3*"/>
+	  <colspec colname='link' colwidth="2*"/>
+
+	  <tbody>
+	    <row >
+	      <entry >
+		<para >
+		  <emphasis >
+		  DRCS
+		  </emphasis>
+		</para>
+		
+		<para >
+		  It contains
+		  reduction applications for following inelastic direct-geometry
+		  time-of-flight instrument
+		</para>
+		
+		
+		<para >
+		  
+		  <itemizedlist >
+		    
+		    <listitem >
+		      LRMECS
+		    </listitem>
+		    
+		    
+		    <listitem >
+		      PHAROS
+		    </listitem>
+		    
+		  </itemizedlist>
+		  
+		</para>
+		
+	      </entry>
+	      
+	      
+	      <entry >
+		
+		<para >
+		  
+		  <ulink url='xxxDOWNLOADSxxx/reduction-Windows-download'>
+		    <citetitle>DRCS win32 py24</citetitle>
+		  </ulink>
+		  
+		</para>
+		
+		
+		<para >
+		  (47M download.
+		</para>
+		
+		For PHAROS reduction a computer with 2G+ memory
+		is recommended. For LRMECS reduction less memory is OK.)
+	      </entry>
+	      
+	    </row>
+	    
+	    
+	    <row >
+	      
+	      <entry >
+		
+		<emphasis >
+		  DRCS sample data
+		</emphasis>
+		
+		
+		<para >
+		  This tar ball contains sample data for PHAROS and
+		  LRMECS instruments.
+		</para>
+		
+	      </entry>
+	      
+	      
+	      <entry >
+		
+		<ulink url='xxxDOWNLOADSxxx/reduction-data-zip'>
+		  <citetitle>DRCS sample data</citetitle>
+		</ulink>
+		
+		(102 M)
+	      </entry>
+	      
+	    </row>
+	    
+	  </tbody>
+	</tgroup>
+      </table>
+      
+    </para>
+    
+    
+    <para >
+      The DRCS will be installed in the system python directory, and
+      an uninstall can be done easily with
+      
+      <emphasis >
+	Control Panel
+      </emphasis>
+      
+      ->
+      
+      <emphasis >
+	Add or remove programs
+      </emphasis>
+      
+      .
+    </para>
+    
+    
+    <para >
+      To use the DRCS, please open a windows command window.
+    </para>
+    
+    
+    <note id='Install_ARCS_software_from_Binaries.Microsoft_Windows.Start_a_Windows_command_line_terminal'>
+      <title >
+	Start a Windows command line terminal
+      </title>
+      <para >
+	click windows "Start" button to bring out the main windows menu
+	click the "Run" button, a small window will pop up
+	type in "cmd" and hit ENTER key
+    </para></note>
+    
+    Now in the Windows terminal, type
+    
+    <programlisting >
+      
+      $ configureARCS.bat
+      
+      
+    </programlisting>
+    
+    
+    <para >
+      This command sets up the necessary envrionment variables for the
+      current Windows command session.
+    </para>
+    
+    
+    <para >
+      You could start to try out DRCS by following
+      
+      <link linkend='GettingStarted'>
+	these instructions
+      </link>
+      
+      .
+    </para>
+    
+  </sect2>
+
+-->
+
+<sect2 id='Install_ARCS_software_from_Binaries.Mac_OS_X'>
+<title >
+  Mac OS X
+</title>
+    
+<table id='Install_ARCS_software_from_Binaries.MacOSX.MacOSX_Downloads'>
+  <title >
+    Mac OS X Downloads
+  </title>
+      
+  <tgroup cols='2' align='left' colsep='1' rowsep='1'>
+    <colspec colname='description' colwidth="3*"/>
+    <colspec colname='link' colwidth="2*"/>
+    
+    <tbody>
+      <row >
+	<entry >
+	  <para>
+	    <emphasis >
+	      DRCS software
+	    </emphasis>
+	  </para>
+	  
+	  <para >
+	    It contains
+	    reduction applications for these inelastic direct-geometry
+	    time-of-flight instruments:
+	  </para>
+	  
+	  <itemizedlist >
+	    <listitem >
+	      LRMECS
+	    </listitem>
+	    <listitem >
+	      PHAROS
+	    </listitem>
+	  </itemizedlist>
+	  
+	</entry>
+	<entry >
+	  <ulink url='xxxDOWNLOADSxxx/reduction-MacOSX-dmg'>
+	    <citetitle>DRCS for Mac OSX 10.4 (intel), python2.3</citetitle>
+	  </ulink>
+	  (46 M)
+	</entry>
+      </row>
+
+      <row >
+	<entry >
+	  <emphasis >
+	    DRCS sample data
+	  </emphasis>
+	  <para >
+	    This tar ball contains sample data for PHAROS and
+	    LRMECS instruments.
+	  </para>
+	</entry>
+	
+	<entry >
+	  <ulink url='xxxDOWNLOADSxxx/reduction-data-tgz'>
+	    <citetitle>DRCS sample data</citetitle>
+	  </ulink>
+	  (102 M)
+	</entry>
+      </row>
+    </tbody>
+  </tgroup>
+</table>
+    
+
+<para>
+  The Mac OS X version of the DRCS is distributed as
+  a dmg file.
+  <xref linkend="Install_ARCS_software_from_Binaries.MacOSX.MacOSX_Downloads"/> 
+  presents related download links.
+</para>
+
+<para>
+  The default python installed with Mac OS X 10.4 is 2.3. Therefore
+  we have chosen to build binary installer for pyhton 2.3.
+  If you have Mac python 2.4 or Mac python 2.5 installed,
+  please contact linjiao@caltech.edu to ask for 
+  "unofficial" binary installers.
+</para>
+
+<para>
+  Before you install DRCS, please make sure that the version of
+  your python installation is 2.3. 
+  Please open a terminal and type
+<programlisting>
+  python -V
+</programlisting>
+to print the version number of your python.
+If your version number does not start with "2.3", you
+cannot install this binary.
+</para>
+
+<para>
+In Mac Pyhton version 2.3, there is a difference between command
+"python" and "pythonw". Please enter
+<programlisting>
+  ls -l `which python`
+</programlisting>
+in your terminal.
+Please note the quote in the above command is "backquote".
+It is better to copy and paste the above command to your terminal!
+The output could be something like:
+<programlisting>
+  /.../python@ -> /.../pythonw
+</programlisting>
+Then you are fine (because your python is actually a link to the pythonw command).
+If the output is something like
+
+<programlisting>
+  /.../python@ -> /.../python
+</programlisting>
+
+Then you probably should do the following
+to make sure "pythonw" instead of "python" is used
+
+
+<programlisting>
+  mkdir -p ~/DRCS/bin
+  ln -s /usr/bin/pythonw ~/DRCS/bin/python
+  echo "export PATH=\$HOME/DRCS/bin:\$PATH" >> ~/.bashrc
+</programlisting>
+
+The first command creates a directory "bin" in "DRCS" directory
+in your home directory.
+The second command makes a symbolic link in the newly-created
+ "bin" directory to the pythonw executable.
+The third command add the path "$HOME/DRCS/bin" to your $PATH
+environment variable, so that the newly created "python"
+symbolic link can be find by your shell.
+The third command is useful if your shell is "bash".
+If you are using "tcsh", you will need to do similar things
+to set your environment variable.
+This should be done once and it will take effect everytime
+you start a X11 terminal.
+
+</para>
+
+
+<para>
+Installation for the Mac OS X 10.4 is similar to
+other Mac software installations. 
+  Now, please download the dmg file. Meanwhile, please
+  create a new folder with the name "DRCS" in your user directory
+ (as indicated by the little house icon in Finder windows)
+  if you have not done so.
+  After you successfully download the dmg file,
+  please double click it to mount it if it is not mounted automatically.
+  It will appear in your finder.
+  Then, please drag the folder in the disk image to the 'DRCS' folder
+  that you just created, and that finishes installation.
+  You will probably want to download the sample data,  and put
+  it in the DRCS directory, too.
+  Your folder structure would look like 
+  <xref linkend="reduction-installation-MacOSX-DRCSInFinder"/>
+  after these steps.
+</para>
+
+<figure id='reduction-installation-MacOSX-DRCSInFinder'>
+  <title >
+    Directory Structure of Installed DRCS
+  </title>
+  
+  <mediaobject >
+    <imageobject >
+      <imagedata width='70%' fileref='figures/installation/MacOSX/DRCS_in_Finder.png' scalefit='1'>
+      </imagedata>
+    </imageobject>
+    <textobject >
+      <phrase >
+	Directory Structure of Installed DRCS
+      </phrase>
+    </textobject>
+  </mediaobject>
+</figure>
+
+<para>
+  Everytime you want to use DRCS-1.2, please start a X11 terminal
+  and enter
+
+<programlisting>
+  source ~/DRCS/DRCS-1.2-macosx10.4-python2.3/bin/envs.sh
+</programlisting>
+
+and you are now ready to use DRCS 1.2.
+</para>
+
+<para >
+  You can try out DRCS by following
+  <link linkend='GettingStarted'>
+    these instructions
+  </link>
+  .
+</para>
+    
+</sect2>
+
+<sect2 id='Install_ARCS_software_from_Binaries.linux'>
+<title>
+  Linux Platforms
+</title>
+<para>
+In any supported linux platform, DRCS can be installed by an installation script.
+Please first download 
+<ulink url="xxxDOWNLOADSxxx/webinstall.py">
+  the installation script
+</ulink>.
+You will need to make the installation script executable by
+<programlisting>
+  chmod +x webinstall.py
+</programlisting>
+. The command to install DRCS is 
+
+<programlisting>
+  ./webinstall.py DRCS -v &lt;version&gt; -p &lt;platform&gt; &lt;path&gt;
+</programlisting>
+
+Here,  &lt;version&gt; is the version number of DRCS you want to install,
+ &lt;platform&gt; is the linux platform you are using, and
+ &lt;path&gt; is the path where you want to install DRCS.
+
+</para>
+<para>
+An example of the installation command is 
+<programlisting>
+  ./webinstall.py DRCS -v 1.2 -p suse10.2 ~/DRCS
+</programlisting>
+
+<xref linkend="reduction.Install.Linux.SpecificInstructions"/> has 
+specific instructions for each supported platform.
+</para>
+
+<para>
+
+After a successful installation, you will need to run 
+
+<programlisting>
+  source /path/to/DRCS/installation/bin/envs.sh
+</programlisting>
+
+before you can start reducing your data. 
+</para>
+
+<para>
+Other than the DRCS software itself, you may need sample data files, 
+for which the download links can be found in
+<xref linkend="Install_ARCS_software_from_Binaries.linux.linux_Downloads"/>
+
+
+<table id='Install_ARCS_software_from_Binaries.linux.linux_Downloads'>
+  <title >
+    Linux Downloads
+  </title>
+  
+  <tgroup cols='2' align='left' colsep='1' rowsep='1'>
+    <colspec colname='description' colwidth="3*"/>
+    <colspec colname='link' colwidth="2*"/>
+    
+    <tbody>
+      <row >
+	<entry >
+	  <para>
+	    <emphasis >
+	      DRCS sample data
+	    </emphasis>
+	  </para>
+	  <para >
+	    This tar ball contains sample data for PHAROS and
+	    LRMECS instruments.
+	  </para>
+	</entry>
+	
+	<entry >
+	  <ulink url='xxxDOWNLOADSxxx/reduction-data-tgz'>
+	    <citetitle>DRCS sample data</citetitle>
+	  </ulink>
+	  (102 M)
+	</entry>
+      </row>
+    </tbody>
+  </tgroup>
+</table>
+
+</para>
+
+<para>
+  You can now try out DRCS by following
+  
+  <link linkend='GettingStarted'>
+    these instructions
+  </link>
+  .
+</para>
+    
+
+<sect3 id="reduction.Install.Linux.SpecificInstructions">
+  <title>Specific Installation Instructions for Supported Linux Platforms
+  </title>
+
+<sect4>
+  <title> OpenSuse 10.2 </title>
+
+Examples:
+<programlisting>
+  ./webinstall.py DRCS -v 1.2 -p suse10.2 ~/DRCS
+</programlisting>
+
+</sect4>
+</sect3>
+
+</sect2>
+
+
+</sect1>
+
+
+<!-- version-->
+<!-- $Id$-->
+
+<!-- Generated automatically by Renderer on Thu Apr 26 13:17:54 2007-->
+
+<!-- End of file -->

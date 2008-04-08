@@ -1,0 +1,146 @@
+<!--
+
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+                                   Jiao Lin
+                      California Institute of Technology
+                        (C) 2007 All Rights Reserved
+
+ {LicenseText}
+
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+-->
+
+
+<sect1 id='Prepare_PHAROS_Reduction_Directory'>
+  <title >
+    Prepare a Directory for PHAROS Reduction
+  </title>
+  
+  
+  <note id='Prepare_a_directory_for_PHAROS_reduction.Note'>
+    <title >
+      Note
+    </title>
+    <para >
+      All data files must be in hdf5 format. The original data files from PHAROS are usually hdf4 files.
+      Hdf4 files can be converted to hdf5 files by h4toh5 tools, which
+      can be downloaded from  ftp://ftp.hdfgroup.org/HDF5/h4toh5.
+      This tutorial uses example data files that are included in the distribution.
+      These example data files are already in hdf5 format.
+  </para></note>
+  
+  
+  <note id='Prepare_a_directory_for_PHAROS_reduction.Note'>
+    <title >
+      Note
+    </title>
+    <para >
+      The following tutorial of preparing your work directory is only
+      an example of how to lay out your directory structure
+      to make reduction work easier. You don't need to follow
+      these procedures. You could put your data files anywhere
+      you like, and you just need to let the reduction application
+      know about them by using either the GUI interface or
+      the command line options.
+  </para></note>
+  
+  
+  <sect2 id='Prepare_a_directory_for_PHAROS_reduction.make_a_work_directory'>
+    <title >
+      Make a Work Directory 
+    </title>
+    
+First we create a work directory to put data files and output files.
+    
+    <programlisting >
+      $ mkdir -p ~/reduction/PHAROS
+      $ cd ~/reduction/PHAROS
+    </programlisting>
+    
+  </sect2>
+  
+  
+  <sect2 id='Prepare_a_directory_for_PHAROS_reduction.link_to_sample_data_directory'>
+    <title >
+      Link to Sample Data Directory 
+    </title>
+    
+    
+    <para >
+      If you have not done so, please download
+      
+      <ulink url='xxxDOWNLOADSxxx/reduction-data-tgz'>
+	<citetitle>DRCS sample data</citetitle>
+      </ulink>
+      
+      and then extract it somewhere (I will assume that it is now in 
+      ~/reduction):
+      
+      <programlisting >
+	$ cd ~/reduction
+	$ tar xvfz /path/to/ins-data.tgz
+      </programlisting>
+      
+    </para>
+    
+    
+    <para >
+      In the extracted "ins-data" directory, there should be 
+      the subdirectory "PHAROS". 
+      Now make a link to that directory in ~/reduction
+      
+      <programlisting >
+	$ cd ~/reduction/PHAROS
+	$ ln -s ~/reduction/ins-data/PHAROS sampledata
+      </programlisting>
+      
+      This will create a link in ~/reduction/PHAROS named "sampledata",
+      pointing to the sample data directory for PHAROS.
+    </para>
+    
+  </sect2>
+  
+  
+  <sect2 id='Prepare_a_directory_for_PHAROS_reduction.extract_data_files'>
+    <title >
+      Extract Data Files 
+    </title>
+    
+    
+    <programlisting >
+      $ cd ~/reduction/PHAROS/sampledata
+      $ gunzip *.gz
+    </programlisting>
+    
+  </sect2>
+  
+  
+  <sect2 id='Prepare_a_directory_for_PHAROS_reduction.link_to_PHAROS_instrument_definition_file'>
+    <title >
+      Link to PHAROS Instrument Definition File 
+    </title>
+    
+    
+    <para >
+      
+      <programlisting >
+	$ cd ~/reduction/PHAROS
+	$ ln -s sampledata/PharosDefinitions.txt
+      </programlisting>
+      
+      this will  create a link in ~/reduction/PHAROS named PharosDefinitions.txt, which contains information about positions and orientations of PHAROS detector tubes.
+    </para>
+    
+  </sect2>
+  
+</sect1>
+
+
+<!-- version-->
+<!-- $Id$-->
+
+<!-- Generated automatically by Renderer on Thu Apr 26 13:18:08 2007-->
+
+<!-- End of file -->

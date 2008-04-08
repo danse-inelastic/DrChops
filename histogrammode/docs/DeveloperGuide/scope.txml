@@ -1,0 +1,39 @@
+<!--
+
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+                                   Jiao Lin
+                      California Institute of Technology
+                        (C) 2007 All Rights Reserved
+
+ {LicenseText}
+
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+-->
+
+  <sect1 id="scope">
+    <title>Scope</title>
+    <para>
+    
+    Reduction package will only support inelastic neutron scattering, 
+    but its design should allow extensions to other neutron scattering 
+    techniques.
+    </para>
+    
+    <para>
+      
+      For inelastic neutron scattering, following instruments will be
+      supported:
+      
+      <itemizedlist>
+	<listitem> LRMECS </listitem>
+	<listitem> PHAROS </listitem>
+	<listitem> ARCS </listitem>
+	<listitem> SEQUOIA </listitem>
+	<listitem> CNCS </listitem>
+      </itemizedlist>
+    </para>
+    
+  </sect1>
+

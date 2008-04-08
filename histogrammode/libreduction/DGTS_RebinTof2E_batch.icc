@@ -1,0 +1,311 @@
+// -*- C++ -*-
+//
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+//
+//                                   Jiao Lin
+//                      California Institute of Technology
+//                        (C) 2007  All Rights Reserved
+//
+// {LicenseText}
+//
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+//
+
+
+#ifndef DANSE_REDUCTION_DGTS_REBINTOF2E_BATCH_ICC
+#error Template definitions meaningless outside of DGTS_RebinTof2E_batch.h
+#endif
+
+
+#include <vector>
+#include "DGTS_RebinTof2E.h"
+#include "sort.h"
+
+
+/// Reduce I(*,tof) to I(phi,E)
+
+namespace DANSE { namespace Reduction{
+
+
+  /// implementation details
+  namespace DGTS_RebinTof2E_batch_impl {
+
+    /// data structure to hold a slice of I(tof) for a pixel and related
+    /// info to be used in reduction
+    template <typename BinIterator, typename DataIterator, typename FLT>
+    struct Reducee {
+      BinIterator tof_begin, tof_end;
+      DataIterator cnts_begin, error2_begin;
+      FLT phi, distance, radius, pressure, solidangle;
+      bool veto;
+    };
+    
+    /// iterator of Reducee
+    template <typename BinIterator, typename DataIterator,
+	      typename MaskIterator, typename FLT>
+    class ReduceeIterator {
+    public:
+      /// ctor
+      /// tof_begin, tof_end: iterators for tof bin boundaries
+      /// cnts__begin, error2__begin: I[*,tof] histogram, data and error bars arrays seen as 1D arrays
+      /// phi__begin: phi[*]
+      /// sa__begin: solid_angle[*]
+      /// dist__begin: distance[*]
+      /// radius__begin: radius[*]
+      /// size: size of *
+      ReduceeIterator( BinIterator tof_begin, BinIterator tof_end,
+		       DataIterator cnts__begin, DataIterator error2__begin,
+		       DataIterator phi__begin, DataIterator sa__begin,
+		       DataIterator dist__begin,
+		       DataIterator radius__begin, DataIterator pressure__begin,
+		       MaskIterator mask__begin,
+		       size_t size ) 
+	: m_tof_begin( tof_begin ), m_tof_end( tof_end ),
+	  m_cnts__begin( cnts__begin ), m_error2__begin( error2__begin ),
+	  m_phi__begin( phi__begin ), m_sa__begin( sa__begin ),
+	  m_dist__begin( dist__begin ),
+	  m_radius__begin( radius__begin ), m_pressure__begin( pressure__begin ),
+	  m_mask__begin( mask__begin ),
+	  m_size (size), m_index(0), m_ntofbins( tof_end-tof_begin-1 )
+      {
+      }
+      
+      ReduceeIterator() : m_size(0) {}
+      
+      /// type aliases
+      typedef ReduceeIterator<BinIterator, DataIterator, MaskIterator, FLT> mytype;
+      typedef Reducee<BinIterator, DataIterator, FLT > mydatatype;
+      
+      ReduceeIterator( const mytype & rhs ) {
+	m_tof_begin = rhs.m_tof_begin; m_tof_end = rhs.m_tof_end;
+	m_cnts__begin = rhs.m_cnts__begin; m_error2__begin = rhs.m_error2__begin;
+	m_phi__begin = rhs.m_phi__begin; m_sa__begin = rhs.m_sa__begin;
+	m_dist__begin = rhs.m_dist__begin;
+	m_radius__begin = rhs.m_radius__begin; m_pressure__begin = rhs.m_pressure__begin;
+	m_mask__begin = rhs.m_mask__begin;
+	m_size = rhs.m_size; m_index = rhs.m_index; 
+	m_ntofbins = rhs.m_ntofbins;
+      }
+      
+      mytype &operator++()
+      {
+	m_index ++ ;
+	return *this;
+      }
+      
+      bool operator < ( const mytype & rhs ) 
+      {
+	return m_index < rhs.m_index;
+      }
+      
+      mytype end() 
+      {
+	mytype ret( *this );
+	ret.m_index = m_size;
+	return ret;
+      }
+      
+      mydatatype operator*() const {
+	if (m_size == 0) throw Exception("Invalid iterator: not initd");
+	if (m_index<0 || m_index>m_size) throw Exception("out of bound");
+	mydatatype ret;
+	ret.tof_begin = m_tof_begin; ret.tof_end = m_tof_end;
+	ret.cnts_begin = m_cnts__begin + m_ntofbins * m_index;
+	ret.error2_begin = m_error2__begin + m_ntofbins * m_index;
+	ret.phi = *(m_phi__begin + m_index);
+	ret.solidangle = *(m_sa__begin + m_index);
+	ret.distance = *(m_dist__begin + m_index);
+	ret.radius = *(m_radius__begin + m_index);
+	ret.pressure = *(m_pressure__begin + m_index);
+	ret.veto = *(m_mask__begin + m_index );
+	return ret;
+      }
+    private:
+      BinIterator m_tof_begin, m_tof_end;
+      DataIterator m_cnts__begin, m_error2__begin;
+      DataIterator m_phi__begin, m_sa__begin, m_dist__begin;
+      DataIterator m_radius__begin, m_pressure__begin;
+      MaskIterator m_mask__begin;
+      size_t m_size ;
+      size_t m_index;
+      size_t m_ntofbins;
+    };
+    
+    /// data structure to hold the output of reduction:
+    /// S(phi,E) 
+    template <typename BinIterator, typename DataIterator>
+    struct Spe {
+      BinIterator phi_begin, phi_end, e_begin, e_end;
+      DataIterator S, S_err2, solidangle;
+    };
+    
+    /// functor to reduce a slice of I(tof) to I(E)
+    template<typename FLT, 
+	     typename InputBinIterator, typename InputDataIterator,
+	     typename OutputBinIterator, typename OutputDataIterator,
+	     typename MaskIterator,
+	     typename EfficiencyCorrector> 
+    struct DGTS_Reduce 
+      : public std::unary_function<
+      Reducee<InputBinIterator, InputDataIterator, FLT>, void>
+    {
+      // type aliases
+      typedef DGTS_RebinTof2E< 
+	FLT, InputBinIterator, InputDataIterator,
+	OutputBinIterator, OutputDataIterator> Rebinner_t;
+      typedef Spe<OutputBinIterator, OutputDataIterator> Spe_t;
+      typedef Reducee<InputBinIterator, InputDataIterator, FLT> Reducee_t;
+      
+      /// ctor
+      DGTS_Reduce(FLT ei, FLT mod2sample, size_t ntofBB, Spe_t spe,
+		  OutputBinIterator tmpE, OutputDataIterator tmpI,
+		  EfficiencyCorrector &efficiencyCorrector)
+	:  m_rebinner( ei, mod2sample ), m_tmpE(tmpE), m_spe( spe ),
+	   m_tmpI( tmpI ), m_nEoutBB( spe.e_end-spe.e_begin ),
+	   m_efficiencyCorrector( efficiencyCorrector )
+      {}
+      
+      /// call
+      void operator() (const Reducee_t &x) 
+      {
+
+	if (x.veto) return;
+	
+	m_rebinner.set_distance( x.distance );
+	
+	using DANSE::Reduction::findCellIndex;
+      
+	if (x.phi < *(m_spe.phi_begin) or x.phi >= *(m_spe.phi_end-1) ) return;
+	
+	//add m_tmpI to appropriate slice of spe
+	size_t cellIndex = findCellIndex( x.phi, m_spe.phi_begin, m_spe.phi_end );
+
+	//first the Intensity (S(phi,E))
+	clear( m_tmpI, m_tmpI+m_nEoutBB-1 );
+	//  rebin
+	m_rebinner( x.tof_begin, x.tof_end, x.cnts_begin,
+		    m_tmpE, 
+		    m_spe.e_begin, m_spe.e_end, m_tmpI
+		    );
+	//  correct for efficiency
+	m_efficiencyCorrector.correct( m_tmpI, x.pressure, x.radius );
+	OutputDataIterator dit = m_spe.S + cellIndex * (m_nEoutBB-1);
+	//  add slice to result
+	for (OutputDataIterator it = m_tmpI; it < m_tmpI+m_nEoutBB-1; it ++, dit++) {
+	  *dit += *it;
+	}
+	
+	//next the error bar of intensity (S_err(phi,E))
+	clear( m_tmpI, m_tmpI+m_nEoutBB-1 );
+	//  rebin
+	m_rebinner( x.tof_begin, x.tof_end, x.error2_begin,
+		    m_tmpE, 
+		    m_spe.e_begin, m_spe.e_end, m_tmpI
+		    ); 
+	//  correct for efficiency
+	m_efficiencyCorrector.correct( m_tmpI, x.pressure, x.radius );
+	//  add slice to result
+	dit = m_spe.S_err2 + cellIndex * (m_nEoutBB-1);
+	for (OutputDataIterator it = m_tmpI; it < m_tmpI+m_nEoutBB-1; it ++, dit++) 
+	  *dit += *it;
+	
+	//solid angle
+	*(m_spe.solidangle + cellIndex) += x.solidangle ;
+      }
+
+    private:
+      void clear( OutputDataIterator it1, OutputDataIterator it2 ) {
+	for (OutputDataIterator it = it1; it < it2; it++ ) {
+	  *it = 0.;
+	}
+      }
+      Rebinner_t m_rebinner;
+      OutputBinIterator m_tmpE;
+      Spe_t m_spe;
+      OutputDataIterator m_tmpI;
+      size_t m_nEoutBB;
+      EfficiencyCorrector &m_efficiencyCorrector;
+    };
+    
+  } // namespace DGTS_RebinTof2E_batch_impl
+
+
+  template<
+    typename FLT, 
+    typename InputBinIterator, typename InputDataIterator,
+    typename OutputBinIterator, typename OutputDataIterator,
+    typename MaskIterator,
+    typename EfficiencyCorrector> 
+  
+  void DGTS_RebinTof2E_batch
+  ( InputBinIterator tofbb_begin, InputBinIterator tofbb_end,
+    InputDataIterator cnts_begin, InputDataIterator error2_begin,
+
+    OutputBinIterator phibb_begin, OutputBinIterator phibb_end,
+    OutputBinIterator ebb_begin, OutputBinIterator ebb_end,
+    OutputDataIterator S_begin, OutputDataIterator Serr2_begin,
+    OutputDataIterator outsolidangle_begin,
+
+    FLT ei, FLT mod2sample, 
+
+    MaskIterator mask_begin,
+    InputDataIterator phi_begin, InputDataIterator solidangle_begin,
+    InputDataIterator dist_begin,
+    InputDataIterator radius_begin, InputDataIterator pressure_begin,
+    size_t size,
+    OutputBinIterator tmpE, OutputDataIterator tmpI )
+  {
+    using namespace DGTS_RebinTof2E_batch_impl;
+
+    typedef Spe<OutputBinIterator, OutputDataIterator> Spe_t;
+    Spe_t spe = {
+      phibb_begin, phibb_end, ebb_begin, ebb_end,
+      S_begin, Serr2_begin, outsolidangle_begin
+    };
+
+    // calcuate energy transfers
+    // they should be bin centers.
+    std::vector<FLT> exfers(ebb_end-ebb_begin-1);
+    for (size_t i=0; i<exfers.size(); i++) 
+      exfers[i] = ( *(ebb_begin+i) + *(ebb_begin+i+1) ) / 2;
+
+    // for efficiency correction, we need final energy
+    std::vector<FLT> efs(exfers.size());
+    for (size_t i=0; i<efs.size(); i++)
+      efs[i] = ei - exfers[i];
+
+    // efficiency calculator
+    EfficiencyCorrector corrector( efs.begin(), efs.end() );
+    
+    DGTS_Reduce
+      <FLT, 
+      InputBinIterator, InputDataIterator, 
+      OutputBinIterator, OutputDataIterator,
+      MaskIterator, 
+      EfficiencyCorrector>  reduce
+      (ei,  mod2sample, tofbb_end-tofbb_begin, 
+       spe, tmpE, tmpI, corrector );
+
+    // alias
+    typedef ReduceeIterator <
+    InputBinIterator, InputDataIterator, MaskIterator, FLT> RIt;
+    
+    RIt rit0(tofbb_begin, tofbb_end, cnts_begin, error2_begin,
+	     phi_begin, solidangle_begin,
+	     dist_begin,
+	     radius_begin, pressure_begin,
+	     mask_begin, size ),
+      rit1 = rit0.end();
+	 
+    for (RIt rit = rit0; rit < rit1; ++rit ) {
+      reduce( *rit );
+    }
+  }
+  
+}}//namespace DANSE::Reduction
+
+
+// version
+// $Id$
+
+// End of file 

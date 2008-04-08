@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="us-ascii" ?>
+
+<!--
+
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+                                   Jiao Lin
+                      California Institute of Technology
+                        (C) 2007 All Rights Reserved
+
+ {LicenseText}
+
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+-->
+
+<chapter>
+  
+  <title>Introduction</title>
+  
+  <para>
+ The open-source software package Data Reduction for Chopper Spectrometers
+ (DRCS, or more affectionately, DrChops) performs reductions of 
+  data from direct-geometry, time-of-flight, neutron chopper spectrometers. 
+  ``Reduction'' means the transformation of raw data, typically times of
+  neutron detections in pixels, into scattered intensities as functions
+ of energy and momentum transfer to the sample.  Reduction software 
+accounts for many instrumental characteristics, producing intensities 
+that are both meaningful to scientists, and reasonably comparable from
+ instrument to instrument. Today DRCS supports the spectrometers 
+LRMECS, PHAROS, and simulations of ARCS. The modular design of DRCS 
+allows it to be adapted quickly for other chopper spectrometers, 
+as explained in the Developer's Guide.  
+ </para>
+  
+  <para>
+   This User's Guide explains how to use DRCS for data reduction.
+ This involves using components of DRCS to perform preprocessings
+ such as removal of time-independent background, normalization,
+ and calibration. Other steps use components to perform reduction
+ transformations such as I(det,pix,tof) to S(phi,E),  or
+ I(det,pix,tof) to S(Q,E).  All users will want to use the
+ components for graphing the data. Advanced users can add 
+functionality to DRCS at several levels. Additional components
+ are available to perform numerical manipulations of the data, 
+and some functional fits. To accommodate different user
+ preferences, and to allow for different types of usage, 
+the same functionalities of DRCS can be accessed in different
+ ways. 
+  </para>
+  
+  <para>  
+    A Graphical User Interface (GUI) is provided for quick
+ and easy reduction of data. The GUI is largely a hierarchy
+ of menus. The top menu is a simple ``run'' button, but
+ beneath it is a logical sequence of configuration steps to
+ allow users to provide information about the data to be
+ reduced, and select parameters used in the reduction.
+ After reduction is done, the results are saved in
+ python-pickle files.
+  </para>
+  
+<!--  
+  <para>
+    This reduction package is based on pyre,
+    a python framework for high-performance computing.
+    The use of pyre allows developers of scientific
+    computing software, ususaly graduate students and postdocs,
+    to focus more on computation engines, the core
+    functional part of scientific software, instead of things like 
+    user interfaces, parallelizations, network computing,
+    etc.
+  </para>
+-->
+
+<para>
+ Unix-like commands are provided to allow more customization
+ of data analysis. These commands can do everything that
+ GUI can do, but also allow users to write their own
+ shell scripts to process datasets in batch mode. 
+</para>
+
+<para>
+  Finally, a python command line interface is provided
+ for users who want direct access to the software
+ components of DRCS.  Using python syntax, users can 
+access each reduction operation, add their own components,
+ or alter existing components and their execution to
+ fit their needs.
+</para>
+
+<para>
+ This User's Guide to Data Reduction for Chopper 
+Spectrometers (DRCS, DrChops) is organized as follows
+</para>
+
+  <para> <xref linkend='reduction-Install'/> explains how to
+  download and install reduction software.
+  </para>
+
+  <para> <xref linkend='GettingStarted'/>, <xref linkend="LRMECS"/>
+  and <xref linkend="PHAROS"/> show how to do basic reduction
+  with graphical user interface.
+  </para>
+
+  <para> <xref linkend='UnixCommands'/> 
+  explains how to
+  use the unix-like commands.
+  </para>
+
+  <para> <xref linkend='reduction.Scripting'/>
+explains the powerful way of using reduction
+software by scripting in python.
+  </para>
+
+  <para> <xref linkend='Multiphonon-UserGuide'/> 
+is about tools for multiphonon and 
+multple-scattering corrections.
+  </para>
+
+
+  <para>
+<xref linkend='Histogram-UserGuide'/> 
+explains how to manipulate and use histograms and the
+ histogram viewer. These capabilities are being used
+ by several other software packages in the DANSE project.
+ </para>
+
+</chapter>
+
+

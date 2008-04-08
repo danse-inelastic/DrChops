@@ -1,0 +1,205 @@
+<?xml version="1.0"?>
+<!--
+! ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!
+!                                   Jiao Lin
+!                      California Institute of Technology
+!              (C) 2005 All Rights Reserved  All Rights Reserved
+!
+! {LicenseText}
+!
+! ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-->
+
+<!DOCTYPE inventory>
+
+<inventory>
+
+    <component name="ARCSSimuReduction">
+        <property name="typos">strict</property>
+        <property name="SpeReducer">ARCSSimuSpeReducer</property>
+        <facility name="journal">journal</facility>
+        <property name="matplotlib">matplot</property>
+        <property name="Measurement">ARCSSimuMeasurement</property>
+        <property name="MainDataExtractor">ARCSSimuMainDataExtractor</property>
+        <facility name="weaver">weaver</facility>
+        <property name="IncidentEnergySolver">ARCSSimuIncidentEnergySolver</property>
+
+        <component name="matplot">
+        </component>
+
+
+        <component name="ARCSSimuSpeReducer">
+            <property name="phimin">1.0</property>
+            <property name="tbgmax">1</property>
+            <property name="emin">-40.0</property>
+            <property name="emax">40.0</property>
+            <property name="DetEfficiencyCalculator">SimpleDetEfficiency</property>
+            <facility name="TimeBGround">TimeBGround</facility>
+            <property name="excludedDetectors">[]</property>
+            <property name="excludedPixels">[]</property>
+            <property name="HistogramOperators">histogram_operators</property>
+            <property name="matplotlib">matplot</property>
+            <property name="excludedSingles">[]</property>
+            <facility name="Rebinner">Rebinner</facility>
+            <property name="delta_e">1.0</property>
+            <property name="delta_phi">3.0</property>
+            <property name="phimax">140.0</property>
+            <property name="tbgmin">0</property>
+
+            <component name="matplot">
+            </component>
+
+
+            <component name="Rebinner">
+                <property name="delta-t">1.0</property>
+                <property name="numEBins">1</property>
+                <property name="datatype">6</property>
+                <property name="epsilon">0.05</property>
+                <property name="numTBins">1</property>
+                <property name="delta-e">1.0</property>
+                <property name="e_i">25.3</property>
+                <property name="mod2SampDist">13600.0</property>
+            </component>
+
+
+            <component name="TimeBGround">
+                <facility name="HistogramAverager">HistogramAverager</facility>
+                <facility name="HistogramScalarAdder">HistogramScalarAdder</facility>
+                <property name="propErrors">True</property>
+
+                <component name="HistogramScalarAdder">
+                    <facility name="ErrorPropagator">ErrorPropagator</facility>
+
+                    <component name="ErrorPropagator">
+                    </component>
+
+                </component>
+
+
+                <component name="HistogramAverager">
+                </component>
+
+            </component>
+
+
+            <component name="SimpleDetEfficiency">
+                <facility name="DetectorEfficCalcor">DetectorEfficCalcor</facility>
+                <property name="matplotlib">matplot</property>
+
+                <component name="matplot">
+                </component>
+
+
+                <component name="DetectorEfficCalcor">
+                    <property name="precision">6</property>
+                    <property name="pressure">10.0</property>
+                    <property name="radius">12.7</property>
+                    <property name="nPoints">500</property>
+                </component>
+
+            </component>
+
+
+            <component name="histogram_operators">
+                <property name="scalarMult">HistogramScalarMult</property>
+                <property name="scalarAdder">HistogramScalarAdder</property>
+                <property name="subtracter">HistogramSubtracter</property>
+                <property name="multiplier">HistogramMultiplier</property>
+                <property name="divider">HistogramDivider</property>
+                <property name="averager">HistogramAverager</property>
+                <property name="adder">HistogramAdder</property>
+
+                <component name="HistogramScalarAdder">
+                    <facility name="ErrorPropagator">ErrorPropagator</facility>
+
+                    <component name="ErrorPropagator">
+                    </component>
+
+                </component>
+
+
+                <component name="HistogramMultiplier">
+                    <facility name="ErrorPropagator">ErrorPropagator</facility>
+
+                    <component name="ErrorPropagator">
+                    </component>
+
+                </component>
+
+
+                <component name="HistogramAdder">
+                    <facility name="ErrorPropagator">ErrorPropagator</facility>
+ 
+                    <component name="ErrorPropagator">
+                    </component>
+
+                </component>
+
+
+                <component name="HistogramScalarMult">
+                    <facility name="ErrorPropagator">ErrorPropagator</facility>
+
+                    <component name="ErrorPropagator">
+                    </component>
+
+                </component>
+
+
+                <component name="HistogramDivider">
+                    <facility name="ErrorPropagator">ErrorPropagator</facility>
+
+                    <component name="ErrorPropagator">
+                    </component>
+
+                </component>
+
+
+                <component name="HistogramSubtracter">
+                    <facility name="ErrorPropagator">ErrorPropagator</facility>
+
+                    <component name="ErrorPropagator">
+                    </component>
+
+                </component>
+
+
+                <component name="HistogramAverager">
+                </component>
+
+            </component>
+
+        </component>
+
+
+        <component name="ARCSSimuIncidentEnergySolver">
+            <property name="e_i">63.0</property>
+        </component>
+
+
+        <component name="ARCSSimuMainDataExtractor">
+            <property name="longEntry">simulations/run001</property>
+            <property name="matplotlib">matplot</property>
+            <property name="shortEntry"></property>
+
+            <component name="matplot">
+            </component>
+
+        </component>
+
+
+        <component name="ARCSSimuMeasurement">
+            <property name="filename">inputs/arcsSimuRes-002.nx5</property>
+            <property name="entry">/run001</property>
+        </component>
+
+    </component>
+
+</inventory>
+
+<!-- version-->
+<!-- $Id: PowderReduction.pml.all 706 2005-11-11 08:50:21Z linjiao $-->
+
+<!-- Generated automatically by Renderer on Thu Nov 10 22:44:29 2005-->
+
+<!-- End of file -->

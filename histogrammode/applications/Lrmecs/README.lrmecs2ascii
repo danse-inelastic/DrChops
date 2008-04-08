@@ -1,0 +1,16 @@
+02/16/2006
+
+ The perl script LRMECS2ASCII was authored by John McCorquodale, in early 2006.
+It allows the user to convert a binary data file from the LRMECS instrument at 
+IPNS at Argonne National Laboratory into a person readable ASCII file.  
+
+If you wish to decrypt the file lrcs4844.run and have the decrypted ASCII file 
+be placed in the file /my/directory/4844, you can use the following syntax at 
+the command prompt:
+
+$ /path/to/LRMECS2ASCII /path/to/lrcs4844.run > /my/directory/4844
+
+As far as I know, there are no test packages for this code.
+
+Max Kresch
+mkresch@caltech.edu

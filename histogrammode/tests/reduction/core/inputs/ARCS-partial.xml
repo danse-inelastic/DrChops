@@ -1,0 +1,425 @@
+<?xml version="1.0"?>
+<!--
+! ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!
+!                                   Jiao Lin
+!                      California Institute of Technology
+!                        (C) 2007  All Rights Reserved
+!
+! {LicenseText}
+!
+! ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-->
+
+<!DOCTYPE instrument>
+
+<Instrument guid="-1" name="ARCS">
+
+  <Moderator guid="1" type="non-existant" name="moderator" id="0">
+    <Shape>
+<!--
+Block
+
+  Its thickness is the length of the dimension that is parallel
+  to neutron beam.
+
+  Its height is its vertical length (parallel to gravity).
+
+  Its width is the 3rd dimension.
+
+-->
+<block width="0.1*m" height="0.1*m" thickness="0.1*m"/>
+    </Shape>
+  </Moderator>
+
+
+  <Monitor mode="monitor" guid="2" name="monitor0" sampledFraction="0.01" id="1">
+    <Shape>
+<!--
+Block
+
+  Its thickness is the length of the dimension that is parallel
+  to neutron beam.
+
+  Its height is its vertical length (parallel to gravity).
+
+  Its width is the 3rd dimension.
+
+-->
+<block width="0.0762*m" height="0.0762*m" thickness="0.0381*m"/>
+    </Shape>
+  </Monitor>
+
+
+  <Monitor mode="monitor" guid="3" name="monitor1" sampledFraction="0.01" id="2">
+    <Shape>
+<!--
+Block
+
+  Its thickness is the length of the dimension that is parallel
+  to neutron beam.
+
+  Its height is its vertical length (parallel to gravity).
+
+  Its width is the 3rd dimension.
+
+-->
+<block width="0.0762*m" height="0.0762*m" thickness="0.0381*m"/>
+    </Shape>
+  </Monitor>
+
+
+  <Sample guid="4" name="sample" id="3">
+  </Sample>
+
+
+  <DetectorSystem name='detectorSystem' guid='5'>
+
+    <Shape>
+      <hollowCylinder in_radius="2.9" out_radius="3.1" height="3.5"/>
+    </Shape>
+    
+    <DetectorPack name='detPack0' guid='1000'>
+      
+      <Shape>
+<block width="8.56*inch" height="1.005*m" thickness="1.0*inch"/>
+      </Shape>
+      
+      <Detector name='det0' guid='10000'>
+	
+	<Shape>
+<cylinder radius="0.5*inch" height="1.0*m"/>
+	</Shape>
+	
+<Pixel name="pix0" guid="100000"/>
+<Pixel name="pix1" guid="100001"/>
+<Pixel name="pix2" guid="100002"/>
+<Pixel name="pix3" guid="100003"/>
+<Pixel name="pix4" guid="100004"/>
+<Pixel name="pix5" guid="100005"/>
+<Pixel name="pix6" guid="100006"/>
+<Pixel name="pix7" guid="100007"/>
+<Pixel name="pix8" guid="100008"/>
+<Pixel name="pix9" guid="100009"/>
+<Pixel name="pix10" guid="100010"/>
+<Pixel name="pix11" guid="100011"/>
+<Pixel name="pix12" guid="100012"/>
+<Pixel name="pix13" guid="100013"/>
+<Pixel name="pix14" guid="100014"/>
+<Pixel name="pix15" guid="100015"/>
+<Pixel name="pix16" guid="100016"/>
+<Pixel name="pix17" guid="100017"/>
+<Pixel name="pix18" guid="100018"/>
+<Pixel name="pix19" guid="100019"/>
+<Pixel name="pix20" guid="100020"/>
+<Pixel name="pix21" guid="100021"/>
+<Pixel name="pix22" guid="100022"/>
+<Pixel name="pix23" guid="100023"/>
+<Pixel name="pix24" guid="100024"/>
+<Pixel name="pix25" guid="100025"/>
+<Pixel name="pix26" guid="100026"/>
+<Pixel name="pix27" guid="100027"/>
+<Pixel name="pix28" guid="100028"/>
+<Pixel name="pix29" guid="100029"/>
+<Pixel name="pix30" guid="100030"/>
+<Pixel name="pix31" guid="100031"/>
+<Pixel name="pix32" guid="100032"/>
+<Pixel name="pix33" guid="100033"/>
+<Pixel name="pix34" guid="100034"/>
+<Pixel name="pix35" guid="100035"/>
+<Pixel name="pix36" guid="100036"/>
+<Pixel name="pix37" guid="100037"/>
+<Pixel name="pix38" guid="100038"/>
+<Pixel name="pix39" guid="100039"/>
+<Pixel name="pix40" guid="100040"/>
+<Pixel name="pix41" guid="100041"/>
+<Pixel name="pix42" guid="100042"/>
+<Pixel name="pix43" guid="100043"/>
+<Pixel name="pix44" guid="100044"/>
+<Pixel name="pix45" guid="100045"/>
+<Pixel name="pix46" guid="100046"/>
+<Pixel name="pix47" guid="100047"/>
+<Pixel name="pix48" guid="100048"/>
+<Pixel name="pix49" guid="100049"/>
+<Pixel name="pix50" guid="100050"/>
+<Pixel name="pix51" guid="100051"/>
+<Pixel name="pix52" guid="100052"/>
+<Pixel name="pix53" guid="100053"/>
+<Pixel name="pix54" guid="100054"/>
+<Pixel name="pix55" guid="100055"/>
+<Pixel name="pix56" guid="100056"/>
+<Pixel name="pix57" guid="100057"/>
+<Pixel name="pix58" guid="100058"/>
+<Pixel name="pix59" guid="100059"/>
+<Pixel name="pix60" guid="100060"/>
+<Pixel name="pix61" guid="100061"/>
+<Pixel name="pix62" guid="100062"/>
+<Pixel name="pix63" guid="100063"/>
+<Pixel name="pix64" guid="100064"/>
+<Pixel name="pix65" guid="100065"/>
+<Pixel name="pix66" guid="100066"/>
+<Pixel name="pix67" guid="100067"/>
+<Pixel name="pix68" guid="100068"/>
+<Pixel name="pix69" guid="100069"/>
+<Pixel name="pix70" guid="100070"/>
+<Pixel name="pix71" guid="100071"/>
+<Pixel name="pix72" guid="100072"/>
+<Pixel name="pix73" guid="100073"/>
+<Pixel name="pix74" guid="100074"/>
+<Pixel name="pix75" guid="100075"/>
+<Pixel name="pix76" guid="100076"/>
+<Pixel name="pix77" guid="100077"/>
+<Pixel name="pix78" guid="100078"/>
+<Pixel name="pix79" guid="100079"/>
+<Pixel name="pix80" guid="100080"/>
+<Pixel name="pix81" guid="100081"/>
+<Pixel name="pix82" guid="100082"/>
+<Pixel name="pix83" guid="100083"/>
+<Pixel name="pix84" guid="100084"/>
+<Pixel name="pix85" guid="100085"/>
+<Pixel name="pix86" guid="100086"/>
+<Pixel name="pix87" guid="100087"/>
+<Pixel name="pix88" guid="100088"/>
+<Pixel name="pix89" guid="100089"/>
+<Pixel name="pix90" guid="100090"/>
+<Pixel name="pix91" guid="100091"/>
+<Pixel name="pix92" guid="100092"/>
+<Pixel name="pix93" guid="100093"/>
+<Pixel name="pix94" guid="100094"/>
+<Pixel name="pix95" guid="100095"/>
+<Pixel name="pix96" guid="100096"/>
+<Pixel name="pix97" guid="100097"/>
+<Pixel name="pix98" guid="100098"/>
+<Pixel name="pix99" guid="100099"/>
+<Pixel name="pix100" guid="100100"/>
+<Pixel name="pix101" guid="100101"/>
+<Pixel name="pix102" guid="100102"/>
+<Pixel name="pix103" guid="100103"/>
+<Pixel name="pix104" guid="100104"/>
+<Pixel name="pix105" guid="100105"/>
+<Pixel name="pix106" guid="100106"/>
+<Pixel name="pix107" guid="100107"/>
+<Pixel name="pix108" guid="100108"/>
+<Pixel name="pix109" guid="100109"/>
+<Pixel name="pix110" guid="100110"/>
+<Pixel name="pix111" guid="100111"/>
+<Pixel name="pix112" guid="100112"/>
+<Pixel name="pix113" guid="100113"/>
+<Pixel name="pix114" guid="100114"/>
+<Pixel name="pix115" guid="100115"/>
+<Pixel name="pix116" guid="100116"/>
+<Pixel name="pix117" guid="100117"/>
+<Pixel name="pix118" guid="100118"/>
+<Pixel name="pix119" guid="100119"/>
+<Pixel name="pix120" guid="100120"/>
+<Pixel name="pix121" guid="100121"/>
+<Pixel name="pix122" guid="100122"/>
+<Pixel name="pix123" guid="100123"/>
+<Pixel name="pix124" guid="100124"/>
+<Pixel name="pix125" guid="100125"/>
+<Pixel name="pix126" guid="100126"/>
+<Pixel name="pix127" guid="100127"/>
+<LocalGeometer registry-coordinate-system="InstrumentScientist">
+<Register name="pix0" position="(0*m,0*m,-0.496094*m)" orientation="(0, 0, 0)"/>
+<Register name="pix1" position="(0*m,0*m,-0.488281*m)" orientation="(0, 0, 0)"/>
+<Register name="pix2" position="(0*m,0*m,-0.480469*m)" orientation="(0, 0, 0)"/>
+<Register name="pix3" position="(0*m,0*m,-0.472656*m)" orientation="(0, 0, 0)"/>
+<Register name="pix4" position="(0*m,0*m,-0.464844*m)" orientation="(0, 0, 0)"/>
+<Register name="pix5" position="(0*m,0*m,-0.457031*m)" orientation="(0, 0, 0)"/>
+<Register name="pix6" position="(0*m,0*m,-0.449219*m)" orientation="(0, 0, 0)"/>
+<Register name="pix7" position="(0*m,0*m,-0.441406*m)" orientation="(0, 0, 0)"/>
+<Register name="pix8" position="(0*m,0*m,-0.433594*m)" orientation="(0, 0, 0)"/>
+<Register name="pix9" position="(0*m,0*m,-0.425781*m)" orientation="(0, 0, 0)"/>
+<Register name="pix10" position="(0*m,0*m,-0.417969*m)" orientation="(0, 0, 0)"/>
+<Register name="pix11" position="(0*m,0*m,-0.410156*m)" orientation="(0, 0, 0)"/>
+<Register name="pix12" position="(0*m,0*m,-0.402344*m)" orientation="(0, 0, 0)"/>
+<Register name="pix13" position="(0*m,0*m,-0.394531*m)" orientation="(0, 0, 0)"/>
+<Register name="pix14" position="(0*m,0*m,-0.386719*m)" orientation="(0, 0, 0)"/>
+<Register name="pix15" position="(0*m,0*m,-0.378906*m)" orientation="(0, 0, 0)"/>
+<Register name="pix16" position="(0*m,0*m,-0.371094*m)" orientation="(0, 0, 0)"/>
+<Register name="pix17" position="(0*m,0*m,-0.363281*m)" orientation="(0, 0, 0)"/>
+<Register name="pix18" position="(0*m,0*m,-0.355469*m)" orientation="(0, 0, 0)"/>
+<Register name="pix19" position="(0*m,0*m,-0.347656*m)" orientation="(0, 0, 0)"/>
+<Register name="pix20" position="(0*m,0*m,-0.339844*m)" orientation="(0, 0, 0)"/>
+<Register name="pix21" position="(0*m,0*m,-0.332031*m)" orientation="(0, 0, 0)"/>
+<Register name="pix22" position="(0*m,0*m,-0.324219*m)" orientation="(0, 0, 0)"/>
+<Register name="pix23" position="(0*m,0*m,-0.316406*m)" orientation="(0, 0, 0)"/>
+<Register name="pix24" position="(0*m,0*m,-0.308594*m)" orientation="(0, 0, 0)"/>
+<Register name="pix25" position="(0*m,0*m,-0.300781*m)" orientation="(0, 0, 0)"/>
+<Register name="pix26" position="(0*m,0*m,-0.292969*m)" orientation="(0, 0, 0)"/>
+<Register name="pix27" position="(0*m,0*m,-0.285156*m)" orientation="(0, 0, 0)"/>
+<Register name="pix28" position="(0*m,0*m,-0.277344*m)" orientation="(0, 0, 0)"/>
+<Register name="pix29" position="(0*m,0*m,-0.269531*m)" orientation="(0, 0, 0)"/>
+<Register name="pix30" position="(0*m,0*m,-0.261719*m)" orientation="(0, 0, 0)"/>
+<Register name="pix31" position="(0*m,0*m,-0.253906*m)" orientation="(0, 0, 0)"/>
+<Register name="pix32" position="(0*m,0*m,-0.246094*m)" orientation="(0, 0, 0)"/>
+<Register name="pix33" position="(0*m,0*m,-0.238281*m)" orientation="(0, 0, 0)"/>
+<Register name="pix34" position="(0*m,0*m,-0.230469*m)" orientation="(0, 0, 0)"/>
+<Register name="pix35" position="(0*m,0*m,-0.222656*m)" orientation="(0, 0, 0)"/>
+<Register name="pix36" position="(0*m,0*m,-0.214844*m)" orientation="(0, 0, 0)"/>
+<Register name="pix37" position="(0*m,0*m,-0.207031*m)" orientation="(0, 0, 0)"/>
+<Register name="pix38" position="(0*m,0*m,-0.199219*m)" orientation="(0, 0, 0)"/>
+<Register name="pix39" position="(0*m,0*m,-0.191406*m)" orientation="(0, 0, 0)"/>
+<Register name="pix40" position="(0*m,0*m,-0.183594*m)" orientation="(0, 0, 0)"/>
+<Register name="pix41" position="(0*m,0*m,-0.175781*m)" orientation="(0, 0, 0)"/>
+<Register name="pix42" position="(0*m,0*m,-0.167969*m)" orientation="(0, 0, 0)"/>
+<Register name="pix43" position="(0*m,0*m,-0.160156*m)" orientation="(0, 0, 0)"/>
+<Register name="pix44" position="(0*m,0*m,-0.152344*m)" orientation="(0, 0, 0)"/>
+<Register name="pix45" position="(0*m,0*m,-0.144531*m)" orientation="(0, 0, 0)"/>
+<Register name="pix46" position="(0*m,0*m,-0.136719*m)" orientation="(0, 0, 0)"/>
+<Register name="pix47" position="(0*m,0*m,-0.128906*m)" orientation="(0, 0, 0)"/>
+<Register name="pix48" position="(0*m,0*m,-0.121094*m)" orientation="(0, 0, 0)"/>
+<Register name="pix49" position="(0*m,0*m,-0.113281*m)" orientation="(0, 0, 0)"/>
+<Register name="pix50" position="(0*m,0*m,-0.105469*m)" orientation="(0, 0, 0)"/>
+<Register name="pix51" position="(0*m,0*m,-0.0976562*m)" orientation="(0, 0, 0)"/>
+<Register name="pix52" position="(0*m,0*m,-0.0898438*m)" orientation="(0, 0, 0)"/>
+<Register name="pix53" position="(0*m,0*m,-0.0820312*m)" orientation="(0, 0, 0)"/>
+<Register name="pix54" position="(0*m,0*m,-0.0742188*m)" orientation="(0, 0, 0)"/>
+<Register name="pix55" position="(0*m,0*m,-0.0664062*m)" orientation="(0, 0, 0)"/>
+<Register name="pix56" position="(0*m,0*m,-0.0585938*m)" orientation="(0, 0, 0)"/>
+<Register name="pix57" position="(0*m,0*m,-0.0507812*m)" orientation="(0, 0, 0)"/>
+<Register name="pix58" position="(0*m,0*m,-0.0429688*m)" orientation="(0, 0, 0)"/>
+<Register name="pix59" position="(0*m,0*m,-0.0351562*m)" orientation="(0, 0, 0)"/>
+<Register name="pix60" position="(0*m,0*m,-0.0273438*m)" orientation="(0, 0, 0)"/>
+<Register name="pix61" position="(0*m,0*m,-0.0195312*m)" orientation="(0, 0, 0)"/>
+<Register name="pix62" position="(0*m,0*m,-0.0117188*m)" orientation="(0, 0, 0)"/>
+<Register name="pix63" position="(0*m,0*m,-0.00390625*m)" orientation="(0, 0, 0)"/>
+<Register name="pix64" position="(0*m,0*m,0.00390625*m)" orientation="(0, 0, 0)"/>
+<Register name="pix65" position="(0*m,0*m,0.0117188*m)" orientation="(0, 0, 0)"/>
+<Register name="pix66" position="(0*m,0*m,0.0195312*m)" orientation="(0, 0, 0)"/>
+<Register name="pix67" position="(0*m,0*m,0.0273438*m)" orientation="(0, 0, 0)"/>
+<Register name="pix68" position="(0*m,0*m,0.0351562*m)" orientation="(0, 0, 0)"/>
+<Register name="pix69" position="(0*m,0*m,0.0429688*m)" orientation="(0, 0, 0)"/>
+<Register name="pix70" position="(0*m,0*m,0.0507812*m)" orientation="(0, 0, 0)"/>
+<Register name="pix71" position="(0*m,0*m,0.0585938*m)" orientation="(0, 0, 0)"/>
+<Register name="pix72" position="(0*m,0*m,0.0664062*m)" orientation="(0, 0, 0)"/>
+<Register name="pix73" position="(0*m,0*m,0.0742188*m)" orientation="(0, 0, 0)"/>
+<Register name="pix74" position="(0*m,0*m,0.0820312*m)" orientation="(0, 0, 0)"/>
+<Register name="pix75" position="(0*m,0*m,0.0898438*m)" orientation="(0, 0, 0)"/>
+<Register name="pix76" position="(0*m,0*m,0.0976562*m)" orientation="(0, 0, 0)"/>
+<Register name="pix77" position="(0*m,0*m,0.105469*m)" orientation="(0, 0, 0)"/>
+<Register name="pix78" position="(0*m,0*m,0.113281*m)" orientation="(0, 0, 0)"/>
+<Register name="pix79" position="(0*m,0*m,0.121094*m)" orientation="(0, 0, 0)"/>
+<Register name="pix80" position="(0*m,0*m,0.128906*m)" orientation="(0, 0, 0)"/>
+<Register name="pix81" position="(0*m,0*m,0.136719*m)" orientation="(0, 0, 0)"/>
+<Register name="pix82" position="(0*m,0*m,0.144531*m)" orientation="(0, 0, 0)"/>
+<Register name="pix83" position="(0*m,0*m,0.152344*m)" orientation="(0, 0, 0)"/>
+<Register name="pix84" position="(0*m,0*m,0.160156*m)" orientation="(0, 0, 0)"/>
+<Register name="pix85" position="(0*m,0*m,0.167969*m)" orientation="(0, 0, 0)"/>
+<Register name="pix86" position="(0*m,0*m,0.175781*m)" orientation="(0, 0, 0)"/>
+<Register name="pix87" position="(0*m,0*m,0.183594*m)" orientation="(0, 0, 0)"/>
+<Register name="pix88" position="(0*m,0*m,0.191406*m)" orientation="(0, 0, 0)"/>
+<Register name="pix89" position="(0*m,0*m,0.199219*m)" orientation="(0, 0, 0)"/>
+<Register name="pix90" position="(0*m,0*m,0.207031*m)" orientation="(0, 0, 0)"/>
+<Register name="pix91" position="(0*m,0*m,0.214844*m)" orientation="(0, 0, 0)"/>
+<Register name="pix92" position="(0*m,0*m,0.222656*m)" orientation="(0, 0, 0)"/>
+<Register name="pix93" position="(0*m,0*m,0.230469*m)" orientation="(0, 0, 0)"/>
+<Register name="pix94" position="(0*m,0*m,0.238281*m)" orientation="(0, 0, 0)"/>
+<Register name="pix95" position="(0*m,0*m,0.246094*m)" orientation="(0, 0, 0)"/>
+<Register name="pix96" position="(0*m,0*m,0.253906*m)" orientation="(0, 0, 0)"/>
+<Register name="pix97" position="(0*m,0*m,0.261719*m)" orientation="(0, 0, 0)"/>
+<Register name="pix98" position="(0*m,0*m,0.269531*m)" orientation="(0, 0, 0)"/>
+<Register name="pix99" position="(0*m,0*m,0.277344*m)" orientation="(0, 0, 0)"/>
+<Register name="pix100" position="(0*m,0*m,0.285156*m)" orientation="(0, 0, 0)"/>
+<Register name="pix101" position="(0*m,0*m,0.292969*m)" orientation="(0, 0, 0)"/>
+<Register name="pix102" position="(0*m,0*m,0.300781*m)" orientation="(0, 0, 0)"/>
+<Register name="pix103" position="(0*m,0*m,0.308594*m)" orientation="(0, 0, 0)"/>
+<Register name="pix104" position="(0*m,0*m,0.316406*m)" orientation="(0, 0, 0)"/>
+<Register name="pix105" position="(0*m,0*m,0.324219*m)" orientation="(0, 0, 0)"/>
+<Register name="pix106" position="(0*m,0*m,0.332031*m)" orientation="(0, 0, 0)"/>
+<Register name="pix107" position="(0*m,0*m,0.339844*m)" orientation="(0, 0, 0)"/>
+<Register name="pix108" position="(0*m,0*m,0.347656*m)" orientation="(0, 0, 0)"/>
+<Register name="pix109" position="(0*m,0*m,0.355469*m)" orientation="(0, 0, 0)"/>
+<Register name="pix110" position="(0*m,0*m,0.363281*m)" orientation="(0, 0, 0)"/>
+<Register name="pix111" position="(0*m,0*m,0.371094*m)" orientation="(0, 0, 0)"/>
+<Register name="pix112" position="(0*m,0*m,0.378906*m)" orientation="(0, 0, 0)"/>
+<Register name="pix113" position="(0*m,0*m,0.386719*m)" orientation="(0, 0, 0)"/>
+<Register name="pix114" position="(0*m,0*m,0.394531*m)" orientation="(0, 0, 0)"/>
+<Register name="pix115" position="(0*m,0*m,0.402344*m)" orientation="(0, 0, 0)"/>
+<Register name="pix116" position="(0*m,0*m,0.410156*m)" orientation="(0, 0, 0)"/>
+<Register name="pix117" position="(0*m,0*m,0.417969*m)" orientation="(0, 0, 0)"/>
+<Register name="pix118" position="(0*m,0*m,0.425781*m)" orientation="(0, 0, 0)"/>
+<Register name="pix119" position="(0*m,0*m,0.433594*m)" orientation="(0, 0, 0)"/>
+<Register name="pix120" position="(0*m,0*m,0.441406*m)" orientation="(0, 0, 0)"/>
+<Register name="pix121" position="(0*m,0*m,0.449219*m)" orientation="(0, 0, 0)"/>
+<Register name="pix122" position="(0*m,0*m,0.457031*m)" orientation="(0, 0, 0)"/>
+<Register name="pix123" position="(0*m,0*m,0.464844*m)" orientation="(0, 0, 0)"/>
+<Register name="pix124" position="(0*m,0*m,0.472656*m)" orientation="(0, 0, 0)"/>
+<Register name="pix125" position="(0*m,0*m,0.480469*m)" orientation="(0, 0, 0)"/>
+<Register name="pix126" position="(0*m,0*m,0.488281*m)" orientation="(0, 0, 0)"/>
+<Register name="pix127" position="(0*m,0*m,0.496094*m)" orientation="(0, 0, 0)"/>
+</LocalGeometer>
+
+      </Detector>
+
+<Copy name="det1" reference="10000" guid="10001"/>
+<Copy name="det2" reference="10000" guid="10002"/>
+<Copy name="det3" reference="10000" guid="10003"/>
+<Copy name="det4" reference="10000" guid="10004"/>
+<Copy name="det5" reference="10000" guid="10005"/>
+<Copy name="det6" reference="10000" guid="10006"/>
+<Copy name="det7" reference="10000" guid="10007"/>
+<LocalGeometer registry-coordinate-system="InstrumentScientist">
+
+	<!--
+	    180 degree comes from the convention mismatch between how ARCS instrument labels its pixels and how instrument simulation routines handles pixels.
+	-->
+
+<Register name="det0" position="(0*m,3.78*inch,0*m)" orientation="(0, 180, 0)"/>
+<Register name="det1" position="(0*m,2.7*inch,0*m)" orientation="(0, 180, 0)"/>
+<Register name="det2" position="(0*m,1.62*inch,0*m)" orientation="(0, 180, 0)"/>
+<Register name="det3" position="(0*m,0.54*inch,0*m)" orientation="(0, 180, 0)"/>
+<Register name="det4" position="(0*m,-0.54*inch,0*m)" orientation="(0, 180, 0)"/>
+<Register name="det5" position="(0*m,-1.62*inch,0*m)" orientation="(0, 180, 0)"/>
+<Register name="det6" position="(0*m,-2.7*inch,0*m)" orientation="(0, 180, 0)"/>
+<Register name="det7" position="(0*m,-3.78*inch,0*m)" orientation="(0, 180, 0)"/>
+</LocalGeometer>      
+      
+    </DetectorPack>
+
+<Copy name="detPack1" reference="1000" guid="1001"/>
+<Copy name="detPack2" reference="1000" guid="1002"/>
+<!--
+<Copy name="detPack3" reference="1000" guid="1003"/>
+<Copy name="detPack4" reference="1000" guid="1004"/>
+<Copy name="detPack5" reference="1000" guid="1005"/>
+<Copy name="detPack6" reference="1000" guid="1006"/>
+<Copy name="detPack7" reference="1000" guid="1007"/>
+<Copy name="detPack8" reference="1000" guid="1008"/>
+<Copy name="detPack9" reference="1000" guid="1009"/>
+<Copy name="detPack10" reference="1000" guid="1010"/>
+-->
+<LocalGeometer registry-coordinate-system="InstrumentScientist">
+<Register name="detPack0" position="(-2.142267, 2.283199, 1.046357)" orientation="(0, 0, 133.17599999999999)"/>
+<Register name="detPack1" position="(-1.976764, 2.427902, 1.046357)" orientation="(0, 0, 129.15199999999999)"/>
+<Register name="detPack2" position="(-1.801514, 2.560635, 1.046357)" orientation="(0, 0, 125.128)"/>
+<!--
+<Register name="detPack3" position="(-1.617382, 2.680742, 1.046357)" orientation="(0, 0, 121.104)"/>
+<Register name="detPack4" position="(-1.425276, 2.787632, 1.046357)" orientation="(0, 0, 117.08)"/>
+<Register name="detPack5" position="(-1.226142, 2.880778, 1.046357)" orientation="(0, 0, 113.056)"/>
+<Register name="detPack6" position="(-1.020963, 2.95972, 1.046357)" orientation="(0, 0, 109.032)"/>
+<Register name="detPack7" position="(-0.733967, 3.043616, 1.046357)" orientation="(0, 0, 103.55799999999999)"/>
+<Register name="detPack8" position="(-0.518574, 3.087618, 1.046357)" orientation="(0, 0, 99.534000000000006)"/>
+<Register name="detPack9" position="(-0.300624, 3.116397, 1.046357)" orientation="(0, 0, 95.510000000000005)"/>
+<Register name="detPack10" position="(-0.081192, 3.12981, 1.046357)" orientation="(0, 0, 91.486000000000004)"/>
+-->
+</LocalGeometer>
+
+
+  </DetectorSystem>
+
+  <LocalGeometer registry-coordinate-system='InstrumentScientist'>
+    <Register name="moderator" position="(0*m, 0*m, 0*m)" orientation="(0.0, 0.0, 0.0)"/>
+    <Register name="monitor0" position="(3*m, 0*m, 0*m)" orientation="(0.0, 0.0, 0.0)"/>
+    <Register name="monitor1" position="(17*m, 0*m, 0*m)" orientation="(0.0, 0.0, 0.0)"/>
+    <Register name="sample" position="(13.5*m, 0*m, 0*m)" orientation="(0, 0, 0)"/>
+    <Register name='detectorSystem' position='(13.5,0,0)' orientation='(0,0,0)'/>
+  </LocalGeometer>
+
+  <InstrumentGeometer type='arcs' registry-coordinate-system='InstrumentScientist'/>
+  
+</Instrument>
+
+<!-- version-->
+<!-- $Id$-->
+<!-- End of file -->

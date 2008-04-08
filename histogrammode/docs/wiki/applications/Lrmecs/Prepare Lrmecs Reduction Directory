@@ -1,0 +1,48 @@
+'''This page explains how to prepare a directory for LRMECS reduction. 
+'''
+
+----
+
+====Data format====
+All LRMECS data files to be reduced must be in a special ascii format. The original data files from Lrmecs can be converted using command lrmecs2ascii
+This tutorial uses example data files that are included in the distribution. 
+Those example data files are already in ascii format.
+
+To convert lrmecs data file to ascii format, please do the following:
+
+ $ lrmecs2ascii <original_datafile_name>   >   <destinatio_filename>
+ 
+An example would be:
+
+ $ lrmecs2ascii 4849.run > 4849
+
+
+====Work Directory====
+First we want to create a work directory where we put data files and output files. 
+
+ $ mkdir -p ~/reduction/Lrmecs
+
+Next we want to have access to sample data. 
+
+If you have not done so, please download [http://strongbad.cacr.caltech.edu/arcs-1.0/ARCS-reduction-data-1.0.tar.gz sample data] and put it under directory
+ ~/reduction
+and expand the tar ball:
+ $ cd ~/reduction
+ $ tar xvfz ARCS-reduction-data-1.0.tar.gz
+This will create a directory "ins-data" which contains sample data files.
+
+Let us make a link to sample data directory
+
+ $ cd ~/reduction/Lrmecs
+ $ ln -s ~/reduction/ARCS-reduction-data/Lrmecs sampledata
+
+this will create a link in ~/reduction/Lrmecs named sampledata, pointing to the LRMECS sample data directory.
+
+
+=== copy Lrmecs sample data files ===
+copy the file here
+ $ cd ~/reduction/Lrmecs
+ $ cp sampledata/4849 .
+'''Hint: '''Don't miss the small 'dot' at the end of the last command!
+
+Do the same thing for data files 4844 and 4779

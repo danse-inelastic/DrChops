@@ -1,0 +1,376 @@
+<!--
+
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+                                   Jiao Lin
+                      California Institute of Technology
+                        (C) 2007 All Rights Reserved
+
+ {LicenseText}
+
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+-->
+
+
+<sect1 id='Install_ARCS_software_from_Source'>
+  <title >
+    Install ARCS software from Source
+  </title>
+  
+  <note>
+    Reduction software is upgrading to version 1.2 ...
+    Please come back 1 day or two to download the most
+    up-to-date binaries.
+    
+    <para>
+    
+    If you need ARCS reduction software right now, please
+    follow instructions on 
+    <xref linkend='Install_ARCS_software_from_SvnRepository'/>.
+    
+    </para>
+  </note>
+
+
+  <para >
+    
+    <table id='Install_ARCS_software_from_Source.Source_Distributions'>
+
+      <title > Source Distributions </title>
+      
+      <tgroup cols='2' align='left' colsep='1' rowsep='1'>
+
+	<colspec colname='description' colwidth="3*"/>
+	<colspec colname='link' colwidth="2*"/>
+
+	<tbody>
+	  
+	  <row >
+	    
+	    <entry >
+	      
+	      <para >
+		
+		<emphasis >
+		  ARCS reduction software
+		</emphasis>
+		
+	      </para>
+	      
+	      
+	      <para >
+		ARCS reduction software contains
+		reduction applications for following inelastic direct-geometry
+		time-of-flight instrument
+	      </para>
+	      
+	      
+	      <para >
+		
+		<itemizedlist >
+		  
+		  <listitem >
+		    LRMECS
+		  </listitem>
+		  
+		  
+		  <listitem >
+		    PHAROS
+		  </listitem>
+		  
+		</itemizedlist>
+		
+	      </para>
+	      
+	    </entry>
+	    
+	    
+	    <entry >
+	      
+	      <para >
+		
+		<ulink url='xxxDOWNLOADSxxx/reduction-source-download'>
+		  <citetitle>ARCS reduction source distribution</citetitle>
+		</ulink>
+		
+	      </para>
+	      
+	      
+	      <para >
+		(34M)
+	      </para>
+	      
+	    </entry>
+	    
+	  </row>
+	  
+	  
+	  <row >
+	    
+	    <entry >
+	      
+	      <emphasis >
+		ARCS reduction sample data
+	      </emphasis>
+	      
+	      
+	      <para >
+		This tar ball contains sample data for PHAROS and
+		LRMECS instruments.
+	      </para>
+	      
+	    </entry>
+	    
+	    
+	    <entry >
+	      
+	      <ulink url='xxxDOWNLOADSxxx/reduction-data-tgz'>
+		<citetitle>ARCS reduction sample data</citetitle>
+	      </ulink>
+	      
+	      (102 M)
+	    </entry>
+	    
+	  </row>
+	  
+	</tbody>
+      </tgroup>
+    </table>
+    
+  </para>
+  
+  
+  <sect2 id='Install_ARCS_software_from_Source.Prerequisites'>
+    <title >
+      Prerequisites
+    </title>
+    
+    
+    <para >
+      ARCS software depends on many existing softwares like HDF and numpy, and it is a complicated procedure to install all those dependencies. It is recommended that you install the binary distributions of ARCS software if it is available for your platform. If you do need to build ARCS software from source for some reason, please install the following prerequisites first:
+    </para>
+    
+    
+    <itemizedlist >
+      
+      <listitem >
+	
+	<ulink url='http://www.numpy.org/'>
+	  <citetitle>numpy</citetitle>
+	</ulink>
+	
+      </listitem>
+      
+      
+      <listitem >
+	
+	<ulink url='http://hdf.ncsa.uiuc.edu/HDF5/'>
+	  <citetitle>HDF5</citetitle>
+	</ulink>
+	
+      </listitem>
+      
+      
+      <listitem >
+	
+	<ulink url='http://matplotlib.sourceforge.net/'>
+	  <citetitle>matplotlib</citetitle>
+	</ulink>
+	
+      </listitem>
+      
+      
+      <listitem >
+	
+	<ulink url='http://www.wxpython.org/'>
+	  <citetitle>wxPython</citetitle>
+	</ulink>
+	
+      </listitem>
+      
+      
+      <listitem >
+	
+	<ulink url='http://www.scipy.org/'>
+	  <citetitle>scipy</citetitle>
+	</ulink>
+	
+	(optional)
+      </listitem>
+      
+    </itemizedlist>
+    
+    
+    <sect3 id='Install_ARCS_software_from_Source.Prerequisites.Install_prerequisites_from_binaries'>
+      <title >
+	Install prerequisites from binaries
+      </title>
+      
+      
+      <para >
+	You could install binaries of those packages, but there are some tricky
+	things about them.
+      </para>
+      
+      
+      <sect4 id='Install_ARCS_software_from_Source.Prerequisites.Install_prerequisites_from_binaries.HDF5'>
+	<title >
+	  HDF5
+	</title>
+	
+	Some prebuilt HDF5 binaries in linux does not have a c++ shared library that is needed by hdf5fs package in the ARCS reduction software. This would require you to build HDF5 yourself. Please read on to the "Install prerequisites from source" section.
+      </sect4>
+      
+      
+      <sect4 id='Install_ARCS_software_from_Source.Prerequisites.Install_prerequisites_from_binaries.Matplotlib_and_wx_python'>
+	<title >
+	  Matplotlib and wx python
+	</title>
+	
+	We use wxPython for our GUI interface, and uses wxagg of Matplotlib to do plotting. Binary installation of Matplotlib sometimes does not work with binary installation of wxPython simply due to mismatch of character set. You can test your installation of wxPython and matplotlib by doing the following:
+	
+	<programlisting >
+	  
+	  >>> import matplotlib
+	  
+	  >>> matplotlib.use("wxagg")
+	  
+	  >>> import pylab
+	  
+	  >>> pylab.plot( [1,2], [1,2] )
+	  
+	  >>> pylab.show()
+	  
+	  
+	</programlisting>
+	
+	If everything goes fine then you are lucky. If something goes wrong in between, you might need to reinstall you wxPython binary. The wxPython binaries come with two flavors, ansi or unicode, and you have to choose the right (usualy unicode) one to make it work with matplotlib binary.
+      </sect4>
+      
+    </sect3>
+    
+    
+    <sect3 id='Install_ARCS_software_from_Source.Prerequisites.Install_prerequisites_from_source'>
+      <title >
+	Install prerequisites from source
+      </title>
+      
+      When you expand the ARCS source tar ball (download it from links in the following section "Build and install ARCS software"), there will be a directory "install-deps". In that directory you will find shell scripts named as
+      
+      <programlisting >
+	
+	install-PACKAGENAME.sh
+	
+	
+      </programlisting>
+      
+      Replace PACKAGENAME with package name like "hdf5" or "numpy". Those scripts are not really for a novice user. They are good hints for experienced linux users who have installed softwares using
+      
+      <programlisting >
+	
+	$ ./configure ...
+	
+	$ make
+	
+	$ make install
+	
+	
+      </programlisting>
+      
+      approach, and have gone through the torture of building one software several times without success.
+      
+      <para >
+	Please read the README file under the install-deps directory and follow instructions there to install all dependencies.
+      </para>
+      
+    </sect3>
+    
+  </sect2>
+  
+  
+  <sect2 id='Install_ARCS_software_from_Source.Build_and_install_ARCS_software'>
+    <title >
+      Build and install ARCS software
+    </title>
+    
+    If all prerequisites are installed properly, installation of ARCS software itself is relatively easy. Please download the tar ball from the links in the following table, then do the following
+    
+    <programlisting >
+      
+      $ cd /some/where
+      
+      $ tar xvfz /path/to/downloaded/tar/ball
+      
+      $ cd arcs-&lt;version&gt;
+      
+      $ export HDF5_DIR=/path/to/HDF5/installation
+      
+      $ python setup.py install --prefix=/path/where/you/want/to/install/ARCS/software
+      
+      
+    </programlisting>
+    
+    An example would be
+    
+    <programlisting >
+      
+      $ cd ~/install
+      
+      $ tar xvfz ~/download/arcs-reduction-&lt;version&gt;.tgz
+      
+      $ cd arcs-&lt;version&gt;
+      
+      $ export HDF5_DIR=/usr/local
+      
+      $ python setup.py install --prefix=/usr/local/arcs-&lt;version&gt;\
+      
+      
+    </programlisting>
+    
+    After installation, before you can use ARCS software, you have to do the following:
+    
+    If you need to set up environment variables for ARCS software by
+    
+    <programlisting >
+      
+      $ source /path/to/your/ARCS/software/installation/bin/envs.sh
+      
+    </programlisting>
+    
+    If you want to automatically set up those variables everytime you login, please add the above command to .bash_profile under your home directory.
+    
+    <para >
+      Now you can start a reduction application from a terminal,
+      
+      <programlisting >
+	
+	$ wxLRMECSReductionApp.py
+	
+	
+      </programlisting>
+      
+    </para>
+    
+    
+    <para >
+      You could start to try out ARCS software by following
+      
+      <link linkend='GettingStarted'>
+	these instructions
+      </link>
+      
+      .
+    </para>
+    
+  </sect2>
+
+</sect1>
+
+
+<!-- version-->
+<!-- $Id$-->
+
+<!-- Generated automatically by Renderer on Thu Apr 26 13:17:56 2007-->
+
+<!-- End of file -->

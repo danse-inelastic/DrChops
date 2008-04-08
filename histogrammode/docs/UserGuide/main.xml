@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="us-ascii" ?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN"
+"http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd"
+[
+<!ENTITY reduction-Introduction SYSTEM "Introduction.xml">
+
+<!ENTITY reduction-Install SYSTEM "Install.xml">
+<!ENTITY reduction-InstallFromBinaries SYSTEM "InstallFromBinaries.xml">
+<!ENTITY reduction-InstallFromSource SYSTEM "InstallFromSource.xml">
+<!ENTITY reduction-InstallFromSvnRepository SYSTEM "InstallFromSvnRepository.xml">
+
+<!ENTITY reduction-GettingStarted SYSTEM "GettingStarted.xml">
+
+<!ENTITY reduction-LRMECS SYSTEM "LRMECS.xml">
+<!ENTITY reduction-Prepare_LRMECS_Reduction_Directory SYSTEM "Prepare_LRMECS_Reduction_Directory.xml">
+<!ENTITY reduction-LRMECS_Reduction_GUI_Tutorial SYSTEM "LRMECS_Reduction_GUI_Tutorial.xml">
+<!ENTITY reduction-LRMECS_Reduction_Commandline_Tutorial SYSTEM "LRMECS_Reduction_Commandline_Tutorial.xml">
+
+<!ENTITY reduction-PHAROS SYSTEM "PHAROS.xml">
+<!ENTITY reduction-Prepare_PHAROS_Reduction_Directory SYSTEM "Prepare_PHAROS_Reduction_Directory.xml">
+<!ENTITY reduction-PHAROS_Reduction_GUI_Tutorial SYSTEM "PHAROS_Reduction_GUI_Tutorial.xml">
+<!ENTITY reduction-PHAROS_Reduction_commandline_Tutorial SYSTEM "PHAROS_Reduction_commandline_Tutorial.xml">
+<!ENTITY reduction-PHAROS_Parallel_Reduction SYSTEM "PHAROS_Parallel_Reduction.xml">
+
+<!ENTITY reduction-UnixCommands SYSTEM "UnixCommands.xml">
+<!ENTITY reduction-Scripting SYSTEM "Scripting.xml">
+<!--
+<!ENTITY reduction-HistogramViewer_Tutorial SYSTEM "HistogramViewer_Tutorial.xml">
+<!ENTITY reduction-Multiphonon SYSTEM "Multiphonon.xml">
+-->
+]>
+
+<book>
+
+<bookinfo>
+<title>Reduction: User Guide</title>
+</bookinfo>
+
+&reduction-Introduction;
+&reduction-Install;
+&reduction-GettingStarted;
+&reduction-LRMECS;
+&reduction-PHAROS;
+&reduction-UnixCommands;
+&reduction-Scripting;
+<!--
+&reduction-HistogramViewer_Tutorial;
+&reduction-Multiphonon;
+-->
+</book>

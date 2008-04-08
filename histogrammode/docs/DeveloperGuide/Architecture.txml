@@ -1,0 +1,291 @@
+<!--
+    
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    
+    Jiao Lin
+    California Institute of Technology
+    (C) 2007 All Rights Reserved
+    
+    {LicenseText}
+    
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    
+-->
+
+<chapter id="reduction Architecture">
+
+  <title >
+    Architecture 
+  </title>
+  
+We define the terms:
+<itemizedlist>
+<listitem>
+reduction application: a complete 
+software solution for reducing experimental data from a
+particular instrument from archival disk file to 
+graphs of intensity in a space of $E$, $Q$, or both,
+</listitem>
+<listitem>
+reduction software: a collection of packages 
+for the purpose of reducing data,
+</listitem>
+<listitem>
+reduction package: one specific package 
+in the  reduction software.
+</listitem>
+</itemizedlist>
+
+
+  <sect1 id='High_level_structure_of_reduction_package_and_reduction_applications'>
+<title >
+  Reduction software 
+</title>
+
+The reduction software consists of four major packages: 
+  
+  <itemizedlist >
+    <listitem>
+      histogram : fundamental data structure
+    </listitem>
+    <listitem>
+      instrument: instrument information
+    </listitem>
+    <listitem>
+      measurement: provide histograms
+    </listitem>
+    <listitem>
+      reduction: reduction methods
+    </listitem>
+  </itemizedlist>
+
+ And there are other supporting packages:
+
+ <itemizedlist>
+   <listitem>
+     nx5: "nexus" readers/(writers) based on hdf5fs
+   </listitem>
+   <listitem>
+     hdf5fs: a tool to create/read/write hdf5 files by treating a hdf5 file as a
+     filesystem with trees of directories and files
+   </listitem>
+   <listitem>
+     stdVector: python binding to c++ std::vector template
+   </listitem>
+   <listitem>
+     array_kluge: tools to manipulate c arrays
+   </listitem>
+ </itemizedlist>
+
+ Relationship among those packages can be illustrated in 
+ <xref linkend='High_level_structure_of_reduction_package_and_reduction_applications.Package_diagram_for_reduction'/>.
+
+ <figure id='High_level_structure_of_reduction_package_and_reduction_applications.Package_diagram_for_reduction'>
+   <title >
+     Package diagram for reduction
+   </title>
+   <mediaobject >
+     <imageobject >
+       <imagedata width='70%' fileref='figures/reduction-package-diagram.png' scalefit='1'>
+       </imagedata>
+     </imageobject>
+     <textobject >
+       <phrase >
+	 Package diagram for reduction
+       </phrase>
+     </textobject>
+   </mediaobject>
+ </figure>
+The main point here is that each package in the reduction software
+has a well-defined functionality to separate from each other. This
+separation ensures extensibility of the software and the ease of
+maintenance. An important effect of this separation is that generic reduction
+applications can be written for each type of neutron instrument,
+and the support of similar instruments is relatively easy when
+one instrument of its type is supported: to support a new instrument
+of a similar type,  the major work would be to
+create an instrument representation of the new instrument,
+an instrument geometer that registers geometrical information
+about neutron components
+ (including moderator, sample, detectors, and so on),
+ and
+then write a "measurement" component(s) that transforms raw data
+(which is instrument-specific, and it could be of many different forms
+including text, hdf, nexus, etc etc) to histograms. 
+The major part of the reduction engines can be reused.
+
+<para>
+  The next section is about the reduction package inside the
+  reduction software.
+</para>
+  </sect1>
+ 
+  <sect1>
+    
+<title> Reduction package </title>
+<para>
+ This section is about the particular reduction package inside the reduction software.
+</para>
+<para>
+ The reduction package is carefully separated to several layers to ensure a clean design.
+ The layers in the reduciton package can be divided into two categories: 
+ the functinality layers and the user-interface layers. 
+</para>
+
+<sect2>
+<title> Layers of Reduction Core Functionalities </title>
+Layers of this category deal with data. It provides core functionalties to manipulate
+and reduce raw data.
+
+<variablelist>
+  <varlistentry> 
+    <term> 
+      "c/c++" layer
+    </term> 
+    <listitem>
+ "c/c++" layer is responsible for intensive computations only feasible to be implemented
+ in low level language. For example, this layer includes a class ERebinAllInOne to
+ rebin data in tof bins to data in evenly-spaced energy bins.
+    </listitem>
+  </varlistentry>
+
+  <varlistentry> 
+    <term> 
+      "python vector-compatible" layer
+    </term> 
+    <listitem>
+ "python vector compatible" layer vectorCompat is the joint point between c++ and python.
+ All c++ codes are implemented to deal with "vector"-like objects, e.g., energy bins.
+ The vectorCompat python package accepts vector arguments and call the corresponding
+ c++ methods to do the real work. This layer separate other python layers from c++ codes and
+ python bindings.
+    </listitem>
+  </varlistentry>
+
+  <varlistentry> 
+    <term> 
+      "python histogram-compatible" layer
+    </term> 
+    <listitem>
+ "python histogram compatible" layer histCompat allows developers to deal with objects with
+ more physics meanings. This layer is built on top of the vectorCompat layer. A
+ histogram
+ is an object consisting of axes and datasets and meta data. In the histCompat layer,
+ histograms are our focus. Classes in this layer  take histograms instead of vectors
+ as arguments,
+ and implementations of those classes decompose histograms to vectors and call the
+ corresponding methods in the vectorCompat layer.
+    </listitem>
+  </varlistentry>
+
+  <varlistentry> 
+    <term> 
+      "reduction core" layer
+    </term> 
+    <listitem>
+  The "reduction core" layer makes use of components in histCompat layer and implement
+ classes that are more high-level. The histCompat layer is more concerned
+ with low-level operations like "rebin to evenly-spaced energy bins" and
+ "fit a curve to gaussian and find the center". The "reduction.core" layer is more concerned
+ with "calculate calibration constants out of calibration data" and
+ "reduce I(det, pix, tof) to S(phi,E)".
+    </listitem>
+  </varlistentry>
+</variablelist>
+
+<para>
+ This layered structure may be illustrated partially 
+ in <xref linkend='High_level_structure_of_reduction_package_and_reduction_applications.Layering_in_reduction_package'/>.
+</para>
+
+<figure id='High_level_structure_of_reduction_package_and_reduction_applications.Layering_in_reduction_package'>
+  <title >
+    Layering in reduction package
+  </title>
+  <mediaobject >
+    <imageobject >
+      <imagedata width='70%' fileref='figures/reduction-package-layers.png' scalefit='1'>
+      </imagedata>
+    </imageobject>
+    <textobject >
+      <phrase >
+	Layering in reduction package
+      </phrase>
+    </textobject>
+  </mediaobject>
+</figure>
+</sect2>
+
+<sect2>
+<title> User interface layers </title>
+Layers of this category deals with user interactions, or
+helps deal with user interactions.
+
+<para>
+  They contain
+  nothing new in terms of functionality of reduction. Instead, they
+  are bridges between users and reduction core functionalities.
+</para>
+
+<variablelist>
+  <varlistentry>
+<term>
+  Pyre components layer
+</term>
+<listitem>
+  Each component in this layer wraps one class in the reduction.core layer.
+  For more details, please read <xref linkend="reduction Pyre Components"/>.
+</listitem>
+  </varlistentry>
+
+  <varlistentry>
+<term>
+  scripting layer
+</term>
+<listitem>
+  Clases of reduction.core layer that have the same API
+  are grouped together to become a command in the scripting layer.
+</listitem>
+  </varlistentry>
+
+</variablelist>
+  
+</sect2>
+  </sect1>
+
+
+  <sect1>
+<title> Reduction applications </title>
+ Reduction pyre components are assembled together to create reduction applications.
+
+<para>
+  <xref linkend='High_level_structure_of_reduction_package_and_reduction_applications.High_level_behavior_of_an_example_reduction_application:_Pharos_powder_reduction_application'/> is a high-level behavior specification of an example
+  reduction application.
+</para>    
+    
+<figure id='High_level_structure_of_reduction_package_and_reduction_applications.High_level_behavior_of_an_example_reduction_application:_Pharos_powder_reduction_application'>
+  <title >
+    High-level behavior of an example reduction application: Pharos powder reduction application
+  </title>
+  <mediaobject >
+    <imageobject >
+      <imagedata width='70%' fileref='figures/ReductionBehavior2.png' scalefit='1'>
+      </imagedata>
+    </imageobject>
+    <textobject >
+      <phrase >
+	High-level behavior of an example reduction application: Pharos powder reduction application
+      </phrase>
+    </textobject>
+  </mediaobject>
+</figure>
+
+  </sect1>
+
+</chapter>
+
+
+<!-- version-->
+<!-- $Id$-->
+
+<!-- End of file -->

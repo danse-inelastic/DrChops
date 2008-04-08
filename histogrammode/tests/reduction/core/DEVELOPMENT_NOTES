@@ -1,0 +1,6 @@
+DetEfficiency_TestCase now it not runnable because DetEfficiency
+has not been implemented. 
+DetEfficiency should be a class to calculate detector efficiency
+regardless of detector type (a visitor like class able to 
+call different methods to calculate detector efficiency).
+

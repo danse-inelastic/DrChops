@@ -1,0 +1,393 @@
+<?xml version="1.0" encoding="us-ascii" ?>
+
+<!--
+
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+                                   Jiao Lin
+                      California Institute of Technology
+                        (C) 2007 All Rights Reserved
+
+ {LicenseText}
+
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+-->
+
+<chapter id='UnixCommands'>
+  
+<title>Unix-Flavor Commandline Interface</title>
+
+<sect1 id="UnixCommands.Introduction">
+
+<title> Introduction </title>
+<para>
+  Unix-flavor commands will be a natural choice
+  for experienced unix(linux) users. 
+  They have all the functionalities shown in the GUIs
+  of previous chapters. 
+</para>
+
+<para>
+  Each command is a pyre application.
+  Any pyre application can be configured using command-line
+  options in the form of
+<programlisting>
+  --&lt;key&gt;=&lt;value&gt;
+</programlisting>
+or
+<programlisting>
+  -&lt;key&gt;=&lt;value&gt;
+</programlisting>
+Either one works.
+</para>
+
+<para>
+Similar to the unix command "man" , there is a "pyreapphelp.py" comamnd
+that can be used to print a detailed list of all options of a pyre
+application. To ask for help about a pyre application, enter
+
+<programlisting>
+  pyreapphelp.py -a &lt;pyre-application&gt;
+</programlisting>
+
+This command will print out a help page that contains all options
+available. For example:
+<programlisting>
+NAME
+  trivial.py
+
+SYNOPSIS
+  trivial.py [options]
+
+Command With All Options And Their Defaults:
+  trivial.py --name='world' --hello.greeting='aloha'
+
+
+ALL OPTIONS
+ General Description
+  All options are in the form
+    --&lt;component&gt;.&lt;property&gt;=&lt;value&gt;
+  In the following, a description of the component
+  will be given first, and then all options of that
+  component will be presented.
+
+
+
+* Component 'trivial':
+A trivial pyre application that prints out greetings
+
+Options:
+
+--name='world'
+        the entity to greet
+
+
+* Component 'hello':
+A greeter that says "hello"
+
+Options:
+
+--hello.greeting='aloha'
+
+</programlisting>
+</para>
+
+</sect1>
+<sect1>
+<title>
+  Commands
+</title>
+
+<sect2 id='reduction-UnixCommands-LrmecsReductionApp'>
+  <title>
+    LrmecsReductionApp.py
+  </title>
+  Reduces data from LRMECS instrument to
+  S(Q,E).
+
+<sect3>
+  <title> Description </title>
+  
+  This command reduces data from LRMECS instrument to
+  S(Q,E). It first extracts I(det,pix,tof) histogram
+  from LRMECS data file, and then perform preprocessings
+  like remove-time-indenpendent-background, apply-detector-mask,
+  etc, and then transform I(det, pix, tof) to S(phi,E).
+  S(phi,E) histogram is then transformed to S(Q,E)
+  histogram.
+  
+</sect3>
+
+<sect3>
+  <title> Options </title>
+<para>
+  There are many options for this application. 
+  Probably the best way to explore the options of this application
+  is to use the GUI version of this application,
+  wxLrmecsReductionApp.py. Using the GUI version of this
+  application is more intuitive. After you reduce a dataset
+  using the GUI, a pml file will be saved. That file has
+  all the configurations you have used to run the reduction
+  application. And then you may want to reduce more data files
+  using very similar configuratios, but only a few of 
+  the options are changed. For example, if the only thing changes
+  is the name of the data file to be reduced, you should keep the
+  configuration file at your working directory, and run:
+  <programlisting>
+    LrmecsReductionApp.py --reducer.LrmecsMeasurement.main=&lt;filename&gt;
+  </programlisting>
+
+  For all availabe options, please use the command 
+  pyreapphelp.py:
+<programlisting>
+  pyreapphelp.py -a LrmecsReductionApp.py
+</programlisting>
+</para>
+
+<para>
+  Here we explain some most useful options.
+</para>
+
+<variablelist>
+  <varlistentry> <term> 
+    --PowderReduction.LrmecsMeasurement.main=&lt;filename&gt;
+  </term> 
+  <listitem>
+    Data file name of the main experimental run.
+  </listitem>
+  </varlistentry>
+
+  <varlistentry> <term> 
+    --PowderReduction.LrmecsMeasurement.mt=&lt;filename&gt;
+  </term> 
+  <listitem>
+    Data file name of the empty-can experimental run.
+  </listitem>
+  </varlistentry>
+
+  <varlistentry> <term> 
+    --PowderReduction.LrmecsMeasurement.calib=&lt;filename&gt;
+  </term> 
+  <listitem>
+    Data file name of the vanadium calibration experimental run.
+  </listitem>
+  </varlistentry>
+
+  <varlistentry> <term> 
+    --PowderReduction.LrmecsMeasurement.interpolateData=yes or no
+  </term> 
+  <listitem>
+    Whether you want to intepolate data from good detectors to bad detectors.
+    The algorithm of interpolation is to take neighboring detectors of a bad
+    detector(s), and do linearly interpolation.
+    This algorithm might fail when there are too many 
+    bad detectors, and you have to turn this option off.
+  </listitem>
+  </varlistentry>
+  
+  <varlistentry> <term>
+    --PowderReduction.LrmecsMeasurement.VanadiumPlate.width=&lt;width&gt;
+  </term>
+  <listitem>
+    Width of vanadium plate sample.
+  </listitem>
+  </varlistentry>
+
+  <varlistentry> <term>
+    --PowderReduction.LrmecsMeasurement.VanadiumPlate.thickness=&lt;thickness&gt;
+  </term>
+  <listitem>
+    Thickness of vanadium plate sample.
+  </listitem>
+  </varlistentry>
+
+  <varlistentry> <term>
+    --PowderReduction.LrmecsMeasurement.VanadiumPlate.darkAngle=&lt;darkAngle&gt;
+  </term>
+  <listitem>
+    Dark angle of vanadium plate sample.
+  </listitem>
+  </varlistentry>
+
+</variablelist>
+
+</sect3>
+</sect2>
+
+<sect2>
+  <title>
+    PharosReductionApp.py
+  </title>
+  Reduces data from PHAROS instrument to
+  S(Q,E). Its usage is very similar to LrmecsReductionApp.py.
+</sect2>
+
+<sect2>
+  <title>
+    PharosReductionApp_Parallel.py
+  </title>
+</sect2>
+
+<sect2>
+  <title>
+    plotitof.py
+  </title>
+  
+  Plot I(tof) curve of an experimental run. 
+
+<sect3>
+  <title> Description </title>
+  
+  This command extracts I(det, pix, tof) dataset from an experimental
+  run and sum over "det" and "pix" axes, and a plot of the curve I(tof)
+  is generated.
+  
+</sect3>
+
+<sect3>
+  <title> Options </title>
+
+  <variablelist>
+    <varlistentry> <term> 
+      --instrument=&lt;instrument name&gt;
+    </term> 
+    <listitem>
+      Specify the name of the instrument at which the
+      experiment is carried out. Supported instruments:
+
+      <itemizedlist>
+	<listitem>
+	  lrmecs
+	</listitem>
+	<listitem>
+	  pharos
+	</listitem>
+      </itemizedlist>
+    </listitem>
+
+    </varlistentry>
+
+    <varlistentry> <term> 
+      --lrmecs.filename=&lt;lrmecs run file name&gt;
+    </term> 
+    <listitem>
+      In case "instrument" is lrmecs,
+      this option should be used to specify the
+      path to the lrmecs data file.
+    </listitem>
+
+    </varlistentry>
+
+    <varlistentry> <term> 
+      --pharos.instrument-definition-filename=&lt;pharos instrument definition file name&gt;
+    </term> 
+    <listitem>
+      In case "instrument" is pharos,
+      this option should be used to specify the
+      path to the pharos instrument definition file:
+      PharosDefinitions.txt.
+    </listitem>
+    </varlistentry>
+
+    <varlistentry> <term> 
+      --pharos.data-filename=&lt;pharos data file name&gt;
+    </term> 
+    <listitem>
+      In case "instrument" is pharos,
+      this option should be used to specify the
+      path to the pharos data file.
+      Example: Pharos_342.nx.h5.
+    </listitem>
+    </varlistentry>
+
+  </variablelist>
+  
+</sect3>
+
+<sect3>
+  <title> Examples </title>
+  
+<programlisting>
+Lrmecs:
+  plotitof.py -instrument=lrmecs -lrmecs.filename=4849
+Pharos:
+  plotitof.py -instrument=pharos \
+    -pharos.instrument-definition-filename=PharosDefinitions.txt \
+    -pharos.data-filename=Pharos_342.nx.h5
+Get Help:
+  plotitof.py -instrument=lrmecs -lrmecs.help-properties
+  plotitof.py -instrument=pharos -pharos.help-properties
+</programlisting>
+</sect3>
+
+</sect2>
+
+<sect2>
+  <title>
+    plotiphi.py
+  </title>
+  
+  Plot I(tof) curve of an experimental run. 
+
+<sect3>
+  <title> Description </title>
+  
+  This command extracts I(det, pix, tof) dataset from an experimental
+  run and sum over "tof" and "pix" axes to get  a curve of
+  I(det). From I(det) and scattering angles of detectors 
+  a curve of I(phi) is generated. 
+</sect3>
+
+<sect3>
+  <title> Examples </title>
+  
+<programlisting>
+
+Lrmecs:
+ $ plotiphi.py -instrument=lrmecs -lrmecs.filename=4849
+
+Pharos:
+ $ plotiphi.py -instrument=pharos \
+   -pharos.instrument-definition-filename=PharosDefinitions.txt \
+   -pharos.data-filename=Pharos_342.nx.h5
+
+Get Help:
+ $ plotiphi.py -instrument=lrmecs -lrmecs.help-properties
+ $ plotiphi.py -instrument=pharos -pharos.help-properties
+</programlisting>
+</sect3>
+</sect2>
+
+<sect2>
+  <title>
+    plotmonitoritof.py
+  </title>
+  
+  Plot I(tof) curve of a beam monitor of an experimental run. 
+
+<sect3>
+  <title> Description </title>
+  
+  This command plot I(tof) of a beam monitor (specified by 
+  monitor id) of  an experimental run.
+</sect3>
+
+<sect3>
+  <title> Examples </title>
+  
+<programlisting>
+Plot I(tof) of monitor #0 of LRMECS run 4849
+  plotmonitoritof.py -instrument=lrmecs -lrmecs.filename=4849 -monitor-id=0
+
+Get Help:
+  plotmonitoritof.py -instrument=lrmecs -lrmecs.help-properties
+</programlisting>
+</sect3>
+</sect2>
+
+
+  </sect1>
+
+</chapter>
+

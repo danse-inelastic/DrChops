@@ -1,0 +1,141 @@
+<!--
+
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+                                   Jiao Lin
+                      California Institute of Technology
+                        (C) 2007 All Rights Reserved
+
+ {LicenseText}
+
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+-->
+
+
+<chapter id='GettingStarted'>
+
+  <title >
+    Getting Started
+  </title>
+  
+  
+  <para >
+    If you have not done so, please install DRCS 
+    by following 
+    
+    <link linkend='reduction-Install'>
+      the installation instructions
+    </link>
+    
+    .
+  </para>
+  
+
+  <sect1 id='Getting_Started.Environment_Set_Up'>
+    <title >
+      Environment Set-Up
+    </title>
+    
+    Before running DRCS, you must first set up environment vairables.
+    
+<!--
+    <para >
+      For Windows platform, please run in a command window the following command
+      
+      <programlisting >
+	
+	$ configureDRCS.bat
+	
+	
+      </programlisting>
+      
+    </para>
+-->
+
+<para>    
+For users of Mac OS X or linux platforms, in bash-like environments,
+the environment variables can be set-up by running one command:
+
+<programlisting>
+  source /path/to/your/DRCS/installation/bin/envs.sh
+</programlisting>
+
+For example, if you have installed the DRCS software to 
+<programlisting>
+  $HOME/DRCS/DRCS-&lt;version&gt;
+</programlisting>
+
+Then the command to set up environment variables is
+
+<programlisting>
+  source $HOME/DRCS/DRCS-&lt;version&gt;
+</programlisting>
+
+If you are not using bash variants,
+please following the example in
+<programlisting>
+ /path/to/your/DRCS/installation/bin/envs.sh
+</programlisting>
+to set up your environment variables using your shell.
+</para>
+
+
+  </sect1>
+  
+  <sect1 id='Getting_Started.Try_it_out'>
+    <title >
+      Try it out
+    </title>
+    
+    A good place to start is to watch the
+    
+    <ulink url='xxxWEBSITExxx/reduction/Software-UserGuide/movies/LrmecsReductionApp.html'>
+      <citetitle>LRMECS reduction demo video </citetitle>
+    </ulink>
+    ,
+    and then follow the
+    
+    <link linkend='LRMECS_Reduction_GUI_Tutorial'>
+      LRMECS reduction tutorial
+    </link>
+    
+    to do a data reduction of a sample LRMECS data file.
+    
+    <figure id='Getting_Started.Try_it_out.Here_is_a__screen_shot_of_LRMECS_reduction_application_running:'>
+      <title >
+	Here is a  screen shot of LRMECS reduction application running:
+      </title>
+      
+      <mediaobject >
+	
+	<imageobject >
+	  
+	  <imagedata width='70%' fileref='figures/LRMECSReduction-screenshot.png' scalefit='1'>
+	    
+	  </imagedata>
+	  
+	</imageobject>
+	
+	<textobject >
+	  
+	  <phrase >
+	    Here is a  screen shot of LRMECS reduction application running:
+	  </phrase>
+	  
+	</textobject>
+	
+      </mediaobject>
+    </figure>
+    
+  </sect1>
+  
+</chapter>
+
+
+<!-- version-->
+<!-- $Id$-->
+
+<!-- Generated automatically by Renderer on Fri Apr 27 02:47:02 2007-->
+
+<!-- End of file -->

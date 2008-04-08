@@ -1,0 +1,4 @@
+*.ppt are powerpoint files
+*.dia are dia drawings
+*.uml are UML projects (created by ArgoUML 0.22)
+*.jpg are generated from UML projects or dia or ppt

@@ -1,0 +1,97 @@
+DANSE Reduction is a set of orthogonal python components for reducing neutron scattering data. Those components can be used as building blocks of a new reduction application easily if a developer follow the [[Procedure to create a reduction application using DANSE reduction framework| procedure]]. 
+
+
+== documentations for developers ==
+For an overview the reduction framework, please read [http://strongbad.cacr.caltech.edu/arcs-1.0/reduction.ppt  this powerpoint presentation]. Then you could browse through  [http://www.cacr.caltech.edu/projects/ARCS/autogen-arcs-docs/reduction/reduction/html/  doxygen documentations of reduction package] and look for more details. If you want to create a reduction application of yourself, here is the 
+[[Procedure to create a reduction application using DANSE reduction framework  | tutorial]].
+
+
+== documentations for users ==
+In the following, documenations are grouped into scientific subfields of neutron scattering science. For each subfield, links to documentations for that subfield are provided.
+
+=== Inelastic neutron scattering ===
+Reduction applications provide tools to reduce experimental data to S(Q,E). Currently PHAROS reduction is our main focus because PHAROS is very similar to ARCS, our ultimate goal. Working on PHAROS reduction will help us understand the challenges of reduction software, especially for direct geometry time-of-flight instruments like ARCS. Hopefully PHAROS reduction applications will be useful to users of PHAROS. Reduciton of data from LRMECS instrument at IPNS is also supported.
+
+====GUI====
+Graphical user interfaces are available for reduction applications. Reduction GUIs consist of dialogs for users to change settings of a reduction task and run the reduction. The basic procedure of using a reduction GUI is
+
+# Configure. In this step you select output directory, input data files, etc etc
+# Run the application
+# Exit
+
+After reduction, some reduced data are saved in the output directory, and they can be futhered manipulated using [[ HistogramViewer-tutorial | Hiistogram GUI]].
+
+=====Front panel=====
+[[reductionGuiFrontPanel| Front panel]] is a thin GUI application that is only useful to launch other reduction GUIs like PHAROS reduction GUI or LRMECS reduction GUI.
+
+=====Pharos=====
+PHAROS reduction GUI is a Graphical User Interface to the PHAROS reduction application. It reduces PHAROS data to S(Q,E), and it can also generate mslice data files if you want.
+
+This [[How to run Pharos reduction GUI|tutorial]] walk you through a typical PHAROS reduction session.
+
+More details can be found in the [[PharosReductionLight-manual| manual]]
+
+=====Lrmecs=====
+LRMECS reduction GUI is a Graphical User Interface to the LRMEcS reduction application. It reduces LRMECS data to S(Q,E), and it can also generate mslice data files if you want.
+
+This [[How to run Lrmecs reduction GUI|tutorial]] walk you through a typical LRMECS reduction session.
+
+More details can be found in the [[LrmecsReductionLight-manual| manual]]
+
+=====Histogram=====
+[[ HistogramViewer-tutorial | Hiistogram GUI]] is a Graphical User Interface to manipulate histograms created in the reduction procedure. Reduction GUIs for PHAROS and LRMECS will save reduced data in files like spehist.pkl (S(phi,E)) and sqehist.pkl (S(Q,E)). Those files can be loaded in the histogram GUI for further manipulations.
+
+====Command line====
+
+Reduction applications can also be accessed from command line. It is useful for more advanced users. For example, one can run a series of reduction runs only changing one input parameter. It is hard to do that with a GUI, but rather easy with a unix command line.
+
+Pharos reduction applications involve one major application, PharosReductionLight.py, and some other tools. PharosReductionLight is the main application to accept user inputs of reduction parameters, and process the Pharos data to obtain meaningful physical quatities like S(Q,E). 
+
+
+Some user inputs (reduction parameters) of this application can be easily figured out. For example, the guess of the neutron incident energy should be known. But some other user inputs might be difficult to guess without some help. 
+
+
+PharosPlotI_tof.py is one of the helper applications. It plots integrate intensity vs tof channels. This is useful to determine tof channels corresponding to "time independent background".
+
+
+PharosReductionLight.py can be run parallely too. It makes use of mpi functionality provided by pyre framework.
+
+=====PharosReductionLight.py=====
+
+[[How to run Pharos reduction application|Tutorial]]
+
+[[PharosReduction_v2_Application_User_Manual|User Manual]]
+
+=====PharosPlotI_tof.py=====
+
+[[Tutorial: PharosPlotI_tof application | Tutorial ]]
+
+=====PharosVanPlotI_phi.py=====
+
+[[Tutorial: PharosVanPlotI_phi application | Tutorial ]]
+
+=====PharosReduction_v2_Parallel.py=====
+
+[[Tutorial: How to run Pharos reduction application in parallel|Tutorial]]
+
+
+
+Similar applications exist for LRMECS reduction:
+
+=====LrmecsReductionLight.py=====
+
+[[How to run Lrmecs reduction application|Tutorial]]
+
+[[LrmecsReduction_Application_User_Manual|User Manual]]
+
+=====LrmecsPlotI_tof.py=====
+
+[[Tutorial: LrmecsPlotI_tof application | Tutorial ]]
+
+=====LrmecsVanPlotI_phi.py=====
+
+[[Tutorial: LrmecsVanPlotI_phi application | Tutorial ]]
+
+
+
+old page: [[ARCS Reduction]]

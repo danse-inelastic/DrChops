@@ -1,0 +1,98 @@
+// -*- C++ -*-
+//
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+//
+//                             Tim Kelley, Jiao Lin
+//                      California Institute of Technology
+//                      (C) 2003-2007  All Rights Reserved
+//
+// {LicenseText}
+//
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+//
+
+
+#ifndef DANSE_REDUCTION_HE3DETEFFIC_ICC
+#error Template definitions meaningless outside of He3DetEffic.h
+#endif
+
+
+#include <cmath>
+#include "journal/debug.h"
+
+
+namespace DANSE {
+  namespace Reduction {
+    
+    namespace He3DetEffic_impl{
+      using journal::at;
+      using journal::endl;
+      
+      extern char * journaltag;
+    }
+
+    template <typename FPT, typename EnergyIterator, typename EfficiencyIterator>
+    FPT He3DetEffic<FPT, EnergyIterator, EfficiencyIterator>::operator()( FPT energy)
+    {
+      FPT efficiency = 0.0;
+      //FPT fnptsm1 = static_cast<FPT>(m_npts - 1);
+      FPT fnptsm1 = static_cast<FPT>(m_npts); // probably should be moved to constructer to speed up. but the difference might be small
+      
+      // For each final energy, compute the microscopic absorption.
+      // Then average over cross-section of cells in the detector, 
+      // to get the total transmission probability.
+      FPT sig = m_refAbsXS*sqrt(81.81/energy);
+      
+      for(unsigned int j=0; j < m_npts; j++)
+	{
+	  FPT u =  j/fnptsm1;
+	  // 2*m_radius*sqrt(1-u*u) is the length of travel
+	  efficiency += exp(-2*m_N*sig*m_radius*sqrt(1-u*u));
+	}
+      
+      // Normalize efficiencies, and subtract it from 1 to 
+      // get the absorption probability.
+      
+      efficiency = 1.0 - efficiency/fnptsm1;
+      
+      return efficiency;
+    }
+    
+    
+    template <typename FPT, typename EnergyIterator, typename EfficiencyIterator>
+    void He3DetEffic<FPT, EnergyIterator, EfficiencyIterator>::operator()
+      ( const EnergyIterator energyStart, 
+	EfficiencyIterator effStart, 
+	EfficiencyIterator effEnd) const
+    {
+      FPT fnptsm1 = static_cast<FPT>(m_npts - 1);
+      
+      // For each final energy, compute the microscopic absorption.
+      // Then average over cross-section of cells in the detector, 
+      // to get the total transmission probability.
+      
+      EfficiencyIterator effCurr = effStart;
+      EnergyIterator energyIt = energyStart;
+      
+      while (effCurr != effEnd)
+	{
+	  FPT sig = m_refAbsXS*sqrt( 81.81/ (*energyIt++));
+	  for(unsigned int j=0; j < m_npts; j++)
+	    {
+	      FPT u =  j/fnptsm1;
+	      *effCurr += exp(-2*m_N*sig*m_radius*sqrt(1-u*u));
+	    }
+	  *effCurr = 1.0 - *effCurr/fnptsm1;
+	  effCurr++;
+	}
+      
+      return;
+    }
+    
+  } // Reduction::
+} // DANSE::
+
+// version
+// $Id: He3DetEffic.icc 1444 2007-11-16 16:46:15Z linjiao $
+
+// End of file

@@ -1,0 +1,803 @@
+<!--
+    
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    
+    Jiao Lin
+    California Institute of Technology
+    (C) 2007 All Rights Reserved
+    
+    {LicenseText}
+    
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    
+-->
+
+<chapter id="reduction Pyre Components">
+
+  <title >
+    Pyre Components 
+  </title>
+  
+  <para>
+  Reduction operators in the reduction.core layer are exposed
+  to the pyre layer and become pyre components. 
+  Each pyre component performs one step in the reduction procedure.
+  Explanations of 
+  some of the pyre components 
+  are presented in 
+  <ulink url='xxxWEBSITExxx/click_monitor/ARCS-bigbook'>
+    <citetitle>reference manual </citetitle>
+  </ulink>, Chapter "Software Reference", section "reduction",
+  subsection "Reduction Components".
+  </para>
+
+  <para>
+    Each pyre component performs a step in reduction procedure.
+    Some of those components are trivial, like adder and subtractor;
+    some others are complicated, like preprocessors.
+  </para>
+
+  <para>
+    Each pyre component in reduction package is a "connectable", 
+    which means that a component has input/output sockets that
+    can be connected to other components. Please take a look at
+    <xref linkend="figure: reduction pyre connectable"/>
+  </para>
+
+<figure id='figure: reduction pyre connectable'>
+  <title >
+    A connectable pyre component in reduction
+  </title>
+  <mediaobject >
+    <imageobject >
+      <imagedata width='50%' fileref='figures/connectable.png' scalefit='1'>
+      </imagedata>
+    </imageobject>
+    <textobject >
+      <phrase >
+    A connectable pyre component in reduction
+      </phrase>
+    </textobject>
+  </mediaobject>
+</figure>
+
+  
+  Those pyre components can be
+  connected together to form a data flow.
+  A composite pyre component is  a group of pyre components
+  that are connected together to perform some 
+  reduction operations that are more complex.
+  A composite pyre component is a connectable as well, which provides
+  a good way to encapsulate a  complex wiring diagram into a unit
+  of simpler interface. 
+  <xref linkend="figure: composite example"/>
+  shows a trivial composite.
+<figure id='figure: composite example'>
+  <title >
+    A trivial composite that encapsulates two connectables.
+  </title>
+  <mediaobject >
+    <imageobject >
+      <imagedata width='70%' fileref='figures/composite.png' scalefit='1'>
+      </imagedata>
+    </imageobject>
+    <textobject >
+      <phrase >
+    A trivial composite that encapsulates two connectables.
+      </phrase>
+    </textobject>
+  </mediaobject>
+</figure>
+
+  <para>
+    In this chapter, we will first explain the funtionality of
+    simple connetable pyre components (which are not composites), and then the composite 
+    pyre components and how data stream flow through them.
+    For each component, the input and output sockets are specified, and
+    its functionalities are explained.
+  </para>
+
+<!--
+    <para>
+    Reduction procedure can be divided to preprocessing, processing, and
+    post processing. In this section, we go through some of those processing
+    steps by looking at the data-flow charts.
+    </para>
+-->
+  <sect1 >
+<title >
+  Basic pyre components
+</title>
+
+<sect2>
+  <title>Adder</title>
+<sect3>
+  <title > Functionality </title>
+  Perform a+b
+</sect3>
+<sect3>
+  <title> Input sockets </title>
+  <itemizedlist >
+    <listitem > operand1( any type ) </listitem>
+    <listitem > operand2( any type addable to operand1 ) </listitem>
+  </itemizedlist>
+</sect3>
+<sect3>
+  <title> Output sockets </title>
+  <itemizedlist >
+    <listitem > result (type determined by operand1 and operand2) </listitem>
+  </itemizedlist>
+</sect3>
+<sect3>
+  <title> Description </title>
+</sect3>
+</sect2>
+
+
+<sect2>
+  <title>Subtractor</title>
+<sect3>
+  <title > Functionality </title>
+  Perform a-b
+</sect3>
+<sect3>
+  <title> Input sockets </title>
+  <itemizedlist >
+    <listitem > operand1 (any type) </listitem>
+    <listitem > operand2 (any type addable to operand1) </listitem>
+  </itemizedlist>
+</sect3>
+<sect3>
+  <title> Output sockets </title>
+  <itemizedlist >
+    <listitem > result (type determined by operand1 and operand2)</listitem>
+  </itemizedlist>
+</sect3>
+<sect3>
+  <title> Description </title>
+</sect3>
+</sect2>
+
+
+<sect2>
+  <title>AxisFactory</title>
+<sect3>
+  <title > Functionality </title>
+  Create axis from user inputs
+</sect3>
+<sect3>
+  <title> Input sockets </title>
+<!--
+  <itemizedlist >
+  </itemizedlist>
+-->
+</sect3>
+<sect3>
+  <title> Output sockets </title>
+  <itemizedlist >
+    <listitem > axis (instance of histogram.Axis) </listitem>
+  </itemizedlist>
+</sect3>
+<sect3>
+  <title> Description </title>
+</sect3>
+</sect2>
+
+
+<sect2>
+  <title>IncidentEnergySolver</title>
+<sect3>
+  <title > Functionality </title>
+  Computes neutron incidenet energy for an experimental run
+</sect3>
+<sect3>
+  <title> Input sockets </title>
+  <itemizedlist >
+    <listitem > run (instance of measurement.Run) </listitem>
+  </itemizedlist>
+</sect3>
+<sect3>
+  <title> Output sockets </title>
+  <itemizedlist >
+    <listitem > Ei (float) </listitem>
+  </itemizedlist>
+</sect3>
+<sect3>
+  <title> Description </title>
+</sect3>
+<sect3>
+  <title> Implementations </title>
+  <itemizedlist >
+    <listitem > Use monitors </listitem>
+    <listitem > Use elastic peaks </listitem>
+  </itemizedlist>
+</sect3>
+</sect2>
+
+
+<sect2>
+  <title>MaskApplyer</title>
+<sect3>
+  <title > Functionality </title>
+  Apply detector mask to measured histogram
+</sect3>
+<sect3>
+  <title> Input sockets </title>
+  <itemizedlist >
+    <listitem > mask (instance of instrument.DetectorMask) </listitem>
+    <listitem > Idpt (instance of histogram.Histogram. I(det, pix, tof) )</listitem>
+  </itemizedlist>
+</sect3>
+<sect3>
+  <title> Output sockets </title>
+  <itemizedlist >
+    <listitem > Idpt (instance of histogram.Histogram. I(det, pix, tof) )</listitem>
+  </itemizedlist>
+</sect3>
+<sect3>
+  <title> Description </title>
+</sect3>
+</sect2>
+
+
+<sect2>
+  <title>Calibrator</title>
+<sect3>
+  <title > Functionality </title>
+  Calibrate measured histogram by given calibration constants.
+</sect3>
+<sect3>
+  <title> Input sockets </title>
+  <itemizedlist >
+    <listitem > calibration constants (instance of histogram.Histogram. cc(detectorID) )</listitem>
+    <listitem > histogram (instance of histogram.Histogram. must have an axis "detectorID".) </listitem>
+  </itemizedlist>
+</sect3>
+<sect3>
+  <title> Output sockets </title>
+  <itemizedlist >
+    <listitem > histogram (This is an in-place operator. The input histogram will be modified and returned) </listitem>
+  </itemizedlist>
+</sect3>
+<sect3>
+  <title> Description </title>
+</sect3>
+</sect2>
+
+
+<sect2>
+  <title>IdptExtractor</title>
+<sect3>
+  <title > Functionality </title>
+  Extract I(detector, pixel, tof) histogram from an experimental run
+</sect3>
+<sect3>
+  <title> Input sockets </title>
+  <itemizedlist >
+    <listitem > run (instance of measurement.Run) </listitem>
+  </itemizedlist>
+</sect3>
+<sect3>
+  <title> Output sockets </title>
+  <itemizedlist >
+    <listitem > Idpt (instance of histogram.Histogram. I(det, pix, tof ) </listitem>
+  </itemizedlist>
+</sect3>
+<sect3>
+  <title> Description </title>
+</sect3>
+</sect2>
+
+
+<sect2>
+  <title>Normalizer</title>
+<sect3>
+  <title > Functionality </title>
+  Normalize a histogram by the normalization constant deduced from
+  the information inside the given experimental run.
+</sect3>
+<sect3>
+  <title> Input sockets </title>
+  <itemizedlist >
+    <listitem > run  (instance of measurement.Run) </listitem>
+    <listitem > histogram (instance of histogram.Histogram) </listitem>
+  </itemizedlist>
+</sect3>
+<sect3>
+  <title> Output sockets </title>
+  <itemizedlist >
+    <listitem > histogram </listitem>
+  </itemizedlist>
+</sect3>
+<sect3>
+  <title> Description </title>
+  This component normalize a given histogram by some quantity that is
+  proportional to the incident neutron flux on the sample.
+  This quantity depends on instrument. For most instruments, there should
+  be some beam monitors of which the recorded intensities can be
+  used as normalization constants. There are other ways to get
+  normalization constants...
+</sect3>
+<sect3>
+  <title> Implementations </title>
+  <itemizedlist >
+    <listitem > Use monitor </listitem>
+    <listitem > Use integrated moderator current </listitem>
+  </itemizedlist>
+</sect3>
+</sect2>
+
+
+<sect2>
+  <title>TimeIndependentBackgroundRemover</title>
+<sect3>
+  <title > Functionality </title>
+  Remove time-independent-background.
+</sect3>
+<sect3>
+  <title> Input sockets </title>
+  <itemizedlist >
+    <listitem > mask (instance of instrument.DetectorMask)</listitem>
+    <listitem > histogram (instance of histogram.Histogram. must have a "detectorID' axis and a "pixelID' axis.) </listitem>
+    <listitem > (optional)tofWindow (a 2-tuple of tofmin, tofmax)</listitem>
+  </itemizedlist>
+</sect3>
+<sect3>
+  <title> Output sockets </title>
+  <itemizedlist >
+    <listitem > histogram (this is a in-place operator that works on the given histogram and returns it as an output) </listitem>
+  </itemizedlist>
+</sect3>
+<sect3>
+  <title> Description </title>
+</sect3>
+<sect3>
+  <title> Implementations </title>
+  <itemizedlist >
+    <listitem > per detector </listitem>
+    <listitem > average all detectors </listitem>
+  </itemizedlist>
+</sect3>
+</sect2>
+
+
+<sect2>
+  <title>VanadiumDataProcessor</title>
+<sect3>
+  <title > Functionality </title>
+  Process Vanadium data to get mask and calibration constants.
+</sect3>
+<sect3>
+  <title> Input sockets </title>
+  <itemizedlist >
+    <listitem > ei_main (float. Incident energy for the main experimental run) </listitem>
+    <listitem > vanadium (instance of instrument.elements.Sample. The vanadium sample) </listitem>
+  </itemizedlist>
+</sect3>
+<sect3>
+  <title> Output sockets </title>
+  <itemizedlist >
+    <listitem > calibration constants (instance of histogram.Histogram. cc(det) )</listitem>
+    <listitem > mask (instance of instrument.DetectorMask)</listitem>
+  </itemizedlist>
+</sect3>
+<sect3>
+  <title> Description </title>
+</sect3>
+</sect2>
+
+
+<sect2>
+  <title> Idpt2Spe </title>
+<sect3>
+  <title > Functionality </title>
+  Reduce I(det, pix, tof) to S(phi, E)
+</sect3>
+<sect3>
+  <title> Input sockets </title>
+  <itemizedlist >
+    <listitem > Ei (float. incident energy)</listitem>
+    <listitem > Idpt (instance of histogram.Histogram. I(det, pix, tof) ) </listitem>
+    <listitem > instrument (instance of instrument.Instrument )</listitem>
+    <listitem > mask (instance of instrument.DetectorMask) </listitem>
+  </itemizedlist>
+</sect3>
+<sect3>
+  <title> Output sockets </title>
+  <itemizedlist >
+    <listitem > spe (instance of histogram. S(phi, E) ) </listitem>
+  </itemizedlist>
+</sect3>
+<sect3>
+  <title> Description </title>
+</sect3>
+</sect2>
+
+
+<sect2>
+  <title>Spe2Sqe</title>
+<sect3>
+  <title > Functionality </title>
+  Convert S(phi,E) to S(Q,E)
+</sect3>
+<sect3>
+  <title> Input sockets </title>
+  <itemizedlist >
+    <listitem > QAxis (instance of histogram.Axis) </listitem>
+    <listitem > Ei (float. incident neutron energy)</listitem>
+    <listitem > spe (instance of histogram.Histogram. S(phi,E) )</listitem>
+  </itemizedlist>
+</sect3>
+<sect3>
+  <title> Output sockets </title>
+  <itemizedlist >
+    <listitem > sqe (instance of histogram.Histogram. S(Q,E) )</listitem>
+  </itemizedlist>
+</sect3>
+<sect3>
+  <title> Description </title>
+</sect3>
+</sect2>
+
+
+
+  </sect1>
+
+  <sect1>
+<title>
+  Composite pyre components
+</title>
+
+<para>
+A composite pyre component encapsulates a bunch of 
+data flows connecting
+pyre components. A diagram are provided for each composite pyre
+component. Detailed explanation of those symbols in a diagram
+is given in the first composite component that follows.
+</para>
+
+
+<sect2>
+  <title>Preprocess_Step1</title>
+<sect3>
+  <title > Functionality </title>
+  Preprocess raw data: apply mask, remove time-independent-background,
+  normalize.
+</sect3>
+<sect3>
+  <title> Input sockets </title>
+  <itemizedlist >
+    <listitem > run </listitem>
+    <listitem > mask </listitem>
+  </itemizedlist>
+</sect3>
+<sect3>
+  <title> Output sockets </title>
+  <itemizedlist >
+    <listitem > Idpt </listitem>
+  </itemizedlist>
+</sect3>
+<sect3>
+  <title> Data stream diagram </title>
+    <figure id='Flow_charts_of_reduction_applications.PreprocessStep1.Preprocess-Step1'>
+      <title >
+	Step1 of preprocessing
+      </title>
+      <mediaobject >
+	<imageobject >
+	  <imagedata width='40%' fileref='figures/Preprocess-Step1.png' scalefit='1'>
+	  </imagedata>
+	</imageobject>
+	<textobject >
+	  <phrase >
+	    Data flow in the first step of preprocessing
+	  </phrase>
+	</textobject>
+      </mediaobject>
+    </figure>
+
+    <para>
+      In the chart, arrows represent data streams, and
+      boxes represent "components" or "operators" that work on data streams.
+    </para>
+
+    <para>
+      For example, the "MaskApplyer" box works on a data stream
+      of I(det, pix, tof) histogram and apply a mask (which comes from
+      another data stream) to the histogram and passes the masked
+      histogram onto the next component "Remove Time-indep Background".
+    </para>
+
+    <para>
+      The big box in 
+      <xref linkend="Flow_charts_of_reduction_applications.PreprocessStep1.Preprocess-Step1"/>.
+      that encapsulates the whole data flow
+      and form the composite component Preprocess_Step1.
+      You can see that the composite component
+      has two inputs: "run" and "mask", and one output: "I(det,pix,tof)".
+      
+    </para>
+
+    <para>
+      This "Step1" preprocessing extracts I(det,pix,tof) out of an
+      expeirmental run data object, applies the given mask, 
+      removes time-independent background, and normalizes the 
+      histogram by neutron flux.
+    </para>
+
+</sect3>
+</sect2>
+
+
+<sect2>
+  <title>Preprocess_Step1_withTibgWindowPicker</title>
+<sect3>
+  <title > Functionality </title>
+  Preprocess raw data: apply mask, remove time-independent-background,
+  normalize.
+</sect3>
+<sect3>
+  <title> Input sockets </title>
+  <itemizedlist >
+    <listitem > run </listitem>
+    <listitem > mask </listitem>
+  </itemizedlist>
+</sect3>
+<sect3>
+  <title> Output sockets </title>
+  <itemizedlist >
+    <listitem > Idpt </listitem>
+  </itemizedlist>
+</sect3>
+<sect3>
+  <title> Data stream diagram </title>
+    <figure>
+      <title >
+	Step1 of preprocessing with a tof window graphic selector
+      </title>
+      <mediaobject >
+	<imageobject >
+	  <imagedata width='40%' fileref='figures/Preprocess-Step1-withTibgWindowPicker.png' scalefit='1'>
+	  </imagedata>
+	</imageobject>
+	<textobject >
+	  <phrase >
+	    Data flow in the first step of preprocessing
+	  </phrase>
+	</textobject>
+      </mediaobject>
+    </figure>
+
+    This preprocessor differs from the previous one in that
+    it uses an additional component: "TofWindowSelector".
+    The TofWindowSelector will pops up a plotting window
+    where users can select the range for the time-independent
+    background.
+</sect3>
+</sect2>
+
+<sect2>
+  <title>Preprocess_MainDataOnly</title>
+<sect3>
+  <title > Functionality </title>
+  Preprocess a measurement with only the main sample run and 
+  computes corrected I(det, pix, tof), mask and Ei.
+</sect3>
+<sect3>
+  <title> Input sockets </title>
+  <itemizedlist >
+    <listitem > measurement </listitem>
+  </itemizedlist>
+</sect3>
+<sect3>
+  <title> Output sockets </title>
+  <itemizedlist >
+    <listitem > Ei </listitem>
+    <listitem > Idpt </listitem>
+    <listitem > mask </listitem>
+  </itemizedlist>
+</sect3>
+<sect3>
+  <title> Description </title>
+</sect3>
+<sect3>
+  <title> Data stream diagram </title>
+      <figure id='Flow_charts_of_reduction_applications.Preprocess-maindataonly.diagram-figure'>
+	<title >
+	  Preprocessing in case there is only data for the main sample
+	</title>
+	<mediaobject >
+	  <imageobject >
+	    <imagedata width='40%' fileref='figures/Preprocess-maindataonly.png' scalefit='1'>
+	    </imagedata>
+	  </imageobject>
+	  <textobject >
+	    <phrase >
+	      Data flow of preprocessing in case there is only data
+	      for the main sample
+	    </phrase>
+	</textobject>
+	</mediaobject>
+      </figure>
+      
+      <para>
+	<xref linkend='Flow_charts_of_reduction_applications.Preprocess-maindataonly.diagram-figure'/>
+	shows the preprocessing of a measurement with only the 
+	main-sample run. The main experimental run data object is passed
+	to both the "IncidentEnergySolver" and the "Step1" preprocessor.
+	The "MaskFromUser" component gathers user inputs about 
+	mask, and passes it to the "Step1" preprocessor.
+	The incident neutron energy, Ei, and I(det, pix, tof) that has 
+	been processed by the "Step1" preprocessor, and the mask are
+	passed out this composite component as outputs.
+      </para>
+</sect3>
+</sect2>
+
+
+
+<sect2>
+  <title>Preprocess_Main_and_MT</title>
+<sect3>
+  <title > Functionality </title>
+  Preprocess a measurement with  the main and the emtpy-can sample runs and 
+  computes corrected I(det, pix, tof), mask and Ei.
+</sect3>
+<sect3>
+  <title> Input sockets </title>
+  <itemizedlist >
+    <listitem > measurement </listitem>
+  </itemizedlist>
+</sect3>
+<sect3>
+  <title> Output sockets </title>
+  <itemizedlist >
+    <listitem > Ei </listitem>
+    <listitem > Idpt </listitem>
+    <listitem > mask </listitem>
+  </itemizedlist>
+</sect3>
+<sect3>
+  <title> Description </title>
+</sect3>
+<sect3>
+  <title> Data stream diagram </title>
+      <figure>
+	<title >
+	  Preprocessing in case there is only data for the main sample
+	</title>
+	<mediaobject >
+	  <imageobject >
+	    <imagedata width='60%' fileref='figures/Preprocess-Main_and_MT.png' scalefit='1'>
+	    </imagedata>
+	  </imageobject>
+	  <textobject >
+	    <phrase >
+	      Data flow of preprocessing in case there are the main 
+	      and the empty-can run.
+	    </phrase>
+	</textobject>
+	</mediaobject>
+      </figure>
+      
+</sect3>
+</sect2>
+
+
+
+<sect2>
+  <title>Preprocess_Main_and_Calib</title>
+<sect3>
+  <title > Functionality </title>
+  Preprocess a measurement with the main sample run and 
+  the vanadium calibration run, and
+  computes corrected I(det, pix, tof), mask and Ei.
+</sect3>
+<sect3>
+  <title> Input sockets </title>
+  <itemizedlist >
+    <listitem > measurement </listitem>
+  </itemizedlist>
+</sect3>
+<sect3>
+  <title> Output sockets </title>
+  <itemizedlist >
+    <listitem > Ei </listitem>
+    <listitem > Idpt </listitem>
+    <listitem > mask </listitem>
+  </itemizedlist>
+</sect3>
+<sect3>
+  <title> Description </title>
+</sect3>
+<sect3>
+  <title> Data stream diagram </title>
+      <figure>
+	<title >
+	  Preprocessing a measurement with the main experimental run
+	  and the vanadium calibration run.
+	</title>
+	<mediaobject >
+	  <imageobject >
+	    <imagedata width='60%' fileref='figures/Preprocess-Main_and_Calib.png' scalefit='1'>
+	    </imagedata>
+	  </imageobject>
+	  <textobject >
+	    <phrase >
+	      Data flow of preprocessing in case there are
+	      the main experimental run and the vanadium calibration
+	      run.
+	    </phrase>
+	</textobject>
+	</mediaobject>
+      </figure>
+</sect3>
+</sect2>
+
+
+
+<sect2>
+  <title>Preprocess_All</title>
+<sect3>
+  <title > Functionality </title>
+  Preprocess a measurement with the main sample run,
+  the empty-can run, and the vanadium calibration run.
+  Computes corrected I(det, pix, tof), mask and Ei.
+</sect3>
+<sect3>
+  <title> Input sockets </title>
+  <itemizedlist >
+    <listitem > measurement </listitem>
+  </itemizedlist>
+</sect3>
+<sect3>
+  <title> Output sockets </title>
+  <itemizedlist >
+    <listitem > Ei </listitem>
+    <listitem > Idpt </listitem>
+    <listitem > mask </listitem>
+  </itemizedlist>
+</sect3>
+<sect3>
+  <title> Description </title>
+</sect3>
+<sect3>
+  <title> Data stream diagram </title>
+      <figure id='Flow_charts_of_reduction_applications.Preprocess-all.diagram-figure'>
+	<title >
+	  Preprocessing in case there are data for the main sample, the empty-can, and the vanadium calibration
+	</title>
+	<mediaobject >
+	  <imageobject >
+	    <imagedata width='70%' fileref='figures/Preprocess-all.png' scalefit='1'>
+	    </imagedata>
+	  </imageobject>
+	  <textobject >
+	    <phrase >
+	      Data flow of preprocessing in case there are
+	      data for the main sample, the empty-can, and the
+	      vanadium calibration.
+	    </phrase>
+	</textobject>
+	</mediaobject>
+      </figure>
+      
+      <para>
+	<xref linkend='Flow_charts_of_reduction_applications.Preprocess-all.diagram-figure'/>
+	shows the preprocessing of a measurement with a full set 
+	of main-sample, empty-can and vanadium calibration runs.
+      </para>
+</sect3>
+</sect2>
+
+
+
+  </sect1>  
+  
+</chapter>
+
+
+<!-- version-->
+<!-- $Id$-->
+
+<!-- End of file -->

@@ -1,0 +1,51 @@
+
+<!--
+! ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!
+!
+! {LicenseText}
+!
+! ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-->
+
+<sect1 id='Flow_charts_of_reduction_applications'>
+<title >
+Flow charts of reduction applications
+</title>
+
+
+    <figure id='Flow_charts_of_reduction_applications.Flow_chart_of_powder_reduction_application_for_PHAROS_instrument'>
+<title >
+Flow chart of powder reduction application for PHAROS instrument
+</title>
+
+<mediaobject >
+
+<imageobject >
+
+<imagedata width='70%' fileref='figures/reduction/ReductionFlowchart.png' scalefit='1'>
+
+</imagedata>
+
+</imageobject>
+
+<textobject >
+
+<phrase >
+Flow chart of powder reduction application for PHAROS instrument
+</phrase>
+
+</textobject>
+
+</mediaobject>
+</figure>
+
+</sect1>
+
+
+<!-- version-->
+<!-- $Id$-->
+
+<!-- Generated automatically by Renderer on Thu Apr 26 13:18:11 2007-->
+
+<!-- End of file -->

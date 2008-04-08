@@ -1,0 +1,101 @@
+// -*- C++ -*-
+//
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+//
+//                             Tim Kelley, Jiao Lin
+//                      California Institute of Technology
+//                      (C) 2004-2007  All Rights Reserved
+//
+// {LicenseText}
+//
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+//
+
+
+#ifndef DANSE_REDUCTION_UTILS_ICC
+#error Template definitions meaningless outside of utils.h
+#endif
+
+#ifndef STRING_INCLUDED
+#define STRING_INCLUDED
+#include <string>
+#endif
+
+
+namespace DANSE {
+  namespace Reduction {
+    namespace utils {
+      
+      template <typename T>
+      void deleteHeapObj( void *ptr)
+      {
+	T *oldt = static_cast<T*>( ptr);
+	delete oldt;
+	return;
+      }
+      
+      template <typename T>
+      ObjectWrapper<T>::ObjectWrapper( int magicNum, int type)
+	: m_magicNumber(magicNum), m_type( type + magicNum)
+      {}
+      
+      
+      template <typename T>
+      TWrapper<T>::TWrapper( T *pT, int type, int magicNum)
+	: ObjectWrapper<T>( magicNum, type), m_pT( pT)
+      {}
+      
+      template <typename T>
+      TWrapper<T>::~TWrapper()
+      {
+	delete m_pT;
+	return;
+      }
+      
+      
+      template <typename T>
+      PyObject *wrapObject( T *pvec, int type, int magicN)
+      {
+	TWrapper<T> *pT = 0;
+	try
+	  {
+	    pT = new TWrapper<T>( pvec, type, magicN);
+	  }
+	catch( std::bad_alloc & ba)
+	  {
+	    std::string errstr("reduction::utils::wrapObject TWrapper "
+			       "alloc failed");
+	    PyErr_SetString(PyExc_RuntimeError, errstr.c_str());
+	    return 0;
+	  }
+	return PyCObject_FromVoidPtr( pT, deleteHeapObj<TWrapper<T> >);
+      }
+      
+      
+      template <typename T>
+      T *unwrapObject( PyObject *pyobj, int type)
+      {
+	TWrapper<T> *pw = 
+	  static_cast< TWrapper<T> *>( PyCObject_AsVoidPtr(pyobj));
+	
+	if( (*pw).m_magicNumber + type == (*pw).m_type) return (*pw).m_pT;
+	
+	else 
+	  {
+	    PyErr_SetString( PyExc_TypeError,
+			     "reduction::unwrapObject(): given type "
+			     "does not match object");
+	    return 0;
+	  }
+      } // unwrapObject( ...)
+      
+      
+    } // utils::
+  } // Reduction::  
+} // DANSE::
+
+
+// version
+// $Id: utils.icc 1431 2007-11-03 20:36:41Z linjiao $
+
+// End of file

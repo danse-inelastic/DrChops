@@ -1,0 +1,11 @@
+from reduction.pyre.preprocessors.AbstractIncidentEnergySolver import AbstractIncidentEnergySolver as base
+
+from pyre.units.energy import meV
+
+class _(base):
+
+  def __call__(self, *args, **kwds):  return 70. * meV
+
+  pass 
+
+def eiSolver(): return _('Ei70')

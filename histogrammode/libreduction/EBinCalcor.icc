@@ -1,0 +1,117 @@
+// -*- C++ -*-
+//
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+//
+//                             Tim Kelley, Jiao Lin
+//                      California Institute of Technology
+//                      (C) 2003-2007  All Rights Reserved
+//
+// {LicenseText}
+//
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+//
+
+
+#ifndef DANSE_REDUCTION_EBINCALCOR_ICC
+#error Template definitions meaningless outside EBinCalcor.h
+#endif
+
+#ifndef IOSTREAM_INCLUDED
+#define IOSTREAM_INCLUDED
+#include <iostream>
+#endif
+
+#ifndef CMATH_INCLUDED
+#define CMATH_INCLUDED
+#include <cmath>
+#endif
+
+
+#include <journal/debug.h>
+
+
+const char * jnrltag = "EBinCalcor";
+
+namespace DANSE { namespace Reduction {
+    
+    template <typename FPT>
+    EBinCalcor<FPT>::EBinCalcor
+    ( 
+     FPT incidentEnergy, 
+     FPT modToSampDist)
+      : m_ei( incidentEnergy),    // incident energy meV
+	m_lToSamp( modToSampDist),    // moderator to sample distance mm
+	m_vi( sqrt(m_ei/5.227))       // speed of incident neutrons mm/mu-sec
+    {
+#ifdef DEBUG
+      journal::debug_t debug( jnrltag );
+      
+      debug << "modToSampDist (in mm): " << m_lToSamp << ", "
+	    << "ei (in meV): " << m_ei << ", "
+	    << "vi (in mm/mu-sec): " << m_vi << ", "
+	    << journal::endl;
+#endif
+    }
+    
+    
+    template <typename FPT>
+    void EBinCalcor<FPT>::operator()( FPT pixelDistance, 
+                                      std::vector<FPT> const & tBinBounds,
+                                      std::vector<FPT> &eBinBounds)
+    {
+      
+#ifdef DEBUG      
+      journal::debug_t debug( jnrltag );
+#endif
+      
+      size_t tof_sz = tBinBounds.size();
+      try
+        {
+	  if (eBinBounds.size() != tof_sz) eBinBounds.resize( tof_sz);
+        }
+      catch (std::bad_alloc &ba)
+        {
+	  std::cerr << __FILE__ << __LINE__ << ba.what();
+	  throw ba;
+        }
+      
+      FPT lp2 = pixelDistance*pixelDistance;
+      
+      size_t eb_index = 0;
+      for( size_t tofb_index=0; tofb_index < tof_sz; tofb_index++)
+        {
+	  FPT residual = m_vi*tBinBounds[tofb_index]-m_lToSamp;
+          
+	  if (residual > 0) {
+	    eBinBounds[eb_index++] = 
+	      m_ei*(1.0-lp2/ ( residual*residual ));
+	  } else {
+	    eBinBounds[eb_index++] = -1e+13 - eb_index;
+	  }
+        }
+      
+      eBinBounds.resize( eb_index );
+      
+#ifdef DEBUG
+      debug << "tof bin boundaries: " << journal::newline;
+      for (size_t i=0; i < tBinBounds.size(); i ++ ) 
+	debug << tBinBounds[i] << journal::newline;
+      debug << journal::endl;
+      
+      debug << "energy bin boundaries: " << journal::newline;
+      for (size_t i = 0; i < eBinBounds.size(); i ++ ) 
+	debug << eBinBounds[i] << journal::newline;
+      debug << journal::endl;
+#endif
+      return;
+    } // operator() ...
+    
+    
+  } // Reduction::
+} // DANSE::
+
+
+// version
+// $Id: EBinCalcor.icc 1431 2007-11-03 20:36:41Z linjiao $
+
+// End of file

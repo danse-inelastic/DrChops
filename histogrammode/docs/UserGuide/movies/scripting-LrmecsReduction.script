@@ -1,0 +1,12 @@
+HistogramGUIApp.py
+from reduction.scripting import *
+# get experimental run data object
+r  = getRun( '/home/linjiao/reduction/Lrmecs/4849' )
+# get instrument and geometer
+i,g = r.getInsturment()
+# get I(det, pix, tof) histogram
+idpt = r.getDetPixTOFData()
+# reduce to S(phi, E)
+spe = idpt2spe( 60, idpt, i, g)
+# reduce to S(Q,E)
+sqe = idpt2sqe( 60, idpt, i, g )

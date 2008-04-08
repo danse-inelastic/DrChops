@@ -1,0 +1,45 @@
+
+<!--
+! ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!
+!
+! {LicenseText}
+!
+! ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-->
+
+<sect1 id='Guides_to_debug_reduction_applications'>
+  <title >
+    Guides to debug reduction applications
+  </title>
+
+
+  <sect2 id='Guides_to_debug_reduction_applications.pickle_files'>
+    <title >
+      pickle files
+    </title>
+
+    Pickle files created along the way of reduction are very useful in debugging.
+    
+    <itemizedlist >
+      
+      <listitem >
+	deteffic_6atm.pkl, deteffic_10atm.pkl: Detector efficiencies computed for
+	6 atomsphere pressure and 10 atomsphere pressure, respectively. Those
+	efficiency numbers are theoretical computations, which do not include
+	calibrations.
+      </listitem>
+      
+    </itemizedlist>
+    
+  </sect2>
+
+</sect1>
+
+
+<!-- version-->
+<!-- $Id$-->
+
+<!-- Generated automatically by Renderer on Thu Apr 26 13:18:13 2007-->
+
+<!-- End of file -->

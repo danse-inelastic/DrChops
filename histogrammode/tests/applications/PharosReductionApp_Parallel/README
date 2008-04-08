@@ -1,0 +1,21 @@
+Before you run tests in this directory, please do
+
+  rsh n01 mpdboot -n 1 -f mpd.hosts
+
+to start mpi on upgrayedd.danse.us
+
+The above instruction only works for the cluster "upgrayedd".
+
+To run these tests on other clusters, one will need to
+
+ * make sure you have installed mpi
+ * make sure pythia mpi is compiled
+ * make sure you have a mpd.hosts
+ * make sure you can run sth like
+    rsh n01 mpdboot -n 1 -f mpd.hosts
+ * make sure mpd is started
+    rsh n01 mpdtrace
+ * you will need to change the command in Fullreduction_TestCase.py
+   that runs the parallel application. It looks like
+
+   rsh -. n01 "PharosReductionApp_Parallel.py -launcher.nodelist=1 -launcher.nodegen='n%02d:4' -launcher.nodes=4 "

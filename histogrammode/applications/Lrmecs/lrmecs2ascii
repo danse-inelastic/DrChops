@@ -1,0 +1,706 @@
+#!/usr/bin/perl -w
+
+if(unpack("I",pack("c4",1,0,0,0))==1) {
+  # PC stuff
+$intFmt="I";   # V for Mac, I for PC
+$shortFmt="S"; # v for Mac, S for PC
+} else {
+  # Mac stuff
+$intFmt="V";   # V for Mac, I for PC
+$shortFmt="v"; # v for Mac, S for PC
+}
+
+use IO::File;
+
+package ShortArray;
+
+sub new {
+  my ($class,$runfile,$offset)=@_;
+  my ($loc,$len)=unpack($::intFmt."2",substr($runfile,$offset,8));
+  my $num=$len/2;
+  my $self=bless [unpack($::shortFmt.$num,substr($runfile,$loc,$num*2))];
+  return $self;
+}
+
+package FloatArray;
+
+sub toFloat {
+  my ($v)=@_;
+
+  my $exp=(($v>>7)&255)-128;
+  if($exp==-128) { return 0.0; }
+  my $hiMant=($v & 127)+128;
+  my $sign=($v>>15)&1;
+  my $loMant=($v>>16)&0xffff;
+  return (1.0-2.0*$sign)*(($hiMant/256.0)+($loMant/16777216.0))*(2.0**$exp);
+}
+
+sub new {
+  my ($class,$runfile,$offset)=@_;
+  my ($loc,$len)=unpack($::intFmt."2",substr($runfile,$offset,8));
+  my $num=$len/4;
+  my $self=bless [unpack($::intFmt.$num,substr($runfile,$loc,$num*4))];
+  foreach $i (0..$num-1) { $self->[$i]=toFloat($self->[$i]); }
+  return $self;
+}
+
+package DetectorMapping;
+
+# (IPNS code from gandalf.pns calls this a DetectorMap)
+# V6 encodes a mapping as (int,short,short) (address,tfType,moreHistBit).
+# V5 encodes all instruments as
+#   tfType(8), moreHistBit(1), address(23)
+# V4 and earlier encode all instruments as V5 except GLAD and LPSD, which are
+#   tfType(8), moreHistBit(1), nop(7), addr(16) (where address=addr<<8)
+#
+# We rename things: tfType -> timeField
+#                   moreHistBit -> moreHist
+#                   address -> offset
+#
+# timeField is an index into the TimeFieldTable, but it's 1-based; a value
+# of zero means "unused detector".
+
+sub new {
+  my ($class,$i)=@_;
+  return bless { timeField => ((($i>>24) & 0xff))-1,
+                 moreHist  => (($i>>23) & 0x1),
+                 offset    => (($i & 0x7fffff)) };
+}
+
+package DetectorMap;
+
+sub new {
+  my ($class,$runfile,$offset)=@_;
+
+  my ($loc,$len)=unpack($::intFmt."2",substr($runfile,$offset,8));
+  my $num=$len/4;
+
+  my $self=bless [ unpack($::intFmt.$num,substr($runfile,$loc,$num*4)) ];
+  for $i (0..$num-1) { $self->[$i]=new DetectorMapping($self->[$i]); }
+  return $self;
+}
+
+package TimeField;
+
+# These are always 16-byte records.  For V5 and later, the record is:
+#   m (int), tMin(int), tMax(int), tStep(int)
+#   with m broken up as:
+#     timeFocusBit(1), emissionDelayBit(1), constantDelayBit(1),
+#     energyBinBit(1), wavelengthBinBit(1), pulseHeightBit(1), logBinBit(1),
+#     nop(9), numOfChannels(16)
+# Before V5 there was a header value lpsdClock/standardClock. GLAD and LPSD
+# use lpsdClock as "clock" and the rest use standardClock.  Then the record
+# is:
+#   m(int), minMultiplier(int), rangeMultiplier(int), width(int)
+#   with m broken up as:
+#     timeFocusBit(1), emissionDelayBit(1), constantDelayBit(1), nop(13),
+#     numOfChannels(16)
+#   and width:
+#     tDoubleLength(16), stepMultiplier(16)
+#   where:
+#     tMin=minMultiplier*clock
+#     tMax=rangeMultiplier*clock
+#     tStep=stepMultiplier*clock
+#
+# For V3 and earlier, standardClock=0.125 and lpsdClock=0.5
+# For V4 and later, they are stored as two floats at absolute offset (632),
+#   standard first
+
+sub new {
+  my ($class,$a,$b,$c,$d)=@_;
+
+  if($b==0) { return undef; }        # White runs have an unused all-zero TF
+
+  my $self=bless { tMin => ($b*0.125),
+                   tMax => ($c*0.125),
+                   tStep => (($d & 0xffff)*0.125),
+                   tDoubleLength => (($d >> 16) & 0xffff),
+                   timeFocus => ($a>>31) & 1,
+                   emissionDelay => ($a>>30) & 1,
+                   constantDelay => ($a>>29) & 1,
+                   numChannels => ($a & 0xffff) };
+
+  # Except that the numChannels field in the file goes unused and it's
+  # computed from min/max and step.
+  $self->{numChannels}=($self->{tMax}-$self->{tMin})/$self->{tStep};
+
+#  printf("TimeField( tMin=%d tMax=%f tStep=%f numChannels=%d )\n",
+#    $self->{tMin},$self->{tMax},$self->{tStep},$self->{numChannels});
+
+  return $self;
+}
+
+package TimeFieldTable;
+
+sub new {
+  my ($class,$runfile,$offset)=@_;
+
+  my ($loc,$len)=unpack($::intFmt."2",substr($runfile,$offset,8));
+#printf("TFT %d %d\n",$loc,$len);
+  my $num=$len/16;
+  my $self=bless [];
+  for $i (0..$num-1) {
+    $self->[$i]=new TimeField(unpack($::intFmt."4",substr($runfile,$loc,16)));
+    $loc+=16;
+  }
+  return $self;
+}
+
+package Header;
+
+sub _readFloat {
+  my ($runfile,$offset)=@_;
+  return FloatArray::toFloat(unpack($::intFmt,substr($runfile,$offset,4)));
+}
+
+sub new {
+  my ($class,$runfile)=@_;
+
+  return bless { histogramsOffset => unpack($::intFmt,substr($runfile,14*4,4)),
+                 detectorMap      => new DetectorMap($runfile,8),
+                 timeFieldTable   => new TimeFieldTable($runfile,16),
+                 angles           => new FloatArray($runfile,72),
+                 pathLengths      => new FloatArray($runfile,80),
+                 detectorTypes    => new ShortArray($runfile,96),
+                 energyIn         => _readFloat($runfile,462),
+                 sourceToSample   => _readFloat($runfile,292),
+                 runfile          => $runfile };
+}
+
+sub isGood {
+  my ($self,$det)=@_;
+  return $self->{detectorMap}->[$det]->{timeField}!=-1;
+}
+
+sub name {
+  my ($self,$det)=@_;
+  return "Detector ".$det." centered at ".
+                    sprintf("%.2f",$self->{angles}->[$det]);
+}
+
+sub hist {
+  my ($self,$det)=@_;
+
+#  my %badDetectors=( 9=>10, 19=>20, 32=>33, 34=>35, 47=>48, 50=>49, 51=>52,
+#                     60=>61, 124=>125, 128=>129, 135=>136 );
+  my %badDetectors=( );
+  if(defined($badDetectors{$det})) { $det=$badDetectors{$det}; }
+
+  my $tf=$self->{timeFieldTable}->[ $self->{detectorMap}->[$det]->{timeField} ];
+  my $numSlots=(($tf->{tMax}-$tf->{tMin})/$tf->{tStep});
+
+  my $tMin=$tf->{tMin};
+  my $tMax=$tf->{tMax};
+  my $tStep=$tf->{tStep};
+
+  my $res=bless { name => "Detector ".$det." centered at ".
+                    sprintf("%.2f",$self->{angles}->[$det]),
+                  tMin => $tMin,
+                  tMax => $tf->{tMax},
+                  tStep => $tf->{tStep},
+                  data => [ unpack($::shortFmt.$numSlots,substr($self->{runfile},
+    $self->{histogramsOffset} + $self->{detectorMap}->[$det]->{offset} + 4,
+    $numSlots*2)) ] }, TOFHistogram;
+
+  my %detectorScale=( 0=>1.0, 1=>1.0, 2=>2.0, 5=>4.0 );
+  for $i (0..$#{$res->{data}})
+    { $res->{data}->[$i] *= $detectorScale{$self->{detectorTypes}->[$det]}; }
+
+  return $res->asHistogram();
+}
+
+package TOFHistogram;
+
+sub asHistogram {
+  my ($self,$name)=@_;
+
+  my $h=new Histogram($self->{name});
+  $h->{firstBin}=$self->{tMin};
+  $#{$h->{binWidths}}=$#{$self->{data}};
+  $#{$h->{data}}=$#{$self->{data}};
+  for my $i (0..$#{$self->{data}}) {
+    $h->{binWidths}->[$i]=$self->{tStep};
+    $h->{data}->[$i]=$self->{data}->[$i];
+  }
+  return $h;
+}
+
+package Histogram;
+
+sub new {
+  my ($class,$name)=@_;
+  return bless { name => $name, firstBin => undef,
+                 binWidths => [], data => [] };
+}
+
+sub truncate {
+  my ($self,$start,$end)=@_;
+  if($self->{firstBin}>$start) { $start=$self->{firstBin}; }
+  my $res=new Histogram($self->{name});
+  my $at=$self->{firstBin};
+#printf("at %f for %d\n",$at,$#{$self->{data}});
+  for my $idx (0..$#{$self->{data}}) {
+    if($at>=$end) { last; }
+    if($at>=$start) {
+#printf("engaged\n");
+      if(!defined($res->{firstBin})) { $res->{firstBin}=$at; }
+      push @{$res->{binWidths}},$self->{binWidths}->[$idx];
+      push @{$res->{data}},$self->{data}->[$idx];
+    }
+    $at+=$self->{binWidths}->[$idx];
+  }
+  return $res;
+}
+
+sub times {
+  my ($self,$factor)=@_;
+
+  my $res=new Histogram($self->{name}." * ".$factor);
+  my $at=$res->{firstBin}=$self->{firstBin};
+  for my $idx (0..$#{$self->{data}}) {
+    push @{$res->{binWidths}},$self->{binWidths}->[$idx];
+    push @{$res->{data}},$self->{data}->[$idx]*$factor;
+  }
+  return $res;
+}
+
+sub plus {
+  my ($self,$other,$factor)=@_;
+
+  if(!defined($factor)) { $factor=1; }
+
+  # They'd better be binned the same, yo.
+  if($self->{firstBin}!=$other->{firstBin}) { die("binning"); }
+
+  my $res=new Histogram($self->{name}." + ".$other->{name});
+  my $at=$res->{firstBin}=$self->{firstBin};
+  for my $idx (0..$#{$self->{data}}) {
+    push @{$res->{binWidths}},$self->{binWidths}->[$idx];
+    push @{$res->{data}},$self->{data}->[$idx]+
+                         $factor*$other->{data}->[$idx];
+  }
+  return $res;
+}
+
+sub _tofToE {
+  my ($tof,$tofToSample,$sampleToDetector)=@_;
+  my $tofSqToE=5.2270388e-6;                # meV*s^2/m^2
+  my $vOut=$sampleToDetector/(($tof-$tofToSample)/1000000.0);
+  return $vOut*$vOut*$tofSqToE;
+}
+
+sub tofToE {
+  my ($self,$tofToSample,$sampleToDetector)=@_;
+
+  my $res=new Histogram($self->{name}." (meV)");
+
+  my $sourceAt=$self->{firstBin};
+  my $resAt=_tofToE($sourceAt,$tofToSample,$sampleToDetector);
+  $res->{firstBin}=$resAt;
+#printf("First bin %f\n",$res->{firstBin});
+  my $idx=0;
+  foreach $w (@{$self->{binWidths}}) {
+    my $d=$self->{data}->[$idx];
+    $res->{data}->[$idx]=$d;        # XXX Not actually right; there's math here
+    my $sourceNext=$sourceAt+$w;
+    my $resNext=_tofToE($sourceNext,$tofToSample,$sampleToDetector);
+    $res->{binWidths}->[$idx]=$resNext-$resAt;
+#printf("  %f+%f %f -> %f+%f %f\n",$sourceAt,$w,$d,$resAt,$resNext-$resAt,$d);
+    $resAt=$resNext;
+    $sourceAt=$sourceNext;
+    $idx++;
+  }
+
+  # And it's going downward, so we actually need to reverse the whole thing
+  # resAt is at the right extreme already
+
+  my $res2=new Histogram($self->{name}." (meV)");
+  $res2->{firstBin}=$resAt;
+#printf("Starts at %f\n",$resAt);
+  for my $idx2 (0..$#{$res->{data}}) {
+    my $idx=$#{$res->{data}}-$idx2;
+    push @{$res2->{binWidths}},-$res->{binWidths}->[$idx];
+    push @{$res2->{data}},$res->{data}->[$idx];
+#printf("  width %f data %d\n",-$res->{binWidths}->[$idx],$res->{data}->[$idx]);
+  }
+
+  return $res2;
+}
+
+sub integrate {
+  my ($self,$from,$to)=@_;
+  if($from<$self->{firstBin}) { $from=$self->{firstBin}; }
+  my $result=0;
+  my $at=$self->{firstBin};
+  my $idx=0;
+  for my $w (@{$self->{binWidths}}) {
+    my $dxThisBox=$at+$w-$from;
+    if($dxThisBox > 0) {
+      my $extraThisBox=$at+$w-$to;
+      if($extraThisBox > 0) { $dxThisBox-=$extraThisBox; }
+      my $thisBoxFrac=$dxThisBox/$w;
+      $result+=($thisBoxFrac*$w*$self->{data}->[$idx]);
+      if($extraThisBox > 0) { last; }
+      $from=$at+$w;
+    }
+    $at+=$w;
+    if(++$idx > $#{$self->{data}}) { last; }
+  }
+  return $result;
+}
+
+sub maxX {
+  my ($self)=@_;
+  my $res=$self->{firstBin};
+  for my $w (@{$self->{binWidths}}) { $res+=$w; }
+  return $res;
+}
+
+sub reBin {
+  my ($self,$binWidth)=@_;
+
+  my $res=new Histogram($self->{name});
+  my $at=$res->{firstBin}=$self->{firstBin};
+  my $lim=$self->maxX();
+  while($at<$lim) {
+    push @{$res->{binWidths}},$binWidth;
+    push @{$res->{data}},$self->integrate($at,$at+$binWidth)/$binWidth;
+    $at+=$binWidth;
+  }
+  return $res;
+}
+
+sub dump {
+  my ($self,$max)=@_;
+
+  my $s=$self->reBin(($self->maxX()-$self->{firstBin})/70);
+
+  # Find the maximum y value so we know how to scale the y axis
+  if(!$max) {
+    $max=0;
+    foreach my $v (@{$s->{data}}) { if($v>$max) { $max=$v; } }
+  }
+
+  # Plot 15 rows of graph with y axis labels
+  printf("%6d__  %69s\n",$max,$self->{name});
+  foreach my $i (0..19) {
+    my $thresh=(20-$i)/20.0*$max;
+    printf("%6d__",$thresh-($max/20.0));
+    for my $v (@{$s->{data}}) { printf(($v>=$thresh)?"X":" "); }
+    printf("\n");
+  }
+
+  # Plot the x axis
+  printf("         ");
+  my $idx=0;
+  my $at=$s->{firstBin};
+  for my $v (@{$s->{data}}) {
+    if($idx%8==0 && $idx<60) { printf("\\%-7d",$at); }
+    $at+=$s->{binWidths}->[$idx];
+    $idx++;
+  }
+  printf("%5d/\n",$at);
+}
+
+sub gnuplot {
+  my ($self,$z,$bias,$clipminus,$clipplus)=@_;
+
+  if(!defined($bias)) { $bias=0; }
+  my $at=$self->{firstBin};
+  my $idx=0;
+  for my $v (@{$self->{data}}) {
+    if(defined($clipplus) && $v>$clipplus) { $v=$clipplus; }
+    if(defined($clipminus) && $v<$clipminus) { $v=$clipminus; }
+    if($z) { printf("%f %f %f\n",$z,$at+$bias,$v); } else
+      { printf("%f %f\n",$at+$bias,$v); }
+    $at+=$self->{binWidths}->[$idx++];
+  }
+}
+
+package Header;
+
+sub _elasticTofToE {
+  my ($self,$tof,$pathLength)=@_;
+  if($tof==0) { $tof=0.000000001; }         # Avoid divide by zero
+  my $vOut=$pathLength/($tof/1000000.0);
+  my $tofSqToE=5.2270388e-6;                # meV*s^2/m^2
+  return $vOut*$vOut*$tofSqToE;
+}
+
+sub _tofToE {
+  my ($self,$kind,$tof,$pathLength)=@_;
+#printf("%f %d\n",$tof,$pathLength);
+  if($kind eq "elastic") { return $self->_elasticTofToE($tof,$pathLength); }
+  die("crapola");
+}
+
+sub histToV {
+  my ($self,$v,$h)=@_;
+
+  my $res=new Histogram(sprintf("Detector %d (m/s)",$v));
+  my $pathLength=$self->{sourceToSample}+$self->{pathLengths}->[$v];
+
+  my $sourceAt=$h->{firstBin};
+  my $resAt=$res->{firstBin}=$pathLength*1000000/$sourceAt;
+  my $idx=0;
+  foreach $w (@{$h->{binWidths}}) {
+    my $d=$h->{data}->[$idx];
+    $res->{data}->[$idx]=$d;
+    my $sourceNext=$sourceAt+$w;
+    my $resNext=$pathLength*1000000/$sourceNext;
+    $res->{binWidths}->[$idx]=$resNext-$resAt;
+    $resAt=$resNext;
+    $sourceAt=$sourceNext;
+    $idx++;
+  }
+
+  # And we have to reverse it since it's counting down now.  resAt is at
+  # the right extreme already
+
+  my $res2=new Histogram($res->{name});
+  $res2->{firstBin}=$resAt;
+  for my $idx2 (0..$#{$res->{data}}) {
+    my $idx=$#{$res->{data}}-$idx2;
+    push @{$res2->{binWidths}},-$res->{binWidths}->[$idx];
+    push @{$res2->{data}},$res->{data}->[$idx];
+  }
+  return $res2;
+}
+
+sub histToE {
+  my ($self,$kind,$v,$h)=@_;
+
+  my $res=new Histogram(
+            sprintf("Detector %d (".$kind.", meV)",$v));
+
+  my $pathLength=$self->{sourceToSample}+$self->{pathLengths}->[$v];
+printf STDERR "Path %f\n",$pathLength;
+
+  my $sourceAt=$h->{firstBin};
+  my $resAt=$res->{firstBin}=$self->_tofToE($kind,$sourceAt,$pathLength);
+  my $idx=0;
+  foreach $w (@{$h->{binWidths}}) {
+    my $d=$h->{data}->[$idx];
+    $res->{data}->[$idx]=$d;        # XXX Not actually right; there's math here
+    my $sourceNext=$sourceAt+$w;
+    my $resNext=$self->_tofToE($kind,$sourceNext,$pathLength);
+    $res->{binWidths}->[$idx]=$resNext-$resAt;
+    $resAt=$resNext;
+    $sourceAt=$sourceNext;
+    $idx++;
+  }
+
+  # And we have to reverse it since it's counting down now.  resAt is at
+  # the right extreme already
+
+  my $res2=new Histogram($res->{name});
+  $res2->{firstBin}=$resAt;
+  for my $idx2 (0..$#{$res->{data}}) {
+    my $idx=$#{$res->{data}}-$idx2;
+    push @{$res2->{binWidths}},-$res->{binWidths}->[$idx];
+    push @{$res2->{data}},$res->{data}->[$idx];
+  }
+  return $res2;
+}
+
+package main;
+
+sub monitors {
+  $run->hist(30)->truncate(2245,2290)->dump;
+  $run->hist(1)->truncate(3345,3410)->dump;
+  printf("Distance Monitor0 to Monitor1: %f\n",
+  $run->{pathLengths}->[1]-$run->{pathLengths}->[0]);
+  $run->hist(123)->truncate(3120,3190)->dump;
+  printf("Distance Target to Sample: %f\n",$run->{sourceToSample});
+  printf("Distance Sample to Detector 123: %f\n",
+    $run->{pathLengths}->[123]);
+  exit(1);
+}
+
+sub readFile {
+  my ($fn)=@_;
+
+  my $io=new IO::File("<".$fn);
+  if(!defined($io)) { return undef; }
+  my $runfile="";
+  while((my $nr=$io->read(my $buf="",1024*128))>0) { $runfile.=$buf; }
+  $io->close;
+  return new Header($runfile);
+}
+
+#ma
+
+if($#ARGV!=0) {
+  printf STDERR "Usage: lrmecs2ascii <runfile>\n";
+  printf STDERR "Detector situation when we were there:\n";
+  printf STDERR "2   garbage   \\
+3   garbage   |__ no detectors installed below -7.2 degrees
+4   garbage   |
+5   garbage   /
+9   zero
+15  garbage   \\
+16  garbage   |__  beamstop; no detectors  -2.4 .. 2.4 degrees
+17  garbage   |
+18  garbage   /
+19  zero
+32  shifted, spread
+34  shifted, spread
+47  zero
+50  zero
+51  noisy floor (2 clicks all over)
+60  zero
+96  garbage   \\__ no detectors, no lapse in coverage here; just skipped IDs
+97  garbage   /
+124 zero
+128 zero
+135 zero
+";
+  exit(1);
+}
+my $file=$ARGV[0];
+
+my $run=readFile($file);
+if(!defined($run)) {
+  printf STDERR "lrmecs2ascii: cannot read runfile '%s'\n",$file;
+  exit(2);
+}
+
+printf "%-40s # runfile filename\n",$file;
+printf "%-40s # pathlength source to sample\n",$run->{sourceToSample};
+printf "%-40s # energy in (inaccurate; use monitor)\n",$run->{energyIn};
+
+my %detDesc=( 0=>"3in pancake 1.5in thick .001 eff",
+              1=>"1in x 18in x 2.377cm dia 1.00 eff",
+              2=>"1in x 9in x 2.377cm dia 1.00 eff",
+              5=>"1in x 4.5in x 2.377cm dia 1.00 eff" );
+
+foreach $det (0..159) {
+  printf "%-40s # Detector name\n",$run->name($det);
+
+  my $g=$run->isGood($det);
+  printf "%-40d # Is Valid\n",$g;
+  if(!$g) { next; }
+
+  my $hist=$run->hist($det);
+
+#  printf "%-40s # Detector name\n",$hist->{name};
+
+  my $tf=$run->{timeFieldTable}->[ $run->{detectorMap}->[$det]->{timeField} ];
+  printf "%-40s # tMin\n",$tf->{tMin};
+  printf "%-40s # tMax\n",$tf->{tMax};
+  printf "%-40s # tStep\n",$tf->{tStep};
+
+  printf "%-40s # detector center angle\n",$run->{angles}->[$det];
+
+  printf "%-40s # detector plugged into this channel?\n",
+    $run->{detectorMap}->[$det]->{timeField}==-1?"no":"yes";
+
+  printf "%-40s # detector type\n",$run->{detectorTypes}->[$det];
+  printf "%-40s # detector desc (from type)\n",$detDesc{$run->{detectorTypes}->[$det]};
+
+  printf "%-40s # pathlength sample to detector\n",$run->{pathLengths}->[$det];
+  printf "%-40s # firstBin\n",$hist->{firstBin};
+
+  my $binWidths=$hist->{binWidths};
+  printf "%-40s # number of binWidths on next line\n",$#$binWidths+1;
+  foreach $i (0..$#$binWidths) { printf("%s ",$binWidths->[$i]); } printf("\n");
+
+  my $data=$hist->{data};
+  printf "%-40s # number of bin counts on next line\n",$#$data+1;
+  foreach $i (0..$#$data) { printf("%s ",$data->[$i]); } printf("\n");
+}
+
+exit(0);
+
+# These are should add to zero (which they do)
+#my $run1=readFile("runs/lrcs3913.run");  # Vanadium pseudo-white
+#my $run2=readFile("runs/lrcs4035.run");  # Vanadium pseudo-white
+
+# But why does PW vanadium minus PW can clean up?
+#my $run1=readFile("runs/lrcs3913.run");  # Vanadium pseudo-white
+my $run1=readFile("runs/lrcs4035.run");  # Vanadium pseudo-white
+my $run2=readFile("runs/lrcs3914.run");  # Empty pseudo-white
+
+# These are very nice and pretty (130..146 in E):
+#my $run1=readFile("runs/lrcs4750.run");  # Vanadium 140 meV
+#my $run2=readFile("runs/lrcs4751.run");  # Empty-can for vanadium 140 meV
+
+# Pretty but bogus spot in the middle
+#my $run1=readFile("runs/lrcs4731.run");  # Vanadium 140 meV
+#my $run2=readFile("runs/lrcs4732.run");  # empty holder for Vanadium 140 meV
+
+#my $run1=readFile("runs/lrcs4033.run");  # Empty LRMECS, no choppers
+#my $run2=readFile("runs/lrcs3914.run");  # Empty pseudo-white
+
+my %noDetectors=( 2=>1,3=>1,4=>1,5=>1,15=>1,16=>1,17=>1,18=>1,96=>1,97=>1 );
+
+{
+  my $run=readFile("runs/lrcs3914.run");  # Empty pseudo-white
+
+#  # Compute the average V scattering distribution
+#  my $hist=undef;
+#  foreach my $v (2..159) {
+#    if($noDetectors{$v}) { next; }
+#    if(!defined($hist)) { $hist=$run1->hist($v); next; }
+#    $hist=$hist->plus($run1->hist($v),1.0);
+#  }
+#  $run->histToE("elastic",0,$hist)->truncate(0,30)->gnuplot(); exit(1);
+
+  my $v=0;
+  printf STDERR ("Flight: %f\n",$run->{sourceToSample}+$run->{pathLengths}->[$v]);
+  $run->hist($v)->truncate(3000,18000)->gnuplot();
+#  $run->histToV($v,$run->hist($v))->truncate(300,2200)->gnuplot();
+#  $run->histToE("elastic",$v,$run->hist($v))->truncate(0,30)->gnuplot();
+
+  exit(1);
+}
+
+
+## All the white-beam empties: 3987, 4034 (blows up), 3914, 4081 (blows up)
+#my $run=readFile("runs/lrcs4779.run");
+#for $v (2..159) {
+#  if($noDetectors{$v}) { next; }
+#  $run->hist($v)->gnuplot($run->{angles}->[$v],0,0); printf("\n")
+#}
+#exit(1);
+
+# It appears that vanadium runs move the incident chopper to the sampple
+# (it's usually at the chopper, which is removed)
+$run1->{pathLengths}->[0]=0;
+
+my $v=30;
+$scale=$run1->histToE("elastic",$v,$hist)->integrate(0,30);
+$run1->histToE("elastic",$v,$hist)->times(1/$scale)->truncate(0,30)->gnuplot();
+exit(1);
+
+my $scale2=$run1->hist(0)->integrate(0,32000)/
+           $run2->hist(0)->integrate(0,32000);
+printf STDERR ("Scale %f\n",$scale2);
+
+## 140 and 40
+#my $v=141;
+#$run1->hist($v)->plus($run2->hist($v),-$scale2)->truncate(5000,15000)
+#  ->gnuplot();
+#exit(1);
+
+for $v (2..159) {
+  if($noDetectors{$v}) { next; }
+
+  printf("[H[2J");
+  $run1->histToE("elastic",$v,$run1->hist($v))->truncate(0,30)->dump;
+  next;
+
+#  $run1->histToE("elastic",$v,
+#    $run1->hist($v)->plus($run2->hist($v),-$scale2)
+    $run1->hist($v)
+#  )
+
+#    ->truncate(0,20)
+#    ->truncate(130,146)
+    ->truncate(5000,15000)
+#    ->dump
+    ->gnuplot($run1->{angles}->[$v],0,0); printf("\n")
+#    ->gnuplot($v,0,0); printf("\n")
+    ;
+#  select(undef,undef,undef,2);
+}

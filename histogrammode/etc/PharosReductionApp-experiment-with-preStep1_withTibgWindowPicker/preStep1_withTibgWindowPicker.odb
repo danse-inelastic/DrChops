@@ -1,0 +1,24 @@
+#!/usr/bin/env python
+#
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#
+#                                   Jiao Lin
+#                      California Institute of Technology
+#                        (C) 2007  All Rights Reserved
+#
+# {LicenseText}
+#
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#
+
+
+from reduction.pyre.preprocessors.Step1_withTibgWindowPicker import Step1_withTibgWindowPicker as factory
+
+def preStep1(): return factory( "preStep1_withTibgWindowPicker" )
+def preStep1_main(): return factory( "preStep1_withTibgWindowPicker" )
+def preStep1_mt(): return factory( "preStep1_withTibgWindowPicker" )
+
+# version
+__id__ = "$Id$"
+
+# End of file 

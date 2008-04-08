@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="us-ascii" ?>
+<!--
+
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+                                   Jiao Lin
+                      California Institute of Technology
+                        (C) 2007 All Rights Reserved
+
+ {LicenseText}
+
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+-->
+
+
+<chapter id='PHAROS'>
+
+<para>
+This chapter explains how to run DRCS for the PHAROS 
+spectrometer at the Lujan Center.
+</para>
+
+<para>
+<xref linkend='Prepare_PHAROS_Reduction_Directory'/>
+ gives some information about data file formats and directories.
+</para>
+
+<para>
+<xref linkend='PHAROS_Reduction_GUI_Tutorial'/>
+explains how to use the data reduction application with a
+menu-driven GUI. This is the easiest approach for new users. We also 
+recommend that advanced users try this application first, in part to 
+get an idea of some of the capabilities of the reduction software.
+</para>
+
+
+  <title>PHAROS Reduction</title>
+  &reduction-Prepare_PHAROS_Reduction_Directory;
+<!--
+  &reduction-PHAROS_Reduction_commandline_Tutorial;
+-->
+  &reduction-PHAROS_Reduction_GUI_Tutorial;
+<!--
+  &reduction-PHAROS_Parallel_Reduction;
+-->
+</chapter>
+

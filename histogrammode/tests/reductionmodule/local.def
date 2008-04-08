@@ -1,0 +1,24 @@
+# -*- Makefile -*-
+#
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#
+#                               Michael A.G. Aivazis
+#                        California Institute of Technology
+#                        (C) 1998-2003  All Rights Reserved
+#
+# <LicenseText>
+#
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#
+
+PROJ_CXX_INCLUDES += . ${addprefix ${BLD_INCDIR}/,reduction}
+PROJ_CXX_INCLUDES += ${addprefix ${BLD_INCDIR}/,ARCSTest} ${addprefix ${BLD_INCDIR}/,journal}
+
+PROJ_CXX_INCLUDES += $(NUMPY_INCDIR) $(PYTHON_INCDIR)
+
+PROJ_CXX_DEFINES += DEEPDEBUG
+
+# version
+# $Id: local.def 1275 2007-06-21 23:54:59Z linjiao $
+
+# End of file

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="us-ascii" ?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN"
+"http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd"
+[
+<!ENTITY Introduction SYSTEM "Introduction.xml">
+<!ENTITY Architecture SYSTEM "Architecture.xml">
+<!ENTITY PyreComponents SYSTEM "PyreComponents.xml">
+]>
+
+<book>
+
+<bookinfo>
+<title> Reduction: Developer Guide</title>
+</bookinfo>
+ 
+&Introduction;
+&Architecture;
+&PyreComponents;
+
+</book>

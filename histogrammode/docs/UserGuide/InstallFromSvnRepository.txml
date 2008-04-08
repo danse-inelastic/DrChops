@@ -1,0 +1,256 @@
+<!--
+
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+                                   Jiao Lin
+                      California Institute of Technology
+                        (C) 2007 All Rights Reserved
+
+ {LicenseText}
+
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+-->
+
+
+<sect1 id='Install_ARCS_software_from_SvnRepository'>
+  <title >
+    Install DRCS from the DANSE svn Repository
+  </title>
+  
+  
+  <sect2 id='Install_ARCS_software_from_SvnRepository.GetDistribution'>
+
+<title > Get Distribution </title>
+First you must have a
+<ulink url="http://subversion.tigris.org/">
+  svn
+</ulink> 
+client installed. Then go to a suitable directory 
+and type
+
+<programlisting>
+  svn co -N svn://danse.us/buildInelast
+  cd buildInelast
+  svn up common reduction-&lt;version&gt;
+  cd reduction-&lt;version&gt;
+</programlisting>
+
+Please remember to replace &lt;version&gt; to the actual version number you 
+are installing.
+  </sect2>  
+
+  
+  <sect2 id='Install_ARCS_software_from_SvnRepository.Prerequisites'>
+    <title >
+      Prerequisites
+    </title>
+    
+<para >
+  DRCS depends on many existing software packages like HDF and numpy.
+It is complicated to install all those dependencies. 
+It is recommended that you install the binary distribution of DRCS 
+if it is available for your platform. If you do need to build DRCS 
+software from source for some reason, 
+please install the following prerequisites first. 
+    </para>
+    
+<itemizedlist >
+  <listitem >
+    <ulink url='http://www.numpy.org/'>
+      <citetitle>numpy</citetitle>
+    </ulink> provides basic numeric operations on data arrays.
+  </listitem>
+  <listitem >
+    <ulink url='http://hdf.ncsa.uiuc.edu/HDF5/'>
+      <citetitle>HDF5</citetitle>
+    </ulink> provides access to hdf5 files, and it is the 
+    underlying file format for NeXus files.
+  </listitem>
+  <listitem >
+    <ulink url='http://www.wxpython.org/'>
+      <citetitle>wxPython</citetitle>
+    </ulink>
+    provides tools to build graphical user interface.
+  </listitem>
+  <listitem >
+    <ulink url='http://matplotlib.sourceforge.net/'>
+      <citetitle>matplotlib</citetitle>
+    </ulink>
+    provides tools to do plotting.
+  </listitem>
+<!--
+  <listitem >
+    <ulink url='http://www.scipy.org/'>
+      <citetitle>scipy</citetitle>
+    </ulink>
+    (optional)
+  </listitem>
+-->
+</itemizedlist>
+
+Please change to the directory "install-deps":
+
+<programlisting>
+  cd install-deps
+</programlisting>
+
+In this directory you will find several shell scripts in the form of
+
+<programlisting>
+  install-&lt;software-name&gt;.sh
+</programlisting>
+
+
+The shell scripts in this directory are good hints for showing
+ experienced linux
+users how to build and install prerequisites for DRCS. If you 
+are not an experienced linux user, you might end up wasting your 
+time trying to build those packages. A better solution is to install
+the binary distribution of DRCS, which includes all dependencies.
+
+<para>
+If you are so determined to go on... Congratulations! You are
+now starting an exciting adventure :)
+</para>
+
+<para>
+First build and install python if you don't have it installed in
+your system. A better solution is to install python using tools
+like apt or yum. If you really want to build python from source, please
+follow install-python.sh. It turns out to be not that difficult...
+</para>
+
+<para>
+Second, numpy. It is quite easy. Even the source distribution is easy.
+Follow install-numpy.py.
+</para>
+
+<para>
+Third, wxPython. It should be available to be installed from binary
+releases for some linux, Mac OS X, and windows platform. 
+It is better to install the unicode binary.
+Google
+around to find out. Even if you want to install it from source,
+this is not too hard either, but it has many
+commands. 
+Reviewing and running install-wxPython.sh might be a good idea.
+</para>
+
+<para>
+Fourth, matplotlib. This is the hard part... Good luck... Depending
+on your platform, you might need to install gtk2-devel (linux) 
+or freetype2 (Mac OS X)  before you can successfully build
+matplotlib. Anyway, please take a look at install-matplotlib.py...
+</para>
+
+<para>
+After install matplotlib, please run the following test to see
+if the installation was successful.
+</para>
+
+<programlisting >	  
+  >>> import matplotlib
+  >>> matplotlib.use("wxagg")
+  >>> import pylab
+  >>> pylab.plot( [1,2], [1,2] )
+  >>> pylab.show()
+</programlisting>
+
+<para>
+If everything goes well, consider youself lucky. If something goes wrong, you might need to reinstall you wxPython binary. The wxPython binaries come in two flavors, ansi or unicode, and you have to choose the right one (usualy unicode) one to make it work with matplotlib binary.
+</para>
+
+<para>
+Fifth, HDF5. The tricky part is we need c++ shared library. Look
+into install-hdf5.sh and you will find hints about how to do that.
+</para>
+
+<para>
+Wow, you have done all of it! Congratulations! Now you can build 
+DRCS. Please don't forget to add necessary environment
+variables to your .bashrc for any software which you have installed
+to custom directories.
+</para>
+
+<para>
+To reduce PHAROS data, you also need the tool h4toh5. The original
+PHAROS data are in HDF4 format. The current ARCS reduction software
+only reads the HDF5 format, however. 
+This tool can convert PHAROS data file
+from HDF4 format to HDF5 format. That tool is not
+needed when building DRCS, but you will need it if you want
+to use ARCS reduction software to reduce PHAROS data.
+To reduce Pharos data, you will have to install HDF4 and h4h5tools.
+Please
+follow the scripts install-hdf4.sh and install-h4h5tools.sh.
+The HDF4 source release chokes sometimes, and complains about missing 
+math functions. You will need to add -lm to solve that.
+</para>
+
+    
+  </sect2>    
+  
+  <sect2 id='Install_ARCS_software_from_SvnRepository.Build_and_install_ARCS_software'>
+    <title >
+      Build and Install ARCS software
+    </title>
+    
+    If all prerequisites are installed properly, 
+installation of DRCS itself is relatively easy. 
+Please change to the directory where you have used
+svn to check out reduction distribution, and type
+(the second command, ./getsrc.py, will ask for password, please type "pyre"
+without the quote as password)
+<programlisting >
+  $ cd buildInelast/reduction-&lt;version&gt;
+  $ ./getsrc.py
+  $ export HDF5_DIR=/path/to/HDF5/installation
+  $ python setup.py install --prefix=/path/where/you/want/to/install/ARCS/software
+</programlisting>
+    
+An example would be
+
+<programlisting >
+  $ cd ~/
+  $ cd buildInelast/reduction--&lt;version&gt;
+  $ ./getsrc.py
+  $ export HDF5_DIR=/usr/local
+  $ python setup.py install --prefix=/usr/local/arcs-&lt;version&gt;
+</programlisting>
+    
+After installation, before you can use DrChops, you have to 
+set up environment variables for DRCS by
+ 
+<programlisting >
+  $ source /path/to/your/ARCS/software/installation/bin/envs.sh
+</programlisting>
+
+If you want to automatically set up these variables every time you login, 
+please add the above command to .bashrc in your home directory.
+    
+<para >
+  Now you can start a reduction application from a terminal,
+</para>
+
+<programlisting >
+  $ wxLrmecsReductionApp.py
+</programlisting>
+      
+You could now try out DrChops by following
+<link linkend='GettingStarted'>
+  these instructions
+</link>
+  .
+    
+  </sect2>
+  
+</sect1>
+
+
+<!-- version-->
+<!-- $Id$-->
+
+<!-- Generated automatically by Renderer on Thu Apr 26 13:17:56 2007-->
+
+<!-- End of file -->

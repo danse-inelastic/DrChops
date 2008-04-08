@@ -1,0 +1,155 @@
+This page explains how to run PHAROS reduction application from command line. If you like GUI, please follow 
+[[How to run Pharos reduction GUI | instructions on PHAROS reduction GUI]].
+
+Fore more information about ARCS applications, please visit [[ARCS_1.0_applications | ARCS applications main page]]
+
+
+=== Environment Set-up ===
+Before you run PHAROS reduction application, please make sure that environment variables of ARCS software are set correctly. Set up of environment variables depends on the platform on which the reduction application will be run. This step is very critical and needs special attention. Once this step is accomplished, it can be set up automatically for you in your next reduction task. If you have installed ARCS software following our [http://www.cacr.caltech.edu/projects/ARCS/arcs-1.0/web/Download.htm Installation Instructions], there should be a script that can set those env vars for you. Please don't hesitate to ask linjiao@caltech.edu for help if you have any trouble.
+
+
+=== Preparation of data files ===
+Please follow instructions in page [[Prepare Pharos Reduction Directory]]
+
+
+=== Understand the data better ===
+To reduce the data, the reduction application needs some information. Some of those information can be easily obtained by looking at some plots.
+
+==== Time independent background ====
+An important step in reduction is to remove the "time-independent background" from the data. The "time-idependent" background is used to identify the background noise presented in neutron measurements. In the reduction procedure, such noise is estimated by the averaged counts in a user-specified tof region. Please take a look at the following figure:
+
+[[Image:Pharos_342_I_tof.png|thumb|center|600px|Integrated intensity vs time-of-flight bin number]]
+
+This figure displays a curve of neutron intensity (integrated over all detectors and pixels) vs time-of-flight. Apparently the region in (0.6e5, 0.7e5) contains useful signals. In the region of (0.9e5, 1.e5), there are very few counts. We can take the latter region for our calculation of time independent background. So please write down these two numbers 0.9e5 and 1.e5, and they will be useful soon.
+
+
+The above plot is created by a tool "PharosPlotI_tof.py". For example, if you want to see I(tof) of the data file "Pharos_342.nx.h5", then the command line would be 
+
+ $ PharosPlotI_tof.py --Measurement.main=sampledata/Pharos_342.nx.h5  --Measurement.instrumentFilename=PharosDefinitions.txt  --Measurement=PharosMeasurement
+
+For those PHAROS data files in the "new" data file format, an example would be:
+
+ $  PharosPlotI_tof.py --Measurement.main=sampledata/Pharos_3322.nx.h5  --Measurement.instrumentFilename=PharosDefinitions.txt  --Measurement=PharosMeasurement11202005
+
+==== Dark angle ====
+Another important step in reduction is to correct for the "dark angle" effect in vanadium calibration. In most experiments, a run of vanadium calibration is necessary to find out the detector efficiencies. In cases where vandium samples are like a plate, the "dark angle" effect is important. The detector intensity would show a dip at the dark angle, just like what you see in the next figure:
+
+[[ Image:Pharos_Vanadium_318_I_phi.png|thumb|center|600px|Integrated intensity vs scattering angle (deg)]]
+
+This figure displays a curve of neutron intensity (integrated over all detectors and pixels) vs scattering angle. Apparently there is a dip in the region of (120, 143). So please write down these two numbers 120 and 143, and they will be useful soon.
+
+
+The above plot is created by a tool "PharosVanPlotI_phi.py". For example, if you want to see I(phi) of the data file "Pharos_318.nx.h5", then the command line would be 
+
+  $ PharosVanPlotI_phi.py --Measurement.calib=sampledata/Pharos_318.nx.h5 --Measurement.instrumentFilename=PharosDefinitions.txt --Measurement=PharosMeasurement --eiGuess=100.
+
+For those PHAROS data files in the "new" data file format, an example would be:
+
+  $ PharosVanPlotI_phi.py --Measurement.calib=sampledata/Pharos_552.nx.h5 --Measurement.instrumentFilename=PharosDefinitions.txt --Measurement=PharosMeasurement11202005 --eiGuess=100.
+
+
+=== Preparation of pml file ===
+ 
+The ".pml" file is used as input file for PHAROS reduction applications. A tool was created to help you generate an example pml file (this tool is only availble in linux and mac platforms, and is not available in windows. For windows users, [[PharosReductionLight | GUI]] interface is the solution.):
+
+ $ text2pyreui.py PharosReductionLight.py
+
+You will be presented with a dialog
+
+[[Image:Text2pyreui-pharosreductionlight-mainwindow.png]]
+
+This dialog helps users to change settings of the current application, PharosReductionLight. Please use up/down arrow keys to move between menu items. Each menu item is either a "property" or a "composite" except the last item "*Done".  When you select a "property" like "EiGuess", a window will shows up to ask you what value you want it to be while the original value is shown as default 
+
+[[Image:Text2pyreui-pharosreductionlight-setproperty.png]]
+
+after you change the value and hit enter, you will be brought back to the original screen.
+
+When you select a "composite" (a "composite" is a list of properties and composites) like "dataFiles", a new settings window will shows up for that composite, like this one:
+
+[[Image:Text2pyreui-pharosreductionlight-datafiles.png ]]
+
+The last item "*Done" should be selected (hit <Enter> key) when you are done with current screen of settings, like this:
+
+[[Image:Text2pyreui-pharosreductionlight-Done.png ]]
+
+Most of those settings are straightforward to change. Some might deserve more explanations here.
+
+==== TimeBG ====
+When you select "TimeBG" in the main dialog, you will be prompted with
+
+[[Image:Text2pyreui-pharosreductionlight-tbg.png]]
+
+You should have used PharosPlotI_tof.py to plot intensity vs tof and write down two numbers. If not, please consult [[How_to_run_Pharos_reduction_application#Time independent background]]. 
+
+Please input those two numbers to answer these two questions
+
+==== Dark Angle ====
+
+When you select "vanadium" in the main dialog, and then select the third item "darkAngleFinder", you will be prompted by
+
+[[Image:Text2pyreui-pharosreductionlight-darkanglefinder.png]]
+
+You should have used PharosVanPlotI_phi.py to plot intensity vs scattering angle and write down two numbers. If not, please consult [[How_to_run_Pharos_reduction_application#Dark angle]]. 
+
+Please input those two numbers to answer these two questions
+
+
+==== Axes ====
+
+When you select "axes" in the main dialog, you will be prompted with this dialog
+
+[[ Image:Text2pyreui-pharosreductionlight-axes.png ]]
+
+This dialog is for you to change settings of axes of reduced S(phi, E) and S(Q,E). There axes are necessary:
+
+* phi: scattering angle
+* E: energy transfer
+* Q: scalar momentum transfer
+
+If select "eAxis", you will be prompted by 
+
+[[ Image:Text2pyreui-pharosreductionlight-eAxis.png ]]
+
+In this window, you need to specify the minimum, maximum, and step size of the energy bins.
+
+Similarly, you need to change settings for Q bins and phi bins.
+
+
+==== Finish up ====
+When you select "*Done" in the main dialog, you will be told that the configuration is done:
+
+[[ Image:Text2pyreui-pharosreductionlight-configurationisdone.png ]]
+
+Just hit enter, and the next window would be
+
+[[ Image:Text2pyreui-pharosreductionlight-save-or-run.png ]]
+
+Here you can choose to
+
+* Save settings to a file. The file will be named PharosReductionLight.pml
+* Save settings and run the application. 
+* Simple quit without doing anything
+
+I would recommend to choose the first option, and then you have a chance to 
+change your configuration file by hand. 
+
+If you choose the second option "Save settings and run the application", 
+you will be presented with the following window:
+
+[[ Image:Text2pyreui-pharosreductionlight-launcher.png ]]
+
+Move curser to choose "*Done" and press <Enter>, 
+the reduction application will start running.
+
+=== Run ===
+If in the previous step you choose either option 1 or 2, there will be a
+file named "PharosReductionLight.pml" in your working directory.
+Running PharosReductionLight is simple now due to existence of this file:
+ 
+ $ PharosReductionLight.py
+
+=== S(Q,E) ===
+
+If everything is fine, a file named "sqe.pkl" will be created under the current directory, to have a quick look at the reduced S(Q,E), please try
+
+ $ PlotSqe.py

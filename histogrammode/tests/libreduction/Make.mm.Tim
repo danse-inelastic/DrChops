@@ -1,0 +1,66 @@
+# -*- Makefile -*-
+#
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#
+#                               T. M. Kelley
+#                        (C) 2004-2005 All Rights Reserved
+#
+# <LicenseText>
+#
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+include local.def
+
+PROJECT = libreduction/tests
+PACKAGE = libTestReduction
+PROJ_CLEAN += $(PROJ_CPPTESTS)
+
+PROJ_CXX_LIB = $(BLD_LIBDIR)/$(PACKAGE).$(EXT_SAR)
+PROJ_CPPTESTS = run_reductionTests 
+PROJ_TESTS = $(PROJ_CPPTESTS)
+PROJ_LIBRARIES += -L$(BLD_LIBDIR)  -L$(EXPORT_ROOT)/lib  -lreduction -ljournal -lARCSTest
+
+
+PROJ_SRCS = \
+   reductionTest_EBinCalcor.cc \
+   reductionTest_ERebinAllInOne.cc \
+   reductionTest_He3DetEffic.cc  \
+
+
+#--------------------------------------------------------------------------
+#
+
+all: proj-cxx-lib $(PROJ_TESTS) 
+
+test:
+	for test in $(PROJ_TESTS) ; do $${test}; done
+
+release: tidy
+	cvs release .
+
+update: clean
+	cvs update .
+
+#--------------------------------------------------------------------------
+#
+
+rvm_srcs = \
+    run_reductionTests.cc \
+    main.cc             \
+
+
+run_reductionTests:  $(rvm_srcs) $(BLD_LIBDIR)/libTestReduction.$(EXT_SAR)
+	$(CXX) $(CXXFLAGS) $(LCXXFLAGS) -o $@ $(rvm_srcs) $(PROJ_LIBRARIES) -lTestReduction
+
+testVanTxCalcor:  testVanTxCalcor.cc 
+	$(CXX) $(CXXFLAGS) $(LCXXFLAGS) -o $@ testVanTxCalcor.cc $(PROJ_LIBRARIES)
+
+testRDriver:  testRDriver.cc 
+	$(CXX) $(CXXFLAGS) $(LCXXFLAGS) -o $@ testRDriver.cc $(PROJ_LIBRARIES)
+
+
+
+# version
+# $Id: Make.mm.Tim 876 2006-04-23 08:10:01Z jiao $
+
+# End of file

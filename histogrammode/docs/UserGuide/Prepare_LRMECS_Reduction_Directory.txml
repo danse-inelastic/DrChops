@@ -1,0 +1,175 @@
+<!--
+
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+                                   Jiao Lin
+                      California Institute of Technology
+                        (C) 2007 All Rights Reserved
+
+ {LicenseText}
+
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+-->
+
+
+<sect1 id='Prepare_LRMECS_Reduction_Directory'>
+  <title >
+    Prepare a Directory for LRMECS Reduction
+  </title>
+  
+  <sect2 id='Prepare_a_directory_for_LRMECS_reduction.Data_format'>
+    <title >
+      Data Format
+    </title>
+    
+    
+    <para >
+      All LRMECS data files to be reduced must be in a special ascii format.
+      The original data files from LRMECS can be converted to that format
+      using the command <emphasis > lrmecs2ascii </emphasis> .
+      The tutorial <xref linkend='LRMECS_Reduction_GUI_Tutorial'/> 
+<!--
+      and 
+      <xref linkend='LRMECS_Reduction_commandline_Tutorial'/> 
+-->
+      uses example data files that are included in the distribution.
+      These example data files are already in the proper ascii format.
+    </para>
+
+
+        <para >
+            For your own binary data files, if you are using linux or Mac OS X,
+            you could use the command "lrmecs2ascii" included in the DRCS
+            to do conversion. For Windows users, however, 
+	    this tool is not available
+            unless your Windows has perl installed. The solution for you
+	    may be 
+
+            <ulink url='xxxlrmecs2asciixxx'>
+	      <citetitle>the online service</citetitle>
+            </ulink>
+
+            .
+        </para>
+
+
+	<para >
+	  For linux and Mac OS X users,
+	  to convert LRMECS data file to ascii format, please do the following:
+<programlisting >
+  $ lrmecs2ascii original_filename > new_filename
+</programlisting>
+
+	</para>
+
+        <para >
+            An example would be:
+
+<programlisting >
+  $ lrmecs2ascii 4849.run > 4849
+</programlisting>
+
+        </para>
+
+    </sect2>
+
+
+    <note id='Prepare_a_directory_for_LRMECS_reduction.Note'>
+<title >
+Note
+</title>
+<para >
+        The following tutorial of preparing your work directory is only
+	an example of how to lay out your directory structure
+        to make your reduction easier. You don't need to follow
+        these procedures. You could put your data files anywhere
+        you like, and you just need to let the reduction application
+        know about them by using either the GUI interface or
+        the command line options.
+    </para></note>
+
+
+    <sect2 id='Prepare_a_directory_for_LRMECS_reduction.Work_Directory'>
+<title >
+Work Directory
+</title>
+
+        First we create a work directory to put data files and output files.
+
+        <programlisting >
+
+            $ mkdir -p ~/reduction/LRMECS
+
+        
+</programlisting>
+
+        Next we want to have access to sample data.
+        If you have not done so, please download
+
+        <ulink url='xxxDOWNLOADSxxx/reduction-data-tgz'>
+	  <citetitle>DRCS sample data</citetitle>
+        </ulink>
+
+	,  put it in the directory ~/reduction,
+
+        and expand the tar ball:
+
+<programlisting >
+  $ cd ~/reduction
+  $ tar xvfz ins-data.tgz
+</programlisting>
+
+In Mac OS X platform, downloads may be unzipped automatically, 
+and the last command should be changed to
+
+<programlisting>
+  $ tar xvf ins-data.tar
+</programlisting>
+
+This will create a directory "ins-data" which contains sample data files.
+Now make a link to the sample data directory
+
+<programlisting >
+  $ cd ~/reduction/LRMECS
+  $ ln -s ~/reduction/ins-data/Lrmecs sampledata
+</programlisting>
+
+This will create a link in ~/reduction/LRMECS named sampledata, pointing to the LRMECS sample data directory.
+    </sect2>
+
+
+    <sect2 id='Prepare_a_directory_for_LRMECS_reduction.copy_LRMECS_sample_data_files_'>
+<title >
+Copy LRMECS Sample Data Files 
+</title>
+
+Copy the file here
+
+<programlisting >
+  $ cd ~/reduction/LRMECS
+  $ cp sampledata/4849 .
+</programlisting>
+
+
+        <emphasis >
+            Hint:
+        </emphasis>
+
+        Don't miss the small 'dot' at the end of the last command!
+
+        <para >
+            Do the same thing for data files 4844 and 4779
+        </para>
+
+    </sect2>
+
+</sect1>
+
+
+<!-- version-->
+<!-- $Id$-->
+
+<!-- Generated automatically by Renderer on Thu Apr 26 13:18:05 2007-->
+
+<!-- End of file -->

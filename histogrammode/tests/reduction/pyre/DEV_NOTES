@@ -1,0 +1,32 @@
+Jan 24, 2005
+
+In order to construct a reliable test suite for pyre components of reduction package,
+we need to prepare 
+
+ - an instrument
+ - a geometer
+ - a measurement
+
+It is helpful that they are simple and the data can be intuitively "reduced" by hand
+or just in mind.
+
+This proposal tries to address this issue by creating fake instrument, geometer, and
+measurement.
+
+========== FakeInstrument ==========
+Fake instrument should have a full hierarchy of detector arrays, but easy to 
+understand to human mind. 
+
+As a proposal, I would like to make detectors to be circles so that each pixel
+in a detector has the exactly same scattering angle. So we can easily "reduce"
+data in our mind.
+
+========== FakeGeometer ==========
+For powder reduction, only "scattering angle" and "distance to sample" are needed.
+So we only need to implement these two methods
+
+
+========== FakeMeasurement =========
+A measurement with simple data. Maybe there should be several of them.
+
+The first one I can think of is to fill the dataset with constant number.

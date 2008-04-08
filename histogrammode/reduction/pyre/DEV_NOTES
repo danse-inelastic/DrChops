@@ -1,0 +1,255 @@
+Nov. 3, 2005
+
+Task: Restructure the powder reduction application
+Purpose: The powder reduction applications were big (1000 lines) applications. The three existing apps (for ARCS, for mcstas simulated ARCS, for Pharos) are long and having almost the same codes. We need to restructure the application to smaller units (components), in order to reduce the confusion and entanglement, and to allow for flexible improvements.
+
+Basic reduction steps:
+   1. determine incident energy
+   2. determine normalization
+   3. determine calibrations
+   4. reduce main data (sample data) to s(phi,E)
+   5. convert to s(Q,E)
+
+Followiing are major pyre components:
+
+
+-----------------------------------------------------------
+EiSolver
+
+  interface:
+     methods:
+        solve(measurement)  --> given measurement, return the incident energy
+
+  implementation:
+     a base class that fixes the interface: EiSolver
+     several solid implementations
+        - simple ei solver (get ei from user input): SimpleEiSolver
+        - calculate ei from monitor data: EiSolverUsingMonitorData
+        - calculate ei from elastic peak of main data: 
+
+ -EiSolver:
+  inventory:
+    properties:
+       None
+    facilities:
+       None
+ -SimpleEiSolver:
+  inventory:
+    properties:
+       e_i
+    facilities:
+       None
+ -EiSolverUsingMonitorData:
+  
+
+-----------------------------------------------------------
+NormalizerFactory
+
+  interface:
+    methods:
+       __call__( measurement ) --> determine the normalization functional by looking into measurement results (the monitor data), return an instance of Normalizer
+
+  implementation:
+     a base class that fixes the interface: Normalizer.NormalizerFactory
+     several solid implementations
+        - simple normalizer that does no normalization: Normalizer.NullNormalizerFactory
+        - normalize by using monitor data: NormalizerUsingMonitorData.NormalizerFactory
+
+  inventory:
+    properties:
+       None
+    facilities:
+       None
+
+  related:
+    Normalizer classes
+
+
+-----------------------------------------------------------
+VCalibration
+
+  interface:
+    methods:
+       calcCalibrations( ei, vdataset, measurement ) --> calculate calibration constants given incident energy, the vanadium dataset, and measurement
+       ???: there some more methods in VCalib_Det that might be considered to be added to the interface???
+
+  implementation:
+     a base class that fixes the interface: VCalibration.VCalibration
+     several solid implementations
+        - simple one that do no calibration: VCalibration.NoCalibration
+        - do calibration detector by detector: VCalib_Det.VCalibration
+        - do calibration pixel by pixel
+
+  inventory:
+    properties:
+       None
+    facilities:
+       ARCSDetCalibCalcor
+
+  related:
+    DetCalibConsts classes
+
+
+-----------------------------------------------------------
+DetEffCalcor
+
+  interface:
+    methods:
+       calcEffHist( energyAxis, ei) --> calculate detector efficiencey given an energy axis. The energy is the final energy of neutrons.
+
+  implementation:
+     a base class that fixes the interface: DetEfficiency.DetEffCalcor
+     several solid implementations
+        - a simple implementation: SimpleDetEfficiency.SimpleDetEfficiency
+
+  inventory:
+    properties:
+       None
+    facilities:
+       He3LPSDEffic
+
+  related:
+    DetEffCalcor.DetEfficiency classes
+
+
+-----------------------------------------------------------
+MainDataExtractor
+
+  interface:
+    methods:
+       extract( measurement ) --> extract main datasets (a collection of histograms) from measurement
+
+  implementation:
+     a base class that fixes the interface: MainDataExtractor.MainDataExtractor
+     several solid implementations. each instrument need one. now I see two kinds
+         - there is only one kind of detector throughout the whole detector system: SimpleMainDataExtractor.SimpleMainDataExtractor
+         - there is several kinds of detectors. for example, ARCS have short tubes and long tubes: ARCSMainDataExtractor.ARCSMainDataExtractor
+
+  inventory:
+    properties:
+       None
+    facilities:
+       None
+
+  related:
+    DetHistCollection classes
+
+
+-----------------------------------------------------------
+VDataExtractor
+
+  interface:
+    methods:
+       extract( measurement ) --> extract vanadium datasets (a collection of histograms) from measurement
+
+  implementation:
+     a base class that fixes the interface: VDataExtractor.VDataExtractor
+     several solid implementations. each instrument need one. now I see two kinds
+         - there is only one kind of detector throughout the whole detector system: SimpleVDataExtractor.SimpleVDataExtractor
+         - there is several kinds of detectors. for example, ARCS have short tubes and long tubes: ARCSVDataExtractor.ARCSVDataExtractor
+
+  inventory:
+    properties:
+       None
+    facilities:
+       None
+
+  related:
+    DetHistCollection classes
+
+
+-----------------------------------------------------------
+MonitorDataExtractor
+
+  interface:
+    methods:
+       extract( measurement ) --> extract vanadium datasets (a collection of histograms) from measurement
+
+  implementation:
+     a base class that fixes the interface: MonitorDataExtractor.MonitorDataExtractor
+     several solid implementations. each instrument might need one. 
+         - SimpleMonitorDataExtractor ??? needs more thinking here ???
+
+  inventory:
+    properties:
+       None
+    facilities:
+       None
+
+  related:
+
+
+
+-----------------------------------------------------------
+SpeReducer
+
+  interface:
+    methods:
+       reduce( mainDataSet, calibration_consts, ei, measurement ) --> reduce mainDataSet to S(phi, E) given calibration constants, incident energy, and measurement
+
+  implementation:
+     a base class that fixes the interface: SpeReducer
+     one solid implementation: SimpleSpeReducer
+
+  inventory:
+    properties:
+       excludeDetectors, excludePixels, excludedSingles, de, emax, emin, dphi, phimin, phimax, tbgmin, tbgmax
+    facilities:
+       histogramOperators, detEfficiencyCalculator, timeBGround, eRebinner
+
+
+
+-----------------------------------------------------------
+Spe2Sqe
+
+  interface:
+    methods:
+       transform( spe, sqe ) --> transform S(phi, E) to S(Q,E)
+
+  implementation:
+       one solid implementation
+
+  inventory:
+    properties:
+      de, emax, emin, dq, qmin, qmax
+    facilities:
+
+
+-----------------------------------------------------------
+There are extra classes (not pyre components) that help implementations of these components. For example,
+
+Class: DetCalibConsts
+Purpose: a class to hold information about calibration constants, it has one method to retrieve calibration constant from an instance of this class.
+Interface:
+    methods:
+        __call__(self, detID, pxlID)  --> return calibration constant of the pixel with the requested detID and pxlID
+implementation:
+    one abstract class defines the interface
+    several solid implementations
+       - calibration only as a function of detID
+       - calibration as a function of both detID and pixID
+
+
+
+
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+Nov 22, 2005
+
+Max is trying to explore algorithms to determine the incident energy
+more accurately. This requires a lot of experiments using command line.
+Currently there are two limitations in Pharos reduction application:
+
+1. It is not very clear to a non-pyre-developer how to use the components
+and how to feed inputs to the components. This is partly due to lack of
+documentation
+
+2. The SpeReducer is one component that contains a few steps that are
+not seperatable. 
+
+
+In this proposal we try to :
+
+1. separate some functionalities from SpeReducer to smaller components,
+like time-independent-background-remover, emtpy-can-data-subtractor.
+2. provided detailed documentations for end-users explaining how to use those
+components.

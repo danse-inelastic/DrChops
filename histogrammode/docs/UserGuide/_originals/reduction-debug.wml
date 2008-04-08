@@ -1,0 +1,18 @@
+<wikitext>
+<section title="Guides to debug reduction applications">
+
+<section title="pickle files">
+Pickle files created along the way of reduction are very useful in debugging.
+
+<list>
+<listitem>
+deteffic_6atm.pkl, deteffic_10atm.pkl: Detector efficiencies computed for 
+6 atomsphere pressure and 10 atomsphere pressure, respectively. Those
+efficiency numbers are theoretical computations, which do not include
+calibrations.
+</listitem>
+</list>
+</section>
+
+</section>
+</wikitext>

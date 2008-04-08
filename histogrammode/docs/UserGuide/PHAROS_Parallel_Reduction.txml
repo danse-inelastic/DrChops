@@ -1,0 +1,96 @@
+<!--
+
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+                                   Jiao Lin
+                      California Institute of Technology
+                        (C) 2007 All Rights Reserved
+
+ {LicenseText}
+
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+-->
+
+<sect1 id='PHAROS_Parallel_Reduction'>
+  <title >
+    Run PHAROS reduction in parallel mode
+  </title>
+
+  <para>
+    PHAROS reduction can be run parallely. It uses mpich2 to
+    handle communications. This means you have to first install
+    mpich2 in your system.
+  </para>
+
+  <para>
+    After install mpich2, you will need to create two configuration
+    files for mpich2: mpd.hosts and .mpd.conf.
+  </para>
+
+  <para>
+    The file "mpd.hosts" contains a lit of nodes available in
+    your cluster. An example would look like
+
+    <programlisting>
+n01:2
+n02:2
+...
+...
+n10:2
+    </programlisting>
+    
+    Here, the first column gives names of nodes, and the second
+    column gives number of cpus in that node.
+  </para>
+
+  <para>
+    The second file is ".mpd.conf". It should be set as only readable
+    by yourself because it contains a password. An example would be
+
+    <programlisting>
+secretword=Your-choice-of-secret-word
+    </programlisting>
+
+    To make it read-only:
+    <programlisting>
+      $ chmod 600 .mpd.conf
+    </programlisting>
+
+  </para>
+
+  <para>Now you are ready to start the mpich service. 
+  This is done by command mpdboot. The command
+
+  <programlisting>
+    $ mpdboot -n 5 -f ~/mpd.hosts -r rsh
+  </programlisting>
+
+  will launch mpich2 service on 5 ncdes by using "rsh" command".
+  </para>
+
+  <para>You can check the status of mpich2 service by
+
+  <programlisting>
+    $ mpdtrace
+  </programlisting>
+  </para>
+
+  <para>
+    Now we are ready to start our application in parallel mode.
+    Suppose ~/reduction/PHAROS is the directory where you try
+    out PHAROS reduction applications, you can run the reduction 
+    script in parallel mode by
+<programlisting>
+  $ mpiexec -np 5 `which mpipython.exe` /home/linjiao/dv/tools/pythia-0.8/bin/PharosReductionLight.py
+</programlisting>
+  </para>
+</sect1>
+
+
+<!-- version-->
+<!-- $Id$-->
+
+<!-- Generated automatically by Renderer on Thu Apr 26 13:17:49 2007-->
+
+<!-- End of file -->

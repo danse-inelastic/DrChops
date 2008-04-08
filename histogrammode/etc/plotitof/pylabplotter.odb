@@ -1,0 +1,4 @@
+from histogram.pyrecomponents.plotter import plotter as factory
+
+def plotter( ): return factory('pylabplotter')
+

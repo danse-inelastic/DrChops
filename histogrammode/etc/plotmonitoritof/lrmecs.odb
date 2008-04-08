@@ -1,0 +1,4 @@
+from measurement.ins.LRMECS.components.Run import Run as factory
+
+def instrument( ): return factory('lrmecs')
+

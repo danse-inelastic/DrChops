@@ -1,0 +1,22 @@
+# -*- Makefile -*-
+#
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#
+#                               Michael A.G. Aivazis
+#                        California Institute of Technology
+#                        (C) 1998-2003  All Rights Reserved
+#
+# <LicenseText>
+#
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#
+
+PROJ_CXX_INCLUDES += . ${addprefix ${BLD_INCDIR}/,reduction}
+PROJ_CXX_INCLUDES += ${addprefix ${BLD_INCDIR}/,ARCSTest} ${addprefix ${BLD_INCDIR}/,journal}
+
+#PROJ_CXX_DEFINES += DEEPDEBUG
+
+# version
+# $Id: local.def 1304 2007-07-12 19:40:10Z linjiao $
+
+# End of file

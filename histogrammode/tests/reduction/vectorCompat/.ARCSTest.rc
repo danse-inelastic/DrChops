@@ -1,0 +1,7 @@
+#!/usr/bin/env python
+
+# ARCSTest resource file
+package = "vectorCompat"
+
+
+# End of file

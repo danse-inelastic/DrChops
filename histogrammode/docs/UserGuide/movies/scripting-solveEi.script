@@ -1,0 +1,18 @@
+from reduction.scripting import *
+#all commands?
+redcmds()
+#general help of a command
+help(solveEi)
+#available engines
+solveEi.engines()
+#help about a specific engine
+solveEi.help( 'use monitors')
+solveEi.help( 'use elastic peaks')
+#get experiment run object
+r = getRun( 'sampledata/4849' )
+# use monitors to solve Ei
+solveEi.select( 'use monitors' )
+solveEi( r )
+# use elastic peaks to solve Ei
+solveEi.select( 'use elastic peaks' )
+solveEi( r )

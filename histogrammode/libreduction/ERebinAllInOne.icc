@@ -1,0 +1,113 @@
+// -*- C++ -*-
+//
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+//
+//                             Tim Kelley, Jiao Lin
+//                      California Institute of Technology
+//                      (C) 2005-2007  All Rights Reserved
+//
+// {LicenseText}
+//
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+//
+
+
+#ifndef DANSE_REDUCTION_EREBINALLINONE_ICC
+#error "Template implementation file meaningless outside of ERebinAllInOne.h"
+#endif
+
+#include <iostream>
+
+#ifndef CMATH_INCLUDED
+#define CMATH_INCLUDED
+#include <cmath>
+#endif
+#ifndef JOURNAL_DEBUG_INCLUDED
+#define JOURNAL_DEBUG_INCLUDED
+#include "journal/debug.h"
+#endif
+
+
+namespace DANSE {
+  namespace Reduction {
+    template <typename FPT, typename VT, typename SzT, typename ItT>
+    void ERebinAllInOne<FPT, VT, SzT, ItT>::operator()
+      (
+       VT const & oldBounds, VT const & newBounds, 
+       VT const & indata, VT const & inerrs,
+       VT & outdata, VT & outerrs
+       )
+    {
+#ifdef DEEPDEBUG
+      journal::debug_t debug( "Reduction.Rebin");
+      using journal::at; using journal::endl;
+	//debug.activate();
+#endif
+      
+      SzT i = 0; // index into new bin bounds 
+      SzT j = 0; // index into old bin bounds
+      
+      // increment until bins overlap:
+      // either old bins start before new bins...:
+      while( oldBounds[j+1] < newBounds[i]) ++j;
+      // ...or new bins start before old:
+      if (j==0) while( newBounds[i+1] < oldBounds[j]) ++i;
+      // ...or everything's fine, do nothing
+      
+#ifdef DEEPDEBUG
+      //        debug << at(__HERE__) << "i=" << i << ", j=" << j; debug.newline();
+#endif
+      
+      // the rebin loop
+      do
+        {
+	  FPT overlap = m_dtOverde*\
+	    (lesserof( oldBounds[j+1], newBounds[i+1]) -
+	     greaterof( oldBounds[j], newBounds[i])
+	     )/(oldBounds[j+1]-oldBounds[j]);
+	  
+#ifdef DEEPDEBUG
+            debug
+	      << at(__HERE__) << "overlap = " << overlap 
+	      << ", j = " << j 
+	      << ", oldBounds[j+1]=" << oldBounds[j+1]
+	      << ", oldBounds[j]=" << oldBounds[j]
+	      ;
+	    debug.newline();
+#endif
+	  
+	  outdata[i] += indata[j]*overlap;
+	  outerrs[i] += inerrs[j]*overlap;
+	  
+	  // If the right edge of the old bin lies beyond the right edge of 
+	  // the new bin, move to next new bin; otherwise move on to 
+	  // the next old bin.
+	  if ( (i < m_nnew) && (oldBounds[j+1] > newBounds[i+1]) ) i++; 
+	  else j++;
+        }while( (j < m_nold - 1) && ( i < m_nnew - 1));
+      
+      if ( m_kpok)
+        {
+	  for(SzT k=0; k<m_nnew - 1; k++)
+            {
+	      FPT kpok = m_ei/( m_ei - newBounds[k]);
+	      outdata[k] *= sqrt( kpok);
+	      outerrs[k] *= kpok;  
+            }
+        } // if(kpok)
+      
+#ifdef DEEPDEBUG
+      debug << endl;
+#endif
+      
+      return;
+    } // ERebinAllInOne::operator()(...)
+    
+  } // Reduction::
+}// DANSE::
+
+
+// version
+// $Id: ERebinAllInOne.icc 1432 2007-11-04 02:10:13Z linjiao $
+
+// End of file

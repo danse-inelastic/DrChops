@@ -1,0 +1,903 @@
+<!--
+
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+                                   Jiao Lin
+                      California Institute of Technology
+                        (C) 2007 All Rights Reserved
+
+ {LicenseText}
+
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+-->
+
+
+<sect1 id='LRMECS_Reduction_commandline_Tutorial'>
+<title >
+LRMECS reduction command line application tutorial
+</title>
+
+    This page explains how to run LRMECS reduction application from command line. If you prefer GUI interface, please follow this
+
+    <link linkend='LRMECS_Reduction_GUI_Tutorial'>
+    instruction
+    </link>
+
+    .
+
+    <sect2 id='LRMECS_reduction_command_line_application_tutorial.Environment_Set_up'>
+<title >
+Environment Set-up 
+</title>
+
+        Before you run LRMECS reduction application, please make sure that environment variables of ARCS software are set correctly. Set up of environment variables depends on the platform on which the reduction application will be run. This step is very critical and needs special attention. Once this step is accomplished, it can be set up automatically for you in your next reduction task. If you have installed ARCS software following our
+
+        <link linkend='Install'>
+        Installation Instructions
+        </link>
+
+        ,
+        there should be a script that can set those env vars for you. Please don't hesitate to ask linjiao@caltech.edu for help if you have any trouble.
+    </sect2>
+
+
+    <sect2 id='LRMECS_reduction_command_line_application_tutorial.Preparation_of_data_files'>
+<title >
+Preparation of data files 
+</title>
+
+        Please follow instructions in page
+
+        <link linkend='Prepare_LRMECS_Reduction_Directory'>
+        Prepare LRMECS Reduction Directory
+        </link>
+
+    </sect2>
+
+
+    <sect2 id='LRMECS_reduction_command_line_application_tutorial.Understand_the_data_better'>
+      <title >
+	Understand the data better 
+      </title>
+      
+      To reduce the data, the reduction application needs some information. Some of those information can be easily obtained by looking at some plots.
+      
+      <sect3 id='LRMECS_reduction_command_line_application_tutorial.Understand_the_data_better.Time_independent_background'>
+	<title >
+	  Time independent background
+	</title>
+	
+	An important step in reduction is to remove the "time-independent background" from the data. The "time-idependent" background is used to identify the background noise presented in neutron measurements. In the reduction procedure, such noise is estimated by the averaged counts in a user-specified tof region. Please take a look at the following figure:
+
+	<figure id='LRMECS_reduction_command_line_application_tutorial.Understand_the_data_better.Time_independent_background.Integrated_intensity_vs_time_of_flight_bin_number'>
+	  <title >
+	    Integrated intensity vs time-of-flight bin number
+	  </title>
+
+	  <mediaobject >
+	    
+	    <imageobject >
+	      
+	      <imagedata width='70%' fileref='figures/LRMECS-commandline-tutorial/LRMECS_4849_I_tof.png' scalefit='1'>
+		
+	      </imagedata>
+	      
+	    </imageobject>
+	    
+	    <textobject >
+	      
+	      <phrase >
+		Integrated intensity vs time-of-flight bin number
+	      </phrase>
+	      
+	    </textobject>
+	    
+	  </mediaobject>
+	</figure>
+	
+	This figure displays a curve of neutron intensity
+	(integrated over all detectors and pixels) vs time-of-flight bin numbers.
+	Apparently the region in (3000, 3500) contains useful signals.
+	In the region of (5000, 5500), there are very few counts.
+	We can take that region for our calculation of time independent
+	background.
+	So please write down these two numbers 5000 and 5500,
+	and they will be useful soon.
+	
+	<para >
+	  The above plot is created by a tool "LRMECSPlotI_tof.py". For example, if you want to see I(tof) of the data file "4849", then the command line would be
+	</para>
+	
+	
+	<programlisting >
+	  
+	  $ LRMECSPlotI_tof.py --Measurement.dataFilename=4849
+	  
+	  
+	</programlisting>
+	
+      </sect3>
+      
+      
+      <sect3 id='LRMECS_reduction_command_line_application_tutorial.Understand_the_data_better.Monitor_data'>
+	<title >
+	  Monitor data
+	</title>
+	
+	To obtain neutron incident energy, we need to know the times of flights for neutrons to travel from moderator to two monitors. Here is a plot of I(tof) for one monitor (monitor id=1):
+	
+	<figure id='LRMECS_reduction_command_line_application_tutorial.Understand_the_data_better.Monitor_data.Integrated_intensity_vs_time_of_flight_bin_number'>
+	  <title >
+	    Integrated intensity vs time-of-flight bin number
+	  </title>
+	  
+	  <mediaobject >
+	    
+	    <imageobject >
+	      
+	      <imagedata width='70%' fileref='figures/LRMECS-commandline-tutorial/LRMECS_4849_monitor1_I_tof.png' scalefit='1'>
+		
+	      </imagedata>
+	      
+	    </imageobject>
+	    
+	    <textobject >
+	      
+	      <phrase >
+		Integrated intensity vs time-of-flight bin number
+	      </phrase>
+	      
+	    </textobject>
+	    
+	  </mediaobject>
+	</figure>
+	
+	
+	<para >
+	  The reduction application will fit this curve to a gaussian, in order to find out the time of flight for neutrons to travel from moderator to monitor whose id is 1.
+	</para>
+	
+	
+	<para >
+	  To generate such a plot, following are examples:
+	</para>
+	
+	For the monitor with id 0:
+	
+	<programlisting >
+	  
+	  $ LRMECSPlotMonI_tof.py --Measurement.dataFilename=4849 --monitorId=0
+
+	  
+	</programlisting>
+	
+	For the monitor with id 1:
+	
+	<programlisting >
+	  
+	  $ LRMECSPlotMonI_tof.py --Measurement.dataFilename=4849 --monitorId=1
+	  
+	  
+	</programlisting>
+	
+	From a plot, please guess the parameters of a guassian that fits the curve:
+	
+	<itemizedlist >
+	  
+	  <listitem > center </listitem>
+	  <listitem > width </listitem>
+	  <listitem > intensity (integrated) </listitem> 
+	  <listitem > background (baseline) </listitem>
+
+	</itemizedlist>
+
+	Please make a good guess of the center and the width of the peak,
+	then please also guess the height of the peak.
+	Then the following approximation usually works well:
+	
+	<itemizedlist >
+	  
+	  <listitem > center = center </listitem>
+	  <listitem > width = width </listitem>
+	  <listitem > intensity = width * height / 2. </listitem>
+	  <listitem > background = 0 </listitem>
+
+	</itemizedlist>
+
+
+	<para >
+	  For example, for data 4849, monitor 1, a guess could be
+	</para>
+	
+	3380.0, 34.0, 100000.0, 0.0
+	
+	<para >
+	  Please write down these numbers and they will be useful soon.
+	</para>
+	
+	
+	<para >
+	  Monitors are also used to normalize counts on detectors. So please write down two tofs that bound the region where the integrated intensity will be used as normalization constant.
+	</para>
+	
+      </sect3>
+      
+    </sect2>
+    
+    
+    <sect2 id='LRMECS_reduction_command_line_application_tutorial.Preparation_of_pml_file'>
+      <title >
+	Preparation of pml file 
+      </title>
+      
+
+      <para >
+	The ".pml" file is used as input file for PHAROS reduction applications.
+	A tool was created to help you generate an example pml file
+	(this tool is only availble in linux and mac platforms,
+	and is not available in windows.
+	For windows users,
+	
+	<link linkend='LRMECS_Reduction_GUI_Tutorial'>
+            GUI
+	</link>
+	
+	interface is the solution.):
+      </para>
+      
+      
+      <programlisting >
+	
+	$ text2pyreui.py LRMECSReductionLight.py
+	
+      </programlisting>
+      
+        You will be presented with a dialog
+
+        <figure id='LRMECS_reduction_command_line_application_tutorial.Preparation_of_pml_file.Main_window'>
+<title >
+Main window
+</title>
+
+<mediaobject >
+
+<imageobject >
+
+<imagedata width='70%' fileref='figures/LRMECS-commandline-tutorial/text2pyreui-LRMECSReductionLight-mainwindow.png' scalefit='1'>
+
+</imagedata>
+
+</imageobject>
+
+<textobject >
+
+<phrase >
+Main window
+</phrase>
+
+</textobject>
+
+</mediaobject>
+</figure>
+
+        This dialog helps users to change settings of the current application, LRMECSReductionLight. Please use up/down arrow keys to move between menu items. Each menu item is either a "property" or a "composite" except the last item "*Done".  When you select a "property" like "EiGuess", a window will shows up to ask you what value you want it to be while the original value is shown as default
+
+        <figure id='LRMECS_reduction_command_line_application_tutorial.Preparation_of_pml_file.input_new_value_for_a_property'>
+<title >
+input new value for a property
+</title>
+
+<mediaobject >
+
+<imageobject >
+
+<imagedata width='70%' fileref='figures/LRMECS-commandline-tutorial/text2pyreui-LRMECSReductionLight-setproperty.png' scalefit='1'>
+
+</imagedata>
+
+</imageobject>
+
+<textobject >
+
+<phrase >
+input new value for a property
+</phrase>
+
+</textobject>
+
+</mediaobject>
+</figure>
+
+        after you change the value and hit enter, you will be brought back to the original screen.
+
+        <para >
+            When you select a "composite" (a "composite" is a list of properties and composites) like "dataFiles", a new settings window will shows up for that composite, like this one:
+        </para>
+
+
+        <figure id='LRMECS_reduction_command_line_application_tutorial.Preparation_of_pml_file.settings_of_data_files'>
+<title >
+settings of data files
+</title>
+
+<mediaobject >
+
+<imageobject >
+
+<imagedata width='70%' fileref='figures/LRMECS-commandline-tutorial/text2pyreui-LRMECSReductionLight-datafiles.png' scalefit='1'>
+
+</imagedata>
+
+</imageobject>
+
+<textobject >
+
+<phrase >
+settings of data files
+</phrase>
+
+</textobject>
+
+</mediaobject>
+</figure>
+
+
+        <para >
+            The last item "Done" should be selected (hit
+
+            <emphasis >
+                enter
+            </emphasis>
+
+            key) when you are done with current screen of settings, like this:
+        </para>
+
+
+        <figure id='LRMECS_reduction_command_line_application_tutorial.Preparation_of_pml_file.Finish_configuration'>
+<title >
+Finish configuration
+</title>
+
+<mediaobject >
+
+<imageobject >
+
+<imagedata width='70%' fileref='figures/LRMECS-commandline-tutorial/text2pyreui-LRMECSReductionLight-Done.png' scalefit='1'>
+
+</imagedata>
+
+</imageobject>
+
+<textobject >
+
+<phrase >
+Finish configuration
+</phrase>
+
+</textobject>
+
+</mediaobject>
+</figure>
+
+        Most of those settings are straightforward to change. Some might deserve more explanations here.
+
+        <sect3 id='LRMECS_reduction_command_line_application_tutorial.Preparation_of_pml_file.Incident_Energy'>
+<title >
+Incident Energy 
+</title>
+
+            Move curser to item "incidentEnergy" and press
+
+            <emphasis >
+                ENTER
+            </emphasis>
+
+            , the following window shows up:
+
+            <figure id='LRMECS_reduction_command_line_application_tutorial.Preparation_of_pml_file.Incident_Energy.Incident_energy'>
+<title >
+Incident energy
+</title>
+
+<mediaobject >
+
+<imageobject >
+
+<imagedata width='70%' fileref='figures/LRMECS-commandline-tutorial/text2pyreui-LRMECSReductionLight-incidentEnergy.png' scalefit='1'>
+
+</imagedata>
+
+</imageobject>
+
+<textobject >
+
+<phrase >
+Incident energy
+</phrase>
+
+</textobject>
+
+</mediaobject>
+</figure>
+
+
+            <sect4 id='LRMECS_reduction_command_line_application_tutorial.Preparation_of_pml_file.Incident_Energy.EiGuess'>
+<title >
+EiGuess
+</title>
+
+                Select item "EiGuess" and input your guess in the following window:
+
+                <figure id='LRMECS_reduction_command_line_application_tutorial.Preparation_of_pml_file.Incident_Energy.EiGuess.set_property'>
+<title >
+set property
+</title>
+
+<mediaobject >
+
+<imageobject >
+
+<imagedata width='70%' fileref='figures/LRMECS-commandline-tutorial/text2pyreui-LRMECSReductionLight-setproperty.png' scalefit='1'>
+
+</imagedata>
+
+</imageobject>
+
+<textobject >
+
+<phrase >
+set property
+</phrase>
+
+</textobject>
+
+</mediaobject>
+</figure>
+
+            </sect4>
+
+
+            <sect4 id='LRMECS_reduction_command_line_application_tutorial.Preparation_of_pml_file.Incident_Energy.IncidentEnergySolver'>
+<title >
+IncidentEnergySolver
+</title>
+
+                Select item "IncidentEnergySolver" and the following dialog shows up:
+
+                <figure id='LRMECS_reduction_command_line_application_tutorial.Preparation_of_pml_file.Incident_Energy.IncidentEnergySolver.Incident_energy_solver_using_beam_monitors'>
+<title >
+Incident energy solver using beam monitors
+</title>
+
+<mediaobject >
+
+<imageobject >
+
+<imagedata width='70%' fileref='figures/LRMECS-commandline-tutorial/text2pyreui-LRMECSReductionLight-monitorEiSolver.png' scalefit='1'>
+
+</imagedata>
+
+</imageobject>
+
+<textobject >
+
+<phrase >
+Incident energy solver using beam monitors
+</phrase>
+
+</textobject>
+
+</mediaobject>
+</figure>
+
+
+                <para >
+                    This incident-energy solver makes use of data from two beam monitors.
+                    It fits centers of peaks in the I(tof) curve of two monitors and
+                    calculate time-of-flight for neutron to travel between two monitors.
+                    Given the distance of these two monitors, we can compute the neutron
+                    incident energy.
+                </para>
+
+                In this window, we are presented with two menu items:
+
+                <itemizedlist >
+
+                    <listitem >
+                        monitor2FitGuess
+                    </listitem>
+
+
+                    <listitem >
+                        monitor1FitGuess
+                    </listitem>
+
+                </itemizedlist>
+
+                As the names suggest, each of them correspond to one monitor,
+                and you have to make a guess of parameters for a gaussian fit to each peak
+                as instructed in
+
+                <link linkend='LRMECS_reduction_command_line_application_tutorial.Understand_the_data_better.Monitor_data'>
+                section "Monitor Data"
+                </link>
+
+
+                <para >
+                    Choose either monitor by moving curser to a menu item,
+                    for example, moinitor1FitGuess, and hit
+
+                    <emphasis >
+                        ENTER
+                    </emphasis>
+
+                    , we are presented with
+                </para>
+
+
+                <figure id='LRMECS_reduction_command_line_application_tutorial.Preparation_of_pml_file.Incident_Energy.IncidentEnergySolver.guess_for_fitting_monitor_data_to_a_gaussian'>
+<title >
+guess for fitting monitor data to a gaussian
+</title>
+
+<mediaobject >
+
+<imageobject >
+
+<imagedata width='70%' fileref='figures/LRMECS-commandline-tutorial/text2pyreui-LRMECSReductionLight-monitor1FitGuess.png' scalefit='1'>
+
+</imagedata>
+
+</imageobject>
+
+<textobject >
+
+<phrase >
+guess for fitting monitor data to a gaussian
+</phrase>
+
+</textobject>
+
+</mediaobject>
+</figure>
+
+
+                <para >
+                    Please input your guess there and choose
+
+                    <emphasis >
+                        OK
+                    </emphasis>
+
+                </para>
+
+
+                <para >
+                    Please note in the above dialog there is a hint: "monitor1FitGuess" is for the front monitor.
+                    Front monitor is closer to moderator, while back monitor is farther away from moderator.
+                </para>
+
+            </sect4>
+
+        </sect3>
+
+
+        <sect3 id='LRMECS_reduction_command_line_application_tutorial.Preparation_of_pml_file.TimeBG'>
+<title >
+TimeBG 
+</title>
+
+            When you select "TimeBG" in the main dialog, you will be prompted with
+
+            <figure id='LRMECS_reduction_command_line_application_tutorial.Preparation_of_pml_file.TimeBG.remove_time_independent_background'>
+<title >
+remove time-independent background
+</title>
+
+<mediaobject >
+
+<imageobject >
+
+<imagedata width='70%' fileref='figures/LRMECS-commandline-tutorial/text2pyreui-LRMECSReductionLight-tbg.png' scalefit='1'>
+
+</imagedata>
+
+</imageobject>
+
+<textobject >
+
+<phrase >
+remove time-independent background
+</phrase>
+
+</textobject>
+
+</mediaobject>
+</figure>
+
+
+<para >
+  You should have used LRMECSPlotI_tof.py to plot intensity vs tof and write down two numbers. If not, please consult
+  
+  <link linkend='LRMECS_reduction_command_line_application_tutorial.Understand_the_data_better.Time_independent_background'>
+    this section
+  </link>
+  .
+</para>
+
+            Please input those two numbers to answer these two questions
+        </sect3>
+
+
+        <sect3 id='LRMECS_reduction_command_line_application_tutorial.Preparation_of_pml_file.Axes'>
+<title >
+Axes 
+</title>
+
+            When you select "axes" in the main dialog, you will be prompted with this dialog
+
+            <figure id='LRMECS_reduction_command_line_application_tutorial.Preparation_of_pml_file.Axes.axes_of_reduced_histograms'>
+<title >
+axes of reduced histograms
+</title>
+
+<mediaobject >
+
+<imageobject >
+
+<imagedata width='70%' fileref='figures/LRMECS-commandline-tutorial/text2pyreui-LRMECSReductionLight-axes.png' scalefit='1'>
+
+</imagedata>
+
+</imageobject>
+
+<textobject >
+
+<phrase >
+axes of reduced histograms
+</phrase>
+
+</textobject>
+
+</mediaobject>
+</figure>
+
+            This dialog is for you to change settings of axes of reduced S(phi, E) and S(Q,E). There axes are necessary:
+
+            <itemizedlist >
+
+                <listitem >
+                    phi: scattering angle
+                </listitem>
+
+
+                <listitem >
+                    E: energy transfer
+                </listitem>
+
+
+                <listitem >
+                    Q: scalar momentum transfer
+                </listitem>
+
+            </itemizedlist>
+
+            If select "eAxis", you will be prompted by
+
+            <figure id='LRMECS_reduction_command_line_application_tutorial.Preparation_of_pml_file.Axes.energy_axis'>
+<title >
+energy axis
+</title>
+
+<mediaobject >
+
+<imageobject >
+
+<imagedata width='70%' fileref='figures/LRMECS-commandline-tutorial/text2pyreui-LRMECSReductionLight-eAxis.png' scalefit='1'>
+
+</imagedata>
+
+</imageobject>
+
+<textobject >
+
+<phrase >
+energy axis
+</phrase>
+
+</textobject>
+
+</mediaobject>
+</figure>
+
+
+            <para >
+                In this window, you need to specify the minimum, maximum, and step size of the energy bins.
+            </para>
+
+
+            <para >
+                Similarly, you need to change settings for Q bins and phi bins.
+            </para>
+
+        </sect3>
+
+
+        <sect3 id='LRMECS_reduction_command_line_application_tutorial.Preparation_of_pml_file.Finish_up'>
+<title >
+Finish up 
+</title>
+
+            When you select "*Done" in the main dialog, you will be told that the configuration is done:
+
+            <figure id='LRMECS_reduction_command_line_application_tutorial.Preparation_of_pml_file.Finish_up.done_with_configuration'>
+<title >
+done with configuration
+</title>
+
+<mediaobject >
+
+<imageobject >
+
+<imagedata width='70%' fileref='figures/LRMECS-commandline-tutorial/text2pyreui-LRMECSReductionLight-configurationisdone.png' scalefit='1'>
+
+</imagedata>
+
+</imageobject>
+
+<textobject >
+
+<phrase >
+done with configuration
+</phrase>
+
+</textobject>
+
+</mediaobject>
+</figure>
+
+            Just hit enter, and the next window would be
+
+            <figure id='LRMECS_reduction_command_line_application_tutorial.Preparation_of_pml_file.Finish_up.What_do_you_want_to_do_now?'>
+<title >
+What do you want to do now?
+</title>
+
+<mediaobject >
+
+<imageobject >
+
+<imagedata width='70%' fileref='figures/LRMECS-commandline-tutorial/text2pyreui-LRMECSReductionLight-save-or-run.png' scalefit='1'>
+
+</imagedata>
+
+</imageobject>
+
+<textobject >
+
+<phrase >
+What do you want to do now?
+</phrase>
+
+</textobject>
+
+</mediaobject>
+</figure>
+
+            Here you can choose to
+
+            <itemizedlist >
+
+                <listitem >
+                    Save settings to a file. The file will be named LRMECSReductionLight.pml
+                </listitem>
+
+
+                <listitem >
+                    Save settings and run the application.
+                </listitem>
+
+
+                <listitem >
+                    Simple quit without doing anything
+                </listitem>
+
+            </itemizedlist>
+
+
+            <para >
+                I would recommend to choose the first option, and then you have a chance to
+                change your configuration file by hand.
+            </para>
+
+
+            <para >
+                If you choose the second option "Save settings and run the application",
+                you will be presented with the following window:
+            </para>
+
+
+            <figure id='LRMECS_reduction_command_line_application_tutorial.Preparation_of_pml_file.Finish_up.Launcher_configuration'>
+<title >
+Launcher configuration
+</title>
+
+<mediaobject >
+
+<imageobject >
+
+<imagedata width='70%' fileref='figures/LRMECS-commandline-tutorial/text2pyreui-LRMECSReductionLight-launcher.png' scalefit='1'>
+
+</imagedata>
+
+</imageobject>
+
+<textobject >
+
+<phrase >
+Launcher configuration
+</phrase>
+
+</textobject>
+
+</mediaobject>
+</figure>
+
+            Move curser to choose "Done" and press
+
+            <emphasis >
+                enter
+            </emphasis>
+
+            ,
+            the reduction application will start running.
+        </sect3>
+
+    </sect2>
+
+
+    <sect2 id='LRMECS_reduction_command_line_application_tutorial.Run'>
+<title >
+Run 
+</title>
+
+        If in the previous step you choose either option 1 or 2, there will be a
+        file named "LRMECSReductionLight.pml" in your working directory.
+        Running LRMECSReduction is simple now due to existence of LRMECSReduction.pml:
+
+        <programlisting >
+
+            $ LRMECSReduction.py
+
+        
+</programlisting>
+
+    </sect2>
+
+
+    <sect2 id='LRMECS_reduction_command_line_application_tutorial.S(Q,E)'>
+<title >
+S(Q,E) 
+</title>
+
+        If everything is fine, a file named "sqe.pkl" will be created under the current directory, to have a quick look at the reduced S(Q,E), please try
+
+        <programlisting >
+
+            $ PlotSqe.py
+
+        
+</programlisting>
+
+    </sect2>
+
+</sect1>
+
+
+<!-- version-->
+<!-- $Id$-->
+
+<!-- Generated automatically by Renderer on Thu Apr 26 13:17:58 2007-->
+
+<!-- End of file -->

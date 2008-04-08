@@ -1,0 +1,7 @@
+from reduction.pyre.preprocessors.AbstractNormalizer import AbstractNormalizer as base
+
+class _(base):
+  def determineNorm(self): return 1., 1.
+
+
+def normalizer(): return _("nonormalization")

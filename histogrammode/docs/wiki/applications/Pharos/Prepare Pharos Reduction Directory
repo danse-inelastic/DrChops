@@ -1,0 +1,45 @@
+'''This page explains how to prepare a directory for PHAROS reduction. 
+'''
+
+----
+
+'''Hint''':<pre>All data files must be in hdf5 format. The original data files from PHAROS are usually hdf4 files.
+Hdf4 files can be converted to hdf5 files by h4toh5 tools, which
+can be downloaded from  ftp://ftp.ncsa.uiuc.edu/HDF/HDF5/h4toh5/.
+This tutorial uses example data files that are included in the distribution. 
+Those example data files are already in hdf5 format.
+</pre>
+
+
+
+----
+
+=== make a work directory ===
+
+ $ mkdir -p ~/reduction/Pharos
+ $ cd ~/reduction/Pharos
+
+=== link to sample data directory ===
+
+If you have not done so, please download [http://strongbad.cacr.caltech.edu/arcs-1.0/ARCS-reduction-data-1.0.tar.gz ARCS reduction sample data] and then extract it somewhere (I will assume that it is ~/reduction):
+
+ $ cd ~/reduction
+ $ tar xvfz /path/to/ARCS-reduction-data-1.0.tar.gz
+
+In the extracted "ARCS-reduction-data" directory, there should be subdirectory "Pharos". Let us make a link to that directory here under ~/reduction
+
+ $ cd ~/reduction/Pharos
+ $ ln -s ~/reduction/ARCS-reduction-data/Pharos sampledata
+
+this will create a link in ~/reduction/Pharos named sampledata, pointing to the sample data directory for PHAROS.
+
+=== extract data files ===
+ $ cd ~/reduction/Pharos/sampledata
+ $ gunzip *.gz
+
+=== link to PHAROS instrument definition file ===
+
+ $ cd ~/reduction/Pharos
+ $ ln -s sampledata/PharosDefinitions.txt
+
+this will  create a link in ~/reduction/Pharos named PharosDefinitions.txt, which contains information about positions and orientations of PHAROS detector tubes.

@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="us-ascii" ?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN"
+"http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd"
+[
+<!ENTITY reduction-Introduction SYSTEM "reduction/Introduction.xml">
+
+<!ENTITY reduction-Install SYSTEM "reduction/Install.xml">
+<!ENTITY reduction-InstallFromBinaries SYSTEM "reduction/InstallFromBinaries.xml">
+<!ENTITY reduction-InstallFromSource SYSTEM "reduction/InstallFromSource.xml">
+<!ENTITY reduction-InstallFromSvnRepository SYSTEM "reduction/InstallFromSvnRepository.xml">
+
+<!ENTITY reduction-GettingStarted SYSTEM "reduction/GettingStarted.xml">
+
+<!ENTITY reduction-LRMECS SYSTEM "reduction/LRMECS.xml">
+<!ENTITY reduction-Prepare_LRMECS_Reduction_Directory SYSTEM "reduction/Prepare_LRMECS_Reduction_Directory.xml">
+<!ENTITY reduction-LRMECS_Reduction_GUI_Tutorial SYSTEM "reduction/LRMECS_Reduction_GUI_Tutorial.xml">
+<!ENTITY reduction-LRMECS_Reduction_Commandline_Tutorial SYSTEM "reduction/LRMECS_Reduction_Commandline_Tutorial.xml">
+
+<!ENTITY reduction-PHAROS SYSTEM "reduction/PHAROS.xml">
+<!ENTITY reduction-Prepare_PHAROS_Reduction_Directory SYSTEM "reduction/Prepare_PHAROS_Reduction_Directory.xml">
+<!ENTITY reduction-PHAROS_Reduction_GUI_Tutorial SYSTEM "reduction/PHAROS_Reduction_GUI_Tutorial.xml">
+<!ENTITY reduction-PHAROS_Reduction_commandline_Tutorial SYSTEM "reduction/PHAROS_Reduction_commandline_Tutorial.xml">
+<!ENTITY reduction-PHAROS_Parallel_Reduction SYSTEM "reduction/PHAROS_Parallel_Reduction.xml">
+
+<!ENTITY reduction-UnixCommands SYSTEM "reduction/UnixCommands.xml">
+<!ENTITY reduction-Scripting SYSTEM "reduction/Scripting.xml">
+
+<!-- <!ENTITY multiphonon-Introduction SYSTEM "multiphonon/Introduction.xml"> -->
+<!ENTITY multiphonon-Applications SYSTEM "multiphonon/Applications.xml">
+
+<!ENTITY histogram-Introduction SYSTEM "histogram/Introduction.xml">
+<!ENTITY histogram-CommandlineInterface SYSTEM "histogram/CommandlineInterface.xml">
+<!ENTITY histogram-HistogramGUI SYSTEM "histogram/HistogramGUI.xml">
+
+]>
+
+<book>
+
+<title>Data Reduction for Chopper Spectrometers: User Guide</title>
+
+<bookinfo>
+  <author><firstname>Jiao</firstname> <surname>Lin</surname> </author>
+  <author><firstname>Max</firstname> <surname>Kresch</surname> </author>
+  <author><firstname>Olivier</firstname> <surname>Delaire</surname> </author>
+  <author><firstname>Brent</firstname> <surname>Fultz</surname> </author>
+</bookinfo>
+
+<!--
+<preface>
+  <title> Preface</title>
+<para>
+  ARCS reduction provides tools to reduce data measured in
+  TOF inelastic neutron scattering instruments.
+</para>
+<para>
+  <xref linkend="Reduction-UserGuide"/> explains the usage
+  of the reduction tools.
+</para>
+
+<para>
+  <xref linkend="Multiphonon-UserGuide"/> presents a post-reduction
+  analysis tool. It converts reduced I(Q,E) to phonon density
+  of states. Multiphonon and multiple-scattering corrections 
+  are applied in the transformation.
+</para>
+
+<para>
+  Histograms are  fundamental data objects
+  for the reduction package.
+ <xref linkend="Histogram-UserGuide"/> explains the usage
+  of histograms.
+</para>
+</preface>
+-->
+<part id='Reduction-UserGuide'>
+  <title> Data Reduction for Chopper Spectrometers: User Guide </title>
+&reduction-Introduction;
+&reduction-Install;
+&reduction-GettingStarted;
+&reduction-LRMECS;
+&reduction-PHAROS;
+&reduction-UnixCommands;
+&reduction-Scripting;
+<!--&HistogramViewer_Tutorial;-->
+<!--
+-->
+</part>
+
+
+
+<part id="Multiphonon-UserGuide">
+  <title> Multiphonon: User Guide </title>
+<!-- &multiphonon-Introduction; -->
+&multiphonon-Applications;
+</part>
+
+
+<part id="Histogram-UserGuide">
+  <title> Histogram: User Guide </title>
+&histogram-Introduction;
+&histogram-CommandlineInterface;
+&histogram-HistogramGUI;
+</part>
+
+</book>

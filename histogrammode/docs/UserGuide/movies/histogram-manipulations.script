@@ -1,0 +1,56 @@
+#import
+from numpy import *  
+from histogram import *
+#create histograms
+#y=x
+x=arange(0, 10, 1.0)
+y=x
+h = histogram('h', [ ('x', x) ], data = y )
+print h
+
+#y = exp(-x/1000)
+def f(x): return exp(-x/1000.)
+
+tofaxis = axis('tof', arange(1000.,3000., 20.0) )
+ht = histogram( 'h', [tofaxis], fromfunction=f)
+
+ht1 = histogram( 'h1', [tofaxis], fromfunction=lambda x: exp(-x/1000) )
+
+#slicing
+del h
+x = 'x', arange(-1, 1, 0.05 )
+y = 'y', arange(-1, 1, 0.05 )
+h = histogram( 'h', [x,y], fromfunction = lambda x,y: x*x + y*y )
+h1 = h[ (0.5, 0.9), (-0.8, 0.8) ]
+h2 = h[ (None, 0.5), (-0.8, 0.8) ]
+h3 = h[ 0.5, () ]      
+
+#set slice
+# create new slice
+yaxis = h.axisFromName( 'y' )
+s = datasetFromFunction( lambda y: y, (yaxis,) )
+# set new slice
+h[ 0.3, () ] = s, None
+
+del h1, h2, h3
+#numerical operations
+h1 = histogram( 'h1', [x,y], fromfunction = lambda x,y: x + y )
+h2 = h + h1
+h3 = h2 + (3., 1.)
+
+#sum
+h.sum()
+hy = h.sum( 'x' )
+
+
+#transpose
+del h, ht
+x = 'x', arange(-1, 1, 0.05 )
+y = 'y', arange(0, 5, 0.05 )
+h = histogram( 'h', [x,y], fromfunction = lambda x,y: x*x + y*y )
+ht = h.transpose()
+
+#get data arrays
+dataarr = h.data().storage().asNumarray()
+errsarr = h.errors().storage().asNumarray()
+

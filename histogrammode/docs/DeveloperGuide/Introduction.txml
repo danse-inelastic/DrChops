@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="us-ascii" ?>
+
+<!--
+
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+                                   Jiao Lin
+                      California Institute of Technology
+                        (C) 2007 All Rights Reserved
+
+ {LicenseText}
+
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+-->
+
+
+<chapter>
+
+  <title>Introduction</title>
+
+  <para>
+  This reduction package originated from the ARCS A direct-geometry 
+  time-of-flight neutron spectrometry reduction package, which can 
+  be used to reduce inelastic neutron scattering data to S(Q,E). 
+  </para>
+  
+  <para>  
+  Reduction is a procedure to transform measured raw data to a form 
+  which is more easily understandable for scientists. This procedure 
+  usually consists of transformations of a histogram measured in a 
+  dimension to another dimension that is more physically meaningful 
+  (an example of which would be converting time-of-flight to neutron 
+  energy) and/or conversion of multidimensional data to lower 
+  dimension (an example of which is intensity measured in an area 
+  detector sometimes can be binned into "rings" in case of powder 
+  sample). In conclusion, a reduction procedure consists mainly of 
+  transformations from input histograms to output histograms. Thus, 
+  it is pretty obvious that our fundamental data structure is 
+  <ulink url="xxxWEBSITExxx/histogram/index.html">
+    histogram
+  </ulink>
+  .
+  </para>
+  
+  <para>
+  Input histograms to this reduction package are obtained from the 
+  <ulink url="xxxWEBSITExxx/measurement/index.html">
+    measurement
+  </ulink>
+  package, which reads in measured data files and 
+  created histograms.
+  </para>
+  
+  <para>
+  In reduction, transformations from input histograms to output 
+  histograms require knowledge of the instrument in which 
+  measurements are taken. For example, in direct-geometry 
+  time-of-flight spectrometer, to convert time of flight to neutron 
+  energy, we need to know the length of the flight path, and the 
+  time at which a neutron hits the sample. The positions of sample 
+  and detectors are clearly necessary inputs for reduction 
+  procedure. Therefore, we need find a way to store information 
+  of the instrument in which the to-be-reduced histogram is measured. 
+  So we need to use the 
+  <ulink url="xxxWEBSITExxx/instrument/index.html">
+    instrument
+  </ulink>
+  package.
+  </para>
+  
+  <para>
+  
+  Finally, the transformations from input histograms to output 
+  histograms are implemented in this reduction package, which 
+  queries the measurement package for input histograms, calls 
+  reduction engines with parameters derived from the instrument 
+  package, and produces output histograms.
+  </para>
+
+
+  <para> <xref linkend='reduction Architecture'/> 
+  will give you a high-level description of the 
+  architecture of the reduction software.
+  </para>
+
+  <para> <xref linkend='reduction Pyre Components'/> 
+  explains the pyre components layer in  the reduciton
+  package in more detail. Pyre components of reduction package
+  implement key operations in the reduction procedures.
+  They demonstrate the core functionality of this reduction
+  package.
+  </para>
+  
+  Doxygen documentations of reduction package can be found 
+  <ulink url='xxxWEBSITExxx/reduction/reduction/html/index.html'>
+    <citetitle>here</citetitle>
+  </ulink>
+  .
+  
+</chapter>
+

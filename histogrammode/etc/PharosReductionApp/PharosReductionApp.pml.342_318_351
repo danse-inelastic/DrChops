@@ -1,0 +1,127 @@
+
+<!--
+! ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!
+!                                   Jiao Lin
+!                      California Institute of Technology
+!                        (C) 2007  All Rights Reserved
+!
+! {LicenseText}
+!
+! ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-->
+
+<!DOCTYPE inventory>
+
+<inventory>
+
+    <component name="PharosReductionApp">
+        <property name="reducer">PowderReduction</property>
+
+        <component name="PowderReduction">
+            <facility name="SpeReducer">SpeReducer</facility>
+            <facility name="Spe2Sqe">Spe2Sqe</facility>
+            <property name="measurementFactory">PharosMeasurement</property>
+
+            <component name="SpeReducer">
+                <property name="preprocess">Preprocess_All</property>
+                <facility name="Idpt2Spe">Idpt2Spe</facility>
+
+                <component name="Preprocess_All">
+                    <facility name="maskAdder">maskAdder</facility>
+                    <facility name="calibrator_main">calibrator_main</facility>
+                    <facility name="histogramSubtractor">histogramSubtractor</facility>
+                    <facility name="preStep1_mt">preStep1_mt</facility>
+                    <facility name="preStep1_main">preStep1_main</facility>
+                    <facility name="maskFromUser">maskFromUser</facility>
+                    <facility name="calibrator_mt">calibrator_mt</facility>
+                    <property name="eiSolver">IncidentEnergySolver_UseElasticPeaks</property>
+                    <property name="vDataProcessor">VPlateDataProcessor</property>
+                    <property name="getRuns">getMain</property>
+
+                    <component name="preStep1_mt">
+                        <facility name="IdptExtractor">IdptExtractor</facility>
+                        <property name="tibgRemover">TimeIndependentBackgroundRemover_AverageOverAllDetectors</property>
+                        <property name="maskApplyer">ApplyMask</property>
+                        <property name="normalizer">NormalizerUsingIntegratedCurrent</property>
+                    </component>
+
+
+                    <component name="preStep1_main">
+                        <facility name="IdptExtractor">IdptExtractor</facility>
+                        <property name="tibgRemover">TimeIndependentBackgroundRemover_AverageOverAllDetectors</property>
+                        <property name="maskApplyer">ApplyMask</property>
+                        <property name="normalizer">NormalizerUsingIntegratedCurrent</property>
+                        <component name="TimeIndependentBackgroundRemover_AverageOverAllDetectors">
+
+                            <property name="tbgMin">9000.0</property>
+                            <property name="tbgMax">10000.0</property>
+                        </component>
+                    </component>
+
+                </component>
+
+
+                <component name="Idpt2Spe">
+                    <property name="EAxis">energy</property>
+                    <facility name="mask">mask</facility>
+                    <property name="phiAxis">phi</property>
+
+                    <component name="energy">
+                        <property name="max">65.0</property>
+                        <property name="unit">meV</property>
+                        <property name="min">-65.0</property>
+                        <property name="step">1.0</property>
+                    </component>
+
+
+                    <component name="phi">
+                        <property name="max">145.0</property>
+                        <property name="step">0.5</property>
+                        <property name="unit">degree</property>
+                        <property name="min">5.0</property>
+                    </component>
+
+                </component>
+
+            </component>
+
+
+            <component name="PharosMeasurement">
+                <property name="calib">../../ins-data/Pharos/Pharos_318.nx.h5</property>
+                <property name="mt">../../ins-data/Pharos/Pharos_351.nx.h5</property>
+                <property name="main">../../ins-data/Pharos/Pharos_342.nx.h5</property>
+                <property name="vanadiumSampleFactory">VanadiumPlate</property>
+                <property name="instrumentFilename">../../ins-data/Pharos/PharosDefinitions.txt</property>
+                <component name="VanadiumPlate">
+                    <property name="thickness">2*mm</property>
+                    <property name="width">6.3*cm</property>
+                    <property name="darkAngle">135*degree</property>
+                </component>
+            </component>
+
+
+            <component name="Spe2Sqe">
+                <property name="QAxis">Q</property>
+
+                <component name="Q">
+                    <property name="max">13.5</property>
+                    <property name="min">0.0</property>
+                    <property name="step">0.06751</property>
+                    <property name="unit">angstrom**-1</property>
+                </component>
+
+            </component>
+
+        </component>
+
+    </component>
+
+</inventory>
+
+<!-- version-->
+<!-- $Id$-->
+
+<!-- Generated automatically by Renderer on Wed Jul 18 08:31:35 2007-->
+
+<!-- End of file -->

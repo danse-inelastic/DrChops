@@ -1,0 +1,159 @@
+<!--
+
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+                                   Jiao Lin
+                      California Institute of Technology
+                        (C) 2007 All Rights Reserved
+
+ {LicenseText}
+
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+-->
+
+
+<sect1 id='PHAROS_Reduction_GUI_Tutorial'>
+  <title >
+    PHAROS Reduction GUI Tutorial
+  </title>
+  
+<!--
+  This page explains how to use PHAROS reduction application GUI. If you prefer command line, please follow this
+  
+  <link linkend='PHAROS_Reduction_commandline_Tutorial'>
+    instruction
+  </link>
+  .
+-->
+
+  <sect2 id='PHAROS_reduction_GUI_tutorial.Environment_Set_up'>
+    <title >
+      Environment Setup
+    </title>
+    
+    Before you run the LRMECS reduction application, please make sure that the 
+    environment variables of DRCS are set correctly.
+If you install from binaries, chances are that the environment
+variables are already set up for you.
+If you install from source or Mac OS X binaries,
+you will have to run a command 
+<programlisting>
+  $ source /path/to/DRCS/installation/bin/envs.sh
+</programlisting>
+, as explained in <xref linkend="reduction-Install"/>.
+
+<para>
+Please don't hesitate to ask linjiao@caltech.edu for help 
+if you have any trouble.
+</para>
+
+  </sect2>
+  
+  
+  <sect2 id='PHAROS_reduction_GUI_tutorial.Preparation_of_data_files_'>
+    <title >
+      Preparation of Data Files 
+    </title>
+    
+    Please follow instructions in page
+    
+    <link linkend='Prepare_PHAROS_Reduction_Directory'>
+      Prepare PHAROS Reduction Directory
+    </link>
+    
+  </sect2>
+  
+  
+  <sect2 id='PHAROS_reduction_GUI_tutorial.Launch_the_reduction_gui_'>
+    <title >
+      Launch the Reduction GUI
+    </title>
+    
+    The PHAROS reduction GUI application has a very similar 
+    usage pattern to the LRMECS package of
+    <xref linkend="LRMECS_Reduction_GUI_Tutorial"/>.
+    Please follow the instructions there to learn how to reduce
+    LRMECS data. 
+    The PHAROS reduction application is essentially the same.
+    To launch the PHAROS reduction GUI, 
+
+    <programlisting >
+      $ wxPharosReductionApp.py
+    </programlisting>
+
+    The configuration dialogs are very similar to 
+    those of 
+    <xref linkend="LRMECS_Reduction_GUI_Tutorial"/>, 
+    and I will only discuss the differences.
+
+<sect3>
+  <title> Settings of Pharos Measurement </title>
+<figure id='LRMECS_reduction_GUI_Tutorial.Launch_the_reduction_gui.configurePharosMeasurement'>
+  <title >
+    Settings of Pharos Measurement
+  </title>
+  <mediaobject >
+    <imageobject >
+      <imagedata width='70%' fileref='figures/PHAROS-gui-tutorial/configurePharosMeasurement.png' scalefit='1'>
+      </imagedata>
+    </imageobject>
+    <textobject >
+      <phrase >
+	Settings of Pharos Measurement
+      </phrase>
+    </textobject>
+  </mediaobject>
+</figure>
+  
+  In
+  <xref linkend='LRMECS_reduction_GUI_Tutorial.Launch_the_reduction_gui.configurePharosMeasurement'/>,
+  the first configurable item is
+  "path to Pharos instrument definition file".
+  It is a text file containing details of geometrical information
+  about  PHAROS detectors. 
+
+  <para>
+    Click the "Choose" button to pop up a browser window.
+    Here we are looking for the file "PharosDefinitions.txt", 
+    and it should be under ~/reduction/PHAROS if you follow
+    this tutorial closely. Double click the file and you 
+    will be back in the "Settings of PharosMeasurement" 
+    dialog.
+  </para>
+
+
+
+You can now use the following example data files:
+      
+<itemizedlist >
+  <listitem >
+    Pharos_342.nx.h5: main experiment data
+  </listitem>
+  <listitem >
+    Pharos_318.nx.h5: vanadium calibration data
+  </listitem>
+  <listitem >
+    Pharos_351.nx.h5: empty can data
+  </listitem>
+</itemizedlist>
+
+</sect3>  
+
+There is no more difference in configurable items
+between the LRMECS reduction application and the
+PHAROS reduction application. Please continue
+with the reduction procedure starting at
+<xref linkend="LRMECS_Reduction_GUI_Tutorial.LaunchApp.Reducers"/>
+
+  </sect2>
+  
+</sect1>
+
+
+<!-- version-->
+<!-- $Id$-->
+
+<!-- Generated automatically by Renderer on Thu Apr 26 13:18:01 2007-->
+
+<!-- End of file -->

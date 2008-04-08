@@ -1,0 +1,992 @@
+<?xml version="1.0" encoding="us-ascii" ?>
+
+<!--
+
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+                                   Jiao Lin
+                      California Institute of Technology
+                        (C) 2007 All Rights Reserved
+
+ {LicenseText}
+
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+-->
+
+<chapter id='reduction.Scripting'>
+  
+  <title>Scripting interface</title>
+
+  <sect1 id="Scripting.Introduction">
+
+    <title> Introduction to the Style of the Scripting Interface </title>
+    <para>
+      To get a feeling of the python command-line interface
+      of DRCS, please watch this 
+    <ulink url='xxxWEBSITExxx/reduction/Software-UserGuide/movies/scripting-LrmecsReduction.html'>
+      <citetitle>short video </citetitle>
+    </ulink>.
+    It shows a few commands that reduce raw data from a LRMECS experiment
+    to S(Q,E). The python commands are run inside an embedded python
+    shell within the Histogram GUI. 
+    More demos can be found in 
+    <xref linkend='Scripting.Demo'/>. 
+    An excellent preparation for using the scripting interface is some
+    knowledge of the language Python.
+    </para>
+
+<para>
+The DRCS scripting interface consists of several python 
+"commands".
+Each command performs one kind of operation. 
+I will use the command "solveEi" as an example, and
+other commands have similar usage.
+Command "solveEi" calculates the 
+incident neutron energy for a given
+experimental run. 
+Note the Python syntax:
+
+<programlisting>
+  >>> from reduction.scripting import *
+  >>> getRun.select('lrmecs')
+  >>> run = getRun( '4849' )
+  >>> ei = solveEi( run )
+</programlisting>
+    
+You can ask for help about this command by 
+
+<programlisting>
+  >>> solveEi.help()
+</programlisting>
+    
+This help request will print out a help page about
+the "solveEi" command:
+
+<programlisting>
+Help on class IncidentEnergySolver_UseElasticPeaksInterface in module reduction.scripting.FacilityFrontEnd:
+
+class IncidentEnergySolver_UseElasticPeaksInterface
+ |  Incident energy solver originally written by Max Kresch.
+ |  It collects counts in all pixels with similar distance from sample,
+ |  and add them together. Then a function is fit to each counts-vs-tof
+ |  curves, in order to find out the velocity (and energy) of the
+ |  incident neutron.
+ |  
+ |  Methods defined here:
+ |  
+ |  __call__ = f(self, *args, **kwds)
+ |      __call__( run, mask = None)
+ |      
+ |      solve Ei for an experimental run.
+ |      
+ |      inputs:
+ |      
+ |        - run: an experimental run. instance of measurement.Run
+ |        - mask: a detector mask. None means no mask
+ |  
+ |  reconstruct = f(self, *args, **kwds)
+    </programlisting>
+
+Any command may have several "engines". For example,
+the "solveEi" command has two engines: solve Ei by
+using beam monitors, or solve Ei from elastic peaks.
+You can find available engines by 
+
+<programlisting>
+  >>> solveEi.engines()
+</programlisting>
+
+The output may look like
+    
+<programlisting>
+  ['use monitors', 'use elastic peaks']      
+</programlisting>
+
+To learn what a particular engine is and what it
+does, we can
+invoke the "help" method again:
+    
+<programlisting>
+  >>> solveEi.help( 'use monitors' )
+</programlisting>
+
+The output looks like
+
+<programlisting>
+Help on class IncidentEnergySolver_UseMonitorsInterface in module reduction.scripting.FacilityFrontEnd:
+
+class IncidentEnergySolver_UseMonitorsInterface
+ |  calcualte Ei from I(tof) data of two monitors.
+ |  
+ |  Methods defined here:
+ |  
+ |  __call__ = f(self, *args, **kwds)
+ |      __call__( run )
+ |      
+ |      solve Ei for an experimental run.
+ |      
+ |      inputs:
+ |      
+ |        - run: an experimental run. instance of measurement.Run
+ |  
+ |  reconstruct = f(self, *args, **kwds)
+ |      reconstruct( monitor1Id, monitor2Id,
+ |      monitor1FitGuess = None, monitor2FitGuess = None, fitter = None )
+ |      
+ |      monitor1Id: id of the first (front) beam monitor
+ |      monitor2Id: id of the second (back) beam monitor
+</programlisting>
+
+It is easy to change the engine of the command "solveEi":
+
+<programlisting>
+  >>> solveEi.select( 'use monitors', monitor1Id=0, monitor2Id=1)
+</programlisting>
+
+The above method changes the engine of the "solveEi" command 
+to "use monitors", and parameters ( monitor1Id=0, monitor2Id=1 )
+will be applied to the new engine.
+</para>
+
+<para>
+Sometimes, you might want to change the parameters of an engine.
+This can be done with method "reconstruct", which will reconstruct
+the underlying engine with new parameters. For example, let us suppose
+an intrument has several different beam monitors, and we can chose
+monitor 1 and monitor 4 to deduce incident neutron energy:
+    
+<programlisting>
+  >>> solveEi.reconstruct( monitor1Id = 1, monitor2Id = 4 )
+  >>> ei = solveEi( run )
+</programlisting>
+
+In the next section, a tutorial will help you go through a typical
+reduction procedure and make you get familiar with several commands.
+
+</para>
+
+</sect1>
+
+<sect1 id="Scripting.LRMECS_reduction_tutorial">
+<title>LRMECS reduction tutorial</title>
+
+<para>
+The first step of reduction is to locate the data to be reduced.
+For LRMECS instrument, please read 
+<xref linkend="Prepare_LRMECS_Reduction_Directory"/>
+to prepare a reduction directory with sample data files.
+</para>
+
+<para>
+Now let us start python interpreter:
+
+<programlisting>
+  $ python
+</programlisting>
+
+and then import reduction scripting support:
+
+<programlisting>
+  >>> from reduction.scripting import *
+</programlisting>
+
+For a listing of reduction commands, please do
+    
+<programlisting>
+  >>> redcmds()
+</programlisting>
+
+which displays a list of commands for each of which
+a brief explanation is presented.
+</para>
+    
+<para>
+Now let us read in the data and create a data object
+containing all information about an experimental run:
+
+<programlisting>
+  >>> run = getRun( '/path/to/lrmecs/data/file/4849' )
+</programlisting>
+
+Here the string  '/path/to/lrmecs/data/file/4849' should
+be replaced by the path to the lrmecs data file. For example,
+
+<programlisting>
+  >>> run = getRun( 'ins-data/Lrmecs/4849' )
+</programlisting>
+
+If the "getRun" command failed, please check if the engine
+of command "getRun" is set to "lrmecs":
+    
+<programlisting>
+  >>> print getRun.currentEngine()
+</programlisting>
+
+The result should be "lrmecs". If it is not "lrmecs", 
+you can change the engine by
+
+<programlisting>
+  >>> getRun.select( 'lrmecs' )
+</programlisting>
+    
+The data object "run" is the source of information about 
+an experimental run. You can query it to obtain datasets,
+instrument information, etc.
+</para>
+
+<para>
+If you are as impatient as me, you might want to see S(Q,E)
+of the current dataset right away. Following are commands
+that take you there:
+
+<programlisting>
+  >>> instrument, geometer = run.getInstrument()
+  >>> Idpt = run.getDetPixTOFData()
+  >>> sqe = idpt2sqe( 60, Idpt, instrument, geometer )
+  >>> plot(sqe)
+</programlisting>
+
+The first line
+
+<programlisting>
+  >>> instrument, geometer = run.getInstrument()
+</programlisting>
+    
+extracts instrument and geometer objects out of the "run" object.
+The instrument object contains the hierarchy of the instrument
+including all neutron components like moderator, guides, choppers,
+and detector tubes. The geometer object is a registry of the
+geometrical information about neutron components in the neutron
+instrument.
+</para>
+
+<para>
+The second line
+  
+<programlisting>
+  >>> Idpt = run.getDetPixTOFData()
+</programlisting>
+
+extracts the main dataset, I(detector, pixel, tof), out of
+the experimental run data object. 
+</para>
+
+<para>
+The third line, 
+
+<programlisting>
+  >>> sqe = idpt2sqe( 60, Idpt, instrument, geometer )
+</programlisting>
+
+performs reduction and convert I(detector, pixel, tof)
+to  S(Q,E). The number "60" is a guess of the neutron incident
+energy.
+</para>
+
+<para>
+The last line
+
+<programlisting>
+  >>> plot(sqe)
+</programlisting>
+
+plots the reduced S(Q,E), as show in 
+<xref linkend="Scripting.LRMECS_reduction_tutorial.SQE"/>
+</para>
+
+<figure id='Scripting.LRMECS_reduction_tutorial.SQE'>
+  <title >
+    S(Q,E)
+  </title>
+  <mediaobject >
+    <imageobject >
+      <imagedata width='70%' fileref='figures/scripting/LRMECS_reduction_tutorial/SQE.png' scalefit='1'>
+      </imagedata>
+    </imageobject>
+    <textobject >
+      <phrase >
+	Reduced S(Q,E) plot
+      </phrase>
+    </textobject>
+  </mediaobject>
+</figure>
+
+<para>
+For details of those commands, please read
+<xref linkend="Scripting.CommandReference"/>.
+</para>
+
+<para>
+Now that we have seen a "preview" of reduced S(Q,E), 
+we may want to do a more rigorous reduction.
+</para>
+
+<para>
+First, remove time-independent background. We want to 
+find out where in the tof spectrum we can treat as
+background. It can be done by looking at the
+I(tof) spectrum summed over all detectors and pixels
+    
+<programlisting>
+  >>> It = Idpt.sum( "detectorID" ).sum( "pixelID" )
+  >>> plot( It )
+</programlisting>
+</para>
+
+<para>
+Now we can use the removeTIBG command to remove time-independent
+background:
+    
+<programlisting>
+  >>> removeTIBG( Idpt )
+</programlisting>
+
+In the next step, we want to compute energy of incident neutron:
+
+<programlisting>
+  >>> ei = solveEi( run )
+</programlisting>
+
+Now we reduce the data again:
+
+<programlisting>
+  >>> sqe = idpt2sqe( ei, Idpt, instrument, geometer )
+  >>> plot(sqe)
+</programlisting>
+
+The plot is shown in
+<xref linkend="Scripting.LRMECS_reduction_tutorial.SQE-goodei"/>.
+</para>
+
+<figure id='Scripting.LRMECS_reduction_tutorial.SQE-goodei'>
+  <title >
+    S(Q,E)
+  </title>
+  <mediaobject >
+    <imageobject >
+      <imagedata width='70%' fileref='figures/scripting/LRMECS_reduction_tutorial/SQE-goodei.png' scalefit='1'>
+      </imagedata>
+    </imageobject>
+    <textobject >
+      <phrase >
+	Reduced S(Q,E) plot with more accurate neutron incident energy
+      </phrase>
+    </textobject>
+  </mediaobject>
+</figure>
+
+<para>
+You can see the more accurate incident neutron energy leads to 
+better reduction.
+</para>
+</sect1>
+
+<sect1 id="Scripting.CommandReference">
+  <title>Command reference</title>
+    
+<sect2 id='Scripting.CommandReference.getRun'>
+
+  <title>getRun</title>
+
+Establish an "experimental-run"  data object
+
+<sect3>
+  <title> Engines </title>
+
+  <itemizedlist >
+    <listitem > LRMECS </listitem>
+    <listitem > PHAROS </listitem>
+  </itemizedlist>
+</sect3>
+
+<sect3>
+  <title> Description </title>
+
+<para>
+  <emphasis>getRun</emphasis> 
+  creates an instance of "experimental-run" from a data source
+  (a data file, for example). The created instance holds information
+  about the experimental run, such as the I(det, pix, tof) dataset,
+  the monitor dataset, the instrument configuration, etc.
+  To create a new "run", first you have to choose the instrument
+  where the data were measured. The following command 
+  selects the LRMECS instrument:
+
+<programlisting>
+  >>> getRun.select( 'lrmecs' )
+</programlisting>
+
+To see all available instruments, type
+
+<programlisting>
+  >>> getRun.engines()
+</programlisting>
+
+After you select the instrument, you can find out how to 
+get a new "run" by requesting help from the command
+
+<programlisting>
+  >>> getRun.help()
+</programlisting>
+
+The command will generate
+
+<programlisting>
+class KlassInterface
+ |  Methods defined here:
+ |  
+ |  __call__ = f(self, *args, **kwds)
+ |      create a lrmecs run data object
+ |      
+ |      runfilename: lrmecs run data filename
+ |      interpolateData: interpolate data or not (default: True)
+ |  
+</programlisting>
+
+By careful reading of the Python syntax in the help text,
+we now have enough
+information to  get a LRMECS experimental run:
+
+<programlisting>
+  >>> run = getRun( 'path/to/4849' )
+</programlisting>
+
+Here the string "path/to/4849" is the path to the sample LRMECS
+data file of experimental run 4849.
+</para>
+
+<para>
+  The object "run" is an important data object. 
+It contains methods to extract
+  datasets and other information related to the experimental run.
+  You can find the methods of the "run" object by
+
+<programlisting>
+  >>> help(run)
+</programlisting>
+
+,which will print out 
+
+<programlisting>
+class LrmecsRun(measurement.ins.Run.Run)
+ |  Method resolution order:
+ |      LrmecsRun
+ |      measurement.ins.Run.Run
+ |      measurement.Run.Run
+ |      __builtin__.object
+ |  
+ |  Methods defined here:
+ |  
+ |  __init__(self, instrument, geometer, filename, interpolateData=False, sample
+=None)
+ |      ctor
+ |      
+ |      @param instrument: instance of instrument.elements.Instrument
+ |      @param geometer: instance of instrument.geometers.Geometer
+ |      @param filename: data file name
+ |  
+ |  getDetPixTOFData(self, dummy=None)
+ |      get I(det,pix,tof) histogram
+ |  
+ |  getDetPixTOFHistCollection(self)
+
+</programlisting>
+
+The most important methods are "getDetPixTOFData" and "getInstrument".
+</para>
+
+</sect3>
+</sect2>
+
+<sect2 id="Scripting.CommandReference.fit1">
+  <title>fit1</title>
+  
+Fit a 1D curve to a given function.
+
+<sect3>
+  <title> Engines </title>
+
+  <itemizedlist >
+    <listitem >
+      <ulink url="http://en.wikipedia.org/wiki/Differential_evolution">
+	differential evolution
+      </ulink>
+    </listitem>
+  </itemizedlist>
+</sect3>
+
+<sect3>
+  <title> Description </title>
+  This command fits a curve to a given function.
+  It could use many different algorithms to do that, but currently
+  only the differential evolution algorithm is used in the optimization
+  core.
+</sect3>
+<sect3>
+  <title> Example </title>
+  
+  We need to work with a histogram:
+  <programlisting>
+    >>> from histogram import *
+  </programlisting>
+
+  <note>
+    <title> Scripting interface for histogram </title>
+    If you are interested, you can read about more capabilities 
+    of the histogram scripting interface in
+    
+    <xref linkend="histogram.CommandlineInterface"/>.
+    
+  </note>
+
+  Here we create a histogram with data points at a straight line:
+  (1, 1), (1.1, 1.1), (1.2, 1.2), ..., (9.9, 9.9).
+  We assumed that the error bar is equal to the square root of y.
+  
+  <programlisting>
+    >>> h1= histogram( 'y', [('x', arange(1, 10, 0.1) )] ,
+        fromfunction = (lambda x: x, lambda x: x ) )
+  </programlisting>
+
+<note>
+  <title> Error bar </title>
+  In DRCS, the convention is to store the squares of error bars
+  instead of error bars themselves, to speed up computation.
+</note>
+
+<note>
+  <title> python keyword <emphasis>lambda</emphasis> </title>
+  Python lambda expression is a powerful tool to 
+  embed defintions of functions into codes.
+</note>
+
+  You can use the "plot" command to view the hisotgram you created:
+
+  <programlisting>
+    >>> plot(h1)
+  </programlisting>
+
+  Now we define a function y = ax+b to fit the "experimental" data.
+  You could write your own, of course:
+
+  <programlisting>
+    >>> def f(x, a,b): return a*x+b
+  </programlisting>
+
+  We do the fitting as follows:
+  <programlisting>
+    >>> fit1(h1, f, [(0,2), (-1,1)] )
+  </programlisting>
+
+  The list [(0,2), (-1,1)] is the box constraints for the values of 
+  the parameters a and b.
+</sect3>
+    </sect2>
+
+<sect2 id="Scripting.CommandReference.fitg1">
+  <title>fitg1</title>
+  Fit a 1D curve to a gaussian function.
+
+<sect3>
+  <title> Engines </title>
+
+  <itemizedlist >
+    <listitem > 
+<ulink url="http://en.wikipedia.org/wiki/Differential_evolution">
+  differential evolution 
+</ulink>
+    </listitem>
+  </itemizedlist>
+</sect3>
+
+<sect3>
+  <title> Description </title>
+  This command is a special case of command "fit1". 
+  It fits a 1D curve to a Gaussian function.
+  Currently, the only algorithm usable is differential evolution.
+</sect3>  
+
+
+<sect3>
+  <title> Example </title>
+
+The following commands create a gaussian function with some random
+noise:
+
+<programlisting>
+  from histogram import *
+  xaxis = axis('x', arange( -10, 10, 0.1, 'd' ) )
+
+  yh = histogram( 'y', [xaxis] )
+    
+  from numpy import exp, random, ones, sqrt
+  def f1(x):
+    y = 100*exp( -x**2 )
+    return y 
+
+  y = datasetFromFunction( f1, [xaxis] )
+  dy = sqrt(random.uniform(0, abs(y)))
+  yh[()] = y+dy, dy**2
+</programlisting>
+
+You can plot your gaussian by
+
+<programlisting>
+  from reduction.scripting import *
+  plot ( yh )
+</programlisting>
+
+Now you can fit your noisy gaussian to an ideal gaussian
+as follows:
+
+<programlisting>
+  fitg1( yh )
+</programlisting>
+</sect3>
+    </sect2>
+
+    
+<sect2 id="Scripting.CommandReference.getCC">
+      
+<title>getCC</title>
+      
+Compute calibration constants
+
+<sect3>
+  <title> Engines </title>
+
+  <itemizedlist >
+    <listitem > white beam V </listitem>
+    <listitem > monochromatic beam V (need to be exported to scripting interface from reduction.core!!! ) </listitem>
+  </itemizedlist>
+</sect3>
+
+<sect3>
+  <title> Description </title>
+  Calibration constants are essential in data reduction in that
+  it accounts for the fluctuation of detector efficiencies.
+  The usual way to obtain calibration constants is to run
+  a vanadium calibration experiment.
+  This command computes calibration constants from 
+  a vanadium calibration run.
+  <para>
+    Currently there are two engines for this command. 
+    The "white beam V" engine deals with calibration runs
+    with a "white" beam on a vanadium sample, while
+    the "monochromatic beam V" engine deals with calibration
+    runs with a monochromatic beam on a vanadium sample.
+  </para>
+</sect3>
+
+<sect3>
+  <title> Example </title>
+  First we read an experimental run from a data source. 
+  This time we need to specify the vanadium sample information. 
+  
+  <para>
+    A vanadium plate can be created by
+  </para>
+
+  <programlisting>
+    vp = vanadiumPlate( thickness = 0.4, width = 10, darkAngle = 135 )
+  </programlisting>
+
+  Here the dimensions are centimeters and degrees.
+  Next we retrive the experimental run of the vanadium sample
+
+  <programlisting>
+    vr = getRun( '4779', sample=vp )
+  </programlisting>
+
+  The calibration constants are now obtained by
+
+  <programlisting>
+    cc = getCC( vr, 60 )
+  </programlisting>
+
+  Here, the number "60" is the incident energy of the experimental runs.
+
+</sect3>
+
+    </sect2>
+
+    <sect2 id="Scripting.CommandReference.idpt2spe">
+      <title>idpt2spe</title>
+      
+Convert I(det,pix,tof) to S(phi,E)
+
+<sect3>
+  <title> Engines </title>
+
+  <itemizedlist >
+    <listitem > default </listitem>
+  </itemizedlist>
+</sect3>
+
+<sect3>
+  <title> Description </title>
+  This command transforms the raw experimental data,
+  I(det,pix,tof), to S(phi,E). 
+  This command has only one engine available right now.
+  It first converts tof to energy transfer for every pixel,
+  and then
+  integrate intensities of detector pixels of same
+  scattering angles (rings) to one constant-phi slice
+  of the S(phi, E) histogram.
+  For more details about this tranformation, please read
+  <ulink url="xxxARCSBOOKxxx">Reference Manual</ulink>, 
+  Chapter "Essential Data Processing", 
+  Section "Steps to Transforming Data into a Function of 
+  Energy and Momentum".
+</sect3>  
+
+<sect3>
+  <title> Example </title>
+  These commands reduce the data file 4849 to S(phi,E), and
+  plot the reduced spectrum:
+  <programlisting>
+    run = getRun( '4849' )
+    instrument, geometer = run.getInstrument()
+    idpt = run.getDetPixTOFData()
+    ei = 60
+    spe = idpt2spe( ei, idpt, instrument, geometer )
+    plot(spe)
+  </programlisting>
+</sect3>
+    </sect2>
+
+    <sect2 id="Scripting.CommandReference.idpt2sqe">
+      <title>idp2sqe</title>
+
+Convert I(det,pix,tof) to S(Q,E)
+
+<sect3>
+  <title> Engines </title>
+
+  <itemizedlist >
+    <listitem > default </listitem>
+  </itemizedlist>
+</sect3>
+
+<sect3>
+  <title> Description </title>
+  This command transforms the raw experimental data,
+  I(det,pix,tof), to S(Q,E). 
+  It has only one engine available.
+  First the I(det, pix, tof ) histogram is converted
+  to the S(phi, E) histogram, and the latter is converted
+  to the S(Q, E) histogram.
+  For more details about this tranformation, please read
+  <ulink url="xxxARCSBOOKxxx">Reference Manual</ulink>, 
+  Chapter "Essential Data Processing", 
+  Section "Steps to Transforming Data into a Function of 
+  Energy and Momentum".
+</sect3>  
+
+<sect3>
+  <title> Example </title>
+  These commands reduce the data file 4849 to S(Q,E),
+  and plot the reduced spectrum:
+  <programlisting>
+    run = getRun( '4849' )
+    instrument, geometer = run.getInstrument()
+    idpt = run.getDetPixTOFData()
+    ei = 60
+    spe = idpt2sqe( ei, idpt, instrument, geometer )
+    plot(sqe)
+  </programlisting>
+</sect3>
+    </sect2>
+
+    <sect2 id="Scripting.CommandReference.plot">
+      <title>plot</title>
+
+Plot a histogram
+
+
+<sect3>
+  <title> Engines </title>
+
+  <itemizedlist >
+    <listitem >
+<ulink url="http://matplotlib.sourceforge.net/matplotlib.pylab.html">
+  pylab
+</ulink>
+ </listitem>
+  </itemizedlist>
+</sect3>
+
+<sect3>
+  <title> Description </title>
+  This command plots histograms.
+  It currently only supports plotting of 1D and 2D histograms.
+  The only engine available for now is 
+  <ulink url="http://matplotlib.sourceforge.net/">
+    pylab
+  </ulink>.
+</sect3>
+
+<sect3>
+  <title> Example </title>
+  The following commands create a histogram and plot it:
+  <programlisting>
+    from histogram import *
+    h = histogram( 'h', [ ('x', arange( -10, 10, 0.5) ) ],
+                   fromfunction = lambda x: x*x )
+    from reduction.scripting import *
+    plot( h )
+  </programlisting>
+</sect3>
+    </sect2>
+
+    <sect2 id="Scripting.CommandReference.removeTIBG">
+      <title>removeTIBG</title>
+
+  Remove time-independent-background
+
+<sect3>
+  <title> Engines </title>
+
+  <itemizedlist >
+    <listitem > average all detectors </listitem>
+    <listitem > per detector </listitem>
+  </itemizedlist>
+</sect3>
+
+<sect3>
+  <title> Description </title>
+  Time-independent backgrounds (TIBG) are background noise in neutron instrument
+  that are considered time-independent. This command removes
+  the TIBG from experimental data. There are currently two engines for
+  this command. Both engines rely on the assumption that 
+  a region of the I(tof) spectrum of the measured data
+  can be identified as time-independent.
+  For both engines, the way to remove the TIBG is to first
+  look at the I(tof) spectrum and then select a window of tof
+  where the intensity is lower, and seems constant in time. 
+  The following commands read a spectrum of 
+  I(det, pix, tof ), and integrate
+  the spectrum to get a spectrum of I(tof). 
+  From the plot, we pick
+  the tof window. 
+  Then we  reconfigure the removeTIBG command to
+  select that window, and perform the correction.
+
+  <programlisting>
+    run = getRun( '4849' )
+    idpt = run.getDetPixTOFData()
+    it = idpt.sum( 'detectorID' ).sum( 'pixelID' )
+    plot(it)
+    removeTIBG.reconstruct( tbgMin = 5000, tbgMax = 5500 )
+    removeTIBG( idpt )
+  </programlisting>
+
+</sect3>
+
+    </sect2>
+
+    <sect2 id="Scripting.CommandReference.solveEi">
+      <title>solveEi</title>
+Compute incident neutron energy
+
+<sect3>
+  <title> Engines </title>
+
+  <itemizedlist >
+    <listitem > use monitors </listitem>
+    <listitem > use elastic peaks </listitem>
+  </itemizedlist>
+</sect3>
+
+<sect3>
+  <title> Description </title>
+  This command computes the incident energy for an experimental run.
+  Currently there are two ways to calculate the incident energy.
+  The first way is conventional.
+  It uses the time between two monitors to compute 
+  the incident energy.
+  The second way is to use the elastic peaks in the acquired data.
+  From the time-of-flight of most
+  neutrons flying from the moderator to a pixel, 
+  assuming mostly elastic scattering by the sample,
+  we can compute the energy of incident neutron.
+</sect3>
+
+<sect3>
+  <title> Example </title>
+
+  The following commands compute the incident energy for LRMECS run
+  4849:
+  <programlisting>
+    run = getRun( '4849' )
+    solveEi.select( 'use monitors' )
+    solveEi( run )
+    solveEi.select( 'use elastic peaks' )
+    solveEi( run )
+  </programlisting>
+
+</sect3>
+    </sect2>
+
+
+  </sect1>
+
+  <sect1 id="Scripting.Demo">
+    <title>Video Demos</title>
+
+<sect2>
+  <title>
+    Lrmecs Reduction
+  </title>
+<para>
+  This video shows a few commands that reduce raw data from a LRMECS experiment
+    to S(Q,E).
+</para>
+<ulink url='xxxWEBSITExxx/reduction/Software-UserGuide/movies/scripting-LrmecsReduction.html'>
+  <citetitle>video </citetitle>
+</ulink>.
+</sect2>
+
+<sect2>
+  <title>
+    Look at raw data
+  </title>
+<para>
+  This video shows some basic commands that are helpful
+  when trying to analyze the raw data.
+</para>
+<ulink url='xxxWEBSITExxx/reduction/Software-UserGuide/movies/scripting-lookatdetectors.html'>
+  <citetitle>video </citetitle>
+</ulink>.
+</sect2>
+
+<sect2>
+  <title>
+    Command "solveEi"
+  </title>
+<para>
+  This video shows how to use a reduction command through
+  the example "solveEi".
+</para>
+<ulink url='xxxWEBSITExxx/reduction/Software-UserGuide/movies/scripting-solveEi.html'>
+  <citetitle>video </citetitle>
+</ulink>.
+</sect2>
+
+<sect2>
+  <title>
+    Histogram manipulations
+  </title>
+<para>
+  This video shows how to manipulate histograms.
+</para>
+<ulink url='xxxWEBSITExxx/reduction/Software-UserGuide/movies/histogram-manipulations.html'>
+  <citetitle>video </citetitle>
+</ulink>.
+</sect2>
+
+  </sect1>
+    
+</chapter>
+

@@ -1,0 +1,126 @@
+This page explains how to use PHAROS reduction application GUI. If you like command line, please follow this 
+[[How_to_run_Pharos_reduction_application| instruction]].
+
+Back to [[ARCS_1.0_applications | ARCS applications]]
+
+
+=== Environment Set-up ===
+Before you run PHAROS reduction application, please make sure that environment variables of ARCS software are set correctly. Set up of environment variables depends on the platform on which the reduction application will be run. This step is very critical and needs special attention. Once this step is accomplished, it can be set up automatically for you in your next reduction task. If you have installed ARCS software following our [http://www.cacr.caltech.edu/projects/ARCS/arcs-1.0/web/Download.htm Installation Instructions], there should be a script that can set those env vars for you. Please don't hesitate to ask linjiao@caltech.edu for help if you have any trouble.
+
+
+=== Preparation of data files ===
+Please follow instructions in page [[Prepare Pharos Reduction Directory]]
+
+
+
+=== Launch the reduction gui ===
+
+  $ wxPharosReductionLight.py 
+
+A window will pop up. 
+
+
+[[Image:Pharosred-mainframe.png]]
+
+
+
+Click on the blue link will pop up this help web page.
+
+There are several buttons on this window:
+* configure
+* save configurations
+* run
+* exit
+
+
+Click "configure" to choose reduction parameters, and the following dialog will pop up:
+
+[[Image:Pharosred-maininventory.png]]
+
+This window shows several groups of parameters that should be configured. Please note that if you stop your mouse over an active text input field or an active button, a small tip will show up.
+
+If you click the "Help" button on the top-right corner, a help window will pop up to explain configurable items in current dialog.
+
+====Outputs====
+Click "Set" button in the row of "Outputs", we get:
+
+[[ Image:Pharosred-Outputs-Inventory.png]]
+
+In this dialog we configure settings for outputs. The first setting is the output directory, i.e., where the reduced data files will be saved. Click the "Choose" button and we will be presented with a dialog to choose a directory. 
+
+[[ Image:Pharosred-Outputs-outputdir.png]]
+
+Pick your favorite directory and we will return to the "Outputs" dialog. The second setting is about mslice. [http://www.isis.rl.ac.uk/excitations/mslice/  Mslice] is a popular data analysis program for TOF neutron spectrometers based on Matlab. If you set the option "Mslice" to True, data files in mslice format will be created and you can further play with it in mslice program.
+
+After you make your choice about mslice, click "OK" button, and you will be back in the main configuration dialog.
+
+[[Image:Pharosred-maininventory.png]]
+
+====Data files to be reduced ====
+Click "Set" button in the row of "dataFiles", and we get:
+
+[[ Image:Pharosred-Datafiles-Inventory.png]]
+
+
+In this dialog, the first step is to choose the Pharos instrument definition file. Click the "Choose" button in the row of "instrumentFilename". A file dialog will pop up for you to find the file. 
+
+[[Image:Pharosred-openfile-pharosdefinition.png]]
+
+Here we are looking for the file "PharosDefinitions.txt", and it should be under ~/reduction/Pharos if you follow this tutorial closely
+
+After select the instrument definition file, you will be back to the dialog for setting data files. 
+
+[[ Image:Pharosred-Datafiles-Inventory.png]]
+
+Click the "Choose" button of "Main experimental data file in full path", and select the data file Pharos_342.nx.h5, which you should be able to
+find under ~/reduction/Pharos.
+
+Please leave other fields blank.
+
+After filling out this form and hit "OK" button, we are again back to this top configure dialog:
+
+[[ Image:Pharosred-maininventory.png ]]
+
+====Time independent background====
+This time click on "Set" button in the row of "Remove time-independent bg from data" and we get
+
+[[ Image:Pharosred-TimeBG-Inventory.png]]
+
+This dialog is for determination of the region of time-independent background. One way to do that is to click on the "Plot I(tof)" button. The following plot will show up
+
+[[ Image:Pharosred-plotItof.png]]
+
+Left-drage a window you would like to choose as "tof-independent background", and close the plotting window, the region you have just chosen will be automatically put into the "tbgMin" and "tbgMax" fields.
+
+Click OK and we are back again in the top level configuration dialog:
+
+[[ Image:Pharosred-maininventory.png ]]
+
+==== Axes ====
+
+This time we want to configure the energy (E), scattering angle (phi), and the momentum (Q) axes of reduced data, and it is done by clicking the "Set" button of the "axes" row. This step is relatively easy and straightforward, and detailed explanation will be skipped.
+
+
+====Vanadium Calibration====
+Similarly, if a calibration data is used, the "Set" button of the "vanadium" row should be clicked and further configurations about corrections to vanadium calibration should be done. In this tutorial, that Set button should be inactive because we have left blank the "calibration data file in full path" field of "Data files" dialog.
+
+====Launch Reduction Application====
+After all configuration are done, click "OK" button and we are back at the main window:
+
+[[Image:Pharosred-mainframe.png]]
+
+Click on "Run" will start the reduction procedure. If everything goes smoothly, a window will pop up with a happy message:
+
+[[Image:Pharosred-reductiondone.png ]]
+
+
+It suggests you to start "histogramGui.py" to look at the reduction result. Most reduction results are saved in python-pickle format in the directory you have picked in the "Outputs" dialog. But there might be data files in other format too. Here is a list:
+* spehist.pkl:  a histogram of S(phi,E)
+* sqehist.pkl  a histogram of S(Q,E)
+* mslice-data.*::  If you set "mslice" option of "Outputs" dialog to True, data will also be output in mslice data formats 
+Histograms saved in python-pickle format can be loaded by histogramGui.py, 
+please read this [[HistogramViewer-tutorial | tutorial]].
+
+Click "OK" we are back in the main window. 
+
+Congratulations! You have successfully reduce a PHAROS dataset using ARCS reduction software. From here, you can do another reduction by clicking "configure" button and change settings; or you can save the current configuration by clicking "save configuration" button so that you can use that configuration some time later; or you can exit by clicking the "Exit" button.

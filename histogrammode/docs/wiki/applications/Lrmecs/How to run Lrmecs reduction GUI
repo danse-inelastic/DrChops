@@ -1,0 +1,135 @@
+This page explains how to run LRMECS reduction application GUI. If you like command line, please follow this 
+[[How to run Lrmecs reduction application | instruction]].
+
+More information about [[ARCS_1.0_applications | ARCS applications]]
+
+
+=== Environment Set-up ===
+Before you run LRMECS reduction application, please make sure that environment variables of ARCS software are set correctly. Set up of environment variables depends on the platform on which the reduction application will be run. This step is very critical and needs special attention. Once this step is accomplished, it can be set up automatically for you in your next reduction task. If you have installed ARCS software following our [http://www.cacr.caltech.edu/projects/ARCS/arcs-1.0/web/Download.htm Installation Instructions], there should be a script that can set those env vars for you. Please don't hesitate to ask linjiao@caltech.edu for help if you have any trouble.
+
+
+=== Preparation of data files ===
+Please follow instructions in page [[Prepare Lrmecs Reduction Directory]]
+
+
+=== Launch the reduction gui ===
+
+  $ wxLrmecsReductionLight.py 
+
+A window will pop up. 
+
+
+[[Image:Lrmecsred-mainframe.png]]
+
+
+
+Click on the blue link will pop up this help web page.
+
+There are several buttons on this window:
+* configure
+* save configuration
+* run
+* exit
+
+
+Click "configure" to change settings of reduction, and the following dialog will pop up:
+
+[[Image:Lrmecsred-maininventory.png]]
+
+This window shows several groups of parameters that should be configured. Please note that if you stop your mouse over an active text input field or an active button, a small tip will show up.
+
+If you click the "Help" button on the top-right corner, a help window will pop up to explain configurable items in current dialog.
+
+====Outputs====
+Click "Set" button in the row of "Outputs", we get:
+
+[[ Image:Lrmecsred-Outputs-Inventory.png]]
+
+In this dialog we configure settings for outputs. The first setting is the output directory, i.e., where the reduced data files will be saved. Click the "Choose" button and we will be presented with a dialog to choose a directory. 
+
+[[ Image:Lrmecsred-Outputs-outputdir.png]]
+
+Pick your favorite directory and we will return to the "Outputs" dialog. The second setting is about mslice. [http://www.isis.rl.ac.uk/excitations/mslice/  Mslice] is a popular data analysis program for TOF neutron spectrometers based on Matlab. If you set the option "Mslice" to True, data files in mslice format will be created and you can further play with it in mslice program.
+
+After you make your choice about mslice, click "OK" button, and you will be back in the main configuration dialog.
+
+[[Image:Lrmecsred-maininventory.png]]
+
+====Data files====
+Click "Set" button of "Data files", and we get:
+
+[[Image:Lrmecsred-datafiles-inventory.png]]
+
+In this form we see fields for various data files including 
+* main experiment data
+* vanadium calibration data
+* empty can data
+* calibration for empty can data
+
+For each field, next to it you can find a "Choose" button. Click the "choose" button will pop up a file dialog where you can find your data file.
+
+[[Image:Lrmecsred-load-maindatafile.png]]
+
+Those data files should be under ~/reduction/Lrmecs if you follow this tutorial closely
+
+After you choose all your data files, click OK button and now you are back to the main configuration dialog:
+[[Image:Lrmecsred-maininventory.png]]
+
+==== Axes ====
+Next field is "axes". Clicking on the "Set" button will pop up another dialog in which we want to configure the energy (E), scattering angle (phi), and the momentum (Q) axes of reduced data. This step is relatively easy and straightforward, and its tutorial will be skipped.
+
+==== Incident neutron energy====
+The next step is to help the program to figure out neutorn incident energy. Click on "Set" button in the row of "incidentEnergy", and the click on the 
+Set button of the field "IncidentEnergySolver", we get the following dialog:
+
+[[Image:Lrmecsred-monitorEiSolver-inventory-dialog.png]]
+
+This "incident energy solver" uses tof of two monitors to calculate the velocity and hence the energy of the neutron. For each monitor, a gaussian like peak will show up in I(tof) curve. Click on 
+
+"Plot I(tof) of back monitor" 
+
+will pop up a plotting window like this:
+
+[[Image:Lrmecsred-monitor-Itof.png]]
+
+Please left-drag to zoom into the peak, like this:
+
+[[Image:Lrmecsred-zoomin-monitor-Itof.png]]
+
+CLose the window will automatically put down guess of the gaussian fit to the peak.
+
+Do the same thing to "front monitor".
+
+Click "OK" buttons, and go back to the main configuration dialog again:
+
+[[Image:Lrmecsred-maininventory.png]]
+
+==== Time indenpendent background ====
+The next step is to define "time-independent background". Click on the corresponding "set" button and then click on "plot I(tof)". A plot will show up and in the plot please left drag to define the background range, and close the plotting window. This should be easy because it is similar to the previous step in which you define the peak for beam monitor.
+
+Come back to the main configuration dialog again:
+
+[[Image:Lrmecsred-maininventory.png]]
+
+If a calibration data is used, the "Set" button of the "vanadium" row should be clicked and further configurations about corrections to vanadium calibration should be done.
+
+After all configuration are done, click "OK" button and we are back at the main window:
+
+[[Image:Lrmecsred-mainframe.png]]
+
+==== Launch reduction application ====
+
+Click on "Run" will start the reduction procedure. If everything goes smoothly, a window will pop up with a happy message:
+
+[[Image:Lrmecsred-reductiondone.png ]]
+
+It suggests you to start "histogramGui.py" to look at the reduction result. Most reduction results are saved in python-pickle format in the directory you have picked in the "Outputs" dialog. But there might be data files in other format too. Here is a list:
+* spehist.pkl:  a histogram of S(phi,E)
+* sqehist.pkl  a histogram of S(Q,E)
+* mslice-data.*::  If you set "mslice" option of "Outputs" dialog to True, data will also be output in mslice data formats 
+Histograms saved in python-pickle format can be loaded by histogramGui.py, 
+please read this [[HistogramViewer-tutorial | tutorial]].
+
+Click "OK" we are back in the main window. 
+
+Congratulations! You have successfully reduce a LRMECS dataset using ARCS reduction software. From here, you can do another reduction by clicking "configure" button and change settings; or you can save the current configuration by clicking "save configuration" button so that you can use that configuration some time later; or you can exit by clicking the "Exit" button.

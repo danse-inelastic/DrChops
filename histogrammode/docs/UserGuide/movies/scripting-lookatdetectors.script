@@ -1,0 +1,34 @@
+from reduction.scripting import *
+getRun.select('pharos')
+r.getRun( 'sampledata/PharosDefintions.txt', 'sampledata/Pharos_342.nx.h5')
+#get I(det, pix, tof)
+idpt = r.getDetPixTOFData()
+# I(tof) for detector 200
+it200 = idpt[ 200, (), () ].sum('pixelID')
+# I(det,pix) 
+idp = idpt.sum( 'tof' )
+# I(tof) of all
+it = idpt.sum( 'detectorID' ).sum( 'pixelID' )
+# I(det,pix) of a tof window
+idp1 = idpt[(), (), (5500, 8000)].sum('tof')
+# I(pix, tof)  for detectors with detectorID>100
+ipt = idpt[ (100, None), (), () ].sum( 'detectorID')
+# note the curvature due to pixels at different heights from scattering plane
+# I(det)
+id = idp1.sum( 'pixelID' )
+# spe
+ei = solveEi( r )
+i, g = r.getInstrument()
+spe = idpt2spe( ei, idpt, i, g )
+#diffraction pattern
+sp = spe.sum( 'energy' )
+
+#vanadium run
+#vanadium sample
+vp = vanadiumPlate( thickness=0.4, width=10, darkAngle=135)
+vr = getRun( 'sampledata/PharosDefinitions.txt', 'sampledata/Pharos_318.nx.h5' )
+vidpt = vr.getDetPixTOFData()
+vidp = vipdt.sum( 'tof' )
+#expand on the bad pixels
+
+

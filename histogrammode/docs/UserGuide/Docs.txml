@@ -1,0 +1,171 @@
+
+<!--
+! ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!
+!
+! {LicenseText}
+!
+! ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-->
+
+<sect1 id='Documentations'>
+<title >
+Documentations
+</title>
+
+
+    <sect2 id='Documentations.For_Users'>
+<title >
+For Users
+</title>
+
+
+        <itemizedlist >
+
+            <listitem >
+
+                <link linkend='/Install'>
+                Installation
+                </link>
+
+            </listitem>
+
+
+            <listitem >
+
+                <link linkend='/Docs/GettingStarted'>
+                Getting Started
+                </link>
+
+            </listitem>
+
+
+            <listitem >
+
+                <link linkend='/click_monitor/ARCS-bigbook'>
+                ARCS software reference manual
+                </link>
+
+                is a textbook-style reference manual
+            </listitem>
+
+
+            <listitem >
+
+                <link linkend='/Docs/LRMECS_Reduction_GUI_Tutorial'>
+                LRMECS Reduction GUI tutorial
+                </link>
+
+            </listitem>
+
+
+            <listitem >
+
+                <link linkend='/Docs/PHAROS_Reduction_GUI_Tutorial'>
+                PHAROS Reduction GUI tutorial
+                </link>
+
+            </listitem>
+
+
+            <listitem >
+
+                <link linkend='/Docs/HistogramViewer_Tutorial'>
+                Histogram GUI tutorial
+                </link>
+
+            </listitem>
+
+
+            <listitem >
+                Submit your complaint about reduction
+
+                <link linkend='http://danse.us/trac/tickets/newticket?type=defect&component=reduction&priority=major'>
+                here
+                </link>
+
+                (Please take a look at existing
+
+                <link linkend='http://danse.us/trac/tickets/query?status=new&status=assigned&status=reopened&component=reduction&order=priority'>
+                complaints
+                </link>
+
+                beforehand).
+            </listitem>
+
+        </itemizedlist>
+
+    </sect2>
+
+
+    <sect2 id='Documentations.For_Developers'>
+<title >
+For Developers
+</title>
+
+
+        <itemizedlist >
+
+            <listitem >
+
+                <link linkend='/Docs/ReductionFlowCharts'>
+                Reduction flow charts
+                </link>
+
+            </listitem>
+
+
+            <listitem >
+
+                <link linkend='Trac'>
+                Trac
+                </link>
+
+            </listitem>
+
+        </itemizedlist>
+
+    </sect2>
+
+
+    <sect2 id='Documentations.Useful_Resources'>
+<title >
+Useful Resources
+</title>
+
+
+        <itemizedlist >
+
+            <listitem >
+
+                <link linkend='http://www.cacr.caltech.edu/projects/ARCS/'>
+                ARCS
+                </link>
+
+                project
+            </listitem>
+
+
+            <listitem >
+
+                <link linkend='http://www.cacr.caltech.edu/projects/pyre/'>
+                Pyre
+                </link>
+
+                ,
+                the underlying framework.
+            </listitem>
+
+        </itemizedlist>
+
+    </sect2>
+
+</sect1>
+
+
+<!-- version-->
+<!-- $Id$-->
+
+<!-- Generated automatically by Renderer on Thu Apr 26 13:17:19 2007-->
+
+<!-- End of file -->

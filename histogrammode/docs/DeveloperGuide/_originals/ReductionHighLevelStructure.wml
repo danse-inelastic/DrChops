@@ -1,0 +1,26 @@
+<wikitext>
+
+<section title="High level structure of reduction package and reduction applications">
+
+<figure title="Package diagram for reduction"
+	file="/figures/reduction/reduction-package-diagram.png"
+        width="800"
+	> 
+</figure> 
+
+<figure title="Layering in reduction package"
+	file="/figures/reduction/reduction-package-layers.png"
+        width="800"
+	> 
+</figure> 
+
+<figure title="High-level behavior of an example reduction application: Pharos powder reduction application"
+	file="/figures/reduction/ReductionBehavior2.png"
+        width="800"
+	> 
+</figure> 
+
+
+</section> <!--section all-->
+
+</wikitext>

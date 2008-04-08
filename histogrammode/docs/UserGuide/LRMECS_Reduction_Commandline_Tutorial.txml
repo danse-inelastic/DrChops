@@ -1,0 +1,66 @@
+<!--
+
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+                                   Jiao Lin
+                      California Institute of Technology
+                        (C) 2007 All Rights Reserved
+
+ {LicenseText}
+
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+-->
+
+
+<sect1 id='LRMECS_Reduction_Commandline_Tutorial'>
+<title>
+LRMECS Reduction Command Line Application Tutorial
+</title>
+
+<para>
+After you finished a reduction session by following the
+<link linkend="LRMECS_Reduction_GUI_Tutorial">
+GUI
+</link>
+verision of LRMECS reduction application, it is natural
+to ask: how to reduce a series of experimental runs that are done
+in similar conditions? In this case, reduction
+configurations are similar among these experimental runs,
+and for the simplest case the only difference is the
+data file name.
+</para>
+
+<para>
+For example, if you already reduce a single experimental run,
+4849, by using the GUI reduction application, and now
+you want to reduce data file 4844, all you need to do is
+<programlisting>
+  LrmecsReductionApp.py --PowderReduction.PharosMeasurement.main=4844
+</programlisting>
+
+For more details about options of LrmecsReductionApp.py command,
+please refer to 
+<xref linkend="reduction-UnixCommands-LrmecsReductionApp"/>.
+
+</para>
+
+<para>You can reduce a series of data files by using shell
+scripts. For example, using bash, we can reduce a bunch of 
+data files:
+<programlisting>
+  for run in 4844 4849 5002 6332 ; do
+    LrmecsReductionApp.py --PowderReduction.PharosMeasurement.main=$run
+  done
+</programlisting>
+</para>
+
+</sect1>
+
+
+<!-- version-->
+<!-- $Id$-->
+
+<!-- Generated automatically by Renderer on Thu Apr 26 13:17:58 2007-->
+
+<!-- End of file -->

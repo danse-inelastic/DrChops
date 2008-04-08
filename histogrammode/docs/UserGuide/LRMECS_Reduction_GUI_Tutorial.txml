@@ -1,0 +1,489 @@
+<!--
+    
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    
+    Jiao Lin
+    California Institute of Technology
+    (C) 2007 All Rights Reserved
+    
+    {LicenseText}
+    
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    
+-->
+
+
+<sect1 id='LRMECS_Reduction_GUI_Tutorial'>
+  <title >
+    LRMECS Reduction GUI Tutorial
+  </title>
+
+<!--  
+  This section explains how to run the LRMECS reduction application GUI. If you prefer command line, please follow this
+  <link linkend='LRMECS_Reduction_commandline_Tutorial'>
+    instruction
+  </link>
+  .
+-->
+  
+  <sect2 id='LRMECS_reduction_GUI_tutorial.Environment_Set_up'>
+    <title >
+      Environment Set-up
+    </title>
+    
+    Before you run the LRMECS reduction application, please make sure that the 
+    environment variables of DRCS are set correctly.
+If you install from binaries, chances are that the environment
+variables are already set up for you.
+If you install from source or Mac OS X binaries, 
+you will have to run a command 
+
+<programlisting>
+  $ source /path/to/DRCS/installation/bin/envs.sh
+</programlisting>
+
+, as explained in <xref linkend="reduction-Install"/>.
+
+<para>
+Please don't hesitate to ask linjiao@caltech.edu for help 
+if you have any trouble.
+</para>
+
+
+  </sect2>
+  
+  
+  <sect2 id='LRMECS_reduction_GUI_tutorial.Preparation_of_data_files'>
+    <title >
+      Preparation of Data Files
+    </title>
+    
+    Please follow instructions in
+    
+    <link linkend='Prepare_LRMECS_Reduction_Directory'>
+      this section
+    </link>
+    
+  </sect2>
+  
+  
+  <sect2 id='LRMECS_reduction_GUI_tutorial.Launch_the_reduction_gui'>
+    <title >
+      Launch the Reduction GUI
+    </title>
+
+    <para>
+      To see the reduction procedure
+      using the GUI interface,
+      please watch this 
+    <ulink url='xxxWEBSITExxx/reduction/Software-UserGuide/movies/LrmecsReductionApp.html'>
+      <citetitle>video </citetitle>
+    </ulink>.
+    It shows a typical reduction session.
+    </para>
+
+
+    Before I go on to show you step by step the reduction procedure,
+    it is better to explain the basic principles of this GUI (and
+    other similar ones).
+
+    <para>
+    This GUI is used to gather user inputs about parameters that
+    are necessary to perform a reduction. When you start configuring,
+    dialog boxes pop up. These dialogs appear in a structured way, and
+    the sequence of emergence of dialogs shows a hierarchy.
+    As you go deeper in the hierarchy, the 
+    configuration dialog is more
+    specific and lower-level. For example,
+    the second-level configuration dialog is about the "reduction engine",
+    which is a high-level operation that converts measured data
+    to S(Q,E). At the deeper forth-level there is
+    a configuration dialog 
+    for users
+    to provide information about the energy axis and the scattering-angle
+    (phi) axis for the reduction operation  that converts
+    I(det, pix, tof) to S(phi,E).
+    </para>
+
+    <para>
+      Now I will explain the GUI in a step-by-step tutorial.
+      First let us start the application:
+
+    
+    <programlisting >
+      $ wxLrmecsReductionApp.py
+    </programlisting>
+    
+    A window will pop up, as shown in
+    <xref linkend="LRMECS_reduction_GUI_tutorial.Launch_the_reduction_gui.Main_GUI_frame"/>
+    
+    <figure id='LRMECS_reduction_GUI_tutorial.Launch_the_reduction_gui.Main_GUI_frame'>
+      <title >
+	Main GUI frame
+      </title>
+      
+      <mediaobject >
+	<imageobject >
+	  <imagedata width='70%' fileref='figures/LRMECS-gui-tutorial/main-window.png' scalefit='1'>
+	  </imagedata>
+	</imageobject>
+	<textobject >
+	  <phrase >
+	    Main GUI frame
+	  </phrase>
+	</textobject>
+      </mediaobject>
+    </figure>
+    
+    Clicking on the blue link will pop up a help web page.
+    </para>
+    
+    <para >
+      There are several buttons on this window:
+      
+      <itemizedlist >
+	
+	<listitem >
+	  Configure
+	</listitem>
+	<listitem >
+	  Save Configuration
+	</listitem>
+	<listitem >
+	  Run
+	</listitem>
+	<listitem >
+	  Exit
+	</listitem>
+	
+      </itemizedlist>
+      
+    </para>
+    
+    Click "Configure" to change settings, and the dialog in 
+    <xref linkend='LRMECS_reduction_GUI_tutorial.Launch_the_reduction_gui.Main_configuration_panel'/>
+    will pop up.
+    
+    <figure id='LRMECS_reduction_GUI_tutorial.Launch_the_reduction_gui.Main_configuration_panel'>
+      <title >
+	Main configuration panel
+      </title>
+      <mediaobject >
+	<imageobject >
+	  <imagedata width='70%' fileref='figures/LRMECS-gui-tutorial/configureApp.png' scalefit='1'>
+	  </imagedata>
+	</imageobject>
+	<textobject >
+	  <phrase >
+	    Main configuration panel
+	  </phrase>
+	</textobject>
+      </mediaobject>
+    </figure>
+    
+    
+    <para >
+      This window is a "configuration dialog" for DRCS. Please note that if you stop your mouse over an active text input field or an active button, a small tip will show up. 
+    </para>
+    
+    <para>
+      A configuration dialog is structured into two main parts.
+      The first row has three buttons: OK, Cancel, and Help.
+      If you click the "Help" button on the top-right corner, a help window will pop up to explain configurable items in current dialog.
+      Close the help window and you will return
+      to the configuration dialog 
+      with title "Settings of LrmecsReductionApp".
+    </para>
+
+    <para>
+      The second part of this configuration dialog is a list of
+      configurable items (although for this dialog there is only
+      one item). For each configurable item there is label,
+      a text box, and a button. The label explains what is the
+      configurable item, the text box contains the current value,
+      and the button provides further
+      configraton action for this item.
+    </para>
+
+    <para>
+      Click on
+      the "Set" button and the dialog of
+      <xref linkend='LRMECS_reduction_GUI_tutorial.Launch_the_reduction_gui.configurePowderReduction'/> will appear.
+    </para>
+
+    <figure id='LRMECS_reduction_GUI_tutorial.Launch_the_reduction_gui.configurePowderReduction'>
+      <title >
+	Configure the Powder Reduction Engine
+      </title>
+      <mediaobject >
+	<imageobject >
+	  <imagedata width='70%' fileref='figures/LRMECS-gui-tutorial/configurePowderReduction.png' scalefit='1'>
+	  </imagedata>
+	</imageobject>
+	<textobject >
+	  <phrase >
+	    Configure the Powder Reduction Engine
+	  </phrase>
+	</textobject>
+      </mediaobject>
+    </figure>
+    
+    
+    <sect3 id='LRMECS_reduction_GUI_tutorial.Launch_the_reduction_gui.Measurement'>
+<title >
+  Measurement Information
+</title>
+      
+The first configurable item is "LrmecsMeasurement".  
+Click the "Set" button, and we get the dialog of 
+<xref linkend='LRMECS_reduction_GUI_tutorial.Launch_the_reduction_gui.configureLrmecsMeasurement'/>.
+In this form we see fields for various data files including
+
+<itemizedlist >
+  <listitem >
+    main experiment data
+  </listitem>
+  <listitem >
+    vanadium calibration data
+  </listitem>
+  <listitem >
+    empty can data
+  </listitem>
+  <listitem >
+    calibration for empty can data
+  </listitem>
+</itemizedlist>
+
+<figure id='LRMECS_reduction_GUI_tutorial.Launch_the_reduction_gui.configureLrmecsMeasurement'>
+  <title >
+    Settings of LRMECS Measurement
+  </title>
+	
+  <mediaobject >
+    <imageobject >
+      <imagedata width='70%' fileref='figures/LRMECS-gui-tutorial/configureLrmecsMeasurement.png' scalefit='1'>
+      </imagedata>
+    </imageobject>
+    <textobject >
+      <phrase >
+	Settings of LRMECS Measurement
+      </phrase>
+    </textobject>
+  </mediaobject>
+</figure>
+
+<para>      
+Next to some fields you can find a "Choose" buttons. 
+Clicking the "choose" button will pop up a file dialog 
+where you can find your data file.
+</para>
+
+<para>
+Some example data files should be under ~/reduction/LRMECS if you followed
+<xref linkend='Prepare_LRMECS_Reduction_Directory'/> closely. 
+</para>
+
+<itemizedlist >
+  <listitem >
+    4849: main experiment data
+  </listitem>
+  <listitem >
+    4779: vanadium calibration data
+  </listitem>
+  <listitem >
+    4844: empty can data
+  </listitem>
+</itemizedlist>
+
+<para>
+  You should choose a data file for the item 
+  "path to Lrmecs data file", which is the data file for the main
+  experimental run. You can leave text boxes for other data files
+  empty if you want to run a quick reduction without
+  the vanadium calibration run and/or the empty can run.
+  After you choose all your data files, click OK button and now you are back to the "Settings of PowderReduction"
+(
+  <xref linkend='LRMECS_reduction_GUI_tutorial.Launch_the_reduction_gui.configurePowderReduction'/>
+)
+</para>
+
+    </sect3>    
+  
+    <sect3 id="LRMECS_Reduction_GUI_Tutorial.LaunchApp.Reducers">
+<title>
+  Reducers
+</title>
+The next two configurable items in 
+<xref linkend='LRMECS_reduction_GUI_tutorial.Launch_the_reduction_gui.configurePowderReduction'/>
+are
+"Reduce data to S(phi,E)" and "S(phi,E)->S(Q,E)", 
+the reduction engines. They should be easy to explore.
+Their main user inputs are axes on which the reduced
+data will be defined (energy axis, scattering angle axis,
+and momentum transfer axis).
+    </sect3>
+
+<sect3>
+<title>Output directory
+</title>
+<para>
+  The last item in
+  <xref linkend='LRMECS_reduction_GUI_tutorial.Launch_the_reduction_gui.configurePowderReduction'/>
+, "Output directory", has a "Choose" button that 
+  allows users to 
+  pick a output directory in a browser.
+</para>
+</sect3>
+
+<sect3>
+<title>
+  Run Application
+</title>
+
+Click on "Run" will start the reduction procedure. 
+
+<para>
+  The application will now read data from data files,
+  and do some preprocessing. After a few seconds, it will pop
+  up a window to ask you to 
+  choose time-independent background window.
+  See <xref linkend='LRMECS_reduction_GUI_tutorial.Launch_the_reduction_gui.tibgSelector'/>.
+
+  <note>
+    For more details about the time-independent background,
+    please read 
+    <ulink url='xxxARCSBOOKxxx'>
+      <citetitle>The ARCS reference manual</citetitle>
+    </ulink>
+    ->Chapter "Essential Data Processing"->
+    Section "Steps to Transforming Data into a Function
+    of Energy and Momentum"->Subsection "A Closer Look at
+    Each Task"->Subsubsection "Subtract Background" 
+  </note>
+
+  <para>
+  You will need to choose a time window which looks like
+  constant background. Perhaps 5000 to 5700 microseconds
+  would be a good choice in our case below.
+  </para>
+
+  <para>
+    Please close the plot window so that the reduction
+    can go on.
+  </para>
+
+  <figure id='LRMECS_reduction_GUI_tutorial.Launch_the_reduction_gui.tibgSelector'>
+    <title >
+      Select time-independent background window. Time is the horizontal 
+      axis (microseconds).
+    </title>
+    <mediaobject >
+      <imageobject >
+	<imagedata width='70%' fileref='figures/LRMECS-gui-tutorial/tibgSelector.png' scalefit='1'>
+	</imagedata>
+      </imageobject>
+      <textobject >
+	<phrase >
+	  Select time-independent background window
+	</phrase>
+      </textobject>
+    </mediaobject>
+  </figure>
+
+</para>
+
+If everything goes smoothly, a window will pop up with a happy message.
+      
+<figure id='LRMECS_reduction_GUI_tutorial.Launch_the_reduction_gui.Launch_reduction_application.Succeed!'>
+  <title >
+    Success!
+  </title>
+  <mediaobject >
+    <imageobject >
+      <imagedata width='70%' fileref='figures/LRMECS-gui-tutorial/done.png' scalefit='1'>
+      </imagedata>
+    </imageobject>
+    <textobject >
+      <phrase >
+	Succeed!
+      </phrase>
+    </textobject>
+  </mediaobject>
+</figure>
+
+It suggests you to start "HistogramGuiApp.py" to look at the reduction result.
+Most reduction results are saved in python-pickle format in the directory you 
+have picked for the "output directory".
+Here is a (incomplete) list of output files:
+      
+<itemizedlist >
+  <listitem >
+    spehist.pkl:  a histogram of S(phi,E)
+  </listitem>
+  <listitem >
+    sqehist.pkl:  a histogram of S(Q,E)
+  </listitem>
+<!--
+  <listitem >
+    mslice-data:  If you set "mslice" option of "Outputs" dialog to True,
+    data will also be output in mslice data formats.
+  </listitem>
+-->
+</itemizedlist>
+
+
+<para >
+  Histograms saved in python-pickle format can be loaded by histogramGui.py,
+  please read this	
+  <xref linkend='Histogram-UserGuide'/>
+  .
+</para>
+      
+      
+<para >
+  After clicking "OK", we are back in the main window as shown in
+  <xref linkend='LRMECS_reduction_GUI_tutorial.Launch_the_reduction_gui.Main_GUI_frame'/>.
+</para>
+      
+      
+<para >
+Congratulations! You have successfully reduced 
+a LRMECS dataset using DrChops.
+From here, you can:
+
+<orderedlist numeration='arabic'>
+<listitem>
+ do another reduction by clicking the configure button 
+ and changing settings, or
+</listitem>
+<listitem>
+ you can save the current configuration by clicking 
+ the save configuration button so that you can use that
+configuration some time later, or
+</listitem>
+<listitem>
+ you can exit by clicking the Exit button.
+</listitem>
+</orderedlist>
+</para>
+
+<note>
+  <title>Hint</title>
+  To reduce data in command line and in batch mode, please
+  read
+  <xref linkend="LRMECS_Reduction_Commandline_Tutorial"/>
+  .
+</note>
+</sect3>
+
+</sect2>    
+  
+</sect1>
+
+
+<!-- version-->
+<!-- $Id$-->
+
+<!-- Generated automatically by Renderer on Thu Apr 26 11:09:23 2007-->
+
+<!-- End of file -->

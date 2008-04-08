@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="us-ascii" ?>
+<!--
+
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+                                   Jiao Lin
+                      California Institute of Technology
+                        (C) 2007 All Rights Reserved
+
+ {LicenseText}
+
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+-->
+
+
+<chapter id='LRMECS'>
+
+  <title>LRMECS Reduction</title>
+
+<para>
+Congratulations on getting your software installed.
+This chapter now explains how to run the reduction software for the LRMECS 
+spectrometer at the Intense Pulsed Neutron Source.
+</para>
+
+<para>
+<xref linkend='Prepare_LRMECS_Reduction_Directory'/>
+ gives some information about data file formats and directories.
+</para>
+
+<para>
+<xref linkend='LRMECS_Reduction_GUI_Tutorial'/>
+explains how to use the data reduction application with a
+menu-driven GUI. This is the easiest approach for new users. We also 
+recommend that advanced users try this application first, in part to 
+get an idea of some of the capabilities of the reduction software.
+</para>
+
+
+  &reduction-Prepare_LRMECS_Reduction_Directory;
+  &reduction-LRMECS_Reduction_GUI_Tutorial;
+  &reduction-LRMECS_Reduction_Commandline_Tutorial;
+
+<!--
+  &reduction-LRMECS_Reduction_commandline_Tutorial;
+-->
+</chapter>
+

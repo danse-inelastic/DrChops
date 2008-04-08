@@ -1,0 +1,53 @@
+<!--
+
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+                                   Jiao Lin
+                      California Institute of Technology
+                        (C) 2007 All Rights Reserved
+
+ {LicenseText}
+
+ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+-->
+
+
+<chapter id='reduction-Install'>
+  <title >
+    Installation
+  </title>
+
+<!--  
+  <note>
+    Reduction software is upgrading to version 1.2 ...
+    Please come back 1 day or two to download the most
+    up-to-date binaries.
+    
+    <para>
+    
+    If you need ARCS reduction software right now, please
+    follow instructions on 
+    <xref linkend='Install_ARCS_software_from_SvnRepository'/>.
+    
+    </para>
+  </note>
+-->
+
+  &reduction-InstallFromBinaries;
+<!--
+  &reduction-InstallFromSource;
+-->
+  &reduction-InstallFromSvnRepository;
+<!--
+-->
+  
+</chapter>
+
+
+<!-- version-->
+<!-- $Id$-->
+
+<!-- Generated automatically by Renderer on Thu Apr 26 13:17:51 2007-->
+
+<!-- End of file -->
