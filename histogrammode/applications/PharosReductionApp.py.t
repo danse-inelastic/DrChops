@@ -11,7 +11,7 @@
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
 
-WEBSITE= "xxxWEBSITExxx"
+WEBSERVER= "xxxWEBSERVERxxx"
 
 
 from PowderReductionApp import PowderReductionApp as base
@@ -21,9 +21,9 @@ class PharosReductionApp( base ):
     onelinehelp = "A handy tool for reducing inelastic neutron \n"\
                   "scattering data from PHAROS.\n"
     gui_helpurl = "%s/click_monitor/PHAROS_Reduction_GUI_Tutorial" % (
-        WEBSITE, )
+        WEBSERVER, )
     helpurl ="%s/click_monitor/PHAROS_Reduction" % (
-        WEBSITE, )
+        WEBSERVER, )
 
 
     __doc__ = '''

@@ -12,7 +12,7 @@
 #
 
 
-WEBSITE= "xxxWEBSITExxx"
+WEBSERVER= "xxxWEBSERVERxxx"
 
 
 from PowderReductionApp import PowderReductionApp as base
@@ -22,9 +22,9 @@ class LrmecsReductionApp( base ):
     onelinehelp = "A handy tool for reducing inelastic neutron \n"\
                   "scattering data from LRMECS.\n"
     gui_helpurl = "%s/click_monitor/LRMECS_Reduction_GUI_Tutorial" % (
-        WEBSITE, )
+        WEBSERVER, )
     helpurl ="%s/click_monitor/LRMECS_Reduction" % (
-        WEBSITE, )
+        WEBSERVER, )
 
 
     __doc__ = '''

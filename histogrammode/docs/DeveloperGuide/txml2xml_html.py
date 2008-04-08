@@ -5,8 +5,11 @@
 # web_absolutepath is for pdf format product. Because pdf cannot contain movies and some other medias, we have to used absolute web links
 # web_relativepath is for html tar ball producet. It can contain everything that is documentation in one tar ball, so in most cases relative link is sufficient. Certainly there still are cases where you want to put up absolute links, for example those links to download binary installers, which should not be included in the documentation tar ball..
 
+
+from webserver import webserver
+
 urldict = {
     'xxxWEBSITExxx': "../../..",
-    'xxxDOWNLOADSxxx': "http://arcscluster.caltech.edu:5001/click_monitor",
+    'xxxDOWNLOADSxxx': "%s/click_monitor" % webserver,
     'xxxARCSBOOKxxx': "../../../ARCSBook/Inelastic_Book/latex/Inelastic_Book.pdf",
     }

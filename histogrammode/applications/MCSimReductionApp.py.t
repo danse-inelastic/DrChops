@@ -12,7 +12,7 @@
 #
 
 
-WEBSITE= "xxxWEBSITExxx"
+WEBSERVER= "xxxWEBSERVERxxx"
 
 
 from PowderReductionApp import PowderReductionApp as base
@@ -22,9 +22,9 @@ class MCSimReductionApp( base ):
     onelinehelp = "A handy tool for reducing simulated inelastic \n"\
                   "neutron scattering data.\n"
     gui_helpurl = "%s/click_monitor/MCSim_Reduction_GUI_Tutorial" % (
-        WEBSITE, )
+        WEBSERVER, )
     helpurl ="%s/click_monitor/MCSim_Reduction" % (
-        WEBSITE, )
+        WEBSERVER, )
 
 
     __doc__ = '''

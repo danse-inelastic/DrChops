@@ -1,0 +1,7 @@
+To change release webserver, you will need to change a few files.
+
+docs/Software-UserGuide: 
+  webserver.py in "reduction", "histogram", "multiphonon" 
+
+applications/Make.mm: WEBSERVER=...
+

@@ -80,12 +80,18 @@ make-executables:
 	done
 
 
-WEBSITE=http://arcscluster.caltech.edu:5001
+WEBSERVER=http://131.215.30.242:5001
 
 %.py: %.py.t
-	cat $< | sed 's|xxxDoxygenDocsxxx|$(DOXYGEN_DOCS)|g' | sed 's|xxxWEBSITExxx|$(WEBSITE)|g'  >   $@
+	cat $< | sed 's|xxxDoxygenDocsxxx|$(DOXYGEN_DOCS)|g' | sed 's|xxxWEBSERVERxxx|$(WEBSERVER)|g'  >   $@
 
 
+APPS_GENERATED_FROM_TEMPALATES = \
+	LrmecsReductionApp.py \
+	PharosReductionApp.py \
+	MCSimReductionApp.py \
+
+PROJ_CLEAN += $(APPS_GENERATED_FROM_TEMPALATES)
 
 # version
 # $Id: Make.mm 1440 2007-11-12 22:59:42Z linjiao $
