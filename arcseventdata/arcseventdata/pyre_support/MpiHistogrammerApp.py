@@ -86,7 +86,9 @@ class Application(base):
             from histogram.hdf import dump
             dump(h, h5filename, '/', 'c' )
             pass
-        return    
+
+        self._info.log( "times: %s" % os.times() )
+        return
     
     pass # end of Application
 
