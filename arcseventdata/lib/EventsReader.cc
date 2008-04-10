@@ -13,6 +13,8 @@
 
 
 #include <iostream>
+#include <cassert>
+
 #include "EventsReader.h"
 #ifdef DEBUG
 #include "journal/debug.h"

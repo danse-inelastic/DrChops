@@ -11,8 +11,10 @@
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 //
 
+#include <cassert>
 #include <fstream>
 #include <iostream>
+
 #ifdef DEBUG
 #include "journal/debug.h"
 #endif
