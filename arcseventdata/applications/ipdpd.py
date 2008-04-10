@@ -26,7 +26,7 @@ class Application(base):
         import pyre.inventory as pinv
 
         from arcseventdata.pyre_support.Tuple import Tuple
-        d_params = Tuple( 'd', default = '-50,50,1.' )
+        d_params = Tuple( 'd', default = '0,4.0,0.02' )
         d_params.meta['tip'] = "d-spacing bin parameters (begin, end, step). units: AA"
 
         ARCSxml = pinv.str('x', default = "ARCS.xml")

@@ -32,7 +32,7 @@ class Application(base):
         Q_params = Tuple( 'Q', default = '0,13,1.' )
         Q_params.meta['tip'] = "momentum transfer bin parameters (begin, end, step). units: angstrom**-1"
 
-        ARCSxml = pinv.str('x', default = "ARCSxml")
+        ARCSxml = pinv.str('x', default = "ARCS.xml")
         ARCSxml.meta['tip'] = "ARCS instrument xml"
 
         Ei = pinv.float( 'I', default = 60 )

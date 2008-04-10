@@ -29,7 +29,7 @@ class Application(base):
         E_params = Tuple( 'E', default = '-50,50,1.' )
         E_params.meta['tip'] = "energy bin parameters (begin, end, step). units: meV"
 
-        ARCSxml = pinv.str('x', default = "ARCSxml")
+        ARCSxml = pinv.str('x', default = "ARCS.xml")
         ARCSxml.meta['tip'] = "ARCS instrument xml"
 
         Ei = pinv.float( 'I', default = 60 )

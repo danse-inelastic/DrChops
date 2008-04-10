@@ -29,7 +29,7 @@ class Application(base):
         dspacingparams = Tuple( 't', default = '0,5,0.01' )
         dspacingparams.meta['tip'] = "d-spacing bin parameters (begin, end, step). units: angstrom"
 
-        ARCSxml = pinv.str('x', default = "ARCSxml")
+        ARCSxml = pinv.str('x', default = "ARCS.xml")
         ARCSxml.meta['tip'] = "ARCS instrument xml"
 
         pass # end of Inventory

@@ -29,7 +29,7 @@ class Application(base):
         tof_params = Tuple( 't', default = '0,16000,100' )
         tof_params.meta['tip'] = "tof bin parameters (begin, end, step). units: us"
 
-        ARCSxml = pinv.str('x', default = "ARCSxml")
+        ARCSxml = pinv.str('x', default = "ARCS.xml")
         ARCSxml.meta['tip'] = "ARCS instrument xml"
 
         pass # end of Inventory
