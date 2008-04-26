@@ -10,6 +10,7 @@ namespace ARCS_EventData {
   const double K2V = 1./V2K; // Convert k[1/AA] to v[m/s] 
   const double SE2V = 437.3949;  /* Convert sqrt(E)[meV] to v[m/s] */
   const double VS2E = 5.227e-6;	 /* Convert (v[m/s])**2 to E[meV] */
+  const double SE2K = SE2V * V2K;
 
 }
 

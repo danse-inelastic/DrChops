@@ -35,17 +35,19 @@ def events2IQE(events, n, IQE, Ei, pixelpositions,
     ntotpixels = len(pixelpositions)
     
     from numpyext import getdataptr
-    pixelpositions = getdataptr( pixelpositions )
+    pixelpositions_ptr = getdataptr( pixelpositions )
     
     import arcseventdata as binding
-    return binding.events2IQE_numpyarray(
+    binding.events2IQE_numpyarray(
         events, n,
         Q_begin, Q_end, Q_step,
         E_begin, E_end, E_step,
         IQE.data().storage().asNumarray(),
         Ei,
-        pixelpositions, ntotpixels, tofUnit, mod2sample,
+        pixelpositions_ptr, ntotpixels, tofUnit, mod2sample,
         emission_time)
+
+    return IQE
 
 
 # version

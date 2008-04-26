@@ -51,6 +51,8 @@ EXPORT_PYTHON_MODULES = \
 	longpixelID.py \
 	monitorData.py \
 	mslice_spe_writer.py \
+	normalize_iqe.py \
+	normalize_iqe_py_prototype.py \
 	pixelpositions2angles.py \
 	read2colascii.py \
 	units.py \

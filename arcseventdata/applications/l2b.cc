@@ -1,6 +1,7 @@
 #include "arcseventdata/littleEndian2bigEndian.h"
 #include <iostream>
 #include <fstream>
+#include <cassert>
 
 
 using namespace std;

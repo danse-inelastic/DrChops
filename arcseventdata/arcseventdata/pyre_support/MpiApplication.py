@@ -85,8 +85,20 @@ class Application(base, ParallelComponent):
                 pass
             continue
         sys.argv = new
+
+        if '-h' in sys.argv : self._showHelpOnly = True
         
         self._debug.log( 'sys.argv=%s' % (sys.argv, ) )
+        return
+
+
+    def _init(self):
+        base._init(self)
+        return
+
+
+    def _fini(self):
+        base._fini(self)
         return
 
     pass # end of Application

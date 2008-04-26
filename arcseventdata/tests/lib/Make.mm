@@ -24,6 +24,7 @@ PROJ_CPPTESTS = test_Histogrammer1 test_Histogrammer2 test_Event2Quantity \
 	test_Event2tof \
 	test_Event2QE \
 	test_Event2pixd \
+	test_normalize_iqe \
 
 PROJ_CPPEXE = 
 PROJ_TESTS = $(PROJ_CPPTESTS) $(PROJ_CPPEXE) $(PROJ_PYTESTS)
@@ -82,6 +83,9 @@ test_events2EvenlySpacedIxy: test_events2EvenlySpacedIxy.cc $(BLD_LIBDIR)/libarc
 
 test_mslice_formating: test_mslice_formating.cc $(BLD_LIBDIR)/libarcseventdata.$(EXT_SAR)
 	$(CXX) $(CXXFLAGS) $(LCXXFLAGS) -o $@ test_mslice_formating.cc $(PROJ_LIBRARIES)
+
+test_normalize_iqe: test_normalize_iqe.cc $(BLD_LIBDIR)/libarcseventdata.$(EXT_SAR)
+	$(CXX) $(CXXFLAGS) $(LCXXFLAGS) -o $@ test_normalize_iqe.cc $(PROJ_LIBRARIES)
 
 
 

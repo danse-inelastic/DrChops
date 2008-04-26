@@ -62,6 +62,12 @@ class Application(base):
 
 
     def main(self):
+        self.compute()
+        self.save()
+        return
+
+
+    def compute(self):
         import sys
         event_source = self.inventory.event_source
 
@@ -71,23 +77,38 @@ class Application(base):
             nevents = ntotal
             pass
              
-        h5filename = self.inventory.h5filename
-        
-        if os.path.exists(h5filename):
-            raise IOError, "%s already exists" % h5filename
-
         reduction_args = self.build_args()
         
         engine = self.inventory.engine
         h = engine(event_source, nevents, *reduction_args )
+        self.histogram = h
 
+        self._info.log( "times: %s" % (os.times(),) )
+        return
+
+
+    def save(self):
         if self.mpiRank == 0:
+            h5filename = self.h5filename
             self._info.log( "writing histogram to file %r" % h5filename )
+            h = self.histogram
             from histogram.hdf import dump
             dump(h, h5filename, '/', 'c' )
             pass
+        return
 
-        self._info.log( "times: %s" % os.times() )
+
+    def _init(self):
+        base._init(self)
+        h5filename = self.inventory.h5filename        
+        if os.path.exists(h5filename):
+            raise IOError, "%s already exists" % h5filename
+        self.h5filename = h5filename
+        return
+
+
+    def _fini(self):
+        base._fini(self)
         return
     
     pass # end of Application

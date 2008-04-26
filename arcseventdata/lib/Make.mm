@@ -27,6 +27,7 @@ PROJ_SRCS = \
 	Event2QE.cc \
 	Event2tof.cc \
 	EventsReader.cc \
+	normalize_iqe.cc \
 	readPixelPositions.cc \
 
 
@@ -59,6 +60,7 @@ export:: export-headers export-libraries
 endif
 
 EXPORT_HEADERS = \
+	AbstractMask.h \
 	Event.h \
 	Event2Quantity.h \
 	Event2d.h \
@@ -84,6 +86,7 @@ EXPORT_HEADERS = \
 	mappers.h \
 	mslice_formating.h \
 	mslice_formating.icc \
+	normalize_iqe.h normalize_iqe.icc \
 	readPixelPositions.h \
 
 EXPORT_LIBS = $(PROJ_SAR)

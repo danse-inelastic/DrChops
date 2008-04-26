@@ -1,0 +1,66 @@
+// -*- C++ -*-
+//
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+//
+//                                   Jiao Lin
+//                      California Institute of Technology
+//                        (C) 2007  All Rights Reserved
+//
+// {LicenseText}
+//
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+//
+
+
+#ifndef H_ARCS_EVENTDATA_NORMALIZE_IQE
+#error normalize_iqe.icc not meaningful outside normalize_iqe.h
+#else
+
+#include "conversion.h"
+#include <cmath>
+
+
+template <typename Float>
+Float ARCS_EventData::calcQ( const Float *position, Float ei, Float e ) 
+{
+  Float ef = ei - e;
+  // q**2 = ki**2 + kf**2 - 2ki*kf*cos(theta)
+  // cos(theta) = x/r
+  Float x = position[0], y = position[1], z = position[2];
+  Float r = std::sqrt( x*x + y*y + z*z );
+  Float cost = x/r;
+  Float q2inmev = ei + ef - 2 * sqrt(ei)*sqrt(ef) * cost;
+  return  std::sqrt( q2inmev ) * SE2K;
+}
+
+
+template <typename IQE, typename Float, typename Index>
+void ARCS_EventData::calcSolidAngleQE
+( IQE & sa, Float ei, 
+  Index npixels, const Float * pixelpositions, 
+  const AbstractMask & mask)
+{
+  Float ebegin = sa.ybegin, eend = sa.yend, estep = sa.ystep;
+
+  for ( Float e = ebegin + estep/2.; e < eend; e+=estep/2. ) {
+
+    for ( Index pixelID = 0; pixelID < npixels; pixelID ++ ) {
+
+      if (mask( pixelID ) ) continue;
+
+      const Float *position = pixelpositions +  pixelID * 3;
+      Float q = calcQ( position, ei, e );
+      sa( q,e ) = sa(q,e) + 1.;
+    }
+  }
+
+}
+
+
+#endif
+
+
+// version
+// $Id$
+
+// End of file 

@@ -1,5 +1,6 @@
 #include <iostream>
 #include <fstream>
+#include <cassert>
 
 #include "arcseventdata/Event.h"
 #include "arcseventdata/Event2d.h"

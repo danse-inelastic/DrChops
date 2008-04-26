@@ -12,22 +12,29 @@
 //
 
 
-#ifndef H_ARCSEVENTDATA_READPIXELPOSITIONS
-#define H_ARCSEVENTDATA_READPIXELPOSITIONS
+#ifndef WRAP_NORMALIZE_IQE_H
+#define WRAP_NORMALIZE_IQE_H
 
-namespace ARCS_EventData{
-  
-  
-  double *readPixelPositions
-  ( const char * infilename, int npacks = 115, int ndetsperpack = 8,
-    int npixelsperdet = 128);
-  
-}
 
-#endif // H_ARCSEVENTDATA_READPIXELPOSITIONS
+#include "Python.h"
+
+
+namespace wrap_arcseventdata
+{
+
+  // calcSolidAngleQE
+  extern char calcSolidAngleQE_numpyarray__name__[];
+  extern char calcSolidAngleQE_numpyarray__doc__[];
+  extern "C"
+  PyObject * calcSolidAngleQE_numpyarray(PyObject *, PyObject *args);
+
+} // wrap_arcseventdata::
+
+#endif // WRAP_NORMALIZE_IQE_H
+
 
 
 // version
 // $Id$
 
-// End of file 
+// End of file
