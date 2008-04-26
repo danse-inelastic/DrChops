@@ -26,7 +26,7 @@ int main()
 
   //check
   int npacks = 115, ndetsperpack = 8, npixelsperdet = 128, nbytesperdouble=8, ndoublepervector=3;
-  assert(length==(npacks+1)*ndetsperpack*npixelsperdet*ndoublepervector*nbytesperdouble);
+  assert(length==(npacks)*ndetsperpack*npixelsperdet*ndoublepervector*nbytesperdouble);
 
   // read
   char *buffer = new char[length];

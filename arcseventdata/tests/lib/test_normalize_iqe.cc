@@ -20,7 +20,7 @@ int main()
   double ei(70);
   NoMask mask;
   unsigned int npixels = 1024 * 100;
-  double * pixelpositions = readPixelPositions( "pixelID2position.bin.new" );
+  double * pixelpositions = readPixelPositions( "pixelID2position.bin" );
 
   calcSolidAngleQE<SaQE, double, unsigned int>
     ( sa, ei, 
