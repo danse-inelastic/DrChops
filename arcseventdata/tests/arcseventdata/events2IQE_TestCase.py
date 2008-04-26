@@ -22,7 +22,7 @@ class events2IQE_TestCase(TestCase):
         'events2IQE'
         from  arcseventdata.events2IQE import  events2IQE
         import arcseventdata
-        events = arcseventdata.readevents( "events.dat", 10 )
+        events, n = arcseventdata.readevents( "events.dat", 10 )
         
         import histogram as H
         IQE = H.histogram(
@@ -36,8 +36,7 @@ class events2IQE_TestCase(TestCase):
         pixelpositions = arcseventdata.readpixelpositions( 'pixelID2position.bin' )
         Ei = 60
         
-        events2IQE( events, 10, IQE, Ei, pixelpositions,
-                    npacks = 99)
+        events2IQE( events, n, IQE, Ei, pixelpositions )
         return
     
     pass # end of events2IQE_TestCase

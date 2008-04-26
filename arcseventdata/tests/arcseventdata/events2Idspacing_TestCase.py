@@ -22,17 +22,19 @@ class events2Idspacing_TestCase(TestCase):
         'events2Idspacing'
         import arcseventdata
         from  arcseventdata.events2Idspacing import events2Idspacing
-        events = arcseventdata.readevents( "events.dat", 10 )
+        events,n = arcseventdata.readevents( "events.dat", 10 )
         pixelPositions = arcseventdata.readpixelpositions( 'pixelID2position.bin' )
         import histogram as H
-        daxis = H.axis('d', boundaries = H.arange(0, 4.0, 0.01) )
+        daxis = H.axis('d',
+                       boundaries = H.arange(0, 4.0, 0.01),
+                       unit = 'angstrom')
         h = H.histogram(
             'I(d spacing)',
             [ daxis ],
             data_type = 'int',
             )
 
-        events2Idspacing( events, 10, h, pixelPositions)
+        events2Idspacing( events, n, h, pixelPositions)
         return
     
     pass # end of events2Idspacing_TestCase

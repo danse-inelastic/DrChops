@@ -12,19 +12,6 @@
 #
 
 
-def read_pixelPositions( ARCSxml ):
-    from arcseventdata.getinstrumentinfo import getinstrumentinfo
-    infos = getinstrumentinfo(ARCSxml)
-    npacks, ndetsperpack, npixelsperdet = infos[
-        'detector-system-dimensions']
-    pixelPositionsFilename = infos[
-        'pixelID-position mapping binary file']
-    import arcseventdata
-    pixelPositions = arcseventdata.readpixelpositions(
-        pixelPositionsFilename, npacks, ndetsperpack, npixelsperdet )
-    return pixelPositions
-        
-        
 import unittest
 
 from unittest import TestCase
@@ -40,12 +27,9 @@ class normalize_iqe_TestCase(TestCase):
         ei = 70
         npixels = 1024*100
 
-        pixelPositions = read_pixelPositions( 'ARCS.xml' )
-        
-        from numpyext import getdataptr
-        pixelPositions = getdataptr( pixelPositions )
-        
         import arcseventdata.arcseventdata as aa
+        pixelPositions = aa.readpixelpositions( 'pixelID2position.bin' )
+        
         aa.calcSolidAngleQE_numpyarray(
             qbegin, qend, qstep, ebegin, eend, estep, sa,
             ei, npixels, pixelPositions)

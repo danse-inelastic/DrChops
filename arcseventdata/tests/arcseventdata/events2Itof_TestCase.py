@@ -22,7 +22,7 @@ class events2Itof_TestCase(TestCase):
         'events2Itof'
         from  arcseventdata.events2Itof import  events2Itof
         import arcseventdata
-        events = arcseventdata.readevents( "events.dat", 10 )
+        events, n = arcseventdata.readevents( "events.dat", 10 )
         
         import histogram as H
         tofaxis = H.axis( 'tof', boundaries = H.arange(0, 1000, 10), unit = "microsecond" )
@@ -32,7 +32,7 @@ class events2Itof_TestCase(TestCase):
             tofaxis,
             ],
             data_type = 'int')
-        events2Itof( events, 10, Itof )
+        events2Itof( events, n, 115*8*128, Itof )
         return
     
     pass # end of events2Itof_TestCase

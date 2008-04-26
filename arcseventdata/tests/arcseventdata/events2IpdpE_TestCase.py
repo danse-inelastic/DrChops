@@ -22,24 +22,23 @@ class events2IpdpE_TestCase(TestCase):
         'events2IpdpE'
         from  arcseventdata.events2IpdpE import  events2IpdpE
         import arcseventdata
-        events = arcseventdata.readevents( "events.dat", 10 )
+        events, n = arcseventdata.readevents( "events.dat", 10 )
         
         import histogram as H
         IpdpE = H.histogram(
             'I(pack, detector, pixel, E)',
             [
-            ('detectorpackID', range(100)),
+            ('detectorpackID', range(115)),
             ('detectorID', range(8)),
             ('pixelID', range(128) ),
-            ('energy', H.arange(-50,50,1)),
+            ('energy', H.arange(-50,50.001,1), 'meV'),
             ],
             data_type = 'int')
         
         pixelpositions = arcseventdata.readpixelpositions( 'pixelID2position.bin' )
         Ei = 60
         
-        events2IpdpE( events, 10, IpdpE, Ei, pixelpositions,
-                      npacks = 99)
+        events2IpdpE( events, n, IpdpE, Ei, pixelpositions )
         return
     
     pass # end of events2IpdpE_TestCase

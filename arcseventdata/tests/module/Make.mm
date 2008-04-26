@@ -15,7 +15,7 @@ PACKAGE = tests
 
 PROJ_CLEAN += $(PROJ_CPPTESTS)
 
-PROJ_PYTESTS = signon.py events2Ipix_TestCase.py
+PROJ_PYTESTS = alltests.py 
 PROJ_CPPTESTS = 
 
 PROJ_CPPEXE = 

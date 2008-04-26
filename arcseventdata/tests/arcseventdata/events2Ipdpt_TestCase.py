@@ -22,21 +22,20 @@ class events2Ipdpt_TestCase(TestCase):
         'events2Ipdpt'
         from  arcseventdata.events2Ipdpt import  events2Ipdpt
         import arcseventdata
-        events = arcseventdata.readevents( "events.dat", 10 )
+        events, n = arcseventdata.readevents( "events.dat", 10 )
         
         import histogram as H
         Ipdpt = H.histogram(
             'I(pack, detector, pixel, tof)',
             [
-            ('detectorpackID', range(100)),
+            ('detectorpackID', range(115)),
             ('detectorID', range(8)),
             ('pixelID', range(128) ),
             ('tof', H.arange(0,1.e-4,1.e-7)),
             ],
             data_type = 'int')
         
-        events2Ipdpt( events, 10, Ipdpt, 
-                      npacks = 99)
+        events2Ipdpt( events, n, Ipdpt )
         return
     
     pass # end of events2Ipdpt_TestCase

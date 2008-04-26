@@ -27,6 +27,11 @@ def getnumberofevents( eventdatafilename ):
     return nevents
 
 
+def getinstrumentinfo( *args, **kwds ):
+    from getinstrumentinfo import getinstrumentinfo
+    return getinstrumentinfo( *args, **kwds )
+
+
 def readevents( filename, n, start = 0):
     ntotal = getnumberofevents( filename )
     if start >= ntotal : raise IOError, "no neutrons to read"
@@ -35,7 +40,8 @@ def readevents( filename, n, start = 0):
     return events, n
 
 
-def readpixelpositions( filename, npacks, ndetsperpack, npixelsperdet):
+def readpixelpositions( filename,
+                        npacks = 115, ndetsperpack = 8, npixelsperdet = 128):
     s = open(filename).read()
     import numpy
     arr = numpy.fromstring( s, numpy.double )

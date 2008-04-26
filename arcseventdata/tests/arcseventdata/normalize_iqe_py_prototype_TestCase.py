@@ -52,7 +52,12 @@ class TestCase(TestCase):
         return
 
 
-    def test2(self):
+    # this test takes a long time to finish, and the function
+    # to test is a prototype implementation in python, and
+    # there is c++ implementation already tested in
+    # normalize_iqe_TestCase. So this test is not really
+    # important
+    def _test2(self):
         'normalize_iqe: calcSolidAngleQE'
         from arcseventdata.getinstrumentinfo import getinstrumentinfo
         ARCSxml = 'ARCS.xml'

@@ -22,7 +22,7 @@ class events2Ipdp_TestCase(TestCase):
         'events2Ipdp'
         from  arcseventdata.events2Ipdp import  events2Ipdp
         import arcseventdata
-        events = arcseventdata.readevents( "events.dat", 10 )
+        events, n = arcseventdata.readevents( "events.dat", 10 )
         
         import histogram as H
         Ipdp = H.histogram(
@@ -33,7 +33,7 @@ class events2Ipdp_TestCase(TestCase):
             ('pixelID', range(128) ),
             ],
             data_type = 'int')
-        events2Ipdp( events, 10, Ipdp )
+        events2Ipdp( events, n, Ipdp )
         return
     
     pass # end of events2Ipdp_TestCase

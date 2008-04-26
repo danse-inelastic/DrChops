@@ -37,7 +37,7 @@ class events2Ipdpd_TestCase(TestCase):
         
         pixelpositions = arcseventdata.readpixelpositions( 'pixelID2position.bin' )
         
-        events2Ipdpd( events, nevents, Ipdpd, pixelpositions, npacks = 115)
+        events2Ipdpd( events, nevents, Ipdpd, pixelpositions)
         return
     
     pass # end of events2Ipdpd_TestCase
