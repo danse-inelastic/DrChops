@@ -50,7 +50,14 @@ void ARCS_EventData::calcSolidAngleQE
 
       const Float *position = pixelpositions +  pixelID * 3;
       Float q = calcQ( position, ei, e );
-      sa( q,e ) = sa(q,e) + 1.;
+      try {
+	sa( q,e ) = sa(q,e) + 1.;
+      }
+      catch (DANSE::Histogram::OutOfBound err) {
+#ifdef DEBUG
+	// use journal to record this error
+#endif
+      }
     }
   }
 
