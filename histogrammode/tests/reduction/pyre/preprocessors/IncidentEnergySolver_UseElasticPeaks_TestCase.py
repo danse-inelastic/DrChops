@@ -32,7 +32,7 @@ class IncidentEnergySolver_UseElasticPeaks_TestCase(TestCase):
 
         #create a pyre script to run the test
         class Test(Script):
-
+            
             class Inventory(Script.Inventory):
                 import pyre.inventory as inv
                 eiSolver = inv.facility("eiSolver", factory = Solver)

@@ -50,6 +50,15 @@ class IncidentEnergySolver_UseElasticPeaks(base):
         numPoints.meta['tip'] = "number of sampling points around "\
                               "the elastic peak at a I(tof) curve"
 
+        energyAxis = inv.str( 'energyAxis', default = '20*meV, 200*meV, 0.5*meV' )
+        energyAxis.meta['tip'] = (
+            'a tuple of (Emin, Emax, dE) to create an axis of neutron energy' \
+            'on which the I(E) histogram will be obtained. This I(E) curve should' \
+            'show a peak, and the position of that peak is the neutron energy' \
+            'we want to compute.'
+            )
+        
+        
         detectorSlice = inv.str( 'detectorSlice', default = "(100,125), ()",
                                  validator = verifyDetectorSlice)
         detectorSlice.meta['tip'] = '''
@@ -65,7 +74,7 @@ and all 40 pixels of those 25 detectors, then
 
 The empty bracket means all pixels for every detector.
 '''
-                                 
+        
         pass # end of Inventory
     
     
@@ -83,6 +92,9 @@ The empty bracket means all pixels for every detector.
         si = self.inventory
         self.numPoints = si.numPoints
         self.detectorSlice = eval(si.detectorSlice)
+        import reduction.units as units
+        meV = units.energy.meV
+        self.energyAxis = eval(si.energyAxis)
         return
 
 
@@ -91,6 +103,7 @@ The empty bracket means all pixels for every detector.
         self._solver = Solver(
             numPoints = self.numPoints,
             detectorSlice = self.detectorSlice,
+            Eaxis = self.energyAxis,
             )
         return
 

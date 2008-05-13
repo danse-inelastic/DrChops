@@ -42,7 +42,7 @@ class Run:
     def getInstrument(self):
         return instrument, geometer
 
-    def getIdpt(self, dummy = None):
+    def getIdpt(self, detectorID = None):
         from histogram import histogram, datasetFromFunction, axis, arange
         detIDs = range( nTotDets )
         pixIDs = range( nPixels )

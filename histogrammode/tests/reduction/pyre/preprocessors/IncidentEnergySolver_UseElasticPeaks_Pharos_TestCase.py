@@ -12,7 +12,8 @@
 #
 
 
-from reduction.pyre.preprocessors.IncidentEnergySolver_UseElasticPeaks import IncidentEnergySolver_UseElasticPeaks as Solver
+from reduction.pyre.preprocessors.IncidentEnergySolver_UseElasticPeaks \
+     import IncidentEnergySolver_UseElasticPeaks as Solver
 
 from pyre.applications.Script import Script
 
@@ -56,6 +57,7 @@ class IncidentEnergySolver_UseElasticPeaks_Pharos_TestCase(TestCase):
             def _defaults(self):
                 eiSolver = self.inventory.eiSolver
                 eiSolver.inventory.detectorSlice = "(100, 120), ()"
+                eiSolver.inventory.energyAxis = "30*meV,80*meV,0.5*meV"
                 return
             
             def _configure(self):
