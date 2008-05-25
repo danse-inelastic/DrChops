@@ -16,7 +16,9 @@ import journal
 
 
 from reduction.interactive import *
-
+cm = units.length.cm
+mm = units.length.mm
+degree = units.angle.degree
 
 import unittestX as unittest
 
@@ -27,7 +29,7 @@ class reduction_interactive__init__TestCase(unittest.TestCase):
     def test(self):
         """vanadiumPlate
         """
-        vp = vanadiumPlate( 10, 5, 135 )
+        vp = vanadiumPlate( height = 10*cm, width = 5*cm, darkAngle = 135*degree )
         return
     
 

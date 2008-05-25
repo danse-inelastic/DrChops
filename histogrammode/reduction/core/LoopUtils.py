@@ -18,7 +18,9 @@
 
 
 
-from instrument.elements.DetectorVisitor import DetectorVisitor
+from instrument.elements.DetectorVisitor import DetectorVisitor as base
+class DetectorVisitor(base):
+    def onSampleAssembly(self, sampleassembly): return
 
 
 class HistogramProcessor:

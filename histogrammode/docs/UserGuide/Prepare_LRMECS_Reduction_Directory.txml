@@ -84,9 +84,11 @@ Note
 	an example of how to lay out your directory structure
         to make your reduction easier. You don't need to follow
         these procedures. You could put your data files anywhere
-        you like, and you just need to let the reduction application
-        know about them by using either the GUI interface or
-        the command line options.
+        you like, but you need to let the reduction application
+	know about them by using either the GUI interface or
+	by setting some command line options (for details, please
+	read <xref linkend="reduction-UnixCommands-LrmecsReductionApp"/>).
+
     </para></note>
 
 

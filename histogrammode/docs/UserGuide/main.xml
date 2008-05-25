@@ -23,7 +23,7 @@
 <!ENTITY reduction-PHAROS_Parallel_Reduction SYSTEM "PHAROS_Parallel_Reduction.xml">
 
 <!ENTITY reduction-UnixCommands SYSTEM "UnixCommands.xml">
-<!ENTITY reduction-Scripting SYSTEM "Scripting.xml">
+<!ENTITY reduction-Interactive SYSTEM "Interactive.xml">
 <!--
 <!ENTITY reduction-HistogramViewer_Tutorial SYSTEM "HistogramViewer_Tutorial.xml">
 <!ENTITY reduction-Multiphonon SYSTEM "Multiphonon.xml">
@@ -42,7 +42,7 @@
 &reduction-LRMECS;
 &reduction-PHAROS;
 &reduction-UnixCommands;
-&reduction-Scripting;
+&reduction-Interactive;
 <!--
 &reduction-HistogramViewer_Tutorial;
 &reduction-Multiphonon;

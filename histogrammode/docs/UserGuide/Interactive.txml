@@ -14,30 +14,30 @@
 
 -->
 
-<chapter id='reduction.Scripting'>
+<chapter id='reduction.Interactive'>
   
-  <title>Scripting interface</title>
+  <title>Interactive reduction interface</title>
 
-  <sect1 id="Scripting.Introduction">
+  <sect1 id="Interactive.Introduction">
 
-    <title> Introduction to the Style of the Scripting Interface </title>
+    <title> Introduction to the Style of the Interactive Reduction Interface </title>
     <para>
       To get a feeling of the python command-line interface
       of DRCS, please watch this 
-    <ulink url='xxxWEBSITExxx/reduction/Software-UserGuide/movies/scripting-LrmecsReduction.html'>
+    <ulink url='xxxWEBSITExxx/reduction/Software-UserGuide/movies/interactive-LrmecsReduction.html'>
       <citetitle>short video </citetitle>
     </ulink>.
     It shows a few commands that reduce raw data from a LRMECS experiment
     to S(Q,E). The python commands are run inside an embedded python
     shell within the Histogram GUI. 
     More demos can be found in 
-    <xref linkend='Scripting.Demo'/>. 
-    An excellent preparation for using the scripting interface is some
+    <xref linkend='Interactive.Demo'/>. 
+    An excellent preparation for using the interactive reduction interface is some
     knowledge of the language Python.
     </para>
 
 <para>
-The DRCS scripting interface consists of several python 
+The DRCS interactive reduction interface consists of several python 
 "commands".
 Each command performs one kind of operation. 
 I will use the command "solveEi" as an example, and
@@ -48,7 +48,7 @@ experimental run.
 Note the Python syntax:
 
 <programlisting>
-  >>> from reduction.scripting import *
+  >>> from reduction.interactive import *
   >>> getRun.select('lrmecs')
   >>> run = getRun( '4849' )
   >>> ei = solveEi( run )
@@ -64,7 +64,7 @@ This help request will print out a help page about
 the "solveEi" command:
 
 <programlisting>
-Help on class IncidentEnergySolver_UseElasticPeaksInterface in module reduction.scripting.FacilityFrontEnd:
+Help on class IncidentEnergySolver_UseElasticPeaksInterface in module reduction.interactive.FacilityFrontEnd:
 
 class IncidentEnergySolver_UseElasticPeaksInterface
  |  Incident energy solver originally written by Max Kresch.
@@ -114,7 +114,7 @@ invoke the "help" method again:
 The output looks like
 
 <programlisting>
-Help on class IncidentEnergySolver_UseMonitorsInterface in module reduction.scripting.FacilityFrontEnd:
+Help on class IncidentEnergySolver_UseMonitorsInterface in module reduction.interactive.FacilityFrontEnd:
 
 class IncidentEnergySolver_UseMonitorsInterface
  |  calcualte Ei from I(tof) data of two monitors.
@@ -168,7 +168,7 @@ reduction procedure and make you get familiar with several commands.
 
 </sect1>
 
-<sect1 id="Scripting.LRMECS_reduction_tutorial">
+<sect1 id="Interactive.LRMECS_reduction_tutorial">
 <title>LRMECS reduction tutorial</title>
 
 <para>
@@ -185,10 +185,10 @@ Now let us start python interpreter:
   $ python
 </programlisting>
 
-and then import reduction scripting support:
+and then import the interactive reduction support:
 
 <programlisting>
-  >>> from reduction.scripting import *
+  >>> from reduction.interactive import *
 </programlisting>
 
 For a listing of reduction commands, please do
@@ -292,16 +292,16 @@ The last line
 </programlisting>
 
 plots the reduced S(Q,E), as show in 
-<xref linkend="Scripting.LRMECS_reduction_tutorial.SQE"/>
+<xref linkend="Interactive.LRMECS_reduction_tutorial.SQE"/>
 </para>
 
-<figure id='Scripting.LRMECS_reduction_tutorial.SQE'>
+<figure id='Interactive.LRMECS_reduction_tutorial.SQE'>
   <title >
     S(Q,E)
   </title>
   <mediaobject >
     <imageobject >
-      <imagedata width='70%' fileref='figures/scripting/LRMECS_reduction_tutorial/SQE.png' scalefit='1'>
+      <imagedata width='70%' fileref='figures/interactive/LRMECS_reduction_tutorial/SQE.png' scalefit='1'>
       </imagedata>
     </imageobject>
     <textobject >
@@ -314,7 +314,7 @@ plots the reduced S(Q,E), as show in
 
 <para>
 For details of those commands, please read
-<xref linkend="Scripting.CommandReference"/>.
+<xref linkend="Interactive.CommandReference"/>.
 </para>
 
 <para>
@@ -356,16 +356,16 @@ Now we reduce the data again:
 </programlisting>
 
 The plot is shown in
-<xref linkend="Scripting.LRMECS_reduction_tutorial.SQE-goodei"/>.
+<xref linkend="Interactive.LRMECS_reduction_tutorial.SQE-goodei"/>.
 </para>
 
-<figure id='Scripting.LRMECS_reduction_tutorial.SQE-goodei'>
+<figure id='Interactive.LRMECS_reduction_tutorial.SQE-goodei'>
   <title >
     S(Q,E)
   </title>
   <mediaobject >
     <imageobject >
-      <imagedata width='70%' fileref='figures/scripting/LRMECS_reduction_tutorial/SQE-goodei.png' scalefit='1'>
+      <imagedata width='70%' fileref='figures/interactive/LRMECS_reduction_tutorial/SQE-goodei.png' scalefit='1'>
       </imagedata>
     </imageobject>
     <textobject >
@@ -382,10 +382,10 @@ better reduction.
 </para>
 </sect1>
 
-<sect1 id="Scripting.CommandReference">
+<sect1 id="Interactive.CommandReference">
   <title>Command reference</title>
     
-<sect2 id='Scripting.CommandReference.getRun'>
+<sect2 id='Interactive.CommandReference.getRun'>
 
   <title>getRun</title>
 
@@ -499,7 +499,7 @@ The most important methods are "getDetPixTOFData" and "getInstrument".
 </sect3>
 </sect2>
 
-<sect2 id="Scripting.CommandReference.fit1">
+<sect2 id="Interactive.CommandReference.fit1">
   <title>fit1</title>
   
 Fit a 1D curve to a given function.
@@ -532,9 +532,9 @@ Fit a 1D curve to a given function.
   </programlisting>
 
   <note>
-    <title> Scripting interface for histogram </title>
+    <title> Interactive interface for histogram </title>
     If you are interested, you can read about more capabilities 
-    of the histogram scripting interface in
+    of the interactive histogram interface in
     
     <xref linkend="histogram.CommandlineInterface"/>.
     
@@ -584,7 +584,7 @@ Fit a 1D curve to a given function.
 </sect3>
     </sect2>
 
-<sect2 id="Scripting.CommandReference.fitg1">
+<sect2 id="Interactive.CommandReference.fitg1">
   <title>fitg1</title>
   Fit a 1D curve to a gaussian function.
 
@@ -633,7 +633,7 @@ noise:
 You can plot your gaussian by
 
 <programlisting>
-  from reduction.scripting import *
+  from reduction.interactive import *
   plot ( yh )
 </programlisting>
 
@@ -647,7 +647,7 @@ as follows:
     </sect2>
 
     
-<sect2 id="Scripting.CommandReference.getCC">
+<sect2 id="Interactive.CommandReference.getCC">
       
 <title>getCC</title>
       
@@ -658,7 +658,8 @@ Compute calibration constants
 
   <itemizedlist >
     <listitem > white beam V </listitem>
-    <listitem > monochromatic beam V (need to be exported to scripting interface from reduction.core!!! ) </listitem>
+    <listitem > monochromatic beam V 
+    (need to be exported to interactive reduction interface from reduction.core!!! ) </listitem>
   </itemizedlist>
 </sect3>
 
@@ -711,7 +712,7 @@ Compute calibration constants
 
     </sect2>
 
-    <sect2 id="Scripting.CommandReference.idpt2spe">
+    <sect2 id="Interactive.CommandReference.idpt2spe">
       <title>idpt2spe</title>
       
 Convert I(det,pix,tof) to S(phi,E)
@@ -756,7 +757,7 @@ Convert I(det,pix,tof) to S(phi,E)
 </sect3>
     </sect2>
 
-    <sect2 id="Scripting.CommandReference.idpt2sqe">
+    <sect2 id="Interactive.CommandReference.idpt2sqe">
       <title>idp2sqe</title>
 
 Convert I(det,pix,tof) to S(Q,E)
@@ -799,7 +800,7 @@ Convert I(det,pix,tof) to S(Q,E)
 </sect3>
     </sect2>
 
-    <sect2 id="Scripting.CommandReference.plot">
+    <sect2 id="Interactive.CommandReference.plot">
       <title>plot</title>
 
 Plot a histogram
@@ -834,13 +835,13 @@ Plot a histogram
     from histogram import *
     h = histogram( 'h', [ ('x', arange( -10, 10, 0.5) ) ],
                    fromfunction = lambda x: x*x )
-    from reduction.scripting import *
+    from reduction.interactive import *
     plot( h )
   </programlisting>
 </sect3>
     </sect2>
 
-    <sect2 id="Scripting.CommandReference.removeTIBG">
+    <sect2 id="Interactive.CommandReference.removeTIBG">
       <title>removeTIBG</title>
 
   Remove time-independent-background
@@ -886,7 +887,7 @@ Plot a histogram
 
     </sect2>
 
-    <sect2 id="Scripting.CommandReference.solveEi">
+    <sect2 id="Interactive.CommandReference.solveEi">
       <title>solveEi</title>
 Compute incident neutron energy
 
@@ -932,7 +933,7 @@ Compute incident neutron energy
 
   </sect1>
 
-  <sect1 id="Scripting.Demo">
+  <sect1 id="Interactive.Demo">
     <title>Video Demos</title>
 
 <sect2>
@@ -943,7 +944,7 @@ Compute incident neutron energy
   This video shows a few commands that reduce raw data from a LRMECS experiment
     to S(Q,E).
 </para>
-<ulink url='xxxWEBSITExxx/reduction/Software-UserGuide/movies/scripting-LrmecsReduction.html'>
+<ulink url='xxxWEBSITExxx/reduction/Software-UserGuide/movies/interactive-LrmecsReduction.html'>
   <citetitle>video </citetitle>
 </ulink>.
 </sect2>
@@ -956,7 +957,7 @@ Compute incident neutron energy
   This video shows some basic commands that are helpful
   when trying to analyze the raw data.
 </para>
-<ulink url='xxxWEBSITExxx/reduction/Software-UserGuide/movies/scripting-lookatdetectors.html'>
+<ulink url='xxxWEBSITExxx/reduction/Software-UserGuide/movies/interactive-lookatdetectors.html'>
   <citetitle>video </citetitle>
 </ulink>.
 </sect2>
@@ -969,7 +970,7 @@ Compute incident neutron energy
   This video shows how to use a reduction command through
   the example "solveEi".
 </para>
-<ulink url='xxxWEBSITExxx/reduction/Software-UserGuide/movies/scripting-solveEi.html'>
+<ulink url='xxxWEBSITExxx/reduction/Software-UserGuide/movies/interactive-solveEi.html'>
   <citetitle>video </citetitle>
 </ulink>.
 </sect2>

@@ -131,7 +131,7 @@ You can now use the following example data files:
     Pharos_342.nx.h5: main experiment data
   </listitem>
   <listitem >
-    Pharos_318.nx.h5: vanadium calibration data
+    Pharos_318.nx.h5: white-beam vanadium calibration data
   </listitem>
   <listitem >
     Pharos_351.nx.h5: empty can data

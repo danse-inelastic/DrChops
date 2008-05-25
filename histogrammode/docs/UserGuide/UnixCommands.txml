@@ -109,12 +109,12 @@ Options:
 <sect3>
   <title> Description </title>
   
-  This command reduces data from LRMECS instrument to
+  This command reduces data from the LRMECS instrument to
   S(Q,E). It first extracts I(det,pix,tof) histogram
-  from LRMECS data file, and then perform preprocessings
+  from a LRMECS data file, and then performs preprocessings
   like remove-time-indenpendent-background, apply-detector-mask,
-  etc, and then transform I(det, pix, tof) to S(phi,E).
-  S(phi,E) histogram is then transformed to S(Q,E)
+  etc, and then transforms I(det, pix, tof) to S(phi,E).
+  The S(phi,E) histogram is then transformed to S(Q,E)
   histogram.
   
 </sect3>
@@ -127,13 +127,16 @@ Options:
   is to use the GUI version of this application,
   wxLrmecsReductionApp.py. Using the GUI version of this
   application is more intuitive. After you reduce a dataset
-  using the GUI, a pml file will be saved. That file has
-  all the configurations you have used to run the reduction
-  application. And then you may want to reduce more data files
-  using very similar configuratios, but only a few of 
-  the options are changed. For example, if the only thing changes
+  using the GUI, a configuration file containing all options (with current values)
+  for this application will be saved. 
+  This file ends with the extension ".pml", and 
+  it defines the behavior of the reduction  
+  application. 
+  This file is handy when you want to reduce more data files
+  using very similar configurations, but only a few of 
+  the options are changed. For example, if the only thing changed
   is the name of the data file to be reduced, you should keep the
-  configuration file at your working directory, and run:
+  configuration file in your working directory, and run:
   <programlisting>
     LrmecsReductionApp.py --reducer.LrmecsMeasurement.main=&lt;filename&gt;
   </programlisting>
@@ -190,7 +193,7 @@ Options:
     --PowderReduction.LrmecsMeasurement.VanadiumPlate.width=&lt;width&gt;
   </term>
   <listitem>
-    Width of vanadium plate sample.
+    Width of vanadium plate sample. Example: 10*cm
   </listitem>
   </varlistentry>
 
@@ -198,7 +201,7 @@ Options:
     --PowderReduction.LrmecsMeasurement.VanadiumPlate.thickness=&lt;thickness&gt;
   </term>
   <listitem>
-    Thickness of vanadium plate sample.
+    Thickness of vanadium plate sample. Example: 2*mm
   </listitem>
   </varlistentry>
 
@@ -206,7 +209,7 @@ Options:
     --PowderReduction.LrmecsMeasurement.VanadiumPlate.darkAngle=&lt;darkAngle&gt;
   </term>
   <listitem>
-    Dark angle of vanadium plate sample.
+    Dark angle of vanadium plate sample. Example: 135*degree
   </listitem>
   </varlistentry>
 
@@ -219,7 +222,7 @@ Options:
   <title>
     PharosReductionApp.py
   </title>
-  Reduces data from PHAROS instrument to
+  Reduces data from the PHAROS instrument to
   S(Q,E). Its usage is very similar to LrmecsReductionApp.py.
 </sect2>
 
@@ -328,7 +331,7 @@ Get Help:
     plotiphi.py
   </title>
   
-  Plot I(tof) curve of an experimental run. 
+  Plot I(phi) curve of an experimental run. 
 
 <sect3>
   <title> Description </title>

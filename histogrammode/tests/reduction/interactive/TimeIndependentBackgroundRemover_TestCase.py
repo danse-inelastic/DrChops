@@ -16,7 +16,7 @@ import unittestX as unittest
 
 
 from FakeMeasurement import Measurement, signal
-from FakeInstrument import main as getInstr
+from FakeInstrument import create as getInstr
 from reduction.interactive import removeTIBG
 
 
@@ -72,7 +72,7 @@ class TimeBG_TestCase(unittest.TestCase):
         #prepare data
         instrument, geometer = getInstr()
         measurement = m = Measurement( instrument, geometer)
-        hist = m.getRun("main").getDetPixTOFData( None )
+        hist = m.getRun("main").getIdpt( None )
 
         #add some background to the histogram so we can see its effects
         _addBG( hist )

@@ -343,8 +343,9 @@
 </para>
 
 <para>
-  The default python installed with Mac OS X 10.4 is 2.3. Therefore
-  we have chosen to build binary installer for pyhton 2.3.
+Python 2.3 is distributed with Mac OS X 10.4. 
+Therefore we have chosen to build the OS 10.4 binary installer for Python 2.3.
+
   If you have Mac python 2.4 or Mac python 2.5 installed,
   please contact linjiao@caltech.edu to ask for 
   "unofficial" binary installers.

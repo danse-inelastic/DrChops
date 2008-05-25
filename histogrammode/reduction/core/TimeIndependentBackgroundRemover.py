@@ -21,6 +21,8 @@
 ## the I(tof) for each pixel on the detector.
 
 
+#todo: make use of units
+
 from AbstractTimeIndependentBackgroundRemover import AbstractTimeIndependentBackgroundRemover as Base
 
 class TimeIndependentBackgroundRemover( Base ):

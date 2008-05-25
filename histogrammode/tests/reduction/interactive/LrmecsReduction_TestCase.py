@@ -16,7 +16,10 @@ import journal
 
 
 from reduction.interactive import *
-
+import reduction.units as units
+mm = units.length.mm
+meV = units.energy.meV
+degree = units.angle.degree
 
 import unittestX as unittest
 
@@ -33,8 +36,8 @@ class LrmecsReduction_TestCase(unittest.TestCase):
         "LRMECS reduction"
         filename = '../../ins-data/Lrmecs/4849'
         vfilename = '../../ins-data/Lrmecs/4779'
-        reduce2( filename,60, (5000,5500), None,
-                 vfilename, 2, 10, 135 )
+        reduce2( filename,60*meV, (5000,5500), None,
+                 vfilename, 2*mm, 10*mm, 135*degree )
         return
         
 
@@ -51,7 +54,7 @@ def reduce( filename, eiGuess, tbgWindow, mask = None ):
     run = getRun(filename, interpolateData = 1)
     
     instrument, geometer = run.getInstrument()
-    Idpt = run.getDetPixTOFData()
+    Idpt = run.getIdpt()
 
     tbgMin, tbgMax = tbgWindow
     removeTIBG.reconstruct( tbgMin = tbgMin, tbgMax = tbgMax )
@@ -80,7 +83,7 @@ def reduce2( filename,eiGuess, tbgWindow, mask,
     run = getRun(filename, interpolateData = 0)
     
     instrument, geometer = run.getInstrument()
-    Idpt = run.getDetPixTOFData()
+    Idpt = run.getIdpt()
 
     tbgMin, tbgMax = tbgWindow
     removeTIBG.reconstruct( tbgMin = tbgMin, tbgMax = tbgMax )
@@ -90,17 +93,17 @@ def reduce2( filename,eiGuess, tbgWindow, mask,
     solveEi.select( 'use monitors', monitor1Id = 0, monitor2Id = 1)
     ei = solveEi(run)
 
-    vRun = getRun(calibFilename, interpolateData = 1)
-    instrument,geometer = vRun.getInstrument()
-    vSample = vanadiumPlate( thickness, width )
-    instrument.changeSample( vSample )
-    geometer.register( vSample, (0,0,0), (0,0,darkAngle) )
+    vSample = vanadiumPlate( thickness = thickness, width = width, darkAngle = darkAngle )
+    vRun = getRun(calibFilename, interpolateData = 1, sampleassembly = vSample)
     
     cc = getCC( vRun, ei )
 
     plot( cc )
 
-    for detID in cc.axisFromName('detectorID').binCenters():
+    #print cc.detectorID
+    #print Idpt.detectorID
+
+    for detID in Idpt.axisFromName('detectorID').binCenters():
 ##         print detID
 ##         if detID < 0: continue
         Idpt[detID, (),() ] /= cc[detID]

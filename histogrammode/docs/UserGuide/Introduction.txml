@@ -108,9 +108,9 @@ Spectrometers (DRCS, DrChops) is organized as follows
   use the unix-like commands.
   </para>
 
-  <para> <xref linkend='reduction.Scripting'/>
+  <para> <xref linkend='reduction.Interactive'/>
 explains the powerful way of using reduction
-software by scripting in python.
+software by executing commands interactively in python.
   </para>
 
   <para> <xref linkend='Multiphonon-UserGuide'/> 

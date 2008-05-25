@@ -42,7 +42,7 @@ you will have to run a command
   $ source /path/to/DRCS/installation/bin/envs.sh
 </programlisting>
 
-, as explained in <xref linkend="reduction-Install"/>.
+as explained in <xref linkend="reduction-Install"/>.
 
 <para>
 Please don't hesitate to ask linjiao@caltech.edu for help 
@@ -60,9 +60,7 @@ if you have any trouble.
     
     Please follow instructions in
     
-    <link linkend='Prepare_LRMECS_Reduction_Directory'>
-      this section
-    </link>
+    <xref linkend='Prepare_LRMECS_Reduction_Directory'/>
     
   </sect2>
   
@@ -160,10 +158,6 @@ if you have any trouble.
       
     </para>
     
-    Click "Configure" to change settings, and the dialog in 
-    <xref linkend='LRMECS_reduction_GUI_tutorial.Launch_the_reduction_gui.Main_configuration_panel'/>
-    will pop up.
-    
     <figure id='LRMECS_reduction_GUI_tutorial.Launch_the_reduction_gui.Main_configuration_panel'>
       <title >
 	Main configuration panel
@@ -183,6 +177,10 @@ if you have any trouble.
     
     
     <para >
+      Click "Configure" to change settings, and the dialog in 
+      <xref linkend='LRMECS_reduction_GUI_tutorial.Launch_the_reduction_gui.Main_configuration_panel'/>
+      will pop up.
+    
       This window is a "configuration dialog" for DRCS. Please note that if you stop your mouse over an active text input field or an active button, a small tip will show up. 
     </para>
     
@@ -250,7 +248,9 @@ In this form we see fields for various data files including
     empty can data
   </listitem>
   <listitem >
-    calibration for empty can data
+    vanadium calibration run taken for the empty can data. In most cases, this should 
+    be the same as the previously specified vanadium calibration. In that case,
+    you can simply leave this field empty.
   </listitem>
 </itemizedlist>
 

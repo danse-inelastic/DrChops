@@ -16,6 +16,8 @@ import journal
 
 
 from reduction.interactive import solveEi
+import reduction.units as units
+meV = units.energy.meV
 
 
 import unittestX as unittest
@@ -33,7 +35,7 @@ class IncidentEnergySolver_TestCase(unittest.TestCase):
         run = Run()
         eiSolved = solveEi( run )
         
-        self.assertAlmostEqual( ei, eiSolved, 3 )
+        self.assertAlmostEqual( ei/eiSolved, 1., 2 )
         return
     
 

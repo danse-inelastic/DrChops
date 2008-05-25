@@ -19,7 +19,7 @@ BUILD_DIRS = \
     pyreHC      \
     pyreVC      \
     share   \
-    scripting   \
+    interactive   \
     utils       \
     vectorCompat\
 

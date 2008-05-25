@@ -16,6 +16,8 @@ import unittestX as unittest
 
 
 from reduction.interactive import idpt2sqe, getRun
+import reduction.units as units
+meV = units.energy.meV
 
 
 class Idpt2Sqe_TestCase(unittest.TestCase):
@@ -29,9 +31,9 @@ class Idpt2Sqe_TestCase(unittest.TestCase):
         run = getRun( f )
         
         instrument, geometer = run.getInstrument()
-        Idpt = run.getDetPixTOFData()
+        Idpt = run.getIdpt()
         
-        ei = 59.1
+        ei = 59.1 * meV
         sqehist = idpt2sqe(ei, Idpt, instrument, geometer)
 
         import pickle

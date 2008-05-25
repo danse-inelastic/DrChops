@@ -45,12 +45,14 @@ f = %s''' % (i, i)
         continue
     help( ReductionCommands )
     return
-    
 
-#misc things:
+
+#misc things
 #from instrument.elements.samples import vanadiumPlate
+from sampleassembly.predefined import vanadiumPlate
 from reduction.core.ApplyMaskToHistogram import applyMask
 from reduction.histCompat import functors
+from reduction import units
 
 
 # version

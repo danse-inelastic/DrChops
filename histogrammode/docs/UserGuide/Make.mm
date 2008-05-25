@@ -72,7 +72,7 @@ DOCBOOKSOURCETEMPLATES = \
 	InstallFromSvnRepository.txml \
 	InstallFromBinaries.txml \
 	GettingStarted.txml \
-	Scripting.txml \
+	Interactive.txml \
 	UnixCommands.txml \
 
 
@@ -89,7 +89,9 @@ export-movies: movies
 export-materials-for-docs: export-movies
 
 
-docs: export-materials-for-docs export-docbook-docs
+docs:
+	$(MM) export-materials-for-docs 
+	$(MM) export-docbook-docs
 
 
 # version
