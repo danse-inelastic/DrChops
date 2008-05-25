@@ -5,6 +5,7 @@
 <!ENTITY Introduction SYSTEM "Introduction.xml">
 <!ENTITY Architecture SYSTEM "Architecture.xml">
 <!ENTITY PyreComponents SYSTEM "PyreComponents.xml">
+<!ENTITY ComponentCores SYSTEM "ComponentCores.xml">
 ]>
 
 <book>
@@ -16,5 +17,6 @@
 &Introduction;
 &Architecture;
 &PyreComponents;
+&ComponentCores;
 
 </book>

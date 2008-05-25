@@ -73,7 +73,7 @@ The reduction software consists of four major packages:
      stdVector: python binding to c++ std::vector template
    </listitem>
    <listitem>
-     array_kluge: tools to manipulate c arrays
+     array_kluge: tools to manipulate c arrays (should be merged into stdVector or given a better name)
    </listitem>
  </itemizedlist>
 
@@ -127,7 +127,12 @@ The major part of the reduction engines can be reused.
  This section is about the particular reduction package inside the reduction software.
 </para>
 <para>
- The reduction package is carefully separated to several layers to ensure a clean design.
+ The reduction package is carefully separated to several layers.
+ Usually classes in one layer only uses classes in the layer 
+ under it to implement functionalities; or we can say only
+ 1st nearest neighbor layers talk to each other.
+ Layers are loosely coupled to ensure easier maintainance and
+ extensibility.
  The layers in the reduciton package can be divided into two categories: 
  the functinality layers and the user-interface layers. 
 </para>
@@ -249,20 +254,58 @@ helps deal with user interactions.
   </varlistentry>
 
 </variablelist>
+
+<para>
+On top of those layers, user interfaces are constructed to ease
+the use of reduction software. 
+
+<xref linkend='High_level_structure_of_reduction_package_and_reduction_applications.Layering_in_reduction_UIandComputationCore'/>
+describes the structure of these UI layers and their relationship
+with the reduction.core layer.
+</para>
+
+
+<figure id='High_level_structure_of_reduction_package_and_reduction_applications.Layering_in_reduction_UIandComputationCore'>
+  <title >
+    Layering in reduction UI
+  </title>
+  <mediaobject >
+    <imageobject >
+      <imagedata width='95%' fileref='figures/reduction-package-layers-UIandComputation.png' scalefit='1'>
+      </imagedata>
+    </imageobject>
+    <textobject >
+      <phrase >
+	Layering in reduction UI
+      </phrase>
+    </textobject>
+  </mediaobject>
+</figure>
   
+
 </sect2>
   </sect1>
 
 
   <sect1>
 <title> Reduction applications </title>
- Reduction pyre components are assembled together to create reduction applications.
+
+A reduction application is basically a chain of reduction components
+sequentially working on histograms measured in a measurement.
+A reduction application is a pyre application, and is assembled
+from a bunch of reduction pyre components.
 
 <para>
   <xref linkend='High_level_structure_of_reduction_package_and_reduction_applications.High_level_behavior_of_an_example_reduction_application:_Pharos_powder_reduction_application'/> is a high-level behavior specification of an example
-  reduction application.
-</para>    
-    
+  reduction application. 
+</para>  
+
+<para>    
+ The upper part of that figure shows
+ that the interactions between the reduction application and various
+ components.
+</para>
+
 <figure id='High_level_structure_of_reduction_package_and_reduction_applications.High_level_behavior_of_an_example_reduction_application:_Pharos_powder_reduction_application'>
   <title >
     High-level behavior of an example reduction application: Pharos powder reduction application
@@ -279,6 +322,22 @@ helps deal with user interactions.
     </textobject>
   </mediaobject>
 </figure>
+
+<para>
+The lower part of  <xref linkend='High_level_structure_of_reduction_package_and_reduction_applications.High_level_behavior_of_an_example_reduction_application:_Pharos_powder_reduction_application'/>
+shows roughly the procedure of reduction: it starts with
+reading histograms by the measurement component, and 
+the a bunch of standard preprocessing components will 
+work on the data the remove backgrounds and do normalizations,
+and then the preprocessed data are reduced into 
+I(Q,E), and finally I(Q,E) is post-processed and 
+saved as a histogram.
+</para>
+
+<para>
+In the next section we will see details of some components and
+how they are chained together to perform reduction.
+</para>
 
   </sect1>
 

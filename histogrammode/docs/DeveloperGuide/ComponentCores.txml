@@ -1,0 +1,125 @@
+<!--
+    
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    
+    Jiao Lin
+    California Institute of Technology
+    (C) 2007 All Rights Reserved
+    
+    {LicenseText}
+    
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    
+-->
+
+<chapter id="reduction component cores">
+
+  <title >
+    Component cores
+  </title>
+
+<para>
+Pyre components are actually thin wrappers of component cores in
+subpackage reduction.core. A component core in this subpackage
+are implemented by using other component cores and calculators
+in reduction.histCompat layer. This chapter gives details
+of implementations of some important reduction component cores.
+</para>
+
+<section id='reduction component cores-VDataProcessor'>
+<title>
+  VDataProcessor
+</title>
+<para>
+VDataProcessor is a processor to process vanadium data
+to obtain calibration constants and detector masks.
+</para>
+
+
+ <figure id='VDataProcessor-UML'>
+   <title >
+     UML for VDataProcessor
+   </title>
+   <mediaobject >
+     <imageobject >
+       <imagedata width='90%' fileref='figures/VDataProcessor.png' scalefit='1'>
+       </imagedata>
+     </imageobject>
+     <textobject >
+       <phrase >
+	 UML for VDataProcessor
+       </phrase>
+     </textobject>
+   </mediaobject>
+ </figure>
+
+</section>
+
+
+<section id='reduction component cores-Idpt2Spe_a'>
+<title>
+  Idpt2Spe_a
+</title>
+<para>
+Idpt2Spe_a is a processor to rebin I(pixel,tof)
+histogram to a S(phi,E) histogram.
+</para>
+
+
+ <figure id='Idpt2Spe_a-UML'>
+   <title >
+     UML for Idpt2Spe_a
+   </title>
+   <mediaobject >
+     <imageobject >
+       <imagedata width='90%' fileref='figures/Idpt2Spe_a.png' scalefit='1'>
+       </imagedata>
+     </imageobject>
+     <textobject >
+       <phrase >
+	 UML for Idpt2Spe_a
+       </phrase>
+     </textobject>
+   </mediaobject>
+ </figure>
+
+</section>
+
+
+
+<section id='reduction component cores-IncidentEnergySolver_UseElasticPeaks'>
+<title>
+  IncidentEnergySolver_UseElasticPeaks
+</title>
+<para>
+IncidentEnergySolver_UseElasticPeaks computes incident neutron energy
+using elastic peaks.
+</para>
+
+
+ <figure id='IncidentEnergySolver_UseElasticPeaks-UML'>
+   <title >
+     UML for IncidentEnergySolver_UseElasticPeaks
+   </title>
+   <mediaobject >
+     <imageobject >
+       <imagedata width='90%' fileref='figures/IncidentEnergySolver_UseElasticPeaks.png' scalefit='1'>
+       </imagedata>
+     </imageobject>
+     <textobject >
+       <phrase >
+	 UML for IncidentEnergySolver_UseElasticPeaks
+       </phrase>
+     </textobject>
+   </mediaobject>
+ </figure>
+
+</section>
+  
+</chapter>
+
+
+<!-- version-->
+<!-- $Id$-->
+
+<!-- End of file -->

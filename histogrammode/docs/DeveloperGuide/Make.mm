@@ -63,16 +63,17 @@ DOCBOOKSOURCETEMPLATES = \
 	Introduction.txml \
 	Architecture.txml \
 	PyreComponents.txml \
+	ComponentCores.txml \
 
 
 include docbook/default.def
 
 
-figures:: uml
-	rsync -av uml/ figures/
+copy-uml-contents-to-figures:
+	rsync -av --exclude=.svn uml/ figures/
 
 
-docs: export-docbook-docs
+docs: copy-uml-contents-to-figures export-docbook-docs
 
 
 # version
