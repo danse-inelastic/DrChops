@@ -1,0 +1,3 @@
+When deployed, there should be a symbolic link here named "docs" that
+points to the documentation export directory ($EXPORT_ROOT/docs).
+

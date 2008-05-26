@@ -1,0 +1,14 @@
+<html xmlns="http://www.w3.org/1999/xhtml" charset="utf-8">
+<%inherit file="head.mako" />
+<body>
+<%inherit file="header.mako" />
+    <!-- Main Content -->
+    
+<%inherit file="page.mako" />
+
+<%inherit file="footer.mako" />
+
+</div>
+</body>
+</html>
+

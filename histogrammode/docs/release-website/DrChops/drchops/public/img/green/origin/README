@@ -1,0 +1,11 @@
+the images in the parent directory all comes from http://pylonshq.com/
+
+there is a list of them obtained from green.css: l
+
+a slightly-revised copy of l is in l1.
+
+use command 
+
+ $ for i in `cat l1`; do wget http://pylonshq.com$i; done
+
+to get all those images.

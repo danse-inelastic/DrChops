@@ -1,0 +1,52 @@
+Q: When I use HistogramGUIApp.py to open a PHAROS dataset (Menu Tools-->Raw data-->Load Histogram from Pharos Experimental Run), no picture shows up in the box.
+A: When Pharos data is loaded, the histogram got loaded into
+Histogram GUI is I(det, pix, tof), which is 3-dimensional. 
+For now, the Histogram GUI
+cannot plot a 3D histogram. You will need to project the data
+to 2D or 1D to see a plot. For example, you can get a detector-pixel
+map of intensity by projecting the 3D I(det, pix, tof) histogram 
+along time-of-flight axis: Idp = Idpt.sum("tof").
+
+Q: Doesn't Python make the software run slower?
+A:
+Yes, but the amount can be imperceptible. We have made every effort to 
+design the software so that intensive computations were written in C++, 
+and given Python bindings. McStas simulations have been benchmarked as 
+both compiled C code and as scripted applications running under the 
+pyre framework. The difference in performance was less than 1%. Python 
+gives the flexibility to quickly iterate through a variety of 
+instrument or sample simulations, for example, and avoids compiler 
+issues at runtime.
+
+
+Q: Can I use the software on a computer running MSWindows?
+A:
+Yes, there are currently three ways that you can run on a Windows platform.
+There are Windows binaries available for download for the current
+official release.  Alternately, if you have a C compiler, you can build from
+the source tarball.  A third possibility is to use cygwin, and install from the
+source tarball (or the ARCS repository) using pyre's native build system
+(config).
+
+
+Q: Why I get an error "Cannot import Channel"?
+A: This error happens on Windows or Mac OS X platforms, and only if
+you (or some software you have installed) set the environment
+variable PYTHONCASEOK. When PYTHONCASEOK is set, python is
+case-insensitive, and this will result in imports of wrong
+python modules, and hence exceptions. 
+The solution is to remove that environment variable. 
+
+
+Q:Why I get an error "missing msvc71p.dll"?
+A:
+The ARCS software windows release is compiled using
+Microsoft Visual Studio 7.1. It requires 
+<a href="http://strongbad.cacr.caltech.edu/arcs-1.0/msvcp71.dll">msvcp71.dll</a>
+ to run. 
+Usually it
+is available on any Windows XP box recently
+installed.
+
+
+

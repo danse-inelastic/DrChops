@@ -1,0 +1,50 @@
+Install
+--> Install
+reduction-suse10.2-download
+--> /releases/arcs-1.2/DRCS-1.2-suse10.2-installer.tgz
+reduction-opensuse-download
+--> /releases/arcs-1.2/DRCS-1.2-suse10.2-installer.tgz
+reduction-MacOSX-download
+--> /releases/arcs-1.2/DRCS-1.2-MacOSX10.4-python2.5-installer.tgz
+reduction-MacOSX-dmg
+--> /releases/DRCS-1.2/DRCS-1.2-MacOSX10.4-python2.3.dmg
+reduction-suse10.2-deps-download
+--> /releases/arcs-1.2/ARCS-reduction-1.2-deps-suse10.2.tgz
+reduction-Windows-download
+--> /releases/arcs-1.0/ARCS-reduction-1.0.win32-py2.4.exe
+reduction-data-zip
+--> /releases/arcs-1.0/ARCS-reduction-data-1.0.zip
+reduction-1.1-MacOSX10.4-python2.3-download
+--> /releases/arcs-1.1/ARCS-reduction-1.1-macosx10.4-py2.3.mpkg.tgz
+reduction-source-download
+--> /releases/arcs-1.0/ARCS-reduction-1.0.tar.gz
+instrument-simulation-source-download
+--> /releases/arcs-1.0/simulation-alpha.tar.gz
+reduction-data-tgz
+--> /releases/arcs-1.0/ARCS-reduction-data-1.0.tar.gz
+reduction-mac-demo
+--> /releases/arcs-1.0/install-arcs-reduction-demo/mac-demo.html
+wxGetDOS-demo
+--> /docs/multiphonon/UserGuide/movies/getdos.htmls
+LrmecsReductionApp-demo
+--> /docs/reduction/UserGuide/movies/LrmecsReductionApp.html
+histogram-manipulations-demo
+--> /docs/reduction/UserGuide/movies/histogram-manipulations.html
+scripting-lookatdetectors-demo
+--> /docs/reduction/UserGuide/movies/scripting-lookatdetectors.html
+scripting-solveEi-demo
+--> /docs/reduction/UserGuide/movies/scripting-solveEi.html
+scripting-LrmecsReduction-demo
+--> /docs/reduction/UserGuide/movies/scripting-LrmecsReduction.html
+ARCS-bigbook
+--> /docs/ARCSBook/Inelastic_Book/latex/Inelastic_Book.pdf
+histogram-viewer-demo
+--> /releases/arcs-1.0/histogramViewer-demo/t.html
+PHAROS_Reduction_GUI_Tutorial
+--> /Docs/docs/reduction/UserGuide/html/ch05s02.html
+PHAROS_Reduction
+--> /Docs/docs/reduction/UserGuide/html/ch05.html
+LRMECS_Reduction_GUI_Tutorial
+--> /Docs/docs/reduction/UserGuide/html/ch04s02.html
+LRMECS_Reduction
+--> /Docs/docs/reduction/UserGuide/html/ch04.html
