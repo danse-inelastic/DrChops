@@ -56,19 +56,19 @@ class DetEfficiency_TestCase(unittest.TestCase):
      
     def testCtor(self):
         "DetEfficiency: ctor"
-        detector_efficiency = DetEfficiency( instrument )
+        detector_efficiency = DetEfficiency()
         return
 
 
     def testCalcEfficHist(self):
         "DetEfficiency: calcEfficHist"
-        detector_efficiency = DetEfficiency( instrument )
+        detector_efficiency = DetEfficiency( )
 
         from histogram import axis, arange
         EAxis = axis( 'energy', arange(-50, 50, 1.), 'meV' )
         Ei = 60. * meV
         EfAxis = -EAxis + Ei
-        efficHist = detector_efficiency.efficiency_vs_energy( None, None, EfAxis )
+        efficHist = detector_efficiency.efficiency_vs_energy( detector, EfAxis )
         
         from histogram.plotter import defaultPlotter
         defaultPlotter.interactive( False )
@@ -78,15 +78,15 @@ class DetEfficiency_TestCase(unittest.TestCase):
 
     def testCache(self):
         "DetEfficiency: cache mechansim"
-        detector_efficiency = DetEfficiency( instrument )
+        detector_efficiency = DetEfficiency( )
 
         from histogram import axis, arange
         EAxis = axis( 'energy', arange(-50, 50, 1.), 'meV' )
         Ei = 60. *meV
         EfAxis = -EAxis + Ei
-        efficHist = detector_efficiency.efficiency_vs_energy( None, None, EfAxis )
+        efficHist = detector_efficiency.efficiency_vs_energy( detector, EfAxis )
         
-        efficHist1 = detector_efficiency.efficiency_vs_energy( None, None, EfAxis )
+        efficHist1 = detector_efficiency.efficiency_vs_energy( detector, EfAxis )
         self.assert_( efficHist1 is efficHist )
         return
 

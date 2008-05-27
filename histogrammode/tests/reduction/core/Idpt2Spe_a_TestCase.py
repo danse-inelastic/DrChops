@@ -205,7 +205,7 @@ class Idpt2Spe_a_TestCase(unittest.TestCase):
                             se[i], i_e[i]) )
                         debug.line(  "errors: got %s, expected %s" % (
                             ee[i], err_e[i]) )
-                        #testFacility.assertAlmostEqual( se[i], i_e[i], 1 )
+                        testFacility.assertAlmostEqual( se[i], i_e[i], 1 )
                         #testFacility.assertAlmostEqual( ee[i], err_e[i], 1 )
                         pass
                     continue # e

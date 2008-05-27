@@ -47,6 +47,7 @@ class Idpt2Spe_TestCase(TestCase):
             def main(self):
                 #prepare data
                 instrument, geometer = getInstr()
+                self.instrument = instrument
                 self.measurement = m = Measurement( instrument, geometer)
                 #self._debug.log( "histogram: %s" % m.getRun("main").getIdpt().data().storage().asList() )
                 
@@ -58,7 +59,6 @@ class Idpt2Spe_TestCase(TestCase):
                 sphiEHist = reducer(
                     ei,
                     m.getRun("main").getIdpt(),
-                    #m.getRun("main").getDetPixTOFHistCollection(),
                     instrument, geometer)
 
                 #compare reduced data to direct computatiion
@@ -67,6 +67,7 @@ class Idpt2Spe_TestCase(TestCase):
             
 
             def _check(self, sphiEHist):
+                instrument = self.instrument
                 #get info about tof axis
                 m = self.measurement
                 h = m.getRun("main").getIdpt( None )
@@ -78,12 +79,16 @@ class Idpt2Spe_TestCase(TestCase):
 
                 # now get reduced S(E) obtained from reduction procedure
                 # get s(phi,E) and then s(E) for a particular phi
-                # we only check for one phi because all phi are equivalent
+                # we only check for one phi 
                 phi, e, spe, err = self._getPhiES(sphiEHist)
                 #s(E)
                 se = spe[0]
                 #error of s(E)
-                ee = err[0]
+                ee = err[0] 
+                #detector system
+                detsys = instrument.getDetectorSystem()
+                #the first detector
+                detector = detsys.elements()[0]
 
                 # now try to calculate S(E) directly
                 #   S(E) = S(tof) * (tof/2Ef) * (deltaE/deltaTof)
@@ -102,7 +107,7 @@ class Idpt2Spe_TestCase(TestCase):
                 self._debug.log( 'jacobi=%s'% jacobi )
 
                 #detector efficiency
-                detEffHist = self._calcDetEff(e, ei/meV)
+                detEffHist = self._calcDetEff(e, ei/meV, detector)
                 eff = detEffHist.data().storage().asNumarray().copy()
                 self._debug.log( 'det eff = %s' % eff )
 
@@ -125,12 +130,12 @@ class Idpt2Spe_TestCase(TestCase):
 
                 #now we can compare reduced data and computed data
                 #plot to show comparison
-##                 import pylab
-##                 pylab.clf()
-##                 pylab.plot( e, se )
-##                 pylab.plot( e, i_e)
-##                 pylab.ylim( 0, 80 )
-##                 pylab.show()
+                import pylab
+                pylab.clf()
+                pylab.plot( e, se )
+                pylab.plot( e, i_e)
+                pylab.ylim( 0, 80 )
+                pylab.show()
                 #print tofMin, tofMax
                 eMin = self._tof2e( tofMin, ei/meV, R/mm)
                 eMax = self._tof2e( tofMax, ei/meV, R/mm)
@@ -140,7 +145,7 @@ class Idpt2Spe_TestCase(TestCase):
                     if energy_transfer < eMax-2*de and energy_transfer > eMin+2*de:
                         self._debug.line(  "intensity: got %s, expected %s" % (se[i], i_e[i]) )
                         self._debug.line(  "errors: got %s, expected %s" % (ee[i], err_e[i]) )
-                        testFacility.assertAlmostEqual( se[i], i_e[i], 1 )
+                        testFacility.assertAlmostEqual( se[i], i_e[i], 0 )
                         #testFacility.assertAlmostEqual( ee[i], err_e[i], 1 )
                         pass
                     continue
@@ -156,16 +161,16 @@ class Idpt2Spe_TestCase(TestCase):
                 return ei - ef
 
 
-            def _calcDetEff(self, e, ei):
+            def _calcDetEff(self, e, ei, detector):
                 """detector efficiency computation
                 """
                 instrument, geometer = getInstr()
                 from reduction.core.DetEfficiency import DetEfficiency
-                detEff = DetEfficiency( instrument )
+                detEff = DetEfficiency( )
                 from histogram import axis
                 eAxis = axis( 'energy', e, unit = 'meV')
                 efAxis = - eAxis + ei * meV
-                return detEff.efficiency_vs_energy( None, None, efAxis )
+                return detEff.efficiency_vs_energy( detector, efAxis )
 
 
             def _calcJacobi(self, e, ei, distSamp2Det):
@@ -207,7 +212,7 @@ class Idpt2Spe_TestCase(TestCase):
                 reducer = si.reducer
                 ri = reducer.inventory
                 from reduction.pyre.Axis import Axis
-                ri.EAxis = Axis( 'energy', -50.0, 50.0, 1.0, 'meV')
+                ri.EAxis = Axis( 'energy', -45.0, 45.0, 1.0, 'meV')
                 ri.phiAxis = Axis( "phi", 0.0, 100.0, 1.0, 'degree')
                 return
 
