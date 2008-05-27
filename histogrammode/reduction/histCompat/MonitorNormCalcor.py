@@ -21,7 +21,16 @@ class MonitorNormCalcor( NormCalcor ):
     """
     
     def calcNorm(self, monitorHist, tofStart, tofEnd ):
-        t = monitorHist.axisFromName('tof').binCenters()
+        tofaxis = monitorHist.axisFromName('tof')
+        tofunit = tofaxis.unit()
+
+        #tof bin centers
+        t = tofaxis.binCenters()
+
+        from reduction.units import isDimensional
+        if isDimensional( tofStart ): tofStart /= tofunit
+        if isDimensional( tofEnd ): tofEnd /= tofunit
+        
         if tofStart > tofEnd:
             raise ValueError , "tofStart(%s) > tofEnd(%s)" %(
                 tofStart, tofEnd)

@@ -31,11 +31,13 @@ EXPORT_PYTHON_MODULES = \
 	Abstract1DFunctionFitter.py 	\
 	AbstractTof2E.py 	\
 	AbstractIncidentEnergySolver.py \
+	AbstractNormalizationCalculator.py \
 	AbstractTimeIndependentBackgroundRemover.py \
 	AbstractIdpt2Spe.py	\
 	AbstractIdpt2Sqe.py	\
 	ApplyMaskToHistogram.py \
 	DifferentialEvolution1DFunctionFitter.py \
+	DetEfficiency.py \
 	HistogramCombiner.py \
 	IdptExtractor.py	\
 	Idpt2Spe_a.py		\
@@ -44,6 +46,8 @@ EXPORT_PYTHON_MODULES = \
 	IncidentEnergySolver_UseElasticPeaks.py \
 	LoopUtils.py \
 	MaskFromVanadiumData.py \
+	NormalizationConstantFromMonitorData.py \
+	NormalizationConstantFromIntegratedModeratorCurrent.py \
 	TimeIndependentBackgroundRemover.py \
 	TimeIndependentBackgroundRemover_AverageOverAllDetectors.py \
 	ParallelComponent.py		\
