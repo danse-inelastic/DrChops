@@ -1,4 +1,8 @@
 
 
 from pyre.units import *
-from pyre.units import length, time, energy, pressure, angle
+from pyre.units import unit, length, time, energy, pressure, angle
+
+def isDimensional(d):
+    return isinstance(d, unit.unit)
+
