@@ -13,6 +13,7 @@
 PROJECT = reduction
 
 BUILD_DIRS = \
+    ARCSReductionApp \
     LrmecsReductionApp \
     MCSimReductionApp \
     PharosReductionApp \

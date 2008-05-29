@@ -1,0 +1,103 @@
+<?xml version="1.0"?>
+<!--
+! ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!
+!                                   Jiao Lin
+!                      California Institute of Technology
+!                        (C) 2007  All Rights Reserved
+!
+! {LicenseText}
+!
+! ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-->
+
+<!DOCTYPE inventory>
+
+<inventory>
+
+    <component name="LrmecsReductionApp">
+
+        <property name="reducer">PowderReduction</property>
+
+        <component name="PowderReduction">
+
+            <component name="SpeReducer">
+                <property name="preprocess">Preprocess_MainDataOnly</property>
+                <facility name="Idpt2Spe">Idpt2Spe</facility>
+
+                <component name="Preprocess_MainDataOnly">
+                    <facility name="preStep1">preStep1</facility>
+                    <property name="eiSolver">IncidentEnergySolver_UseMonitors</property>
+
+                    <component name="preStep1">
+                        <property name="tibgRemover">TimeIndependentBackgroundRemover_AverageOverAllDetectors</property>
+
+                        <component name="TimeIndependentBackgroundRemover_AverageOverAllDetectors">
+                            <property name="tbgMin"> 4500 </property>
+                            <property name="tbgMax"> 5000 </property>
+                        </component>
+
+                        <property name="normalizer">NormalizerUsingMonitorData</property>
+
+                        <component name="NormalizerUsingMonitorData">
+                            <property name="monitorId"> 0 </property>
+                            <property name="tofStart"> 2200 </property>
+                            <property name="tofEnd"> 2399 </property>
+                        </component>
+                    </component>
+
+                </component>
+
+
+                <component name="Idpt2Spe">
+
+                    <component name="energy">
+                        <property name="max">55.0</property>
+                        <property name="unit">meV</property>
+                        <property name="min">-55.0</property>
+                        <property name="step">0.5</property>
+                    </component>
+
+
+                    <component name="phi">
+                        <property name="max">145.0</property>
+                        <property name="step">0.6</property>
+                        <property name="unit">degree</property>
+                        <property name="min">5.0</property>
+                    </component>
+
+                </component>
+
+            </component>
+
+
+            <component name="Spe2Sqe">
+                <property name="QAxis">Q</property>
+
+                <component name="Q">
+                    <property name="min">0.0</property>
+                    <property name="max">13.5</property>
+                    <property name="step">0.05</property>
+                    <property name="unit">angstrom**-1</property>
+                </component>
+
+            </component>
+
+
+            <component name="LrmecsMeasurement">
+                <property name="interpolateData">True</property>
+                <property name="main">../../ins-data/Lrmecs/4849</property>
+            </component>
+
+        </component>
+
+    </component>
+
+</inventory>
+
+<!-- version-->
+<!-- $Id$-->
+
+<!-- Generated automatically by Renderer on Fri Jul 20 10:49:34 2007-->
+
+<!-- End of file -->
