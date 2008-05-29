@@ -22,7 +22,7 @@ def readHistogram( filename ):
     Itof = H.histogram(
         'I(tof)',
         [
-        ('tof', tof),
+        ('tof', tof, '0.1*microsecond'),
         ],
         data = I, errors = I )
     return Itof

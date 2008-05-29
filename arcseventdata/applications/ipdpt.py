@@ -72,8 +72,10 @@ class Engine(AbstractHistogrammer):
         tof_begin, tof_end, tof_step = numpy.array(tof_params)*1.e-6 #convert from microseconds to seconds
 
         import arcseventdata, histogram 
-        tof_axis = histogram.axis('tof', boundaries = histogram.arange(
-            tof_begin, tof_end, tof_step) )
+        tof_axis = histogram.axis(
+            'tof',
+            boundaries = histogram.arange(tof_begin, tof_end, tof_step),
+            unit = 'second' )
         detaxes = infos['detector axes']
         h = histogram.histogram(
             'I(pdpt)',
