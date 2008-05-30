@@ -11,14 +11,12 @@
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 PROJECT = arcseventdata
-PACKAGE = arcseventdata
+PACKAGE = parallel_histogrammers/components
 
 
 # directory structure
 
 BUILD_DIRS = \
-	parallel_histogrammers \
-	pyre_support \
 
 
 OTHER_DIRS = \
@@ -38,32 +36,12 @@ all: export
 # export
 
 EXPORT_PYTHON_MODULES = \
-	createmap_pixelID2position.py \
-	events2Ipdp.py \
-	events2Ipdpd.py \
-	events2IpdpE.py \
-	events2IQE.py \
-	events2Ipdpt.py \
-	events2Itof.py \
-	events2Idspacing.py \
-	getinstrumentinfo.py \
-	getpixelinfo.py \
-	histogramFrom2colascii.py \
-	longpixelID.py \
-	monitorData.py \
-	mslice_spe_writer.py \
-	normalize_iqe.py \
-	normalize_iqe_py_prototype.py \
-	pixelpositions2angles.py \
-	read2colascii.py \
-	units.py \
+	IdspacingHistogrammer.py \
+	IpdptHistogrammer.py \
 	__init__.py \
-	GetDetectorAxesInfo.py \
-	ParallelComponent.py \
-	ParallelHistogrammer.py \
 
 
-export:: export-python-modules
+export:: export-package-python-modules
 
 # version
 # $Id$

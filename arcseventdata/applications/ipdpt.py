@@ -49,46 +49,8 @@ class Application(base):
     pass # end of Application
 
 
-from arcseventdata.pyre_support.AbstractHistogrammer import AbstractHistogrammer
-class Engine(AbstractHistogrammer):
-
-    def _run( self,
-              eventdatafilename, start, nevents,
-              ARCSxml, tof_params):
-
-        from arcseventdata.getinstrumentinfo import getinstrumentinfo
-        infos = getinstrumentinfo(ARCSxml)
-        npacks, ndetsperpack, npixelsperdet = infos[
-            'detector-system-dimensions']
-        mod2sample = infos['moderator-sample distance']
-        pixelPositionsFilename = infos[
-            'pixelID-position mapping binary file']
-
-        self._info.log( "eventdatafilename = %s" % eventdatafilename )
-        self._info.log( "nevents = %s" % nevents )
-        self._info.log( 'tof_params (unit: microsecond) = %s' % (tof_params, ) )
-
-        import numpy
-        tof_begin, tof_end, tof_step = numpy.array(tof_params)*1.e-6 #convert from microseconds to seconds
-
-        import arcseventdata, histogram 
-        tof_axis = histogram.axis(
-            'tof',
-            boundaries = histogram.arange(tof_begin, tof_end, tof_step),
-            unit = 'second' )
-        detaxes = infos['detector axes']
-        h = histogram.histogram(
-            'I(pdpt)',
-            detaxes + [tof_axis],
-            data_type = 'int',
-            )
-
-        events, nevents = arcseventdata.readevents( eventdatafilename, nevents, start )
-
-        arcseventdata.events2Ipdpt(
-            events, nevents, h )
-        
-        return h
+#from arcseventdata.pyre_support.AbstractHistogrammer import AbstractHistogrammer
+from arcseventdata.parallel_histogrammers.components.IpdptHistogrammer import IpdptHistogrammer as Engine
 
 
 def main():
