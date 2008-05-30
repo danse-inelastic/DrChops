@@ -99,6 +99,7 @@ The empty bracket means all pixels for every detector.
 
 
     def _init(self):
+        base._init(self)
         from reduction.core.IncidentEnergySolver_UseElasticPeaks import IncidentEnergySolver_UseElasticPeaks as Solver
         self._solver = Solver(
             numPoints = self.numPoints,
