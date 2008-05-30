@@ -34,9 +34,19 @@ class TofWindowSelector(base):
 
     def _update(self):
         Idpt = self._getInput( 'Idpt' )
-        Itof = Idpt.sum('detectorID').sum('pixelID' )
+        axes = Idpt.axisNameList()
+        old = Idpt
+        for axis in axes:
+            if axis != 'tof': new = old.sum( axis )
+            old = new
+            continue
+        Itof = new
         x = Itof.axisFromName('tof').binCenters()
         y = Itof.data().storage().asNumarray()
+        #convert to microsecnnd
+        tofaxis = Itof.axisFromName('tof')
+        from reduction.units import time
+        x *= tofaxis.unit()/time.microsecond
         tofWindow = self._plot_xy( x, y )
         self._setOutput( 'tofWindow', tofWindow )
         return
