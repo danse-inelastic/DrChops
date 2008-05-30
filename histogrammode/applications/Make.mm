@@ -50,6 +50,7 @@ EXPORT_PYTHON_MODULES = \
 
 
 EXPORT_BINS = \
+	ARCSReductionApp.py \
 	LrmecsReductionApp.py \
 	MCSimReductionApp.py \
 	PharosReductionApp.py \
@@ -64,6 +65,7 @@ EXPORT_BINS = \
 	plotitof.py \
 	plotmonitoritof.py \
 	toMslice.py \
+	wxARCSReductionApp.py \
 	wxLrmecsReductionApp.py \
 	wxPharosReductionApp.py \
 
@@ -87,6 +89,7 @@ WEBSERVER=http://131.215.30.242:5001
 
 
 APPS_GENERATED_FROM_TEMPALATES = \
+	ARCSReductionApp.py \
 	LrmecsReductionApp.py \
 	PharosReductionApp.py \
 	MCSimReductionApp.py \
