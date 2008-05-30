@@ -95,6 +95,7 @@ class PowderReduction(base):
 
     def _configure(self):
         base._configure(self)
+        if self._showHelpOnly: return
 
         mi = self.inventory.measurementFactory.inventory
         self._measurementObserver.update( mi )

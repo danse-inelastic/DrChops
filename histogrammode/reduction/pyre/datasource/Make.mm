@@ -34,6 +34,7 @@ update: clean
 # export
 
 EXPORT_PYTHON_MODULES = \
+	ARCSMeasurement.py \
 	Connectable.py \
 	LrmecsMeasurement.py \
 	MCSimMeasurement.py \
