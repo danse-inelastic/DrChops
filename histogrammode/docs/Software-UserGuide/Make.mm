@@ -78,7 +78,12 @@ export-publications: publications
 export-materials-for-docs: export-movies export-publications
 
 
-docs: merge-figures merge-movies merge-publications export-materials-for-docs export-docbook-docs
+docs: 
+	$(MM) merge-figures 
+	$(MM) merge-movies 
+	$(MM) merge-publications 
+	$(MM) export-materials-for-docs 
+	$(MM) export-docbook-docs
 
 
 merge-figures::
