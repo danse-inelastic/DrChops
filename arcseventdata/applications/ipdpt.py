@@ -43,14 +43,12 @@ class Application(base):
 
     def _defaults(self):
         base._defaults(self)
+        from arcseventdata.parallel_histogrammers.components.IpdptHistogrammer import IpdptHistogrammer as Engine
         self.inventory.engine = Engine( )
         return
     
     pass # end of Application
 
-
-#from arcseventdata.pyre_support.AbstractHistogrammer import AbstractHistogrammer
-from arcseventdata.parallel_histogrammers.components.IpdptHistogrammer import IpdptHistogrammer as Engine
 
 
 def main():

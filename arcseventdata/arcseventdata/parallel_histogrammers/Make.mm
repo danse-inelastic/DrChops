@@ -38,7 +38,11 @@ all: export
 
 EXPORT_PYTHON_MODULES = \
 	IdspacingHistogrammer.py \
+	IpdpdHistogrammer.py \
+	IpdpEHistogrammer.py \
 	IpdptHistogrammer.py \
+	IqeHistogrammer.py \
+	ItofHistogrammer.py \
 	ParallelComponent.py \
 	ParallelHistogrammer.py \
 	__init__.py \

@@ -44,41 +44,12 @@ class Application(base):
 
     def _defaults(self):
         base._defaults(self)
+        from arcseventdata.parallel_histogrammers.components.ItofHistogrammer import ItofHistogrammer as Engine
         self.inventory.engine = Engine( )
         return
     
     pass # end of Application
 
-
-from arcseventdata.pyre_support.AbstractHistogrammer import AbstractHistogrammer
-class Engine(AbstractHistogrammer):
-
-    def _run( self,
-              eventdatafilename, start, nevents,
-              ARCSxml, tof_params):
-
-        from arcseventdata.getinstrumentinfo import getinstrumentinfo
-        infos = getinstrumentinfo(ARCSxml)
-        npacks, ndetsperpack, npixelsperdet = infos[
-            'detector-system-dimensions']
-        import arcseventdata
-        ntotpixels = arcseventdata.npixels( npacks, ndetsperpack, npixelsperdet )
-        
-        mod2sample = infos['moderator-sample distance']
-
-        self._info.log( "eventdatafilename = %s" % eventdatafilename )
-        self._info.log( "nevents = %s" % nevents )
-        self._info.log( 'tof_params (unit: us) = %s' % (tof_params, ) )
-        
-        events, nevents = arcseventdata.readevents( eventdatafilename, nevents, start )
-    
-        tof_begin, tof_end, tof_step = tof_params
-
-        h = arcseventdata.e2Itof(
-            events, nevents, ntotpixels,
-            tof_params = tof_params)
-        
-        return h
 
 
 def main():
