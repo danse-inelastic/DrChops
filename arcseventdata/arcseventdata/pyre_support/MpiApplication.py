@@ -57,8 +57,9 @@ class Application(base, ParallelComponent):
         for name in self.inventory.propertyNames():
             if name in excluded: continue
             trait = self.inventory.getTrait( name )
-            print '  -%s: %s, default = %s' % (
-                name, trait.meta.get('tip') or '', trait.default )
+            prefix = '-' * {True:1, False:2}[ len(name)==1 ]
+            print '  %s%s: %s, default = %s' % (
+                prefix, name, trait.meta.get('tip') or '', trait.default )
         return
 
 

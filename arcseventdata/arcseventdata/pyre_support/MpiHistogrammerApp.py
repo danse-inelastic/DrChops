@@ -27,6 +27,12 @@ class Application(base):
         h5filename = pinv.str( 'o', default = "" )
         h5filename.meta['tip'] ="hdf5 file for output histogram"
 
+        pathinh5 = pinv.str( 'pathinh5', default = '/' )
+        pathinh5.meta['tip'] = 'path in the hdf5file where histogram will be saved'
+
+        histogramname = pinv.str( 'histogramname', default = '' )
+        histogramname.meta['tip'] = 'name of the histogram'
+
         nevents = pinv.float( "n", default = 0 )
         nevents.meta['tip'] ="number of events to reduce"
 
@@ -92,18 +98,31 @@ class Application(base):
             h5filename = self.h5filename
             self._info.log( "writing histogram to file %r" % h5filename )
             h = self.histogram
+            histogramname = self.inventory.histogramname
+            if histogramname != '':
+                h.setAttribute( 'name', histogramname )
+                
+            from nx5.file import file
+            if os.path.exists( h5filename ): mode ='w'
+            else: mode = 'c'
+            fs = file( h5filename, mode )._fs
+            pathinh5 = self.pathinh5
+            fs.makedirs( pathinh5 )
+            
             from histogram.hdf import dump
-            dump(h, h5filename, '/', 'c' )
+            dump(h, h5filename, pathinh5, mode = 'w', fs = fs )
             pass
         return
 
 
     def _init(self):
         base._init(self)
-        h5filename = self.inventory.h5filename        
-        if os.path.exists(h5filename):
-            raise IOError, "%s already exists" % h5filename
+        h5filename = self.inventory.h5filename
+        pathinh5 = self.inventory.pathinh5
+        #if os.path.exists(h5filename) and not overwrite:
+        #    raise IOError, "%s already exists" % h5filename
         self.h5filename = h5filename
+        self.pathinh5 = pathinh5
         return
 
 
