@@ -184,7 +184,7 @@ class FacilityFrontEnd(object):
         
         engine = self.engineFactories[name]( **savedkwds )
         self._setEngine( name, engine )
-        return
+        return self
 
     
     def parameters(self):
