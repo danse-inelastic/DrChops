@@ -98,18 +98,19 @@ class IncidentEnergySolver_UseElasticPeaks(_base, ParallelComponent):
         return
 
 
-    def __call__(self, run, mask=None):
+    def __call__(self, run = None, mask=None, idpt = None):
         '''__call__( run, mask = None)
 
         solve Ei for an experimental run.
 
         inputs:
 
-          - run: an experimental run. instance of measurement.Run
+          - run: an experimental run. instance of measurement.Run. I(*detectorlayers, tof) are read from this instance.
           - mask: a detector mask. None means no mask
+          - idpt: I(*detectorlayers, tof) histogram. If this is supplied, the parameter "run" is ignored
         '''
         if not self.parallel or self.mpiRank == 0:
-            ei = self.__call__1(run, mask)
+            ei = self.__call__1(run = run, mask = mask, idpt = idpt)
             pass
         
         if self.parallel:
@@ -127,7 +128,7 @@ class IncidentEnergySolver_UseElasticPeaks(_base, ParallelComponent):
         return ei
 
 
-    def __call__1(self, run, mask = None):
+    def __call__1(self, run = None, mask = None, idpt = None):
         '''__call__( run, mask = None)
 
         solve Ei for an experimental run.
@@ -145,20 +146,10 @@ class IncidentEnergySolver_UseElasticPeaks(_base, ParallelComponent):
             mask = DetectorMask()
             pass
         
+        if idpt is None:
+            idpt = self._readIdpt(run)
 
-        info.log( 'read data' )
-
-        #we only take the highest level slice.
-        #The reason is Pharos Run's getIdpt method
-        #cannot take more.
-        level0detector = instrument.getDetectorSystem().elements()[0].__class__.__name__.lower() + 'ID'
-        if self.detectorSlice:
-            sliceInfo = {level0detector: self.detectorSlice[0] }
-            mainhist = run.getIdpt( **sliceInfo )
-        else:
-            mainhist = run.getIdpt()
-
-        axes = mainhist.axes()
+        axes = idpt.axes()
         detaxes = axes[:-1]
 
         from getPixelInfo import getPixelGeometricInfo
@@ -180,18 +171,35 @@ class IncidentEnergySolver_UseElasticPeaks(_base, ParallelComponent):
         
         # for debug
         from pickle import dump
-        dump( I_E, open('I(Ef)-node%d.pkl' % self.mpiRank,'w') )
         dump( distances, open('distance(pixel)-node%d.pkl'%self.mpiRank, 'w') )
-        dump( mainhist, open('I(pixel,tof)-node%d.pkl'%self.mpiRank, 'w') )
+        dump( idpt, open('I(pixel,tof)-node%d.pkl'%self.mpiRank, 'w') )
         dump( mask, open('mask(pixel)-node%d.pkl'%self.mpiRank, 'w') )
         
         from reduction.histCompat.RebinTof2E_batch import istartof2IE
-        istartof2IE( mainhist, I_E, distances, mask )
+        istartof2IE( idpt, I_E, distances, mask )
+
+        dump( I_E, open('I(Ef)-node%d.pkl' % self.mpiRank,'w') )
 
         from reduction.histCompat import findPeakPosition
         E = findPeakPosition( I_E, numPoints )
         
         return E * meV
+
+
+    def _readIdpt(self, run):
+        instrument, g = run.getInstrument()
+        info.log( 'read data' )
+        #we only take the highest level slice.
+        #The reason is Pharos Run's getIdpt method
+        #cannot take more.
+        level0detector = instrument.getDetectorSystem().elements()[0].__class__.__name__.lower() + 'ID'
+        if self.detectorSlice:
+            sliceInfo = {level0detector: self.detectorSlice[0] }
+            idpt = run.getIdpt( **sliceInfo )
+        else:
+            idpt = run.getIdpt()
+        return idpt
+    
 
     pass # end of IncidentEnergySolver_UseElasticPeaks
 

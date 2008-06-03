@@ -83,7 +83,8 @@ class Idpt2Spe_a(ParallelComponent, AbstractIdpt2Spe):
     __init__.__doc__ += parameterDocs
 
 
-    def __call__(self, ei, Idpt, instrument, geometer, **params):
+    def __call__(self, ei, Idpt, instrument, geometer, mask_dp = None,
+                 **params):
         '''__call__(ei, Idpt, instrument, geometer, **params)
   Inputs:
     ei: incident energy
@@ -94,7 +95,8 @@ class Idpt2Spe_a(ParallelComponent, AbstractIdpt2Spe):
         
         self.set( **params )
         
-        sphiEHist, solidAngleHist = self.reduce_( ei, Idpt, instrument, geometer)
+        sphiEHist, solidAngleHist = self.reduce_(
+            ei, Idpt, instrument, geometer, mask_dp = mask_dp)
 
         if self.parallel:
 
@@ -156,7 +158,7 @@ class Idpt2Spe_a(ParallelComponent, AbstractIdpt2Spe):
 
     # implementation details
     
-    def reduce_(self, ei, Idpt, instrument, geometer):
+    def reduce_(self, ei, Idpt, instrument, geometer, mask_dp = None):
 
         info.log("create hisotgrams to hold results")
         from histogram import histogram
@@ -179,7 +181,8 @@ class Idpt2Spe_a(ParallelComponent, AbstractIdpt2Spe):
         #pickle.dump( (ei, mod2SampleDist, self.mask, phi_dp, sa_dp, dist_dp,
         #              radius_dp, pressure_dp), open('tobereduced.pkl','w') )
         rebinner(Idpt, spe, sap, ei, mod2SampleDist,
-                 self.mask, phi_dp, sa_dp, dist_dp, radius_dp, pressure_dp)
+                 self.mask, phi_dp, sa_dp, dist_dp, radius_dp, pressure_dp,
+                 mask_dp = mask_dp)
 
         return spe, sap
 
@@ -266,14 +269,36 @@ class IteratorRebinner:
     '''
     def __call__( self, Idpt, spe, sap, ei, mod2sample,
                   mask, phi_dp, sa_dp, dist_dp,
-                  radius_dp, pressure_dp):
+                  radius_dp, pressure_dp, mask_dp = None):
 
         from histogram import histogram
         detaxes = phi_dp.axes()
-        mask_dp = histogram( 'mask', detaxes, data_type = 'int')
 
+        if mask_dp is None:
+            mask_dp = histogram( 'mask', detaxes, data_type = 'int')
+            self._make_mask_dp( mask_dp, mask )
+
+        from reduction.histCompat.DGTS_RebinTof2E_batch import dgts_RebinTof2E_batch
+
+        #print Idpt, spe, sap, ei, mod2sample, mask_dp, phi_dp, sa_dp, dist_dp
+        dgts_RebinTof2E_batch(
+            Idpt, spe, sap,
+            ei, mod2sample, 
+            mask_dp, phi_dp, sa_dp, dist_dp,
+            radius_dp, pressure_dp)
+
+##         from histogram.plotter import defaultPlotter
+##         defaultPlotter.plot( spe )
+##         raw_input( 'Press <ENTER> to continue' )
+        return
+
+
+    def _make_mask_dp(self, mask_dp, mask):
+        'make a mask(detectorindexes) histogram from a mask instance'
+        
         detaxis = mask_dp.axisFromName( 'detectorID' )
         pixaxis = mask_dp.axisFromName( 'pixelID' )
+        
         dets = detaxis.binCenters()
         pixs = pixaxis.binCenters()
         
@@ -291,20 +316,8 @@ class IteratorRebinner:
             mask_dp [ { 'detectorID':det, 'pixelID':pix} ] = 1, 0
             continue
 
-        from reduction.histCompat.DGTS_RebinTof2E_batch import dgts_RebinTof2E_batch
-
-        #print Idpt, spe, sap, ei, mod2sample, mask_dp, phi_dp, sa_dp, dist_dp
-        dgts_RebinTof2E_batch(
-            Idpt, spe, sap,
-            ei, mod2sample, 
-            mask_dp, phi_dp, sa_dp, dist_dp,
-            radius_dp, pressure_dp)
-
-##         from histogram.plotter import defaultPlotter
-##         defaultPlotter.plot( spe )
-##         raw_input( 'Press <ENTER> to continue' )
         return
-
+    
     pass # end of IteratorRebinner
 
 
