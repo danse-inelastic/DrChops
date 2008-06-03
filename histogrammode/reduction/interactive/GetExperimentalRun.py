@@ -36,6 +36,10 @@ import measurement.ins.Pharos as pharos
 getRun.registerEngineFactory(
     'pharos', FunctorFromFunction( pharos.createRun ) )
 
+from measurement.ins.ARCS import createRun as arcs
+getRun.registerEngineFactory(
+    'arcs', FunctorFromFunction( arcs ) )
+
 
 getRun.select( 'lrmecs' )
 
