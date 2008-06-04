@@ -26,6 +26,9 @@ namespace DANSE {
     template class He3DetEffic<double, std::vector<double>::iterator>;
     template class He3DetEffic<float, std::vector<float>::iterator>;
     
+    namespace He3DetEffic_impl{
+      char * journaltag = "he3deteffic";
+    }
   } // Reduction::
 } // DANSE::
 

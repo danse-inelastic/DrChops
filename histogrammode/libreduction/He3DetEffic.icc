@@ -18,6 +18,7 @@
 
 
 #include <cmath>
+#include <iostream>
 #include "journal/debug.h"
 
 
@@ -34,6 +35,8 @@ namespace DANSE {
     template <typename FPT, typename EnergyIterator, typename EfficiencyIterator>
     FPT He3DetEffic<FPT, EnergyIterator, EfficiencyIterator>::operator()( FPT energy)
     {
+      using namespace He3DetEffic_impl;
+
       FPT efficiency = 0.0;
       //FPT fnptsm1 = static_cast<FPT>(m_npts - 1);
       FPT fnptsm1 = static_cast<FPT>(m_npts); // probably should be moved to constructer to speed up. but the difference might be small
@@ -42,14 +45,36 @@ namespace DANSE {
       // Then average over cross-section of cells in the detector, 
       // to get the total transmission probability.
       FPT sig = m_refAbsXS*sqrt(81.81/energy);
-      
+
+#ifdef DEBUG
+      journal::debug_t debug( journaltag );
+      debug << journal::at(__HERE__);
+#endif
+
       for(unsigned int j=0; j < m_npts; j++)
 	{
 	  FPT u =  j/fnptsm1;
+	  FPT l = 2*m_radius*sqrt(1-u*u)/m_costheta;
 	  // 2*m_radius*sqrt(1-u*u) is the length of travel
-	  efficiency += exp(-2*m_N*sig*m_radius*sqrt(1-u*u));
+	  efficiency += exp(-m_N*sig*l);
+#ifdef DEBUG
+	  debug 
+	    << "u=" << u
+	    << "l=" << l
+	    << "transmission=" << efficiency
+	    << "m_radius=" << m_radius
+	    << "m_costheta=" << m_costheta
+	    << "sig=" << sig
+	    << "m_N=" << m_N
+	    << journal::newline;
+#endif
 	}
       
+#ifdef DEBUG
+      debug << journal::at(__HERE__)
+	    << journal::endl;
+#endif 
+
       // Normalize efficiencies, and subtract it from 1 to 
       // get the absorption probability.
       
@@ -80,7 +105,8 @@ namespace DANSE {
 	  for(unsigned int j=0; j < m_npts; j++)
 	    {
 	      FPT u =  j/fnptsm1;
-	      *effCurr += exp(-2*m_N*sig*m_radius*sqrt(1-u*u));
+	      FPT l = 2*m_radius*sqrt(1-u*u)/m_costheta;
+	      *effCurr += exp(-m_N*sig*l);
 	    }
 	  *effCurr = 1.0 - *effCurr/fnptsm1;
 	  effCurr++;

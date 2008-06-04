@@ -82,11 +82,14 @@ namespace DANSE {
        * \param radius Radius of tube. Tube is assumed to be a cylinder. Units: cm
        * \param pressure Pressure of He3 in detector tube. Units: Atmospheres
        * \param npts Number of points per side of grid used for integration
+       * \param costheta cos(theta). theta is the angle between the kf and the scattering plane.
        */
       explicit He3DetEffic( FPT pressure, FPT radius = 1.27, 
-			    unsigned npts = 500)
+			    unsigned npts = 500,
+			    FPT costheta = 1.)
 	: m_pressure( pressure), 
 	  m_radius( radius),
+	  m_costheta( costheta ),
 	  m_refAbsXS( 5333.0e-24/1.798),
 	  m_refWavelength( 1.798),
 	  m_N( pressure*1.468e20/6.0),
@@ -108,6 +111,7 @@ namespace DANSE {
       
       FPT m_pressure;
       FPT m_radius;
+      FPT m_costheta;
       
       /*! Absorption x-section of He3 in cm^2 at ref. wavelength (actual
        *  number stored is divided by ref wavelength for convenience)
