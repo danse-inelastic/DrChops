@@ -66,70 +66,42 @@ namespace ReductionTest
             return true;
         } // test_1
 
-        bool test_2()
+        bool _test_2(double pressure, double radius, int n, double costheta,
+		     double energy)
         {
             journal::info_t info( journalname);
             
             using namespace DANSE::Reduction;
 
-	    double pressure=10.0, radius = 1.27;
-	    int n = 1;
-
-            He3DetEffic< double> hdd( pressure, radius, n);
+            He3DetEffic< double> hdd( pressure, radius, n, costheta);
             info << at(__HERE__);
-            info << "instantiated He3DetEffic<double>(pressure=" 
-		 << pressure 
-		 << ", radius=" 
-		 << radius
-		 << ", n="
-		 << n
+            info << "instantiated He3DetEffic<double>(pressure=" << pressure 
+		 << ", radius=" << radius
+		 << ", n=" << n
+		 << ", costheta=" << costheta
 		 << newline;
 
-	    double energy =  47.043;
 	    info << "effciency at " << energy << " is " << hdd(energy ) << endl;
 	    return true;
+	}
+
+        bool test_2()
+        {
+	  _test_2( 10.0, 1.27, 1, 1., 47.043);
+	  _test_2( 10.0, 1.27, 1, 0.8, 47.043);
+	  return true;
 	}
 
         bool test_3()
         {
-            journal::info_t info( journalname);
-            
-            using namespace DANSE::Reduction;
-
-	    double pressure=10.0, radius = 1.27;
-	    int n = 200;
-
-            He3DetEffic< double> hdd( pressure, radius, n);
-            info << at(__HERE__);
-            info << "instantiated He3DetEffic<double>(pressure=" 
-		 << pressure 
-		 << ", radius=" 
-		 << radius
-		 << ", n="
-		 << n
-		 << newline;
-
-	    double energy =  47.043;
-	    info << "effciency at " << energy << " is " << hdd(energy ) << endl;
-
-
-	    pressure = 6.0;
-            He3DetEffic< double> hdd1( pressure, radius, n);
-            info << at(__HERE__);
-            info << "instantiated He3DetEffic<double>(pressure=" 
-		 << pressure 
-		 << ", radius=" 
-		 << radius
-		 << ", n="
-		 << n
-		 << newline;
-
-	    info << "effciency at " << energy << " is " << hdd1(energy ) << endl;
-	    return true;
+	  _test_2( 10.0, 1.27, 200, 1., 47.043);
+	  _test_2( 6.0, 1.27, 200, 1., 47.043);
+	  return true;
 	}
 
         bool test_4()
         {
+
             journal::info_t info( journalname);
             
             using namespace DANSE::Reduction;
@@ -187,6 +159,8 @@ namespace ReductionTest
 
 int main()
 {
+  journal::debug_t debug( "he3deteffic" );
+  debug.activate();
   bool passed = ReductionTest::test_He3DetEffic(); 
   report ("test of He3DetEffic", passed );
 }
