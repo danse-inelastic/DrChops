@@ -56,7 +56,7 @@ class He3DetEffic( Base):
         """radius() -> radius of detector (in mm)"""
         return self._radius
 
-    
+
     def __call__(self, energy, output=None):
         """he3DetEffic( energy, output=None)->varies
         Compute the efficiency(ies) for the given energy(ies).
@@ -93,7 +93,7 @@ class He3DetEffic( Base):
         return output
 
 
-    def __init__(self, pressure, radius, nPoints=500, dtype=6):
+    def __init__(self, pressure, radius, nPoints=500, dtype=6, costheta = 1.):
         """He3LPSDEffic( pressure, radius, nPoints=500, dtype=6)->new He3DetEffic
         Create an object that calculates the efficiency of a He3 detector as a
         function of energy.
@@ -101,6 +101,7 @@ class He3DetEffic( Base):
             pressure: of He3 in atmospheres (float)
             radius: of detector tube in cm (float)
             nPoints: number points used in integral
+            costheta: cos(theta) theta is the angle between kf and scattering plane
             dtype: type code, 5.....float, 6.....double
         Outputs:
             new He3LPSDEffic object
@@ -110,14 +111,16 @@ class He3DetEffic( Base):
         (2) ValueError on unrecognized data type.
         (3) RuntimeError if unable to create/allocate."""
 
-        debug.log( "create He3 detector efficiency calculator: pressure is %s atm, radius is %s cm" % (pressure, radius) )
-        handle = red.He3LPSDEffic( dtype, pressure, radius, nPoints)
+        debug.log( "create He3 detector efficiency calculator: pressure is %s atm, radius is %s cm, nPoints is %s, costheta is %s" % (
+            pressure, radius, nPoints, costheta) )
+        handle = red.He3LPSDEffic( dtype, pressure, radius, nPoints, costheta)
         classID = red.He3LPSDEffic_classID()
         Base.__init__( self, dtype, handle, "He3DetEffic<T>", classID)
 
         self._pressure  = pressure
         self._radius = radius
         self._nPoints = nPoints
+        self._costheta = costheta
         
         return
 

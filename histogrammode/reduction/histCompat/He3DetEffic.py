@@ -30,7 +30,8 @@ class He3DetEffic:
                  radius=2.5*cm,
                  nPoints=500,
                  dtype=6,
-                 engine_factory = None):
+                 engine_factory = None,
+                 costheta = 1.):
         if engine_factory is None:
             from reduction.vectorCompat.He3DetEffic import He3DetEffic
             engine_factory = He3DetEffic
@@ -53,7 +54,7 @@ class He3DetEffic:
 
         debug.log( 'pressure: %s, radius: %s, nPoints: %s, dtype: %s' % (
             pressure, radius, nPoints, dtype ) )
-        self._engine = engine_factory( pressure, radius, nPoints, dtype )
+        self._engine = engine_factory( pressure, radius, nPoints = nPoints, dtype = dtype, costheta = costheta )
         return
 
 

@@ -22,16 +22,24 @@ class He3DetEffic_TestCase(ut.TestCase):
     def test(self):
         "He3LPSDEffic"
         eff = He3LPSDEffic( 6, 10., 1.27, 200 )
+        eff = He3LPSDEffic( 6, 10., 1.27, 200, 0.8 )
         return
     
+    def _test1(self, typecode, pressure, radius, npoints, costheta, energy):
+        "He3LPSDEffic - call with one energy value"
+        eff = He3LPSDEffic( typecode, pressure, radius, npoints, costheta )
+        print "pressure=%s, radius=%s, n=%s, costheta=%s" % (
+            pressure, radius, npoints, costheta )
+        eff = He3LPSDEffic_callSingle( eff, typecode, energy )
+        print "efficiency at %s is %s" % (energy, eff)
+        return eff
+
     def test1(self):
         "He3LPSDEffic - call with one energy value"
-        eff = He3LPSDEffic( 6, 10., 1.27, 200 )
-        print "pressure=10, radius=1.27, n=2000"
-        e = 47.043
-        print "efficiency at %s is %s" % (
-            e, He3LPSDEffic_callSingle( eff, 6, e )
-            )
+        self.assertAlmostEqual(
+            self._test1( 6, 10, 1.27, 2000, 1., 47.043), 0.82, places = 2)
+        self.assertAlmostEqual(
+            self._test1( 6, 10, 1.27, 2000, 0.8, 47.043), 0.88, places = 2)
         return
     
     def test2(self):

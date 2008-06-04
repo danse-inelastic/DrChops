@@ -18,7 +18,7 @@ namespace reductionmod
 
   char He3DetEffic__name__[] = "He3LPSDEffic";
   char He3DetEffic__doc__[] = 
-    "He3DetEffic( pressure, radius, numnPoints)\n"
+    "He3DetEffic( pressure, radius, numnPoints, costheta)\n"
     "Create a new He3DetEffic object, which computes the energy dependence \n"
     "of a 3-He detector's absorption\n"
     "Inputs:\n"
@@ -28,6 +28,7 @@ namespace reductionmod
     "    pressure: in atmospheres (floating point)\n"
     "    radius: in cm (floating point)\n"
     "    numPoints: number points to use in grid, must be > 0\n"
+    "    costheta: cos(theta), theta being angle between kf  and scattering plane"
     "Output: \n"
     "    New He3DetEffic instance\n"
     "Exceptions: ValueError\n"
@@ -50,13 +51,13 @@ namespace reductionmod
 
     template <typename FPT>
     PyObject *_callCtor( int dtype, FPT press, FPT radius, 
-			 unsigned nPoints)
+			 unsigned nPoints, FPT costheta)
     {
       typedef typename std::vector<FPT>::iterator FPTIt;
       typedef DANSE::Reduction::He3DetEffic<FPT, FPTIt> w_t;
       
       w_t *newde = 
-	new w_t( press, radius, nPoints);
+	new w_t( press, radius, nPoints, costheta);
 
       return DANSE::Reduction::utils::wrapObject<w_t>
 	(newde, dtype, reductionmod::He3DetEffic__magicNumber);
@@ -68,10 +69,10 @@ namespace reductionmod
   PyObject * He3DetEffic(PyObject *, PyObject *args)
   {
     int dtype = 0;
-    double press = 0.0, radius = 0.0;
+    double press = 0.0, radius = 0.0, costheta=1.0;
     unsigned nPoints = 0;
-    int ok = PyArg_ParseTuple( args, "iddI", &dtype, &press, &radius,
-			       &nPoints);
+    int ok = PyArg_ParseTuple( args, "iddI|d", &dtype, &press, &radius,
+			       &nPoints, &costheta);
     if (!ok) return 0;
     
     std::stringstream errstr("He3DetEffic(): ");
@@ -80,6 +81,7 @@ namespace reductionmod
     if (! _checkArgPositive<double>( press, errstr)) return 0;
     if (! _checkArgPositive<double>( radius, errstr)) return 0;
     if (! _checkArgPositive<unsigned>( nPoints, errstr)) return 0;
+    if (! _checkArgPositive<double>( costheta, errstr)) return 0;
 
     PyObject *retval = 0;
 
@@ -87,10 +89,10 @@ namespace reductionmod
       {
       case 5:    // float
 	retval = _callCtor<float>( dtype, (float)press, (float)radius, 
-				   nPoints);
+				   nPoints, (float)costheta);
 	break;
       case 6:   // double
-	retval = _callCtor<double>( dtype, press, radius, nPoints);
+	retval = _callCtor<double>( dtype, press, radius, nPoints, costheta);
 	break;
       default:
 	errstr << "unrecognized type code " << dtype 
