@@ -39,6 +39,7 @@ EXPORT_PYTHON_MODULES = \
 	Idpt2Sqe.py	\
 	IncidentEnergySolver.py \
 	NormalizationConstantCalculator.py \
+	Spe2Sqe.py \
 	TimeIndependentBackgroundRemover.py \
 	_utils.py		\
 	__init__.py		\
