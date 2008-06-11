@@ -39,6 +39,7 @@ all: export
 
 EXPORT_PYTHON_MODULES = \
 	createmap_pixelID2position.py \
+	detectorview_hist.py \
 	events2Ipdp.py \
 	events2Ipdpd.py \
 	events2IpdpE.py \
