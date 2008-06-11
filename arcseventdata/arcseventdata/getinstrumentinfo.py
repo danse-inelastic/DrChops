@@ -130,12 +130,14 @@ def _getInfoFromCache( ARCSxml ):
     phis = pickle.load( open('phi_pdp.pkl') )
     psis = pickle.load( open('psi_pdp.pkl') )
     dists = pickle.load( open('dist_pdp.pkl') )
+    positions = pickle.load( open('pixelID2position.pkl') )
     os.chdir( cwd )
     infos[ 'phis' ] = phis
     infos[ 'psis' ] = psis
     infos[ 'dists' ] = dists
     infos[ 'pixelID-position mapping binary file' ] =  os.path.join(
         cache_dir, 'pixelID2position.bin' )
+    infos[ 'pixelID-position mapping array' ] = positions
     import units
     meter = units.length.meter
     for k,v in infos.iteritems():
