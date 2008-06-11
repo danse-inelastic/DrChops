@@ -46,6 +46,28 @@ class Idpt2Spe_TestCase(unittest.TestCase):
         return
 
 
+    def test2(self):
+        """Idpt2Spe(ei, idpt, run)
+        """
+        import os
+        f = os.path.join( '..', '..', 'ins-data', 'Lrmecs', '4849' )
+        getRun.select('lrmecs')
+        run = getRun( f )
+        
+        Idpt = run.getIdpt()
+        
+        ei = 59.1 * meV
+        spehist = idpt2spe(ei, Idpt, run = run)
+
+        import pickle
+        pickle.dump( spehist, open('idpt2spe2-4849-spe.pkl', 'w') )
+
+        from histogram.plotter import defaultPlotter
+        defaultPlotter.plot( spehist )
+        raw_input( 'Press <ENTER> to continue' )
+        return
+
+
     pass # end of TimeBG_TestCase
 
     
