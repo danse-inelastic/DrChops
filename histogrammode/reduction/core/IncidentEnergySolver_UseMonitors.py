@@ -27,14 +27,19 @@ class IncidentEnergySolver_UseMonitors(base):
 
 
     def __init__(self, monitor1Id = 0, monitor2Id = 1,
+                 monitor1tofrange = None,
+                 monitor2tofrange = None,
                  monitor1FitGuess = None,
                  monitor2FitGuess = None,
                  fitter = None ):
-        '''__init__( monitor1Id, monitor2Id,
+        '''IncidentEnergySolver_UseMonitors( monitor1Id, monitor2Id,
     monitor1FitGuess = None, monitor2FitGuess = None, fitter = None )
 
     monitor1Id: id of the first (front) beam monitor
     monitor2Id: id of the second (back) beam monitor
+
+    monitor1tofrange: a 2-tuple; tof range for monitor 1. None means full range
+    monitor2tofrange: a 2-tuple; tof range for monitor 2. None means full range
 
     monitor1FitGuess(optional): guess of fitting parameter for first monitor.
     monitor2FitGuess(optional): guess of fitting parameter for second monitor.
@@ -48,6 +53,8 @@ class IncidentEnergySolver_UseMonitors(base):
             monitor1Id, monitor2Id ) )
         self.monitor1Id = monitor1Id
         self.monitor2Id = monitor2Id
+        self.monitor1tofrange = monitor1tofrange
+        self.monitor2tofrange = monitor2tofrange
         self.monitor1FitGuess = monitor1FitGuess
         self.monitor2FitGuess = monitor2FitGuess
         
@@ -73,6 +80,10 @@ class IncidentEnergySolver_UseMonitors(base):
         debug.log("monitor1Id: %s" % self.monitor1Id )
         debug.log("monitor2Id: %s" % self.monitor2Id )
         m1data = run.getMonitorItof( self.monitor1Id )
+        
+        if self.monitor1tofrange: m1data = m1data[ self.monitor1tofrange ]
+        if self.monitor2tofrange: m2data = m2data[ self.monitor2tofrange ]
+        
         m2data = run.getMonitorItof( self.monitor2Id )
         debug.log("m1data: %s" % (m1data.data().storage().asNumarray()) )
         debug.log("m2data: %s" % (m2data.data().storage().asNumarray()) )
@@ -92,7 +103,7 @@ class IncidentEnergySolver_UseMonitors(base):
 
         from pyre.units.length import mm
         distance /= mm
-        e = self._solve( distance, m1data, mon1Inits, m2data, mon2Inits)
+        e = self._solve( distance, m1data, mon1Inits, m2data, mon2Inits )
         debug.log( "energy solved: %s" % e )
         from pyre.units.energy import meV
         return float(e) * meV
@@ -159,7 +170,7 @@ def _guess( monitorData ):
 
 
 def _findMax( xs, ys ):
-    max = ys[0]
+    max = ys[0]; pos = xs[0]
     for x,y in zip(xs, ys):
         if y>max: max = y; pos =x
         continue

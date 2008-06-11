@@ -40,13 +40,13 @@ class Spe2Sqe(ParallelComponent):
 
 
     def __call__(self, ei, sphiEHist, QAxis):
-        """convert s(phi,E) histogram to S(Q,E) histogram
-
-        \arg ei incident energy
-        \arg sphiEHist S(phi,E) histogram
-
-        trivial parallel (non-parallel)
+        """spe2sqe(ei, sphiEHist, QAxis): convert s(phi,E) histogram to S(Q,E) histogram
+        
+        ei: incident energy
+        sphiEHist: S(phi,E) histogram
+        QAxis: Q (momentum transfer) axis
         """
+        #trivial parallel (non-parallel)
         channel = 333
         if not self.parallel or self.mpiRank == 0:
             ret = self.__call__1( ei, sphiEHist, QAxis )
