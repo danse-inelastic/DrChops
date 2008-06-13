@@ -9,12 +9,11 @@
 #
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-PROJECT = reduction
-PACKAGE = core
+PROJECT = reduction/core
+PACKAGE = ARCS
 
 
 BUILD_DIRS = \
-	ARCS  \
 
 RECURSE_DIRS = $(BUILD_DIRS)
 
@@ -34,11 +33,13 @@ update: clean
 # export
 
 EXPORT_PYTHON_MODULES = \
+	DetectorEfficiencyCalculator.py \
+	SolidAngleCalculator.py		\
 	__init__.py		\
 
 
 export:: export-package-python-modules
-	BLD_ACTION="export" $(MM) recurse
+
 
 
 # version
