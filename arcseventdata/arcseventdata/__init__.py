@@ -12,8 +12,13 @@
 # 
 
 
-def copyright():
-    return "arcseventdata pyre module: Copyright (c) 1998-2005 Michael A.G. Aivazis";
+def detectorview( pdphist ):
+    '''create a 2d view of ARCS detectors given a histogram.
+    The first 3 axes of given histogram must be pack, tube, pixel.
+    '''
+    from detectorview_hist import detectorview
+    return detectorview( pdphist )
+
 
 
 def getnumberofevents( eventdatafilename ):
@@ -178,7 +183,7 @@ def e2Itof(
 
 
 
-from pixelpositions2angles import pixelpositions2angles
+#from pixelpositions2angles import pixelpositions2angles
 
 def write_mslice_files( IpE, phi_p, psi_p, spefile, phxfile ):
     from mslice_spe_writer import writer
