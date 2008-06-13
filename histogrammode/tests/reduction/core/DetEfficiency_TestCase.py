@@ -34,7 +34,7 @@ class Detector:
     def __init__(self):
         attributes = Attributes()
         attributes.pressure = 10.*atm
-        self._shape = Tube( 25.*mm, 1000.*mm )
+        self._shape = Tube( 12.5*mm, 1000.*mm )
         self.attributes = attributes
         return
     def shape(self): return self._shape
