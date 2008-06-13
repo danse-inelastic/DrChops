@@ -65,6 +65,23 @@ class VanPlateTx(object):
         energy = energy / meV
         return red.vanPlateXmission_call( self._handle, detectorAngle, energy)
 
+
+    def calc_tx_phi(self, energy, angleaxis):
+        '''calculate a Tx(phi) histogram
+
+        angleaxis: phi axis
+        energy: neutron energy. must have unit attached
+        '''
+        assert angleaxis.name() == 'phi'
+        from histogram import histogram
+        res = histogram( 'V plate tx(phi)', [angleaxis])
+        for phi in res.phi:
+            res[ phi ] = self( phi*degree, energy ), 0
+            continue
+        return res
+
+    
+
 # version
 __id__ = "$Id: VanPlateTx.py 1431 2007-11-03 20:36:41Z linjiao $"
 
