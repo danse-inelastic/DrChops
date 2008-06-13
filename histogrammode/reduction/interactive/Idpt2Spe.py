@@ -30,20 +30,21 @@ idpt2spe = Idpt2Spe()
 from reduction.core.Idpt2Spe_a import Idpt2Spe_a as base
 class Engine(base):
     __doc__ = base.__doc__
-    def __call__(self, ei, idpt , i = None, g = None, run = None):
+    def __call__(self, ei, idpt , i = None, g = None, run = None, mask = None):
         '''idpt2spe(ei, idpt, run=None): convert I(...,pixel,tof) to S(phi,E)
 
         ei: incident energy
         idpt: I(..., pixel, tof) histogram. "..." indicates additional detector
               axes such as packs, tubes, etc
         run: The experimental run instance. 
+        mask: mask histogram
         '''
         # i and g are kept for backward compatibility
         if run: i,g = run.getInstrument()
         else:
             import warnings
             warnings.warn( 'idpt2spe( ei, idpt, instrument, geometer ) deprecated. use idpt2spe(ei, idpt, run=run)', DeprecationWarning )
-        return base.__call__(self, ei, idpt, i, g)
+        return base.__call__(self, ei, idpt, i, g, mask_dp = mask)
         
 
 idpt2spe.registerEngineFactory('default',  Engine)
