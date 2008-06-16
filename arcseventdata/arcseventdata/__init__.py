@@ -33,7 +33,7 @@ def getnumberofevents( eventdatafilename ):
 
 
 def getinstrumentinfo( *args, **kwds ):
-    from getinstrumentinfo import getinstrumentinfo
+    from _getinstrumentinfo import getinstrumentinfo
     return getinstrumentinfo( *args, **kwds )
 
 

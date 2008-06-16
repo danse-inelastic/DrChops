@@ -47,7 +47,6 @@ EXPORT_PYTHON_MODULES = \
 	events2Ipdpt.py \
 	events2Itof.py \
 	events2Idspacing.py \
-	getinstrumentinfo.py \
 	getpixelinfo.py \
 	histogramFrom2colascii.py \
 	longpixelID.py \
@@ -59,6 +58,7 @@ EXPORT_PYTHON_MODULES = \
 	read2colascii.py \
 	units.py \
 	__init__.py \
+	_getinstrumentinfo.py \
 	GetDetectorAxesInfo.py \
 	ParallelComponent.py \
 	ParallelHistogrammer.py \
