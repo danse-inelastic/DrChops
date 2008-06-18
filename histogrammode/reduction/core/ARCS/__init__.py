@@ -29,6 +29,9 @@ def solid_angles( ARCSxml = 'ARCS.xml', pixelradius = 1.27*cm, pixelheight = 100
     return solidangles
 
 
+from DetectorEfficiencyCalculator import deteff_hist
+
+
 # version
 __id__ = "$Id$"
 

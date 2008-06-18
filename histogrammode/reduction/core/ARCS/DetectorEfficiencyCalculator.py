@@ -28,7 +28,10 @@ middlepacks = range(39, 78)
 toppacks = range(78, 116)
 
 
-def deteff_hist( energy, ARCSxml ):
+def deteff_hist( energy, ARCSxml = 'ARCS.xml' ):
+    '''comnpute detector efficieny as a function of pack, detector, pixel
+    The returned object is a histogram eff( pack, det, pixel )
+    '''
     detaxes = getdetaxes( ARCSxml )
     tubeaxis, pixelaxis = detaxes[1:]
     from instrument.nixml import parse_file
