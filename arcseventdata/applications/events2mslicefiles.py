@@ -43,20 +43,46 @@ class Application( base ):
         
         base.main(self)
 
-        from histogram.hdf import load
-        h = load( self.inventory.h5filename, 'I(pdpE)' )
+        if mpiRank() == 0:
+            from histogram.hdf import load
+            h = load( self.inventory.h5filename, 'I(pdpE)' )
 
-        from arcseventdata.getinstrumentinfo import getinstrumentinfo
-        infos = getinstrumentinfo(self.inventory.ARCSxml)
-        phi_p = infos['phis']
-        psi_p = infos['psis']
-
-        #convert to mslice file
-        import arcseventdata
-        arcseventdata.write_mslice_files( h, phi_p, psi_p, spef, phxf )
+            from arcseventdata import getinstrumentinfo
+            infos = getinstrumentinfo(self.inventory.ARCSxml)
+            phi_p = infos['phis']
+            psi_p = infos['psis']
+            
+            import numpy
+            phi_p.I[:] = numpy.nan_to_num( phi_p.I )
+            psi_p.I[:] = numpy.nan_to_num( psi_p.I )
+            
+            #convert to mslice file
+            import arcseventdata
+            arcseventdata.write_mslice_files( h, phi_p, psi_p, spef, phxf )
+            
         return
 
     pass # end of Application
+
+
+
+def mpiRank():
+    try:
+        import mpi
+        world = mpi.world()
+        mpiRank = world.rank; mpiSize = world.size
+        if mpiSize < 1:
+            mpiSize = 1
+            parallel = False
+        else:
+            parallel = True
+    except:
+        mpiRank = 0
+        mpiSize = 1
+        parallel = False
+        pass
+    return mpiRank
+
 
 import os
 
