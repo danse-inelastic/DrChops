@@ -58,8 +58,7 @@ class ParallelHistogrammer(ParallelComponent):
         for i in range(1, mpiSize):
             datastr = self.mpiReceiveStr( i, tag)
             if len(datastr) == 0:
-                raise RuntimeError, 'data string received from node %s is empty. tag = %s' %(
-                    i, tag ) )
+                raise RuntimeError, 'data string received from node %s is empty. tag = %s' %( i, tag ) 
             data = fromstring(datastr, datatype)
             data.shape = shape
             info.log( "received histogram from node %d" % i )
