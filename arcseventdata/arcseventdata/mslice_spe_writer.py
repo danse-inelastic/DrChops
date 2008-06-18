@@ -46,12 +46,6 @@ class Writer(object ):
         print "mslice data writer: write phx file"
         f = open(filename, 'w')
 
-        detAxis = sa_p.axisFromName( "detectorID" )
-        ndets = detAxis.size()
-        
-        pxlAxis = sa_p.axisFromName( "pixelID" )
-        npxls = pxlAxis.size()
-
         assert sa_p.shape() == psi_p.shape()
         size = sa_p.size()
         f.write( "%s\n" % size)
@@ -68,7 +62,7 @@ class Writer(object ):
 
         psi_arr = N.array( psi_p.data().storage().asNumarray(), copy = 0 )
         psi_arr.shape = -1,
-
+        
         for i in range(size):
             counter += 1
             twotheta = sa_arr[i]
