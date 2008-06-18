@@ -29,6 +29,9 @@ class Application(base):
         tof_params = Tuple( 't', default = '0,16000,100' )
         tof_params.meta['tip'] = "tof bin parameters (begin, end, step). units: us"
 
+        pack_params = Tuple( 'p', default = '1,115' )
+        pack_params.meta['tip'] = 'pack parameters (begin, end)'
+
         ARCSxml = pinv.str('x', default = "ARCS.xml")
         ARCSxml.meta['tip'] = "ARCS instrument xml"
 
@@ -38,7 +41,8 @@ class Application(base):
     def build_args(self):
         ARCSxml = self.inventory.ARCSxml
         tof_params = self.inventory.tof_params
-        return ARCSxml, tof_params
+        pack_params = self.inventory.pack_params
+        return ARCSxml, tof_params, pack_params
         
 
     def _defaults(self):

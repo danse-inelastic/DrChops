@@ -17,7 +17,7 @@ class IpdptHistogrammer(base):
 
     def _run( self,
               eventdatafilename, start, nevents,
-              ARCSxml, tof_params):
+              ARCSxml, tof_params, pack_params = (1,115) ):
 
         from arcseventdata import getinstrumentinfo
         infos = getinstrumentinfo(ARCSxml)
@@ -40,6 +40,14 @@ class IpdptHistogrammer(base):
             boundaries = histogram.arange(tof_begin, tof_end, tof_step),
             unit = 'second' )
         detaxes = infos['detector axes']
+
+        #pack axis needs attention
+        startpack, endpack = pack_params
+        packaxis = histogram.axis(
+            'detectorpackID',
+            range( startpack, endpack+1 ) )
+        detaxes[0] = packaxis
+        
         h = histogram.histogram(
             'I(pdpt)',
             detaxes + [tof_axis],
