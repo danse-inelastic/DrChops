@@ -22,7 +22,7 @@
 import os
 
 def run( ARCSxml ):
-    from arcseventdata.getinstrumentinfo import getinstrumentinfo
+    from arcseventdata import getinstrumentinfo
     infos = getinstrumentinfo(ARCSxml)
     return
 
