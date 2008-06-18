@@ -28,7 +28,7 @@ class IpdpdHistogrammer(base):
         info.log( 'neutrons: start = %d, n = %d' % (
             start, nevents ) )
     
-        from arcseventdata.getinstrumentinfo import getinstrumentinfo
+        from arcseventdata import getinstrumentinfo
         infos = getinstrumentinfo(ARCSxml)
         npacks, ndetsperpack, npixelsperdet = infos[
             'detector-system-dimensions']

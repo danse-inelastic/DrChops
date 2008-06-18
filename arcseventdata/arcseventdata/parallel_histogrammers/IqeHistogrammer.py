@@ -50,7 +50,7 @@ class IqeHistogrammer(base):
               eventdatafilename, start, nevents,
               Q_params, E_params, ARCSxml, Ei, emission_time):
         
-        from arcseventdata.getinstrumentinfo import getinstrumentinfo
+        from arcseventdata import getinstrumentinfo
         infos = getinstrumentinfo(ARCSxml)
         npacks, ndetsperpack, npixelsperdet = infos[
             'detector-system-dimensions']

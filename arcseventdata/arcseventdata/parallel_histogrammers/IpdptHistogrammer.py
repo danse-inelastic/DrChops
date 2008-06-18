@@ -19,7 +19,7 @@ class IpdptHistogrammer(base):
               eventdatafilename, start, nevents,
               ARCSxml, tof_params):
 
-        from arcseventdata.getinstrumentinfo import getinstrumentinfo
+        from arcseventdata import getinstrumentinfo
         infos = getinstrumentinfo(ARCSxml)
         npacks, ndetsperpack, npixelsperdet = infos[
             'detector-system-dimensions']

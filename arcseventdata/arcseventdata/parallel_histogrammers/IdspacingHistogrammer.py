@@ -21,7 +21,7 @@ class IdspacingHistogrammer(base):
         
         info.log( "nevents = %s" % nevents )
         
-        from arcseventdata.getinstrumentinfo import getinstrumentinfo
+        from arcseventdata import getinstrumentinfo
         infos = getinstrumentinfo(ARCSxml)
         npacks, ndetsperpack, npixelsperdet = infos[
             'detector-system-dimensions']
