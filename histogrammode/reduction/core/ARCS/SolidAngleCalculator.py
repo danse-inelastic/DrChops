@@ -65,6 +65,10 @@ class SolidAngleCalculator:
 
         x,y,z = pixelpositions[:,0], pixelpositions[:,1], pixelpositions[:,2]
         r2 = x*x + y*y + z*z
+        #remove zeros from r2. r2 will be zero for those fake pixels for
+        #padding pixels for the short tubes
+        r2[ r2<1e-10 ] = 3*3
+        
         import numpy
         cost = (1 - z*z/r2)**0.5
         solidangles[:] = area * cost / r2
