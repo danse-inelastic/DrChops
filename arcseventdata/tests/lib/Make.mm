@@ -16,13 +16,16 @@ PACKAGE = tests
 PROJ_CLEAN += $(PROJ_CPPTESTS)
 
 PROJ_PYTESTS = 
-PROJ_CPPTESTS = test_Histogrammer1 test_Histogrammer2 test_Event2Quantity \
+PROJ_CPPTESTS = test_Histogrammer1 test_Histogrammer2 test_Histogrammer4 \
+	test_Event2Quantity \
 	test_events2Ix test_EventsReader test_Event2d \
 	test_events2EvenlySpacedIx \
 	test_events2EvenlySpacedIxy \
+	test_events2EvenlySpacedIxxxx \
 	test_mslice_formating \
 	test_Event2tof \
 	test_Event2QE \
+	test_Event2QQQE \
 	test_Event2pixd \
 	test_normalize_iqe \
 
@@ -54,6 +57,9 @@ test_Histogrammer1: test_Histogrammer1.cc $(BLD_LIBDIR)/libarcseventdata.$(EXT_S
 test_Histogrammer2: test_Histogrammer2.cc $(BLD_LIBDIR)/libarcseventdata.$(EXT_SAR)
 	$(CXX) $(CXXFLAGS) $(LCXXFLAGS) -o $@ test_Histogrammer2.cc $(PROJ_LIBRARIES)
 
+test_Histogrammer4: test_Histogrammer4.cc $(BLD_LIBDIR)/libarcseventdata.$(EXT_SAR)
+	$(CXX) $(CXXFLAGS) $(LCXXFLAGS) -o $@ test_Histogrammer4.cc $(PROJ_LIBRARIES)
+
 test_Event2Quantity: test_Event2Quantity.cc $(BLD_LIBDIR)/libarcseventdata.$(EXT_SAR)
 	$(CXX) $(CXXFLAGS) $(LCXXFLAGS) -o $@ test_Event2Quantity.cc $(PROJ_LIBRARIES)
 
@@ -75,11 +81,17 @@ test_Event2tof: test_Event2tof.cc $(BLD_LIBDIR)/libarcseventdata.$(EXT_SAR)
 test_Event2QE: test_Event2QE.cc $(BLD_LIBDIR)/libarcseventdata.$(EXT_SAR)
 	$(CXX) $(CXXFLAGS) $(LCXXFLAGS) -o $@ test_Event2QE.cc $(PROJ_LIBRARIES)
 
+test_Event2QQQE: test_Event2QQQE.cc $(BLD_LIBDIR)/libarcseventdata.$(EXT_SAR)
+	$(CXX) $(CXXFLAGS) $(LCXXFLAGS) -o $@ test_Event2QQQE.cc $(PROJ_LIBRARIES)
+
 test_events2EvenlySpacedIx: test_events2EvenlySpacedIx.cc $(BLD_LIBDIR)/libarcseventdata.$(EXT_SAR)
 	$(CXX) $(CXXFLAGS) $(LCXXFLAGS) -o $@ test_events2EvenlySpacedIx.cc $(PROJ_LIBRARIES)
 
 test_events2EvenlySpacedIxy: test_events2EvenlySpacedIxy.cc $(BLD_LIBDIR)/libarcseventdata.$(EXT_SAR)
 	$(CXX) $(CXXFLAGS) $(LCXXFLAGS) -o $@ test_events2EvenlySpacedIxy.cc $(PROJ_LIBRARIES)
+
+test_events2EvenlySpacedIxxxx: test_events2EvenlySpacedIxxxx.cc $(BLD_LIBDIR)/libarcseventdata.$(EXT_SAR)
+	$(CXX) $(CXXFLAGS) $(LCXXFLAGS) -o $@ test_events2EvenlySpacedIxxxx.cc $(PROJ_LIBRARIES)
 
 test_mslice_formating: test_mslice_formating.cc $(BLD_LIBDIR)/libarcseventdata.$(EXT_SAR)
 	$(CXX) $(CXXFLAGS) $(LCXXFLAGS) -o $@ test_mslice_formating.cc $(PROJ_LIBRARIES)

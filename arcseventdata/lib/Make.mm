@@ -25,6 +25,7 @@ PROJ_SRCS = \
 	Event2pixE.cc \
 	Event2pixtof.cc \
 	Event2QE.cc \
+	Event2QQQE.cc \
 	Event2tof.cc \
 	EventsReader.cc \
 	normalize_iqe.cc \
@@ -68,6 +69,7 @@ EXPORT_HEADERS = \
 	Event2pixE.h \
 	Event2pixtof.h \
 	Event2QE.h \
+	Event2QQQE.h \
 	Event2tof.h \
 	EventsReader.h \
 	Histogrammer.h \
@@ -79,8 +81,10 @@ EXPORT_HEADERS = \
 	events2histogram.h \
 	events2Ix.h \
 	events2Ixy.h \
+	events2Ixxxx.h \
 	events2EvenlySpacedIx.h \
 	events2EvenlySpacedIxy.h \
+	events2EvenlySpacedIxxxx.h \
 	ioutils.h \
 	littleEndian2bigEndian.h \
 	mappers.h \

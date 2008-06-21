@@ -1,23 +1,12 @@
 #include <cstring>
 #include <iostream>
-#include <cassert>
 
 #include "arcseventdata/Event.h"
 #include "arcseventdata/Event2Quantity.h"
+#include "arcseventdata/events2EvenlySpacedIxxxx.h"
 
 
 using namespace ARCS_EventData;
-
-class Event2TofChannel: public Event2Quantity1<unsigned int>
-{
-  public:
-  bool operator() ( const Event & e, unsigned int & d ) const 
-  {
-    d = e.tof;
-    return 0;
-  }
-};
-
 
 //4D
 class Event2pdpt: public Event2Quantity4<unsigned int, unsigned int, unsigned int, double>
@@ -35,27 +24,28 @@ class Event2pdpt: public Event2Quantity4<unsigned int, unsigned int, unsigned in
 };
 
 
-int test4d()
-{
-  Event2pdpt e2pdpt;
-  
-  Event event;
-  event.tof = 1000; event.pixelID = 2048;
-
-  unsigned int pack, tube, pixel;
-  double tof;
-  
-  e2pdpt( event,  pack, tube, pixel, tof );
-  
-  assert (pack==3);
-  assert (pixel == 0);
-  assert (tube == 0);
-  assert (tof == 100.);
-}
-
-
 int main()
-{
+{  
+  Event e = { 12500, (21-1)*1024+3*128+77 };
+
+  Event2pdpt e2pdpt;
+
+  size_t size = 115*8*128*100;
+  unsigned int * intensities = new unsigned int[ size ];
+
+  for (int i=0; i<size; i++) { intensities[i] = 0; }
+  
+  events2EvenlySpacedIxxxx<Event2pdpt, unsigned int, unsigned int, unsigned int, double, unsigned int>
+    (&e, 1, e2pdpt, 
+     1, 116, 1, 
+     0, 8, 1,
+     0, 128, 1,
+     1000, 2000, 10.,
+     intensities);
+
+  assert (intensities[ ((21-1)*1024+3*128+77)*100 + 25] == 1);
+  
+  delete [] intensities;
   return 0;
 }
 

@@ -129,6 +129,64 @@ namespace ARCS_EventData{
     YDataType m_y;
   } ;
 
+
+  /// Histogammer4: add event to a 4D histogram.
+  /// Class to add neutron events (objects of Event class) 
+  /// to a 4-D histogram (object of GridData_4D).
+  /// This is the core of event-mode reduction.
+  /// The idea is, given a neutron event, the histogrammer
+  /// deduce the values of the physical quantities from that neutron event, 
+  /// and then do histogramming by add 1 to the bin
+  /// to which the values of the physical quantities belong.
+  ///
+  /// template arguments:
+  ///   GridData_4D: f(x1,x2,x3,x4) histogram. 
+  ///   Event2Quantity4: functor event-->x1,x2,x3,x4
+  ///   X1DataType: data type of x1
+  ///   X2DataType: data type of x2
+  ///   X3DataType: data type of x3
+  ///   X4DataType: data type of x4
+  ///
+  template <typename GridData_4D, typename Event2Quantity4, 
+	    typename X1DataType, typename X2DataType, typename X3DataType, typename X4DataType>
+  class Histogrammer4 {
+    
+  public:
+    Histogrammer4( GridData_4D & fxxxx, const Event2Quantity4 & e2xxxx )
+      : m_fxxxx( fxxxx ), m_e2xxxx( e2xxxx )
+    {
+    }
+    
+    void operator() ( const Event & e )
+    {
+      if (m_e2xxxx( e, m_x1, m_x2, m_x3, m_x4 )) return;
+      try {
+	m_fxxxx( m_x1, m_x2, m_x3, m_x4 ) += 1;
+      }
+      catch (OutOfBound err)  {
+#ifdef DEBUG
+	journal::warning_t warning("arcseventdata.Histogrammer4");
+	warning << journal::at(__HERE__)
+		<< "OutOfBound: " << err.what()
+		<< journal::endl;
+#endif
+      }
+    }
+    
+    void clear() 
+    {
+      m_fxxxx.clear();
+    }
+
+  private:
+    GridData_4D & m_fxxxx;
+    const Event2Quantity4 & m_e2xxxx;
+    X1DataType m_x1;
+    X2DataType m_x2;
+    X3DataType m_x3;
+    X4DataType m_x4;
+  } ;
+
 }
 
 
