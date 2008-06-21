@@ -171,8 +171,8 @@ class IncidentEnergySolver_UseElasticPeaks(_base, ParallelComponent):
         
         # for debug
         from pickle import dump
-        dump( distances, open('distance(pixel)-node%d.pkl'%self.mpiRank, 'w') )
-        dump( idpt, open('I(pixel,tof)-node%d.pkl'%self.mpiRank, 'w') )
+        #dump( distances, open('distance(pixel)-node%d.pkl'%self.mpiRank, 'w') )
+        #dump( idpt, open('I(pixel,tof)-node%d.pkl'%self.mpiRank, 'w') )
         dump( mask, open('mask(pixel)-node%d.pkl'%self.mpiRank, 'w') )
         
         from reduction.histCompat.RebinTof2E_batch import istartof2IE
