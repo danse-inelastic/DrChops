@@ -37,7 +37,6 @@ all: export
 
 EXPORT_PYTHON_MODULES = \
 	__init__.py \
-	AbstractHistogrammer.py \
 	LauncherMPICH2.py \
 	MpiApplication.py \
 	MpiHistogrammerApp.py \

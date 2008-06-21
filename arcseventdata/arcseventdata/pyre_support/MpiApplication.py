@@ -21,7 +21,7 @@
 
 
 from mpi.Application import Application as base
-from arcseventdata.ParallelComponent import ParallelComponent
+from arcseventdata.parallel_histogrammers.ParallelComponent import ParallelComponent
 
 
 class Application(base, ParallelComponent):

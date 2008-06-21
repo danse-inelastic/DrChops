@@ -60,8 +60,6 @@ EXPORT_PYTHON_MODULES = \
 	__init__.py \
 	_getinstrumentinfo.py \
 	GetDetectorAxesInfo.py \
-	ParallelComponent.py \
-	ParallelHistogrammer.py \
 
 
 export:: export-python-modules
