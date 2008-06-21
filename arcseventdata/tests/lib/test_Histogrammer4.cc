@@ -35,11 +35,12 @@ int main()
   
   unsigned int * intensities = new unsigned int[ 115*8*128*100 ];
 
-  Ipdpt ipdpt( 1, 116, 1, 
-		   0, 8, 1,
-		   0, 128, 1,
-		   1000, 2000, 10.,
-		   intensities );
+  Ipdpt ipdpt
+    ( 1, 116, 1, 
+      0, 8, 1,
+      0, 128, 1,
+      1000, 2000, 10.,
+      intensities );
   ipdpt.clear();
   assert (ipdpt(21, 3, 77, 1250) == 0);
   
