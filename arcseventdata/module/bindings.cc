@@ -20,6 +20,7 @@
 
 #include "wrap_events2EvenlySpacedIx.h"
 #include "wrap_events2EvenlySpacedIxy.h"
+#include "wrap_events2EvenlySpacedIxxxx.h"
 #include "wrap_readevents.h"
 #include "wrap_readpixelpositions.h"
 #include "wrap_mslice_formating.h"
@@ -71,6 +72,11 @@ struct PyMethodDef pyarcseventdata_methods[] = {
     {wrap_arcseventdata::events2Ipixd_numpyarray__name__, 
      wrap_arcseventdata::events2Ipixd_numpyarray,
      METH_VARARGS, wrap_arcseventdata::events2Ipixd_numpyarray__doc__},
+    
+    // events2IQQQE
+    {wrap_arcseventdata::events2IQQQE_numpyarray__name__, 
+     wrap_arcseventdata::events2IQQQE_numpyarray,
+     METH_VARARGS, wrap_arcseventdata::events2IQQQE_numpyarray__doc__},
     
     // readevents
     {wrap_arcseventdata::readevents__name__, 

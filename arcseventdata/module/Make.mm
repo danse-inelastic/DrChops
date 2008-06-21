@@ -27,6 +27,7 @@ PROJ_SRCS = \
 	numpy_support.cc \
 	wrap_events2EvenlySpacedIx.cc \
 	wrap_events2EvenlySpacedIxy.cc \
+	wrap_events2EvenlySpacedIxxxx.cc \
 	wrap_mslice_formating.cc \
 	wrap_normalize_iqe.cc \
 	wrap_readevents.cc \
