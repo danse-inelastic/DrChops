@@ -93,6 +93,8 @@ class Idpt2Spe_a_TestCase(unittest.TestCase):
 
         ei = 47.043 # v=3000m/s
         R = R/mm #
+        scale_intensity = 3.0
+        spe_standard_unit = meV
 
         from histogram import axis, arange
         EAxis = axis('energy', arange(-45, 45, 1.), unit='meV')
@@ -104,6 +106,7 @@ class Idpt2Spe_a_TestCase(unittest.TestCase):
         measurement = Measurement( instrument, geometer)
         mainrun = measurement.getRun("main")
         Idpt = mainrun.getIdpt()
+        Idpt *= scale_intensity, 0
         spehist = reducer(ei*meV, Idpt, instrument, geometer)
         #import pickle
         #pickle.dump(spehist, open('spehist-FakeMeasurement.pkl', 'w') )
@@ -182,9 +185,9 @@ class Idpt2Spe_a_TestCase(unittest.TestCase):
                 #counts should be normalized by solid angle for a phi bin
                 #now it is normalized by number of pixels
                 #expected reduced intensity
-                i_e = counts / eff / numpxls
+                i_e = counts / eff / numpxls * scale_intensity
                 #remember: it is the square of errors
-                err_e = counts /eff/eff /numpxls/numpxls
+                err_e = counts /eff/eff /numpxls/numpxls * scale_intensity  * scale_intensity 
                 
                 #now we can compare reduced data and computed data
                 #plot to show comparison
@@ -205,8 +208,8 @@ class Idpt2Spe_a_TestCase(unittest.TestCase):
                             se[i], i_e[i]) )
                         debug.line(  "errors: got %s, expected %s" % (
                             ee[i], err_e[i]) )
-                        testFacility.assertAlmostEqual( se[i], i_e[i], 1 )
-                        #testFacility.assertAlmostEqual( ee[i], err_e[i], 1 )
+                        testFacility.assertAlmostEqual( se[i], i_e[i], 0 )
+                        #testFacility.assertAlmostEqual( ee[i], err_e[i], 0 )
                         pass
                     continue # e
                 continue # detID
@@ -266,12 +269,12 @@ class Idpt2Spe_a_TestCase(unittest.TestCase):
             eaxis = sphiEHist.axisFromName( 'energy' )
             e = array(eaxis.binCenters())*(eaxis.unit()/meV)
             
-            spe = sphiEHist.data().storage().asNumarray()
-            spe = array(spe, copy = 1)
+            spe = sphiEHist.I * sphiEHist.unit() * spe_standard_unit
+            #spe = array(spe, copy = 1)
             spe.shape = len(phi), len(e)
                 
-            err = sphiEHist.errors().storage().asNumarray()
-            err = array(err, copy = 1)
+            err = sphiEHist.E2 * sphiEHist.unit() * sphiEHist.unit() * spe_standard_unit * spe_standard_unit
+            #err = array(err, copy = 1)
             err.shape = len(phi), len(e)
             return phi, e, spe, err
 

@@ -25,6 +25,8 @@ class Spe2Sqe_TestCase(TestCase):
     def test(self):
         """
         """
+        intensity_scale = 3.
+
         #prepare data
         from histogram import axis, histogram, arange, datasetFromFunction
         phiAxis = axis( 'phi', boundaries = arange( 0., 120., 5. ), unit = 'degree'  )
@@ -35,6 +37,8 @@ class Spe2Sqe_TestCase(TestCase):
 
         def f(phi): return 1+0.*phi
         spe[ (), 0. ] = datasetFromFunction(f, (phiAxis,)), datasetFromFunction(f, (phiAxis,))
+
+        spe *= intensity_scale, 0 # to test handling of unit
 
         from reduction.core.Spe2Sqe import spe2sqe
 

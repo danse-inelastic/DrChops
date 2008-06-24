@@ -70,6 +70,8 @@ class Spe2Sqe(ParallelComponent):
 
         non-parallel version
         """
+        unitfactor = self._check_unit( sphiEHist )
+        
         EAxis = sphiEHist.axisFromName('energy')
         sQEHist = histogram( 'S(Q,E)', [QAxis, EAxis], unit='1')
         
@@ -103,11 +105,39 @@ class Spe2Sqe(ParallelComponent):
             continue # for loop
             
         info.log("completed S(Q,E) loop")
+
+        #should this unit manipulation implemented in histCompat.QRebinner?
+        info.log("**fix units")
+        self._fix_sqe_unit( sQEHist, unitfactor )
+        
         info.log( "save S(Q,E) using pickle" )
         
         dump( sQEHist, "sqehist.pkl" )
         self._save( sQEHist )
         return sQEHist
+
+
+    def _check_unit(self, spe):
+        #check unit of input hsitogram
+        speunit = spe.unit()
+        import reduction.units as units
+        meV = units.energy.meV
+        try:
+            speunit + 1./meV
+            return speunit*meV
+        except:
+            try:
+                speunit + 1.
+                return speunit
+            except:
+                raise RuntimeError, "S(phi,E) histogram should have a unit of 1/meV or should be unitless"
+            raise "Should not reach here"
+        raise "should not reach here"
+
+
+    def _fix_sqe_unit(self, sqe, unitfactor ):
+        sqe *= unitfactor, 0
+        return
 
 
     def _save(self, sQEHist):

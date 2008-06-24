@@ -57,6 +57,11 @@ def dgts_RebinTof2E_batch(
     All input should be either histograms or floats
     """
 
+    # make sure input histogram has the right unit
+    Iunit = I_startof.unit()
+    try: Iunit + 1
+    except: raise RuntimeError, "intensities of I(*,tof) histogram should be unitless"
+
     from pyre.units.time import microsecond
     from pyre.units.length import mm,cm
     from pyre.units.pressure import atm
@@ -113,7 +118,11 @@ def dgts_RebinTof2E_batch(
 
     debug.log( '%s' % args )
     
-    return vengine( *args )
+    ret = vengine( *args )
+
+    S_pe *= Iunit, 0
+    
+    return ret
 
 
 #debug.activate()

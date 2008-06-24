@@ -12,6 +12,21 @@ class QRebinner( object):
     def rebin( self, inHist, outHist, e_final):
 
         # should check units of inHist and outHist here!!!!
+        # probably the right thing to do is to set the unit
+        # of input histogram to a fixed unit and
+        # set the output histogram to a fixed unit.
+        import warnings
+        message = (
+            "A good strategy of dealing with units has not been implemented."
+            "At this moment you have to take care of the units yourself."
+            "For example, you can do"
+            "  >>> rebin(inHist, outHist, e_final)"
+            "  >>> outHist *= inHist.unit(), inHist.unit()*0"
+            "Actually this is what is now implemented in reduction.core.Spe2Sqe"
+            "Anyway, you should not need to use this class directly, "
+            "You should use recored.core.Spe2Sqe or reduction.interactive.spe2sqe."
+            )
+        warnings.warn( message )
 
         indata = inHist.data().storage()
         inerrs = inHist.errors().storage()
