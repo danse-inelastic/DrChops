@@ -79,12 +79,13 @@ class IncidentEnergySolver_UseMonitors(base):
         
         debug.log("monitor1Id: %s" % self.monitor1Id )
         debug.log("monitor2Id: %s" % self.monitor2Id )
+        
         m1data = run.getMonitorItof( self.monitor1Id )
+        m2data = run.getMonitorItof( self.monitor2Id )
         
         if self.monitor1tofrange: m1data = m1data[ self.monitor1tofrange ]
         if self.monitor2tofrange: m2data = m2data[ self.monitor2tofrange ]
         
-        m2data = run.getMonitorItof( self.monitor2Id )
         debug.log("m1data: %s" % (m1data.data().storage().asNumarray()) )
         debug.log("m2data: %s" % (m2data.data().storage().asNumarray()) )
 
