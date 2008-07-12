@@ -69,7 +69,6 @@ def calcEi( m1Itof, m2Itof, guess = 70, find_peakcenter = None, export = {}):
     # find peak centers
     t1 = find_peakcenter( m1Itof, mod2m1, v, 1, export )
     t2 = find_peakcenter( m2Itof, mod2m2, v, 2, export )
-    print t1,t2
 
     tofaxis = m1Itof.axisFromName('tof')
     tofunit = tofaxis.unit()
@@ -77,10 +76,7 @@ def calcEi( m1Itof, m2Itof, guess = 70, find_peakcenter = None, export = {}):
     second = units.time.second
     scale = second / tofunit
 
-    print scale
-    print mod2m2, mod2m1, t2, t1
     v = (mod2m2-mod2m1)/(t2-t1)*scale
-    print v
     
     Ei = C.v2e( v )
     export['Ei'] = Ei
