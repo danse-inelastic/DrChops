@@ -12,6 +12,9 @@
 # 
 
 
+#tofunit = '0.1*microsecond'
+tofunit = 'microsecond'
+
 def readHistogram( filename ):
     s = open(filename).read()
     import numpy as N
@@ -22,7 +25,7 @@ def readHistogram( filename ):
     Itof = H.histogram(
         'I(tof)',
         [
-        ('tof', tof, '0.1*microsecond'),
+        ('tof', tof, tofunit),
         ],
         data = I, errors = I )
     return Itof
