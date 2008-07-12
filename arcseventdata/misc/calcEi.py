@@ -1,7 +1,34 @@
+#!/usr/bin/env python
+# 
+#  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# 
+#                                  Jiao Lin
+#                        California Institute of Technology
+#                          (C) 2007  All Rights Reserved
+# 
+#  <LicenseText>
+# 
+#  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#
 
 
 
-def peakcenter( itof, mod2monitor, velocityguess, monno, export ):
+def peakcenter_by_fitting_to_parabolic( itof, mod2monitor, velocityguess, monno, export ):
+    t = mod2monitor/velocityguess * 1e6 # microsecond
+    
+    width = t/10
+    
+    pk = itof[ (t-width, t+width) ]
+    export ['m%spk' % monno ] = pk
+
+    from reduction.histCompat import findPeakPosition
+    
+    center = findPeakPosition( pk, n=8 )
+    
+    return center
+
+
+def peakcenter_by_fitting_to_gaussian( itof, mod2monitor, velocityguess, monno, export ):
     t = mod2monitor/velocityguess * 1e6 # microsecond
     
     width = t/10
@@ -23,7 +50,47 @@ def peakcenter( itof, mod2monitor, velocityguess, monno, export ):
     
 
 
-def run( guess = 70,  export = {} ):
+
+def calcEi( m1Itof, m2Itof, guess = 70, find_peakcenter = None, export = {}):
+    
+    if find_peakcenter is None:
+        find_peakcenter = peakcenter_by_fitting_to_parabolic
+
+    # approximate velocity 
+    from reduction.utils import conversion as C
+    v = C.e2v( guess )
+
+    # instrument details
+    from arcseventdata import getinstrumentinfo as gii
+    arcs = gii('ARCS.xml')
+    mod2m1 = arcs['moderator-monitor1 distance']
+    mod2m2 = arcs['moderator-monitor2 distance']
+
+    # find peak centers
+    t1 = find_peakcenter( m1Itof, mod2m1, v, 1, export )
+    t2 = find_peakcenter( m2Itof, mod2m2, v, 2, export )
+    print t1,t2
+
+    tofaxis = m1Itof.axisFromName('tof')
+    tofunit = tofaxis.unit()
+    from reduction.interactive import units
+    second = units.time.second
+    scale = second / tofunit
+
+    print scale
+    print mod2m2, mod2m1, t2, t1
+    v = (mod2m2-mod2m1)/(t2-t1)*scale
+    print v
+    
+    Ei = C.v2e( v )
+    export['Ei'] = Ei
+
+    emission_time = t1*tofunit - mod2m1/v * second
+    export['emission_time'] = emission_time
+    return 
+
+    
+def run( exprun, guess = 70, export = {}, find_peakcenter = None ):
     '''calculate Ei
 
     inputs:
@@ -39,27 +106,23 @@ def run( guess = 70,  export = {} ):
       - m1pkfit: fit to m1pk
       - m2pkfit: fit to m2pk
     '''
-    import histogram.hdf as hh
-    m1 = hh.load( 'm1Itof.h5', 'I(tof)' )
-    m2 = hh.load( 'm2Itof.h5', 'I(tof)' )
-    export['m1'] = m1
-    export['m2'] = m2
-    from reduction.utils import conversion as C
-    v = C.e2v( guess )
-    from arcseventdata.getinstrumentinfo import getinstrumentinfo as gii
-    arcs = gii('ARCS.xml')
-    mod2m1 = arcs['moderator-monitor1 distance']
-    mod2m2 = arcs['moderator-monitor2 distance']
-
-    t1 = peakcenter( m1, mod2m1, v, 1, export )
-    t2 = peakcenter( m2, mod2m2, v, 2, export )
     
-    v = (mod2m2-mod2m1)/(t2-t1)*1e6
-    
-    Ei = C.v2e( v )
-    export['Ei'] = Ei
+    if find_peakcenter is None:
+        find_peakcenter = peakcenter_by_fitting_to_parabolic
 
-    emission_time = t1 - mod2m1/v * 1e6
-    export['emission_time'] = emission_time
+    m1Itof = exprun.getMonitorItof( 1 )
+    m2Itof = exprun.getMonitorItof( 2 )
+    
+    export['m1Itof'] = m1Itof
+    export['m2Itof'] = m2Itof
+
+    calcEi( m1Itof, m2Itof,
+            guess = guess, find_peakcenter = find_peakcenter, export = export)
     return 
 
+
+
+# version
+__id__ = "$Id$"
+
+#  End of file 
