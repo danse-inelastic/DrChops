@@ -23,7 +23,7 @@ def peakcenter_by_fitting_to_parabolic( itof, mod2monitor, velocityguess, monno,
 
     from reduction.histCompat import findPeakPosition
     
-    center = findPeakPosition( pk, n=8 )
+    center = findPeakPosition( pk, n=1 )
     
     return center
 
@@ -36,7 +36,7 @@ def peakcenter_by_fitting_to_gaussian( itof, mod2monitor, velocityguess, monno, 
     pk = itof[ (t-width, t+width) ]
     export ['m%spk' % monno ] = pk
 
-    from reduction.scripting import fitg1
+    from reduction.interactive import fitg1
 
     bg, ht, center, width = fitg1( pk )
     gaussian = fitg1.functor( bg, ht, center, width )
