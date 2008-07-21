@@ -12,10 +12,10 @@ using namespace ARCS_EventData;
 class Event2TofChannel: public Event2Quantity1<unsigned int>
 {
   public:
-  bool operator() ( const Event & e, unsigned int & tof ) const 
+  unsigned int operator() ( const Event & e, unsigned int & tof ) const 
   {
     tof = e.tof;
-    return 0;
+    return 1;
   }
 };
 
@@ -33,7 +33,7 @@ int main()
   
   Event2TofChannel e2t;
   
-  Histogrammer1<Itof, Event2TofChannel, unsigned int> her( itof, e2t );
+  Histogrammer1<Event, Itof, Event2TofChannel, unsigned int, unsigned int> her( itof, e2t );
   her.clear();
   
   Event e = { 3500, 2048 };

@@ -41,7 +41,7 @@ namespace ARCS_EventData{
       );
 
     // methods
-    bool operator() ( const Event & e, double &Q, double & E ) const ;
+    unsigned int operator() ( const Event & e, double &Q, double & E ) const ;
 
 
   private:

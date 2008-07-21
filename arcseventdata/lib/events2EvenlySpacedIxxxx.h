@@ -15,8 +15,11 @@
 #ifndef H_ARCSEVENTDATA_EVENTS2EVENLYSPACEDIXXXX
 #define H_ARCSEVENTDATA_EVENTS2EVENLYSPACEDIXXXX
 
-#include "events2Ixxxx.h"
+//#include "events2Ixxxx.h"
+#include "Histogrammer.h"
+#include "events2histogram.h"
 #include "histogram/EvenlySpacedGridData_4D.h"
+
 
 namespace ARCS_EventData{
 
@@ -60,7 +63,8 @@ namespace ARCS_EventData{
        x4_begin, x4_end, x4_step, 
        z_begin);
     
-    Histogrammer4< Ixxxx, Event2XXXX, X1Data, X2Data, X3Data, X4Data> her( ixxxx, e2xxxx );
+    Histogrammer4< Event, Ixxxx, Event2XXXX, 
+      X1Data, X2Data, X3Data, X4Data, ZData>  her( ixxxx, e2xxxx );
     events2histogram( events_begin, N, her );
     return ;
   }

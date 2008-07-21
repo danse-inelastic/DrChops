@@ -28,7 +28,7 @@ class events2Ipdpt_TestCase(TestCase):
         Ipdpt = H.histogram(
             'I(pack, detector, pixel, tof)',
             [
-            ('detectorpackID', range(115)),
+            ('detectorpackID', range(1,116)),
             ('detectorID', range(8)),
             ('pixelID', range(128) ),
             ('tof', H.arange(0,1.e-4,1.e-7)),

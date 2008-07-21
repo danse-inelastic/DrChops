@@ -15,7 +15,7 @@ namespace ARCS_EventData {
     const char jrnltag[] = "Event2d";
   }
 
-  bool
+  unsigned int
   Event2d::operator ()
     ( const Event & e, double &d ) const
   {
@@ -27,7 +27,7 @@ namespace ARCS_EventData {
 	      << "pixel ID out of bound: " << pixelID 
 	      << journal::endl;
 #endif
-      return 1;
+      return 0;
     }
     const unsigned int & tofchannelno = e.tof;
 
@@ -60,7 +60,7 @@ namespace ARCS_EventData {
 
     //std::cout << "pixelID=" << pixelID << ", x,y,z=" << x << "," << y << "," << z << ", sample2pixel = " << sample2pixel << ", mo2sample=" << m_mod2sample << "tof = " << tof << "velocity = " << velocity << "lambda=" << lambda << "twotheta = " << twotheta << ", d = " << d << std::endl;
 
-    return 0;
+    return 1;
   }
   
 }

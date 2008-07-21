@@ -20,7 +20,7 @@ class TestCase(TestCase):
 
     def test1(self):
         'normalize_iqe: calcSolidAngleQE'
-        from arcseventdata.getinstrumentinfo import getinstrumentinfo
+        from arcseventdata import getinstrumentinfo
         ARCSxml = 'ARCS.xml'
         infos = getinstrumentinfo(ARCSxml)
         npacks, ndetsperpack, npixelsperdet = infos[

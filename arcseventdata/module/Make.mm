@@ -30,6 +30,7 @@ PROJ_SRCS = \
 	wrap_events2EvenlySpacedIxxxx.cc \
 	wrap_mslice_formating.cc \
 	wrap_normalize_iqe.cc \
+	wrap_normalize_iqqqe.cc \
 	wrap_readevents.cc \
 	wrap_readpixelpositions.cc \
 

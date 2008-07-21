@@ -22,8 +22,6 @@ namespace ARCS_EventData{
 
   using namespace DANSE::Histogram;
 
-  struct Event;
-
   /// Histogammer1: add event to a 1D histogram.
   /// Class to add neutron events (objects of Event class) 
   /// to a 1-D histogram (object of GridData_1D).
@@ -38,7 +36,8 @@ namespace ARCS_EventData{
   ///   Event2Quantity1: functor event-->x
   ///   DataType: data type of x
   ///
-  template <typename GridData_1D, typename Event2Quantity1, typename DataType>
+  template <typename Event, typename GridData_1D, typename Event2Quantity1, 
+	    typename DataType, typename IDataType>
   class Histogrammer1 {
     
   public:
@@ -49,10 +48,9 @@ namespace ARCS_EventData{
     
     void operator() ( const Event & e )
     {
-      bool failed = m_e2x( e, m_x );
-      if (failed) return;
+      IDataType i = m_e2x( e, m_x );
       try {
-	m_fx( m_x ) += 1;
+	m_fx( m_x ) += i;
       }
       catch (OutOfBound err)  {
 #ifdef DEBUG
@@ -91,8 +89,9 @@ namespace ARCS_EventData{
   ///   XDataType: data type of x
   ///   YDataType: data type of y
   ///
-  template <typename GridData_2D, typename Event2Quantity2, 
-	    typename XDataType, typename YDataType>
+  template <typename Event, typename GridData_2D, typename Event2Quantity2, 
+	    typename XDataType, typename YDataType,
+	    typename IDataType>
   class Histogrammer2 {
     
   public:
@@ -103,9 +102,9 @@ namespace ARCS_EventData{
     
     void operator() ( const Event & e )
     {
-      if (m_e2xy( e, m_x, m_y )) return;
+      IDataType i = m_e2xy( e, m_x, m_y );
       try {
-	m_fxy( m_x, m_y ) += 1;
+	m_fxy( m_x, m_y ) += i;
       }
       catch (OutOfBound err)  {
 #ifdef DEBUG
@@ -147,8 +146,9 @@ namespace ARCS_EventData{
   ///   X3DataType: data type of x3
   ///   X4DataType: data type of x4
   ///
-  template <typename GridData_4D, typename Event2Quantity4, 
-	    typename X1DataType, typename X2DataType, typename X3DataType, typename X4DataType>
+  template <typename Event, typename GridData_4D, typename Event2Quantity4, 
+	    typename X1DataType, typename X2DataType, typename X3DataType, typename X4DataType,
+	    typename IDataType>
   class Histogrammer4 {
     
   public:
@@ -159,9 +159,9 @@ namespace ARCS_EventData{
     
     void operator() ( const Event & e )
     {
-      if (m_e2xxxx( e, m_x1, m_x2, m_x3, m_x4 )) return;
+      IDataType i = m_e2xxxx( e, m_x1, m_x2, m_x3, m_x4 );
       try {
-	m_fxxxx( m_x1, m_x2, m_x3, m_x4 ) += 1;
+	m_fxxxx( m_x1, m_x2, m_x3, m_x4 ) += i;
       }
       catch (OutOfBound err)  {
 #ifdef DEBUG

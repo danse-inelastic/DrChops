@@ -44,6 +44,7 @@ EXPORT_PYTHON_MODULES = \
 	events2Ipdpd.py \
 	events2IpdpE.py \
 	events2IQE.py \
+	events2IQQQE.py \
 	events2Ipdpt.py \
 	events2Itof.py \
 	events2Idspacing.py \
@@ -54,6 +55,7 @@ EXPORT_PYTHON_MODULES = \
 	mslice_spe_writer.py \
 	normalize_iqe.py \
 	normalize_iqe_py_prototype.py \
+	normalize_iqqqe.py \
 	pixelpositions2angles.py \
 	read2colascii.py \
 	units.py \

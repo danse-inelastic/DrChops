@@ -197,6 +197,7 @@ from events2Idspacing import events2Idspacing
 from events2IpdpE import events2IpdpE
 from events2Ipdpd import events2Ipdpd
 from events2IQE import events2IQE
+from events2IQQQE import events2IQQQE
 from events2Ipdpt import events2Ipdpt
 from events2Itof import events2Itof
 

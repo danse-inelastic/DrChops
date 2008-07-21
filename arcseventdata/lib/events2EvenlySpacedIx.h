@@ -15,8 +15,12 @@
 #ifndef H_ARCSEVENTDATA_EVENTS2EVENLYSPACEDIX
 #define H_ARCSEVENTDATA_EVENTS2EVENLYSPACEDIX
 
-#include "events2Ix.h"
+
+//#include "events2Ix.h"
+#include "Histogrammer.h"
+#include "events2histogram.h"
 #include "histogram/EvenlySpacedGridData_1D.h"
+
 
 namespace ARCS_EventData{
 
@@ -42,12 +46,14 @@ namespace ARCS_EventData{
 	    typename EventIterator>
   void events2EvenlySpacedIx
   ( const EventIterator events_begin, size_t N, const Event2X & e2x, 
-    XData x_begin, XData x_end, XData x_step, YIterator y_begin)
+    XData x_begin, XData x_end, XData x_step, 
+    YIterator y_begin)
   {
     typedef EvenlySpacedGridData_1D< XData, YData, YIterator> Ix;
     Ix ix(x_begin, x_end, x_step, y_begin);
     
-    Histogrammer1< Ix, Event2X, typename Ix::xdatatype> her( ix, e2x );
+    Histogrammer1< Event, Ix, Event2X, 
+      typename Ix::xdatatype, typename Ix::ydatatype> her( ix, e2x );
     events2histogram( events_begin, N, her );
     return ;
   }

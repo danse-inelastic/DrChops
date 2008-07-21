@@ -1,3 +1,17 @@
+// -*- C++ -*-
+//
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+//
+//                                   Jiao Lin
+//                      California Institute of Technology
+//                        (C) 2007  All Rights Reserved
+//
+// {LicenseText}
+//
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+//
+
+
 #ifndef H_ARCS_EVENTDATA_EVENT2D
 #define H_ARCS_EVENTDATA_EVENT2D
 
@@ -40,7 +54,7 @@ namespace ARCS_EventData {
       */
     }
     
-    virtual bool operator () ( const Event & e, double &d ) const;
+    virtual unsigned int operator () ( const Event & e, double &d ) const;
       
   private:
 
@@ -54,3 +68,10 @@ namespace ARCS_EventData {
 
 
 #endif// H_ARCS_EVENTDATA_EVENT2D
+
+
+// version
+// $Id$
+
+// End of file 
+  

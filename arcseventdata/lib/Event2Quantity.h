@@ -30,8 +30,8 @@ namespace ARCS_EventData{
   class Event2Quantity1 {
   public:
     /// convert event to a quantity
-    /// return: 1 if failed. 0 if succeed
-    virtual bool operator() ( const Event & e, DataType & d ) const = 0;
+    /// return: 0 if failed. 1 if succeed
+    virtual unsigned int operator() ( const Event & e, DataType & d ) const = 0;
     virtual ~Event2Quantity1() {} ;
   };
 
@@ -46,8 +46,8 @@ namespace ARCS_EventData{
   class Event2Quantity2 {
   public:
     /// convert event to two quantities
-    /// return: 1 if failed. 0 if succeed
-    virtual bool operator() ( const Event & e, DataType1 & d1, DataType2 &d2 ) const = 0;
+    /// return: 0 if failed. 1 if succeed
+    virtual unsigned int operator() ( const Event & e, DataType1 & d1, DataType2 &d2 ) const = 0;
     virtual ~Event2Quantity2() {}
   };
 
@@ -61,8 +61,8 @@ namespace ARCS_EventData{
   class Event2Quantity4 {
   public:
     /// convert event to 4 quantities
-    /// return: 1 if failed. 0 if succeed
-    virtual bool operator() ( const Event & e, 
+    /// return: 0 if failed. 1 if succeed
+    virtual unsigned int operator() ( const Event & e, 
 			      DataType1 & d1, DataType2 &d2, DataType3 &d3, DataType4 &d4  ) const = 0;
     virtual ~Event2Quantity4() {}
   };

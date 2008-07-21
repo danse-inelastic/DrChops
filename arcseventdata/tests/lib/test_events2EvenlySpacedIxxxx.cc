@@ -12,14 +12,14 @@ using namespace ARCS_EventData;
 class Event2pdpt: public Event2Quantity4<unsigned int, unsigned int, unsigned int, double>
 {
   public:
-  bool operator() ( const Event & e, 
+  unsigned int operator() ( const Event & e, 
 		    unsigned int & pack, unsigned int & tube, unsigned int &pixel, double &tof ) const 
   {
     pack = e.pixelID/1024 + 1;
     tube = e.pixelID/128 % 8;
     pixel = e.pixelID % 128;
     tof = e.tof/10.;
-    return 0;
+    return 1;
   }
 };
 

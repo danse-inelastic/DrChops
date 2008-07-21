@@ -20,14 +20,14 @@ class TestCase(TestCase):
 
     def test1(self):
         '''test cached info'''
-        from arcseventdata.getinstrumentinfo import getinstrumentinfo
+        from arcseventdata import getinstrumentinfo
         arcs = getinstrumentinfo('ARCS.xml')
         print arcs
         return
     
     def test2(self):
         '''test cached generation'''
-        from arcseventdata.getinstrumentinfo import getinstrumentinfo
+        from arcseventdata import getinstrumentinfo
         arcs = getinstrumentinfo('ARCS-1.xml')
         print arcs
         return

@@ -32,7 +32,7 @@ namespace ARCS_EventData {
 #endif
   }
   
-  bool
+  unsigned int
   Event2QQQE::operator ()
     ( const Event & e, double &Qx, double &Qy, double &Qz, double &E ) const
   {
@@ -45,7 +45,7 @@ namespace ARCS_EventData {
 	    << "pixel ID out of bound: " << pixelID 
 	    << journal::endl;
 #endif
-      return 1;
+      return 0;
     }
     const unsigned int & tofchannelno = e.tof;
 
@@ -66,7 +66,7 @@ namespace ARCS_EventData {
 	    << "tof out of range: "  << toftotal
 	    << journal::endl;
 #endif
-      return 1;
+      return 0;
     }
 
     // tof from sample to pixel in second
@@ -78,7 +78,7 @@ namespace ARCS_EventData {
 	    << "negative time of flight" << tof 
 	    << journal::endl;
 #endif
-      return 1;
+      return 0;
     }
 
     // distances in meter
@@ -102,7 +102,7 @@ namespace ARCS_EventData {
     Qz = -kz;
     
     //std::cout << "pixelID=" << pixelID << ", x,y,z=" << x << "," << y << "," << z << ", sample2pixel = " << sample2pixel << ", mo2sample=" << m_mod2sample << "tof = " << tof << "velocity = " << velocity << "k=" << kx << ',' << ky << ',' << kz << "ki = " << m_ki << ", Q = " << Q << std::endl;
-    return 0;
+    return 1;
   }
   
 }

@@ -39,10 +39,6 @@ namespace wrap_arcseventdata
   using namespace ARCS_EventData;
   using namespace reductionmod;
   
-  typedef Array1DIterator<npy_double> DblArrIt;
-  typedef Array1DIterator<npy_int> IntArrIt;
-
-  
   namespace events2EvenlySpacedIxxxx_impl {
     
     template <typename Event2XXXX, 
@@ -78,10 +74,8 @@ namespace wrap_arcseventdata
 	return 0;
       }
       
-      //std::cout << "hello" << std::endl;
       size_t nzarrsize = PyArray_Size( pyzarray );
       
-      //std::cout << "hello" << std::endl;
       //std::cout << x_begin << ", " << x_end << ", " << x_step << std::endl;
       size_t tmpsize =  size_t((x1_end-x1_begin)/x1_step) * size_t( (x2_end-x2_begin)/x2_step)
 	* size_t((x3_end-x3_begin)/x3_step) * size_t( (x4_end-x4_begin)/x4_step);
@@ -101,8 +95,6 @@ namespace wrap_arcseventdata
 	return 0;
       }
 
-      //std::cout << "hello" << std::endl;
-      
       typedef Array1DIterator<ZData> ZIterator;
       ZIterator z_begin(pyzarray);
       
@@ -130,7 +122,7 @@ namespace wrap_arcseventdata
 "            Qz_begin, Qz_end, Qz_step, \n"\
 "            E_begin, E_end, E_step, \n"\
 "            intensities, Ei, pixelPositions, ntotpixels, tofUnit, \n"\
-"            mod2sample, toffset)"
+"            mod2sample, toffset, intensity_npy_typecode)"
 ;
   // events: PyCObject of pointer to events
   // N: number of events to process
@@ -145,6 +137,7 @@ namespace wrap_arcseventdata
   // tofUnit: unit of tof in the event data file
   // mod2sample: moderator sample distance. unit: meter
   // toffset: shutter time offset. unit: microsecond
+  // intensity_npy_typecode: numpy typecode for the intensity array
   
   PyObject * events2IQQQE_numpyarray(PyObject *, PyObject *args)
   {
@@ -159,9 +152,10 @@ namespace wrap_arcseventdata
     long ntotpixels=  115*8*128;
     double tofUnit = 1e-7, mod2sample = 13.5;
     double toffset = 0;
+    int intensity_npy_typecode = NPY_INT;
     
     int ok = PyArg_ParseTuple
-      (args, "OlddddddddddddOdO|lddd", 
+      (args, "OlddddddddddddOdO|ldddi", 
        &pyevents, &N, 
        &Qx_begin, &Qx_end, &Qx_step,
        &Qy_begin, &Qy_end, &Qy_step,
@@ -171,7 +165,8 @@ namespace wrap_arcseventdata
        &Ei,
        &pypixelPositions, 
        &ntotpixels, &tofUnit, &mod2sample,
-       &toffset);
+       &toffset,
+       &intensity_npy_typecode);
     
     if (!ok) return 0;
     
@@ -190,17 +185,60 @@ namespace wrap_arcseventdata
 	      << E_step << ", "
 	      << std::endl;
     */
-    return events2EvenlySpacedIxxxx_impl::call_numpyarray
+    switch (intensity_npy_typecode) {
+
+    case NPY_INT:
+      return events2EvenlySpacedIxxxx_impl::call_numpyarray
       <Event2QQQE,
-      double, double, double, double, npy_int, NPY_INT>
-      (e2QQQE,
-       pyevents, N,
-       Qx_begin, Qx_end, Qx_step, 
-       Qy_begin, Qy_end, Qy_step, 
-       Qz_begin, Qz_end, Qz_step, 
-       E_begin, E_end, E_step, 
-       pyintensities)
-      ;
+	double, double, double, double, npy_int, NPY_INT>
+	(e2QQQE,
+	 pyevents, N,
+	 Qx_begin, Qx_end, Qx_step, 
+	 Qy_begin, Qy_end, Qy_step, 
+	 Qz_begin, Qz_end, Qz_step, 
+	 E_begin, E_end, E_step, 
+	 pyintensities)
+	;
+
+    case NPY_LONG:
+      return events2EvenlySpacedIxxxx_impl::call_numpyarray
+      <Event2QQQE,
+	double, double, double, double, npy_long, NPY_LONG>
+	(e2QQQE,
+	 pyevents, N,
+	 Qx_begin, Qx_end, Qx_step, 
+	 Qy_begin, Qy_end, Qy_step, 
+	 Qz_begin, Qz_end, Qz_step, 
+	 E_begin, E_end, E_step, 
+	 pyintensities)
+	;
+
+    case NPY_DOUBLE:
+      return events2EvenlySpacedIxxxx_impl::call_numpyarray
+      <Event2QQQE,
+	double, double, double, double, npy_double, NPY_DOUBLE>
+	(e2QQQE,
+	 pyevents, N,
+	 Qx_begin, Qx_end, Qx_step, 
+	 Qy_begin, Qy_end, Qy_step, 
+	 Qz_begin, Qz_end, Qz_step, 
+	 E_begin, E_end, E_step, 
+	 pyintensities)
+	;
+
+    default:
+      std::ostringstream oss;
+      oss << "Not implemented yet: intensity array data type is " 
+	  << intensity_npy_typecode
+	  << "."
+	  << "int: " << NPY_INT << ", "
+	  << "long: " << NPY_LONG << ", "
+	  << "double: " << NPY_DOUBLE << ", "
+	  << std::endl;
+      PyErr_SetString( PyExc_NotImplementedError, oss.str().c_str() );
+      return 0;
+      
+    }
   }
   
 } // wrap_arcseventdata:

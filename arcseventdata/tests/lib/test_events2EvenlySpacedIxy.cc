@@ -11,11 +11,11 @@ using namespace ARCS_EventData;
 class Event2PixTof: public Event2Quantity2<unsigned int, double>
 {
   public:
-  bool operator() ( const Event & e, unsigned int & pix, double & tof) const 
+  unsigned int operator() ( const Event & e, unsigned int & pix, double & tof) const 
   {
     tof = e.tof * 0.1; // micro second
     pix = e.pixelID;
-    return 0;
+    return 1;
   }
 };
 

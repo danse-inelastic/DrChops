@@ -1,0 +1,88 @@
+// -*- C++ -*-
+//
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+//
+//                                   Jiao Lin
+//                      California Institute of Technology
+//                        (C) 2007  All Rights Reserved
+//
+// {LicenseText}
+//
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+//
+
+
+#ifndef H_ARCS_EVENTDATA_NORMALIZE_IQQQE
+#error normalize_iqqqe.icc not meaningful outside normalize_iqqqe.h
+#else
+
+#include <cmath>
+#include "conversion.h"
+#include "pixel_solidangle.h"
+#include "Exception.h"
+
+
+template <typename Float>
+void ARCS_EventData::calcQQQ( Float &Qx, Float & Qy, Float &Qz, 
+			      const Float *position, Float ei, Float e ) 
+{
+  Float ef = ei - e;
+  if (ef<0) { throw Exception( "calcQQQ: energy transfer larger than incident energy" ); }
+  
+  Float x = position[0], y = position[1], z = position[2];
+  Float r = std::sqrt( x*x + y*y + z*z );
+
+  // vQ = vki - vkf
+  // vki = (ki, 0, 0)
+  // vkf = (x,y,z)/r * kf
+
+  Float ki = std::sqrt( ei ) * SE2K, kf = std::sqrt( ef ) * SE2K;
+  
+  Float tmpf = kf/r, kfx = x*tmpf, kfy = y*tmpf, kfz = z*tmpf;
+
+  Qx = ki - kfx;
+  Qy = -kfy;
+  Qz = -kfz;
+}
+
+
+template <typename IQQQE, typename Float, typename Index>
+void ARCS_EventData::calcSolidAngleQQQE
+( IQQQE & sa, Float ei, 
+  Float pixelarea,
+  Index npixels, const Float * pixelpositions, 
+  const AbstractMask & mask)
+{
+  Float Qx, Qy, Qz;
+  Float ebegin = sa.x4begin, eend = sa.x4end, estep = sa.x4step;
+
+  for ( Float e = ebegin + estep/2.; e < eend; e+=estep/2. ) {
+
+    for ( Index pixelID = 0; pixelID < npixels; pixelID ++ ) {
+
+      if (mask( pixelID ) ) continue;
+
+      const Float *position = pixelpositions +  pixelID * 3;
+      calcQQQ( Qx, Qy, Qz, position, ei, e );
+      try {
+	sa( Qx, Qy, Qz, e ) = sa(Qx, Qy, Qz, e) + \
+	  pixel_solidangle<Float>(pixelarea, position[0], position[1], position[2]);
+      }
+      catch (DANSE::Histogram::OutOfBound err) {
+#ifdef DEBUG
+	// use journal to record this error
+#endif
+      }
+    }
+  }
+
+}
+
+
+#endif
+
+
+// version
+// $Id$
+
+// End of file 

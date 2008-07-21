@@ -12,10 +12,10 @@ using namespace DANSE;
 class Event2TofChannel: public Event2Quantity1<unsigned int>
 {
   public:
-  bool operator() ( const Event & e, unsigned int & d ) const 
+  unsigned int operator() ( const Event & e, unsigned int & d ) const 
   {
     d = e.tof;
-    return 0;
+    return 1;
   }
 };
 

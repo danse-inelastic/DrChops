@@ -38,7 +38,7 @@ namespace ARCS_EventData{
   void events2Ix
   ( const EventIterator events_begin, size_t N, const Event2X & e2x, Ix & ix )
   {
-    Histogrammer1< Ix, Event2X, typename Ix::xdatatype> her( ix, e2x );
+    Histogrammer1< Event, Ix, Event2X, typename Ix::xdatatype, typename Ix::ydatatype> her( ix, e2x );
     events2histogram( events_begin, N, her );
     return ;
   }

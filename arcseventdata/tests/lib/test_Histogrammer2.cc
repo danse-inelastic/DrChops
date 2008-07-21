@@ -12,11 +12,11 @@ using namespace ARCS_EventData;
 class Event2PixTofc: public Event2Quantity2<unsigned int, unsigned int>
 {
   public:
-  bool operator() ( const Event & e, unsigned int & pix, unsigned int & tof ) const 
+  unsigned int operator() ( const Event & e, unsigned int & pix, unsigned int & tof ) const 
   {
     pix = e.pixelID;
     tof = e.tof;
-    return 0;
+    return 1;
   }
 };
 
@@ -36,7 +36,8 @@ int main()
   
   Event2PixTofc e2pt;
   
-  Histogrammer2<Ipixtof, Event2PixTofc, unsigned int, unsigned int> her( ipixtof, e2pt );
+  Histogrammer2<Event, Ipixtof, Event2PixTofc, unsigned int, unsigned int, unsigned int> 
+    her( ipixtof, e2pt );
   
   Event e = { 3500, 66 };
   

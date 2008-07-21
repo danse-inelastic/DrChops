@@ -35,7 +35,7 @@ namespace ARCS_EventData{
   {
   }
 
-  bool 
+  unsigned int 
   Event2tof::operator() ( const Event & e, double & tof) const 
   {
     const unsigned int &pixelID = e.pixelID;
@@ -47,13 +47,13 @@ namespace ARCS_EventData{
 	    << "pixel ID out of bound: " << pixelID
 	    << journal::endl;
 #endif
-      return 1;
+      return 0;
     }
     const unsigned int & tofchannelno = e.tof;
     
     // tof in seconds
     tof = tofchannelno*m_tofUnit;
-    return 0;
+    return 1;
   }
 }
 

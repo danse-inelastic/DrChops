@@ -28,6 +28,8 @@ PROJ_CPPTESTS = test_Histogrammer1 test_Histogrammer2 test_Histogrammer4 \
 	test_Event2QQQE \
 	test_Event2pixd \
 	test_normalize_iqe \
+	test_normalize_iqqqe \
+	test_pixel_solidangle \
 
 PROJ_CPPEXE = 
 PROJ_TESTS = $(PROJ_CPPTESTS) $(PROJ_CPPEXE) $(PROJ_PYTESTS)
@@ -98,6 +100,12 @@ test_mslice_formating: test_mslice_formating.cc $(BLD_LIBDIR)/libarcseventdata.$
 
 test_normalize_iqe: test_normalize_iqe.cc $(BLD_LIBDIR)/libarcseventdata.$(EXT_SAR)
 	$(CXX) $(CXXFLAGS) $(LCXXFLAGS) -o $@ test_normalize_iqe.cc $(PROJ_LIBRARIES)
+
+test_normalize_iqqqe: test_normalize_iqqqe.cc $(BLD_LIBDIR)/libarcseventdata.$(EXT_SAR)
+	$(CXX) $(CXXFLAGS) $(LCXXFLAGS) -o $@ test_normalize_iqqqe.cc $(PROJ_LIBRARIES)
+
+test_pixel_solidangle: test_pixel_solidangle.cc $(BLD_LIBDIR)/libarcseventdata.$(EXT_SAR)
+	$(CXX) $(CXXFLAGS) $(LCXXFLAGS) -o $@ test_pixel_solidangle.cc $(PROJ_LIBRARIES)
 
 
 

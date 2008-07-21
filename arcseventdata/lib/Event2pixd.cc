@@ -25,7 +25,7 @@ namespace ARCS_EventData {
   }
 
 
-  bool
+  unsigned int
   Event2pixd::operator ()
     ( const Event & e, unsigned int & pixelID, double &d ) const
   {
@@ -37,7 +37,7 @@ namespace ARCS_EventData {
 	      << "pixel ID out of bound: " << pixelID 
 	      << journal::endl;
 #endif
-      return 1;
+      return 0;
     }
 
     //calculate d
@@ -72,7 +72,7 @@ namespace ARCS_EventData {
 
     //std::cout << "pixelID=" << pixelID << ", x,y,z=" << x << "," << y << "," << z << ", sample2pixel = " << sample2pixel << ", mo2sample=" << m_mod2sample << "tof = " << tof << "velocity = " << velocity << "lambda=" << lambda << "twotheta = " << twotheta << ", d = " << d << std::endl;
 
-    return 0;
+    return 1;
   }
   
 }

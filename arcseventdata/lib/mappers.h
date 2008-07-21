@@ -22,10 +22,10 @@ namespace ARCS_EventData{
   class Event2TofChannel: public Event2Quantity1<unsigned int>
   {
   public:
-    bool operator() ( const Event & e, unsigned int & d ) const 
+    unsigned int operator() ( const Event & e, unsigned int & d ) const 
     {
       d = e.tof;
-      return 0;
+      return 1;
     }
   };
   
@@ -35,10 +35,10 @@ namespace ARCS_EventData{
   class Event2pixelID: public Event2Quantity1<unsigned int>
   {
   public:
-    bool operator() ( const Event & e, unsigned int & d ) const 
+    unsigned int operator() ( const Event & e, unsigned int & d ) const 
     {
       d = e.pixelID;
-      return 0;
+      return 1;
     }
   };
   
@@ -47,11 +47,11 @@ namespace ARCS_EventData{
   class Event2pixelIDtofChannel: public Event2Quantity2<unsigned int, unsigned int>
   {
   public:
-    bool operator() ( const Event & e, unsigned int & pixelID, unsigned int & tof ) const 
+    unsigned int operator() ( const Event & e, unsigned int & pixelID, unsigned int & tof ) const 
     {
       pixelID = e.pixelID;
       tof = e.tof;
-      return 0;
+      return 1;
     }
   };
   

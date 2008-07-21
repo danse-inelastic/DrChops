@@ -32,7 +32,7 @@ namespace ARCS_EventData{
      double tofUnit=1e-7);
 
     // methods
-    bool operator() ( const Event & e, unsigned int & pixelID, double & tof ) const ;
+    unsigned int operator() ( const Event & e, unsigned int & pixelID, double & tof ) const ;
 
 
   private:

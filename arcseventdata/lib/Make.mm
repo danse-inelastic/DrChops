@@ -29,6 +29,7 @@ PROJ_SRCS = \
 	Event2tof.cc \
 	EventsReader.cc \
 	normalize_iqe.cc \
+	normalize_iqqqe.cc \
 	readPixelPositions.cc \
 
 
@@ -72,6 +73,7 @@ EXPORT_HEADERS = \
 	Event2QQQE.h \
 	Event2tof.h \
 	EventsReader.h \
+	Exception.h \
 	Histogrammer.h \
 	Idspacing.h \
 	Ipix.h \
@@ -91,6 +93,8 @@ EXPORT_HEADERS = \
 	mslice_formating.h \
 	mslice_formating.icc \
 	normalize_iqe.h normalize_iqe.icc \
+	normalize_iqqqe.h normalize_iqqqe.icc \
+	pixel_solidangle.h  pixel_solidangle.icc \
 	readPixelPositions.h \
 
 EXPORT_LIBS = $(PROJ_SAR)

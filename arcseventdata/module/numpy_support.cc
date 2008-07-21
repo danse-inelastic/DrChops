@@ -28,8 +28,11 @@ namespace reductionmod{
       return 1;
     }
     if (PyArray_TYPE( obj ) != typecode ) {
-      oss << name << " must be a numpy array of type " 
-	  << typecode << std::endl;
+      oss << "In file " << __FILE__ << ", line " << __LINE__ << ", "
+	  << name 
+	  << " must be a numpy array of type " << typecode << ", "
+	  << " but its type code actually is " << PyArray_TYPE( obj ) << "."
+	  << std::endl;
       PyErr_SetString( PyExc_ValueError, oss.str().c_str() );
       return 1;
     }
