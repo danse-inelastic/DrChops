@@ -34,6 +34,7 @@ update: clean
 
 EXPORT_PYTHON_MODULES = \
 	DetectorEfficiencyCalculator.py \
+	EiSolver_UseMonitorsAndDetectors.py \
 	SolidAngleCalculator.py		\
 	__init__.py		\
 

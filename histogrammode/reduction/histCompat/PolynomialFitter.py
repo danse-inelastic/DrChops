@@ -10,7 +10,7 @@
 class PolynomialFitter( object):
 
 
-    def fit( self, histogram, guess = None):
+    def fit( self, histogram, guess = None, weights = None):
         """fit( histogram) -> [best fit params]
         Refine polynomial function's parameters to fit histogram's data at with weights
         given by 1/square of errors, 
@@ -27,10 +27,10 @@ class PolynomialFitter( object):
         # need bin centers for histogram
         ordinates = axis.binCenters()
         errors = histogram.errors().storage().asList()
-        weights = self.__calcWeights(errors)
+        #if weights is None: weights = self.__calcWeights(errors)
         #self._debug.log("ordinates: %s" % ordinates)
-        self._debug.log("data: %s, ordinates: %s, weights:%s" % (
-            data, ordinates, weights) )
+        #self._debug.log("data: %s, ordinates: %s, weights:%s" % (
+        #    data, ordinates, weights) )
         return self._fitter.fit( ordinates, data )
 
 
