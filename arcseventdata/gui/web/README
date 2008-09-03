@@ -1,0 +1,8 @@
+To try this demo
+
+ 1. install pyre 
+ 2. make pyre available by setting up env vars
+ 3. start server
+    $ ./startserver.sh
+ 4. open http://localhost:8080 in a browser
+

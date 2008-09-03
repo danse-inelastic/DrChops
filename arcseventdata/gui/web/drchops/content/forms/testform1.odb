@@ -1,0 +1,55 @@
+# -*- Python -*-
+#
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#
+#                                   Jiao Lin
+#                      California Institute of Technology
+#                        (C) 2008  All Rights Reserved
+#
+# {LicenseText}
+#
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#
+
+
+
+from drchops.components.DBObjectForm import DBObjectForm as base
+
+
+class Testform1(base):
+
+
+    class Inventory(base.Inventory):
+
+        import pyre.inventory
+        
+        text1 = pyre.inventory.str('text1', default = 'Text field 1')
+	text1.meta['tip'] = "Text field 1, defined in drchops/content/forms/testform1.odb"
+        
+        text2 = pyre.inventory.str('text2', default = 'Text field 2')
+	text2.meta['tip'] = "Text field 2, defined in drchops/content/forms/testform1.odb"
+
+        pass # end of Inventory
+
+
+    parameters = [ 'text1', 'text2' ]  # all fileds that you want to be presented in the form
+    
+    DBTable = 'TestObject1'
+
+
+    def __init__(self, name = None):
+        if name is None:
+            name = 'testform1'
+
+        base.__init__(self, name)
+
+        return
+
+
+
+def form(): return Testform1()
+
+# version
+__id__ = "$Id$"
+
+# End of file 

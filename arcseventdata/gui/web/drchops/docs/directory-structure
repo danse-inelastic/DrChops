@@ -1,0 +1,6 @@
+drchops/
+	bin/			binaries to start services
+	config/		configurations
+	content/		menus, layouts, forms, actors
+	html/		html specific stylesheets etc
+	drchops/	drchops python package

@@ -1,0 +1,8 @@
+user interface:
+     - actor
+     - page (layout)
+     - menu (portlet)
+     - form
+
+actor:
+	user inputs <--> actor <--> dom objects
