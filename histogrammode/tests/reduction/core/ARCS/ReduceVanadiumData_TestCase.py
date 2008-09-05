@@ -34,21 +34,35 @@ class TestCase(base):
 
     def test(self):
         indir = '/ARCS-DAS-FS/2008_2_18_SCI/ARCS_297' 
-        output = 'calibration.h5'
+        calibration_constants_output = 'calibration.h5'
+        mask_output = 'mask.h5'
+        outputs = [
+            calibration_constants_output,
+            mask_output,
+            ]
+        
         import os
         assert os.path.exists( indir  )
-        if os.path.exists( output ): os.remove( output )
+        for output in outputs:
+            if os.path.exists( output ): os.remove( output )
+            continue
         
         from reduction.core.ARCS.ReduceVanadiumData import reduce
-        calibration = reduce(
+        reduced = reduce(
             indir,
             Ei = 98.58,
             emission_time = 0,
             E_params = (-65,65,1.)
             )
+        
         if mpiRank !=0: return
+
+        calibration = reduced['calibration']
+        mask = reduced['mask']
+        
         from histogram.hdf import dump
-        dump( calibration, output, '/', 'c' )
+        dump( calibration, calibration_constants_output, '/', 'c' )
+        dump( mask, mask_output, '/', 'c' )
 
         import arcseventdata as aed
         v = aed.detectorview( calibration )

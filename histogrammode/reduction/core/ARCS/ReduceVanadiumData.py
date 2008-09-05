@@ -77,15 +77,19 @@ def reduce( vrundir, ARCSxml = 'ARCS.xml', nevents = None,
     
     # Now average over pixels and we have a good calibration "histogram"
     detaxes = ipdp.axes()
-    import histogram as H
     c = H.histogram( 'calibration', detaxes )
     ipd_c2 = ipdp_c2.sum('pixelID')/(128.,0)
     for pixel in c.pixelID: c[ (), (), pixel ] = ipd_c2
     # calibration_view = aed.detectorview( c )
+
+    # the mask
+    mask = newmask( detaxes )
     
     # Reassign tubes with 0 intensity with a large number
     largenumber = c.I.sum() * 1e8
-    c.I[ c.I<criteria_nocounts ] = largenumber
+    black = c.I < criteria_nocounts
+    mask.I[ black ] = 1
+    c.I[ black ] = largenumber
     
     if calibration_returned_withsolidangle:
         # Put solid angle into this calibration as well. 
@@ -96,10 +100,19 @@ def reduce( vrundir, ARCSxml = 'ARCS.xml', nevents = None,
     # Update the view
     # c_view = aed.detectorview( calibration )
     
-    return calibration
+    return {
+        'calibration': calibration,
+        'mask': mask,
+        }
+
+
+def newmask( detaxes ):
+    mask = H.histogram( 'mask', detaxes, data_type = 'int' )
+    return mask
 
 
 import os
+import histogram as H
 
 # version
 __id__ = "$Id$"
