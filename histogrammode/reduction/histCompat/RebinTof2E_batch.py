@@ -53,9 +53,8 @@ def istartof2IE(
     from pyre.units.angle import degree
 
     tofaxis = I_startof.axisFromName('tof')
-    tofaxis.changeUnit( 'microsecond' )
-    tofbb = tofaxis.binBoundaries()
-
+    tofbb = tofaxis.binBoundaries() * (tofaxis.unit() / microsecond)
+    
     cntsmat = I_startof.data().storage()
     err2mat = I_startof.errors().storage()
 

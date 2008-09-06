@@ -69,8 +69,7 @@ def dgts_RebinTof2E_batch(
     from pyre.units.angle import degree
 
     tofaxis = I_startof.axisFromName('tof')
-    tofaxis.changeUnit( 'microsecond' )
-    tofbb = tofaxis.binBoundaries()
+    tofbb = tofaxis.binBoundaries() * (tofaxis.unit()/microsecond)
 
     mod2sample /= mm
     
