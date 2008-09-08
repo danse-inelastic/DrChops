@@ -84,11 +84,11 @@ def reduce( vrundir, ARCSxml = 'ARCS.xml', nevents = None,
 
     # the mask
     mask = newmask( detaxes )
+    maskbadtubes( mask, c, lowerlimit = criteria_nocounts )
     
     # Reassign tubes with 0 intensity with a large number
     largenumber = c.I.sum() * 1e8
     black = c.I < criteria_nocounts
-    mask.I[ black ] = 1
     c.I[ black ] = largenumber
     
     if calibration_returned_withsolidangle:
@@ -106,13 +106,9 @@ def reduce( vrundir, ARCSxml = 'ARCS.xml', nevents = None,
         }
 
 
-def newmask( detaxes ):
-    mask = H.histogram( 'mask', detaxes, data_type = 'int' )
-    return mask
-
-
 import os
 import histogram as H
+from _maskUtils import newmask, maskbadtubes
 
 # version
 __id__ = "$Id$"

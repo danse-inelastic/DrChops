@@ -24,6 +24,7 @@ except ImportError:
 
 def reduce( rundir,
             mtrundir = None, mtratio = 0.9,
+            criteria_nocounts = 10,
             calibration = None, mask = None,
             ARCSxml = 'ARCS.xml',
             tof_params = (3000,6000,5),
@@ -57,9 +58,12 @@ def reduce( rundir,
         mtr = None
 
     idpt = r.getIdpt( tof_params, nodes = nodes )
+    if mask: maskbadtubes( mask, idpt.sum('tof'), lowerlimit = criteria_nocounts )
+    
     if mtr:
         mtidpt = mtr.getIdpt( tof_params, nodes = nodes )
-
+        if mask: maskbadtubes( mask, mtidpt.sum('tof'), lowerlimit = criteria_nocounts )
+        
     from reduction import units
     meV = units.energy.meV
 
@@ -80,6 +84,7 @@ def reduce( rundir,
 
 
 import histogram as H
+from _maskUtils import maskbadtubes
 
 
 # version

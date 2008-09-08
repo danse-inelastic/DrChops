@@ -38,6 +38,7 @@ EXPORT_PYTHON_MODULES = \
 	Reduce.py \
 	ReduceVanadiumData.py \
 	SolidAngleCalculator.py		\
+	_maskUtils.py 	\
 	__init__.py		\
 
 

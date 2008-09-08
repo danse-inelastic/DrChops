@@ -31,7 +31,77 @@ import unittest
 from unittestX import TestCase as base
 class TestCase(base):
 
-    def test(self):
+    def test1(self):
+        'no calibration, no mask, no empty can data'
+        mainrun = '/ARCS-DAS-FS/2008_2_18_SCI/ARCS_279'
+        inputs = [
+            mainrun,
+            ]
+
+        spe_output = 'spe-nocali-nomask-nomt.h5'
+        outputs = [
+            spe_output,
+            ]
+        
+        for inputdir in inputs:
+            assert os.path.exists( inputdir  )
+            continue
+        
+        for output in outputs:
+            if os.path.exists( output ): os.remove( output )
+            continue
+        
+        spe = reduce(
+            mainrun,
+            Ei = 100,
+            tof_params = (3000,6000,5.),
+            E_params = (-90,90,1.),
+            nodes = 8,
+            )
+        
+        hdf.dump( spe, spe_output, '/', 'c' )
+
+        defaultPlotter.plot( spe )
+        return
+
+    def test2(self):
+        'no calibration, no mask. with empty can data'
+        mainrun = '/ARCS-DAS-FS/2008_2_18_SCI/ARCS_279'
+        mtrun = '/ARCS-DAS-FS/2008_2_18_SCI/ARCS_289'
+        inputs = [
+            mainrun,
+            mtrun,
+            ]
+
+        spe_output = 'spe-nocali-nomask-mtsubtracted.h5'
+        outputs = [
+            spe_output,
+            ]
+        
+        for inputdir in inputs:
+            assert os.path.exists( inputdir  )
+            continue
+        
+        for output in outputs:
+            if os.path.exists( output ): os.remove( output )
+            continue
+        
+        spe = reduce(
+            mainrun,
+            mtrundir = mtrun,
+            Ei = 100,
+            tof_params = (3000,6000,5.),
+            E_params = (-90,90,1.),
+            nodes = 8,
+            )
+        
+        hdf.dump( spe, spe_output, '/', 'c' )
+
+        defaultPlotter.plot( spe )
+        return
+
+    def test3(self):
+        'do calibration. use mask. use empty can data'
         mainrun = '/ARCS-DAS-FS/2008_2_18_SCI/ARCS_279'
         mtrun = '/ARCS-DAS-FS/2008_2_18_SCI/ARCS_289'
         calibration_constants_input = 'calibration.h5'
@@ -43,12 +113,11 @@ class TestCase(base):
             mask_input,
             ]
 
-        spe_output = 'spe.h5'
+        spe_output = 'spe-calibrated-masked-mtsubtracted.h5'
         outputs = [
             spe_output,
             ]
         
-        import os
         for inputdir in inputs:
             assert os.path.exists( inputdir  )
             continue
@@ -56,24 +125,31 @@ class TestCase(base):
         for output in outputs:
             if os.path.exists( output ): os.remove( output )
             continue
-        
-        from reduction.core.ARCS.Reduce import reduce
+
+        calibration = hdf.load( calibration_constants_input, 'calibration' )
+        mask = hdf.load( mask_input, 'mask' )
         spe = reduce(
             mainrun,
+            mtrundir = mtrun,
             Ei = 100,
             tof_params = (3000,6000,5.),
             E_params = (-90,90,1.),
+            calibration = calibration,
+            mask = mask,
             nodes = 8,
             )
         
-        from histogram.hdf import dump
-        dump( spe, spe_output, '/', 'c' )
+        hdf.dump( spe, spe_output, '/', 'c' )
 
-        from histogram.plotter import defaultPlotter
         defaultPlotter.plot( spe )
         return
 
     pass # end of TestCase
+
+from histogram import hdf
+import os
+from reduction.core.ARCS.Reduce import reduce
+from histogram.plotter import defaultPlotter
 
 
 import reduction.units as units
