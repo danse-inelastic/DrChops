@@ -14,7 +14,7 @@
 '''
 To run this test in parallel, you can run
 
- $ mpirun -n 8 `which mpipython.exe` Reduce_TestCase.py
+ $ mpirun -n 8 `which mpipython.exe` ReduceToMslice_TestCase.py
 
 '''
 
@@ -38,10 +38,8 @@ class TestCase(base):
             mainrun,
             ]
 
-        spe_output = 'spe-nocali-nomask-nomt.h5'
-        outputs = [
-            spe_output,
-            ]
+        outputprefix = 'mslice-nocali-nomask-nomt'
+        outputs = _mslice_outputs( outputprefix )
         
         for inputdir in inputs:
             assert os.path.exists( inputdir  )
@@ -50,18 +48,13 @@ class TestCase(base):
         for output in outputs:
             if os.path.exists( output ): os.remove( output )
             continue
-        
-        spe = reduce(
+
+        mslice = reduce(
             mainrun,
             Ei = 100,
-            tof_params = (3000,6000,5.),
             E_params = (-90,90,1.),
+            outputprefix = outputprefix,
             )
-
-        if mpiRank!=0: return
-        hdf.dump( spe, spe_output, '/', 'c' )
-
-        #defaultPlotter.plot( spe )
         return
 
     def test2(self):
@@ -73,10 +66,8 @@ class TestCase(base):
             mtrun,
             ]
 
-        spe_output = 'spe-nocali-nomask-mtsubtracted.h5'
-        outputs = [
-            spe_output,
-            ]
+        outputprefix = 'mslice-nocali-nomask-mtsubtracted'
+        outputs = _mslice_outputs( outputprefix )
         
         for inputdir in inputs:
             assert os.path.exists( inputdir  )
@@ -86,18 +77,13 @@ class TestCase(base):
             if os.path.exists( output ): os.remove( output )
             continue
         
-        spe = reduce(
+        reduce(
             mainrun,
             mtrundir = mtrun,
             Ei = 100,
-            tof_params = (3000,6000,5.),
             E_params = (-90,90,1.),
+            outputprefix = outputprefix,
             )
-        
-        if mpiRank!=0: return
-        hdf.dump( spe, spe_output, '/', 'c' )
-
-        defaultPlotter.plot( spe )
         return
 
     def test3(self):
@@ -113,10 +99,8 @@ class TestCase(base):
             mask_input,
             ]
 
-        spe_output = 'spe-calibrated-masked-mtsubtracted.h5'
-        outputs = [
-            spe_output,
-            ]
+        outputprefix = 'mslice-calibrated-masked-mtsubtracted'
+        outputs = _mslice_outputs( outputprefix )
         
         for inputdir in inputs:
             assert os.path.exists( inputdir  )
@@ -128,27 +112,30 @@ class TestCase(base):
 
         calibration = hdf.load( calibration_constants_input, 'calibration' )
         mask = hdf.load( mask_input, 'mask' )
-        spe = reduce(
+        reduce(
             mainrun,
             mtrundir = mtrun,
             Ei = 100,
-            tof_params = (3000,6000,5.),
             E_params = (-90,90,1.),
             calibration = calibration,
             mask = mask,
+            outputprefix = outputprefix,
             )
-        
-        if mpiRank!=0: return
-        hdf.dump( spe, spe_output, '/', 'c' )
-
-        defaultPlotter.plot( spe )
         return
 
     pass # end of TestCase
 
+
+def _mslice_outputs( prefix ):
+    return [
+        '%s.spe'%prefix,
+        '%s.phx'%prefix,
+        '%s-IpdpE.h5'%prefix,
+        ]
+
 from histogram import hdf
 import os
-from reduction.core.ARCS.Reduce import reduce, info
+from reduction.core.ARCS.ReduceToMslice import reduce, info
 info.activate()
 from histogram.plotter import defaultPlotter
 
@@ -167,6 +154,7 @@ def pysuite():
 def main():
     import journal
     #journal.debug('reduction.core.getPixelInfo' ).activate()
+    journal.info('histogrammer' ).activate()
     pytests = pysuite()
     alltests = unittest.TestSuite( (pytests, ) )
     unittest.TextTestRunner(verbosity=2).run(alltests)

@@ -37,6 +37,7 @@ EXPORT_PYTHON_MODULES = \
 	EiSolver_UseMonitorsAndDetectors.py \
 	Reduce.py \
 	ReduceVanadiumData.py \
+	ReduceToMslice.py \
 	SolidAngleCalculator.py		\
 	_maskUtils.py 	\
 	__init__.py		\
