@@ -25,7 +25,13 @@ class NumberList(List):
 
 
     def _cast(self, text):
-        l = List._cast(self, text)
+        if isinstance(text, basestring):
+            l = List._cast(self, text)
+        elif isinstance(text, list) or isinstance(text,tuple):
+            l = text
+        else:
+            raise TypeError, "cannot convert %r(%s) to a list" % (
+                text, type(text) )
         if len(l) == 1 and l[0] == '': return []
         try:
             return [ _eval(item) for item in l ]
