@@ -13,18 +13,22 @@
 
 
 def reduce( vrundir, ARCSxml = 'ARCS.xml', nevents = None,
-            E_params = (-60,60,1), Ei = 70, emission_time = 10,
+            E_params = (-60,60,1), Ei = 70, emission_time = 0,
             calibration_returned_withsolidangle = True,
-            criteria_nocounts = 10,
+            criteria_nocounts = 10, criteria_toomanycounts = None,
             ):
     '''
     vrundir: directory of vanadium run
     E_params (unit: meV) 
-    Incident energy (unit: meV)
+    Ei: Incident energy (unit: meV)
     emission_time (unit: microsecond)
     calibration_returned_withsolidangle: if true, the calibration histogram returned contains solid angle correction. this means the reduction procedure of the dataset to be calibrated need NOT consider solid angle correction.
     criteria_nocounts: if number of counts in a pixel is smaller than this number, the pixel is considered as no-count.
     '''
+    # we don't need to compute Ei precisely. The intensity we care
+    # is the integrated intensity including elastic and inelastic
+    # scatterings bracketed in a range defined by E_params.
+    
     runname = os.path.split( vrundir )[-1]
     eventdatafilename = '%s_neutron_event.dat' % runname
     eventdatafilename = os.path.join( vrundir, eventdatafilename )
@@ -84,7 +88,7 @@ def reduce( vrundir, ARCSxml = 'ARCS.xml', nevents = None,
 
     # the mask
     mask = newmask( detaxes )
-    maskbadtubes( mask, c, lowerlimit = criteria_nocounts )
+    maskbadtubes( mask, c, lowerlimit = criteria_nocounts, upperlimit = criteria_toomanycounts )
     
     # Reassign tubes with 0 intensity with a large number
     largenumber = c.I.sum() * 1e8

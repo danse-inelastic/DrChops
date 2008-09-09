@@ -51,6 +51,7 @@ EXPORT_PYTHON_MODULES = \
 
 EXPORT_BINS = \
 	ARCSReductionApp.py \
+	ARCSReduceVanadiumData.py \
 	LrmecsReductionApp.py \
 	MCSimReductionApp.py \
 	PharosReductionApp.py \

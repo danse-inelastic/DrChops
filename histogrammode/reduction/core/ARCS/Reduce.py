@@ -24,7 +24,7 @@ except ImportError:
 
 def reduce( rundir,
             mtrundir = None, mtratio = 0.9,
-            criteria_nocounts = 10,
+            criteria_nocounts = 10, criteria_toomanycounts = None,
             calibration = None, mask = None,
             ARCSxml = 'ARCS.xml',
             tof_params = (3000,6000,5),
@@ -54,7 +54,9 @@ def reduce( rundir,
     idpt = getIpdpt(_eventfile(rundir), ARCSxml, tof_params)
     if mpiRank==0:
         if mask: maskbadtubes(
-            mask, idpt.sum('tof'), lowerlimit = criteria_nocounts )
+            mask, idpt.sum('tof'),
+            lowerlimit = criteria_nocounts,
+            upperlimit = criteria_toomanycounts)
         info.log('normalizing main data...')
         idpt /= r.getIntegratedCurrent()[0]/1.e12, 0
     
@@ -62,7 +64,9 @@ def reduce( rundir,
         mtidpt = getIpdpt(_eventfile(mtrundir), ARCSxml, tof_params)
         
         if mpiRank==0:
-            if mask: maskbadtubes( mask, mtidpt.sum('tof'), lowerlimit = criteria_nocounts )
+            if mask: maskbadtubes( mask, mtidpt.sum('tof'),
+                                   lowerlimit = criteria_nocounts,
+                                   upperlimit = criteria_toomanycounts)
             info.log('normalizing mt data...')
             mtidpt /= mtr.getIntegratedCurrent()[0]/1.e12, 0
             mtidpt *= (mtratio, 0)
