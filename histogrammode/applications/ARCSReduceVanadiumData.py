@@ -29,17 +29,17 @@ class ArcsreducevanadiumdataApp(base):
 
         import pyre.inventory
 
-        vrun = pyre.inventory.str('vrun', default='ARCS_297')
+        vrun = pyre.inventory.str('v', default='ARCS_297')
         vrun.meta['tip'] = 'The vanadium run data directory'
 
         ARCSxml = pyre.inventory.str('x', default='ARCS.xml')
         ARCSxml.meta['tip'] = 'The instrument xml file for ARCS'
 
         from reduction.pyre.inventory.properties.NumberList import NumberList
-        E_params = NumberList('E_params', default=(-60,60,1.))
+        E_params = NumberList('E', default=(-60,60,1.))
         E_params.meta['tip'] = 'Define Energy axis: min, max, step'
 
-        Ei = pyre.inventory.float('Ei', default=99)
+        Ei = pyre.inventory.float('I', default=99)
         Ei.meta['tip'] = 'Nominal incident neutron energy for this vanadium calibration run'
 
         mask_counts_bracket = NumberList('m', default=(10,0))
@@ -116,8 +116,9 @@ class ArcsreducevanadiumdataApp(base):
 def main():
     app = ArcsreducevanadiumdataApp()
     import os
+    app.run()
     print "times: %s" % str(os.times())
-    return app.run()
+    return
 
 
 # main

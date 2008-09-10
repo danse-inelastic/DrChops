@@ -38,6 +38,39 @@ class TestCase(base):
             mainrun,
             ]
 
+        sqe_output = 'sqe-nocali-nomask-nomt.h5'
+        outputs = [
+            sqe_output,
+            ]
+        
+        for inputdir in inputs:
+            assert os.path.exists( inputdir  )
+            continue
+        
+        for output in outputs:
+            if os.path.exists( output ): os.remove( output )
+            continue
+        
+        sqe = reduce(
+            mainrun,
+            Ei = 100,
+            tof_params = (3000,6000,5.),
+            E_params = (-90,90,1.),
+            )
+
+        if mpiRank!=0: return
+        hdf.dump( sqe, sqe_output, '/', 'c' )
+
+        #defaultPlotter.plot( sqe )
+        return
+    
+    def test1a(self):
+        'no calibration, no mask, no empty can data'
+        mainrun = '/ARCS-DAS-FS/2008_2_18_SCI/ARCS_279'
+        inputs = [
+            mainrun,
+            ]
+
         spe_output = 'spe-nocali-nomask-nomt.h5'
         outputs = [
             spe_output,
@@ -56,6 +89,7 @@ class TestCase(base):
             Ei = 100,
             tof_params = (3000,6000,5.),
             E_params = (-90,90,1.),
+            spe_output = True,
             )
 
         if mpiRank!=0: return
@@ -73,9 +107,9 @@ class TestCase(base):
             mtrun,
             ]
 
-        spe_output = 'spe-nocali-nomask-mtsubtracted.h5'
+        sqe_output = 'sqe-nocali-nomask-mtsubtracted.h5'
         outputs = [
-            spe_output,
+            sqe_output,
             ]
         
         for inputdir in inputs:
@@ -86,7 +120,7 @@ class TestCase(base):
             if os.path.exists( output ): os.remove( output )
             continue
         
-        spe = reduce(
+        sqe = reduce(
             mainrun,
             mtrundir = mtrun,
             Ei = 100,
@@ -95,9 +129,9 @@ class TestCase(base):
             )
         
         if mpiRank!=0: return
-        hdf.dump( spe, spe_output, '/', 'c' )
+        hdf.dump( sqe, sqe_output, '/', 'c' )
 
-        defaultPlotter.plot( spe )
+        defaultPlotter.plot( sqe )
         return
 
     def test3(self):
@@ -113,9 +147,9 @@ class TestCase(base):
             mask_input,
             ]
 
-        spe_output = 'spe-calibrated-masked-mtsubtracted.h5'
+        sqe_output = 'sqe-calibrated-masked-mtsubtracted.h5'
         outputs = [
-            spe_output,
+            sqe_output,
             ]
         
         for inputdir in inputs:
@@ -128,7 +162,7 @@ class TestCase(base):
 
         calibration = hdf.load( calibration_constants_input, 'calibration' )
         mask = hdf.load( mask_input, 'mask' )
-        spe = reduce(
+        sqe = reduce(
             mainrun,
             mtrundir = mtrun,
             Ei = 100,
@@ -139,9 +173,9 @@ class TestCase(base):
             )
         
         if mpiRank!=0: return
-        hdf.dump( spe, spe_output, '/', 'c' )
+        hdf.dump( sqe, sqe_output, '/', 'c' )
 
-        defaultPlotter.plot( spe )
+        defaultPlotter.plot( sqe )
         return
 
     pass # end of TestCase

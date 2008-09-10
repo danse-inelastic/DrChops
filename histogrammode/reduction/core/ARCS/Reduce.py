@@ -29,8 +29,12 @@ def reduce( rundir,
             ARCSxml = 'ARCS.xml',
             tof_params = (3000,6000,5),
             E_params = (-60,60,1),
+            phi_params = (2,145,1.),
+            Q_params = (0,13,0.1),
             Ei = 70, emission_time = 0,
+            spe_output = False,
             ):
+    
     '''
     rundir: directory of the ARCS run to be reduced
     mtrundir: directory of the empty can run
@@ -42,6 +46,7 @@ def reduce( rundir,
     Ei: estimated Incident energy (unit: meV)
     emission_time (unit: microsecond)  !!!!Not used yet!!!!
     '''
+    
     import reduction.interactive as ri
     ri.getRun.select('arcs')
 
@@ -92,15 +97,23 @@ def reduce( rundir,
     info.log( 'computed incident energy: %s' % (calculated_ei/meV,) )
 
     EAxis = H.axis('energy', H.arange(*E_params), 'meV')
-    ri.idpt2spe.reconstruct( EAxis = EAxis )
+    phiAxis = H.axis('phi', H.arange(*phi_params), 'degree')
+    ri.idpt2spe.reconstruct( EAxis = EAxis, phiAxis = phiAxis )
     info.log( 'reducing...' )
 
     # !!! don't use parallel version of idpt2spe right now
     ri.idpt2spe._engine.parallel = 0
     # !!!
     spe = ri.idpt2spe(calculated_ei, idpt, run = r, mask = mask)
-    info.log( 'done' )
-    return spe
+    info.log( 'got spe.' )
+
+    if spe_output: return spe
+    QAxis = H.axis('Q', H.arange(*Q_params), 'angstrom**-1')
+    # !!! don't use parallel version of spe2sqe right now
+    ri.spe2sqe._engine.parallel = 0
+    # !!!
+    return ri.spe2sqe(calculated_ei, spe, QAxis)
+
 
 
 def _fullcalibrationhist( calibration_pdp, tofaxis ):
