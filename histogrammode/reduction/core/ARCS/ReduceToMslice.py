@@ -71,7 +71,7 @@ def reduce(
         rundir,
         mtrundir = mtrundir, mtratio = mtratio,
         criteria_nocounts = criteria_nocounts,
-        calibration = mask, mask = mask,
+        calibration = calibration, mask = mask,
         ARCSxml = ARCSxml,
         E_params = E_params,
         Ei = calculated_ei/meV,
@@ -107,6 +107,14 @@ def reduce(
     return
 
 
+def mslice_output_filenames( prefix ):
+    return [
+        '%s.spe'%prefix,
+        '%s.phx'%prefix,
+        '%s-IpdpE.h5'%prefix,
+        ]
+
+
 def reduceToIpdpE(
     rundir,
     mtrundir = None, mtratio = 0.9,
@@ -136,9 +144,12 @@ def reduceToIpdpE(
         eventdatafilename, nevents, ARCSxml, E_params, Ei, emission_time)
 
     if mpiRank == 0:
+        ipdpE = ipdpE.as_floattype()
         r = ri.getRun(rundir, instrument_xml = ARCSxml)
-        ipdpE /= r.getIntegratedCurrent()[0]/1.e12, 0
         info.log('normalizing I(pdpE)')
+        ipdpE /= r.getIntegratedCurrent()[0]/1.e12, 0
+        import histogram.hdf as hh
+        hh.dump(ipdpE, 'main-ipdpE-normalized.h5', '/', 'c')
     
     if mtrundir:
         mteventdatafilename = _eventfile(mtrundir)
@@ -149,12 +160,19 @@ def reduceToIpdpE(
             E_params, Ei, emission_time)
 
         if mpiRank == 0:
+            mtipdpE = mtipdpE.as_floattype()
             mtr = ri.getRun(mtrundir, instrument_xml = ARCSxml)
-            mtipdpE /= mtr.getIntegratedCurrent()[0]/1.e12, 0
             info.log('normalizing mt I(pdpE)')
+            mtipdpE /= mtr.getIntegratedCurrent()[0]/1.e12, 0
             mtipdpE *= mtratio, 0
+            hh.dump(mtipdpE, 'mt-ipdpE-normalized.h5', '/', 'c')
             info.log('subtracting mt data from main data')
             ipdpE -= mtipdpE
+            hh.dump(ipdpE, 'ipdpE-mtsubtracted.h5', '/', 'c')
+            # remove negative numbers
+            # Is this the right thing to do?
+            ipdpE.I[ ipdpE.I<0 ] = 0
+            hh.dump(ipdpE, 'ipdpE-mtsubtracted-positive.h5', '/', 'c')
 
     if mpiRank!=0 : return
     
@@ -162,8 +180,9 @@ def reduceToIpdpE(
         info.log('calibrating')
         calib_pdpE = _fullcalibrationhist(
             calibration, ipdpE.axisFromName('energy' ))
+        hh.dump( calib_pdpE, 'calibration-full.h5', '/', 'c' )
         ipdpE /= calib_pdpE
-
+        hh.dump( ipdpE, 'ipdpE-calibrated.h5', '/', 'c') 
     info.log('done')
     return ipdpE
 
