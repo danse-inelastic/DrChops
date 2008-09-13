@@ -20,9 +20,9 @@ class Measurement(DbObject):
 
     import pyre.db
 
-    main = pyre.db.str( name = 'main')
-    mt = pyre.db.str( name = 'mt')
-    calib = pyre.db.str( name = 'calib')
+    main = pyre.db.varchar( name = 'main', length = 128)
+    mt = pyre.db.varchar( name = 'mt', length = 128)
+    calib = pyre.db.varchar( name = 'calib', length = 128)
 
 
 # version

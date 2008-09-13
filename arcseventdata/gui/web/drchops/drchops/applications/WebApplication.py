@@ -19,6 +19,8 @@ class WebApplication(Base):
 
     class Inventory(Base.Inventory):
 
+        import pyre.inventory
+
         # properties
         db = pyre.inventory.str(name='db', default='drchops')
         db.meta['tip'] = 'The name of the data base'
@@ -30,13 +32,12 @@ class WebApplication(Base):
         idd = pyre.inventory.facility('idd-session', factory=pyre.idd.session, args=['idd-session'])
         idd.meta['tip'] = "access to the token server"
 
-        import pyre.inventory
         import drchops.components
         clerk = pyre.inventory.facility( 'clerk', factory = drchops.components.clerk )
 
 
     def _configure(self):
-        super(Base, self)._configure()
+        super(WebApplication, self)._configure()
         self.clerk = self.inventory.clerk
         self.idd = self.inventory.idd
         
@@ -48,7 +49,7 @@ class WebApplication(Base):
         
 
     def _init(self):
-        super(Base, self)._init()
+        super(WebApplication, self)._init()
 
         # connect to the database
         import pyre.db
@@ -57,6 +58,7 @@ class WebApplication(Base):
         
         # initialize the accessors
         self.clerk.db = self.db
+        self.clerk.director = self
         return
         
 

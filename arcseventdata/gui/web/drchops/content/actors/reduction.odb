@@ -12,23 +12,179 @@
 #
 
 
-from drchops.components.FormActor import FormActor as base, action, action_link
+from drchops.components.FormActor import FormActor as base, action, action_link, InputProcessingError
 
 class Actor(base):
     
+    class Inventory(base.Inventory):
 
-    def start(self, director):
+        import pyre.inventory
+        id = pyre.inventory.str( 'id', default = '')
+        id.meta['tip'] = 'id of reduction session'
+
+        type = pyre.inventory.str( 'type', default = 'Vanadium' )
+        type.meta['tip'] = 'type of reduction'
+
+
+    def start(self,director):
+        return self.select_reduction_type( director )
+
+
+    def select_reduction_type(self, director):
         page = director.retrievePage( 'reduction' )
         main = page._body._content._main
         document = main.document(
             title='Reduction: Start'
             )
 
+        formcomponent = self.retrieveFormToShow( 'select_reduction_type' )
+        formcomponent.director = director
+
+        # start form
+        form = document.form(
+            name = 'select_reduction_type',
+            legend = formcomponent.legend(),
+            action = director.cgihome)
+
+        # specify action
+        theaction = action(
+            label = '', 
+            actor = 'reduction', routine = 'verify_reduction_type_selection', 
+            arguments = {'form-received': formcomponent.name },
+            )
+
+        # weave the action into the form
+        from drchops.weaver import action_formfields
+        action_formfields( theaction, form )
+        
+        # expand the form using the form component
+        formcomponent.expand( form )
+
+        # ok button
+        submit = form.control(name="submit", type="submit", value="OK")
+        
+        return page
+
+
+    def verify_reduction_type_selection(self, director):
+        # process the input form and return a db record
+        # that contains user inputs.
+        reduction = self.processFormInputs( director )
+        type = reduction.__class__
+        typename = type.__name__
+        handler = "configure_%s" % typename.lower()
+        handler = getattr(self, handler)
+        self.inventory.id = reduction.id
+        return handler(director)
+        
+
+    def configure_vanadiumreduction(self, director, errors = None):
+        #prepare the page layout
+        page = director.retrievePage( 'reduction' )
+        main = page._body._content._main
+        document = main.document(title='Reduce a vanadium run to obtain mask and calibration constants')
+
+        # the reduction record
+        clerk = director.clerk
+        id = self.inventory.id
+        reduction = clerk.getVanadiumReduction(id)
+
+        # prepare form
+        formcomponent = self.retrieveFormToShow( 'vanadiumreduction' )
+        formcomponent.director = director
+
+        # start form
+        form = document.form(
+            name = 'vanadiumreduction',
+            legend = formcomponent.legend(),
+            action = director.cgihome)
+
+        # specify action
+        theaction = action(
+            label = '', 
+            actor = 'reduction', routine = 'verify_vanadiumreduction_configuration', 
+            arguments = {'form-received': formcomponent.name },
+            )
+
+        # weave the action into the form
+        from drchops.weaver import action_formfields
+        action_formfields( theaction, form )
+        
+        # expand the form using the form component
+        formcomponent.expand( form, errors = errors )
+
+        # ok button
+        submit = form.control(name="submit", type="submit", value="OK")
+        
+        return page
+
+
+    def verify_vanadiumreduction_configuration(self, director):
+        try:
+            reduction = self.processFormInputs(director)
+        except InputProcessingError, err:
+            errors = err.errors
+            self.form_received = None
+            director.routine = 'configure_vanadiumreduction'
+            return self.configure_vanadiumreduction( director, errors = errors )
+
+        self.inventory.id = reduction.id
+        return self.run( director )
+
+
+    def run(self, director):
+        page = director.retrievePage( 'reduction' )
+        return page
+        
+
+    def start1(self, director, errors = None):
+        page = director.retrievePage( 'reduction' )
+        main = page._body._content._main
+        document = main.document(
+            title='Reduction: Start'
+            )
+
+        id = self.inventory.id
+        if empty_id( id ):
+            reduction = director.clerk.newReduction()
+        else:
+            reduction = director.clerk.getReduction( id )
+
+        measurement_id = reduction.measurement.id
+            
+        formcomponent = self.retrieveFormToShow( 'measurement' )
+        formcomponent.inventory.id = measurement_id
+        formcomponent.director = director
+
+        # start form
+        form = document.form(
+            name = 'measurement',
+            legend = formcomponent.legend(),
+            action = director.cgihome)
+
+        # specify action
+        theaction = action(
+            label = '', 
+            actor = 'reduction', routine = 'verify_measurement', 
+            arguments = { 'id': reduction.id,
+                          'form-received': formcomponent.name },
+            )
+
+        # weave the action into the form
+        from drchops.weaver import action_formfields
+        action_formfields( theaction, form )
+        
+        # expand the form using the form component
+        formcomponent.expand( form, errors = errors )
+
+        # ok button
+        submit = form.control(name="submit", type="submit", value="OK")
         
         return page
 
 
 import os
+from drchops.components.misc import empty_id
 
 
 def actor():

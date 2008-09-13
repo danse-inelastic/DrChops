@@ -109,7 +109,7 @@ class DBObjectForm( base ):
                 #if record is new, create a new db record
                 id = new_id( director )
                 record.id = id
-                director.clerk.newRecord( record )
+                director.clerk.insertRecord( record )
             else:
                 #otherwise, update the record
                 director.clerk.updateRecord( record )

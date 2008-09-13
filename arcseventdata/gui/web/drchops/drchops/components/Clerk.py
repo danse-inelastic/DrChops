@@ -19,83 +19,81 @@ class Clerk( base ):
 
     class Inventory( base.Inventory):
 
-        import pyre.inventory
-        db = pyre.inventory.str('db', default = 'db-pickles' )
+        pass
         
 
     def __init__(self, name = 'clerk', facility = 'clerk'):
-        base.__init__(self, name, facility)
+        super(Clerk, self).__init__(name=name, facility=facility)
         return
 
 
-    def newRecord(self, record):
-        tablename = record.__class__.__name__
-        store = self._retrieve_store( tablename )
-        store[ record.id ] = record
-        self._update_store( tablename, store )
-        return
+    def newVanadiumReduction(self):
+        from drchops.dom.VanadiumReduction import VanadiumReduction
+        return self._newRecord( VanadiumReduction )
 
 
-    def updateRecord(self, record):
-        tablename = record.__class__.__name__
-        store = self._retrieve_store( tablename )
-        store[ record.id ] = record
-        self._update_store( tablename, store )
-        return
+    def newReduction(self):
+        director = self.director
+        
+        # create a new reduction
+        from drchops.dom.Reduction import Reduction
+        reduction = Reduction()
+        reduction.id = new_id(director)
+        
+        # create a new measurement
+        from drchops.dom.Measurement import Measurement
+        measurement = Measurement()
+        measurement.id = new_id(director)
+        
+        #
+        reduction.measurement = measurement
+
+        self.db.insertRow( measurement )
+        self.db.insertRow( reduction )
+        
+        return reduction
 
 
-    def getRecordByID(self, table, id):
-        store = self._retrieve_store( table )
-        return store[ id ]
+    def getReduction(self, id):
+        return self.getRecordByID( 'Reduction', id )
 
 
-    def _retrieve_store(self, tablename):
-        if tablename in self._cache : return self._cache[ tablename ]
-        else:
-            path = self._store_path( tablename )
-            if not os.path.exists( path ): ret = dict()
-            else:
-                f = open(path) 
-                ret = pickle.load( f )
-                f.close()
-                
-            self._cache[ tablename ] = ret
-            
-            return ret
+    def getVanadiumReduction(self, id):
+        return self.getRecordByID( 'VanadiumReduction', id )
 
 
-    def _update_store(self, tablename, newstore):
-        store = self._retrieve_store( tablename )
-        store.update( newstore )
-        return
+    def getRecordByID(self, tablename, id):
+        exec 'from drchops.dom.%s import %s as Table' % (tablename, tablename) \
+             in locals()
+        return self._getRecordByID( Table, id )
 
 
-    def _store_path(self, tablename):
-        return os.path.join( self.db, tablename )
+    def insertRecord(self, record):
+        self.db.insertRow( record )
+        return record
+
+
+    def _newRecord(self, table):
+        r = table()
+        id = new_id(self.director)
+        r.id = id
+        db = self.db
+        db.insertRow(r)
+        return r
+
     
-
-    def _configure(self):
-        base._configure(self)
-        self.db = self.inventory.db
-        return
-
-
-    def _init(self):
-        base._init(self)
-        self._cache  = {}
-        return
-
-
-    def _fini(self):
-        for name, store in self._cache.iteritems():
-            path = self._store_path( name )
-            pickle.dump( store, open( path, 'w') )
-        base._fini(self)
-        return
+    def _getRecordByID(self, table, id ):
+        all = self.db.fetchall( table, where = "id='%s'" % id )
+        if len(all) == 1:
+            return all[0]
+        raise RuntimeError, "Cannot find record of id=%s in table %s" % (
+            id, table.__name__)
+    
     
 
 import os
 import pickle
+from misc import empty_id, new_id
 
 
 # version

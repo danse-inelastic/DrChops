@@ -1,0 +1,115 @@
+# -*- Python -*-
+#
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#
+#                                   Jiao Lin
+#                      California Institute of Technology
+#                        (C) 2008  All Rights Reserved
+#
+# {LicenseText}
+#
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#
+
+
+from drchops.components.Form import Form as base
+from drchops.components.Actor import action_link#, actionRequireAuthentication
+
+
+reduction_types = [
+    'VanadiumReduction',
+    'PowderReductionToSQE',
+    'ReductionToMslice',
+    ]
+
+
+class Form( base ):
+
+    class Inventory( base.Inventory ):
+        import pyre.inventory
+        typeindex = pyre.inventory.int('typeindex', default = 0)
+        pass # end of Inventory
+
+
+    def legend(self):
+        'return a legend string'
+        return 'Select reduction type'
+
+
+    def expand(self, form):
+        '''expand an existing form with fields from this component'''
+        
+        prefix = formactor_action_prefix
+        
+        entries = enumerate( reduction_types )
+        selector = form.selector(
+            id = 'reduction_selector',
+            name = '%s.typeindex' % prefix,
+            entries = entries,
+            label = 'Reduction',
+            selected = reduction_types[0],
+            )
+        
+        return
+
+
+    def processUserInputs(self):
+        'process user inputs and save them to db'
+        
+        reduction_type = reduction_types[self.inventory.typeindex]
+
+        clerk = self.director.clerk
+        factory = eval( 'clerk.new%s' % reduction_type )
+        record = factory()
+        return record
+
+
+    def __init__(self, name = None):
+        if name is None:
+            name = 'select_reduction_type'
+
+        base.__init__(self, name)
+
+        return
+    
+    pass # end of Form
+
+
+
+
+def new_id( director ):
+    #new token
+    token = director.idd.token()
+    uniquename = '%s-%s-%s' % (token.locator, token.tid, token.date)
+    return uniquename
+
+
+def new_block( director ):
+    from drchops.dom.Block import Block as factory
+    record = factory()
+
+    id = new_id( director )
+    record.id = id
+
+    record.creator = director.sentry.username
+    record.width = record.height = record.thickness = 0.01
+
+    import time
+    record.date = time.ctime()
+
+    director.clerk.newRecord( record )
+    
+    return record
+
+
+
+formactor_action_prefix = 'actor.form-received' # assumed actor is a form actor
+
+
+def form(): return Form()
+
+
+# version
+__id__ = "$Id$"
+
+# End of file 

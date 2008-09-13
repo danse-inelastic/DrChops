@@ -1,0 +1,134 @@
+# -*- Python -*-
+#
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#
+#                                   Jiao Lin
+#                      California Institute of Technology
+#                        (C) 2008  All Rights Reserved
+#
+# {LicenseText}
+#
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#
+
+
+from drchops.components.DBObjectForm import DBObjectForm as base
+from drchops.components.FormActor import InputProcessingError, action_link#, actionRequireAuthentication
+
+
+
+class Form( base ):
+
+    class Inventory( base.Inventory ):
+        import pyre.inventory
+        runno = pyre.inventory.str('runno', default = '128')
+        runno.meta['label'] = 'Run #'
+        runno.meta['tip'] = (
+            'ARCS run number',
+            )
+        runno.meta['tiponerror'] = (
+            'ARCS run number should be a positive integer',
+            )
+        
+        E_params = pyre.inventory.str( name = 'E_params', default = '[-60,60,1]' )
+        E_params.meta['label'] = 'Energy axis'
+        E_params.meta['tip'] = (
+            'Define energy axis (start, stop, step)',
+            )
+        E_params.meta['tiponerror'] = (
+            'unit: meV',
+            )
+        
+        Ei = pyre.inventory.str( name = 'Ei', default = 100 )
+        Ei.meta['label'] = 'Incident energy'
+        Ei.meta['tip'] = (
+            'Nominal incident energy',
+            )
+        Ei.meta['tiponerror'] = (
+            'Input incident energy as a positve number. Unit: meV',
+            )
+        
+        pass # end of Inventory
+
+
+    parameters = [#'short_description',
+        'runno', 'E_params', 'Ei']
+    
+    DBTable = 'VanadiumReduction'
+
+
+    def __init__(self, name = None):
+        if name is None:
+            name = 'vanadiumreduction'
+
+        base.__init__(self, name)
+        return
+    
+
+    def processUserInputs(self, *args, **kwds):
+        errors = []
+        
+        Ei = self.inventory.Ei
+        if self._checkEi( Ei ): errors.append( 'Ei' )
+
+        E_params = self.inventory.E_params
+        if self._checkE_params( E_params ): errors.append( 'E_params' )
+
+        runno = self.inventory.runno
+        if self._checkrunno(runno): errors.append( 'runno' )
+        
+        if len(errors): raise InputProcessingError, errors
+        return base.processUserInputs(self, *args, **kwds)
+
+
+    def _checkrunno(self, runno):
+        from drchops.components.misc import find_arcs_run_dir
+        dir = find_arcs_run_dir(runno)
+        return not dir
+
+
+    def _checkE_params(self, E_params):
+        try: e_params = eval(E_params)
+        except: return 1
+        try: e_params = tuple( e_params )
+        except: return 1
+        if len(e_params) !=3 : return 1
+        for i in e_params:
+            try: float(i)
+            except: return 1
+            continue
+        start, stop, step = [float(i) for i in e_params]
+        if step<=0: return 1
+        if start >= stop: return 1
+        return 0
+    
+
+    def _checkEi(self, Ei):
+        try: float( Ei )
+        except: return 1
+        return 
+
+
+    pass # end of Form
+
+
+
+
+def new_id( director ):
+    #new token
+    token = director.idd.token()
+    uniquename = '%s-%s-%s' % (token.locator, token.tid, token.date)
+    return uniquename
+
+
+
+formactor_action_prefix = 'actor.form-received' # assumed actor is a form actor
+
+
+def form(): return Form()
+
+
+# version
+__id__ = "$Id$"
+
+# End of file 
