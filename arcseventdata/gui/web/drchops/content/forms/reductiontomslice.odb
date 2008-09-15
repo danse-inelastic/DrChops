@@ -30,7 +30,7 @@ class Form( base ):
             'ARCS run number should be a positive integer',
             )
         
-        mt_runno = pyre.inventory.str('mt_runno', default = '279')
+        mt_runno = pyre.inventory.str('mt_runno', default = '289')
         mt_runno.meta['label'] = 'Empty can run #'
         mt_runno.meta['tip'] = (
             'ARCS run number for the empty can experiment',
@@ -92,6 +92,27 @@ class Form( base ):
             name = 'reductiontomslice'
 
         base.__init__(self, name)
+        return
+
+
+    def expand(self, form, *args, **kwds):
+        base.expand(self, form, *args, **kwds)
+
+        prefix = formactor_action_prefix
+        finished_calibrations = self.director.clerk.getFinishedVanadiumReductions()
+        finished_calibrations = [
+            '%s %s: run #%s (Ei=%s, E_params=%s)' % (
+            c.__class__.__name__, c.id, c.runno, c.Ei, c.E_params)
+            for c in finished_calibrations ]
+        entries = enumerate(finished_calibrations)
+        selector = form.selector(
+            id = 'calibration_selector',
+            name = '%s.calibration' % prefix,
+            entries = entries,
+            label = 'Calibration',
+            selected = finished_calibrations[0],
+            )
+        
         return
     
 
@@ -171,16 +192,6 @@ class Form( base ):
 
 
     pass # end of Form
-
-
-
-
-def new_id( director ):
-    #new token
-    token = director.idd.token()
-    uniquename = '%s-%s-%s' % (token.locator, token.tid, token.date)
-    return uniquename
-
 
 
 formactor_action_prefix = 'actor.form-received' # assumed actor is a form actor

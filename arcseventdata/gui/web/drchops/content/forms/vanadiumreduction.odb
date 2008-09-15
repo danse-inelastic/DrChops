@@ -21,7 +21,7 @@ class Form( base ):
 
     class Inventory( base.Inventory ):
         import pyre.inventory
-        runno = pyre.inventory.str('runno', default = '128')
+        runno = pyre.inventory.str('runno', default = '297')
         runno.meta['label'] = 'Run #'
         runno.meta['tip'] = (
             'ARCS run number',
@@ -111,14 +111,6 @@ class Form( base ):
 
     pass # end of Form
 
-
-
-
-def new_id( director ):
-    #new token
-    token = director.idd.token()
-    uniquename = '%s-%s-%s' % (token.locator, token.tid, token.date)
-    return uniquename
 
 
 

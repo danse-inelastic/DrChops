@@ -87,7 +87,7 @@ class Scheduler:
             output, error = self._readoutputerror(
                 self.outfilename, self.errfilename )
             ret.update(
-                { 'exit_code': report['ExitCode'],
+                { 'exit_code': report['ExitCode'][:1],
                   'timeCompletion': report['EndTime'],
                   'output': output,
                   'error': error,

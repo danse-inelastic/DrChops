@@ -37,6 +37,11 @@ class Clerk( base ):
         return self._newRecord( VanadiumReduction )
 
 
+    def newReductionToMslice(self):
+        from drchops.dom.ReductionToMslice import ReductionToMslice
+        return self._newRecord( ReductionToMslice )
+
+
     def newReduction(self):
         director = self.director
         
@@ -65,6 +70,13 @@ class Clerk( base ):
 
     def getVanadiumReduction(self, id):
         return self.getRecordByID( 'VanadiumReduction', id )
+
+
+    def getFinishedVanadiumReductions(self):
+        from drchops.dom.VanadiumReduction import VanadiumReduction as table
+        all = self.db.fetchall( table )
+        from ReductionResultsRetriever import retrieve
+        return filter( lambda r: retrieve(r, self.director), all )
 
 
     def getReductionToMslice(self, id):
