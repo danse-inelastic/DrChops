@@ -2,6 +2,8 @@
 main = [
     'Measurement',
     'VanadiumReduction',
+    'ReductionToMslice',
+    'Job',
     ]
 
 tablemodules = \

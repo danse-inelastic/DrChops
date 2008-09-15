@@ -30,6 +30,16 @@ def portlet(app):
     home.icon = "images/link_icon.gif"
     home.type = "navItem"
     
+    jobs = portlet.item(description="Jobs")
+    jobs.target = action_href(
+            action(
+            label = 'Jobs',
+            actor = 'job',
+            ),
+            app.cgihome)
+    jobs.icon = "images/link_icon.gif"
+    jobs.type = "navItem"
+    
     return portlet
 
 

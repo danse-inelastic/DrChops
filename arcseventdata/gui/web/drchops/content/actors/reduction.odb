@@ -22,7 +22,7 @@ class Actor(base):
         id = pyre.inventory.str( 'id', default = '')
         id.meta['tip'] = 'id of reduction session'
 
-        type = pyre.inventory.str( 'type', default = 'Vanadium' )
+        type = pyre.inventory.str( 'type', default = 'VanadiumReduction' )
         type.meta['tip'] = 'type of reduction'
 
 
@@ -35,6 +35,9 @@ class Actor(base):
         main = page._body._content._main
         document = main.document(
             title='Reduction: Start'
+            )
+        document.description = (
+            'Please select the reduction type and click OK'
             )
 
         formcomponent = self.retrieveFormToShow( 'select_reduction_type' )
@@ -119,6 +122,47 @@ class Actor(base):
         return page
 
 
+    def configure_reductiontomslice(self, director, errors = None):
+        #prepare the page layout
+        page = director.retrievePage( 'reduction' )
+        main = page._body._content._main
+        document = main.document(title='Reduce data to mslice data files')
+
+        # the reduction record
+        clerk = director.clerk
+        id = self.inventory.id
+        reduction = clerk.getReductionToMslice(id)
+
+        # prepare form
+        formcomponent = self.retrieveFormToShow( 'reductiontomslice' )
+        formcomponent.director = director
+
+        # start form
+        form = document.form(
+            name = 'reductiontomslice',
+            legend = formcomponent.legend(),
+            action = director.cgihome)
+
+        # specify action
+        theaction = action(
+            label = '', 
+            actor = 'reduction', routine = 'verify_reductiontomslice_configuration', 
+            arguments = {'form-received': formcomponent.name },
+            )
+
+        # weave the action into the form
+        from drchops.weaver import action_formfields
+        action_formfields( theaction, form )
+        
+        # expand the form using the form component
+        formcomponent.expand( form, errors = errors )
+
+        # ok button
+        submit = form.control(name="submit", type="submit", value="OK")
+        
+        return page
+
+
     def verify_vanadiumreduction_configuration(self, director):
         try:
             reduction = self.processFormInputs(director)
@@ -132,8 +176,70 @@ class Actor(base):
         return self.run( director )
 
 
+    def verify_reductiontomslice_configuration(self, director):
+        try:
+            reduction = self.processFormInputs(director)
+        except InputProcessingError, err:
+            errors = err.errors
+            self.form_received = None
+            director.routine = 'configure_reductiontomslice'
+            return self.configure_reductiontomslice( director, errors = errors )
+
+        self.inventory.id = reduction.id
+        return self.run( director )
+
+
     def run(self, director):
         page = director.retrievePage( 'reduction' )
+        id = self.inventory.id
+        type = self.inventory.type
+
+        clerk = director.clerk
+        reduction = clerk.getRecordByID( type, id )
+
+        # create job
+        job = buildJob( reduction, director )
+        
+        # redirect to job actor
+        return self.redirect( director, 'job', 'view', id = job.id )
+
+
+    def view(self, director):
+        page = director.retrievePage( 'reduction' )
+        id = self.inventory.id
+        type = self.inventory.type
+
+        clerk = director.clerk
+        reduction = clerk.getRecordByID( type, id )
+
+        main = page._body._content._main
+        document = main.document(
+            title='%s #%s' % (type, id)
+            )
+        document.description = (
+            'Reduction details'
+            )
+
+        props = reduction.getColumnNames()
+        lines = ['%s=%s' % (prop, getattr(reduction, prop) ) for prop in props]
+        for line in lines:
+            p = document.paragraph()
+            p.text = [line]
+            continue
+
+        p = document.paragraph()
+        job = reduction.job
+        link = action_link(
+            action(actor = 'job',
+                   routine = 'view',
+                   label = 'here',
+                   id = job.id,
+                   type = job.table.__name__,
+                   ),
+            director.cgihome
+            )
+        p.text = ["To see what the job submitted for this reduction, please click %s" % link]
+
         return page
         
 
@@ -181,6 +287,12 @@ class Actor(base):
         submit = form.control(name="submit", type="submit", value="OK")
         
         return page
+
+
+def buildJob(reduction, director):
+    from drchops.components.ReductionJobBuilder import ReductionJobBuilder
+    return ReductionJobBuilder(director)(reduction)
+
 
 
 import os

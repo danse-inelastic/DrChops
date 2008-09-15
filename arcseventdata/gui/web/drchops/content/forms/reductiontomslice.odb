@@ -1,0 +1,195 @@
+# -*- Python -*-
+#
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#
+#                                   Jiao Lin
+#                      California Institute of Technology
+#                        (C) 2008  All Rights Reserved
+#
+# {LicenseText}
+#
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#
+
+
+from drchops.components.DBObjectForm import DBObjectForm as base
+from drchops.components.FormActor import InputProcessingError, action_link#, actionRequireAuthentication
+
+
+
+class Form( base ):
+
+    class Inventory( base.Inventory ):
+        import pyre.inventory
+        main_runno = pyre.inventory.str('main_runno', default = '279')
+        main_runno.meta['label'] = 'Main Run #'
+        main_runno.meta['tip'] = (
+            'ARCS run number for the main experiment',
+            )
+        main_runno.meta['tiponerror'] = (
+            'ARCS run number should be a positive integer',
+            )
+        
+        mt_runno = pyre.inventory.str('mt_runno', default = '279')
+        mt_runno.meta['label'] = 'Empty can run #'
+        mt_runno.meta['tip'] = (
+            'ARCS run number for the empty can experiment',
+            )
+        mt_runno.meta['tiponerror'] = (
+            'ARCS run number should be a positive integer',
+            )
+        
+        mtratio = pyre.inventory.str( name = 'mtratio', default = 0.9 )
+        mtratio.meta['label'] = 'Ratio of empty can data to be subtracted from main data'
+        mtratio.meta['tip'] = (
+            'Ratio of mt/main',
+            )
+        mtratio.meta['tiponerror'] = (
+            'Mt/main ratio should be a number close to 1.',
+            )
+        
+        E_params = pyre.inventory.str( name = 'E_params', default = '[-60,60,1]' )
+        E_params.meta['label'] = 'Energy axis'
+        E_params.meta['tip'] = (
+            'Define energy axis (start, stop, step)',
+            )
+        E_params.meta['tiponerror'] = (
+            'unit: meV',
+            )
+        
+        tof_params = pyre.inventory.str( name = 'tof_params', default = '[3000,6000,5.]' )
+        tof_params.meta['label'] = 'Tof axis'
+        tof_params.meta['tip'] = (
+            'Define time-of-flight axis (start, stop, step)',
+            )
+        tof_params.meta['tiponerror'] = (
+            'unit: milisecond',
+            )
+        
+        Ei = pyre.inventory.str( name = 'Ei', default = 100 )
+        Ei.meta['label'] = 'Incident energy'
+        Ei.meta['tip'] = (
+            'Nominal incident energy',
+            )
+        Ei.meta['tiponerror'] = (
+            'Input incident energy as a positve number. Unit: meV',
+            )
+
+        calibration = pyre.inventory.str( name = 'calibration' )
+        
+        pass # end of Inventory
+
+
+    parameters = [#'short_description',
+        'main_runno', 'mt_runno', 'mtratio',
+        'E_params', 'tof_params', 'Ei']
+    
+    DBTable = 'ReductionToMslice'
+
+
+    def __init__(self, name = None):
+        if name is None:
+            name = 'reductiontomslice'
+
+        base.__init__(self, name)
+        return
+    
+
+    def processUserInputs(self, *args, **kwds):
+        errors = []
+        
+        Ei = self.inventory.Ei
+        if self._checkEi( Ei ): errors.append( 'Ei' )
+
+        E_params = self.inventory.E_params
+        if self._checkE_params( E_params ): errors.append( 'E_params' )
+
+        tof_params = self.inventory.tof_params
+        if self._checktof_params( tof_params ): errors.append( 'tof_params' )
+
+        main_runno = self.inventory.main_runno
+        if self._checkrunno(main_runno): errors.append( 'main_runno' )
+        
+        mt_runno = self.inventory.mt_runno
+        if self._checkrunno(mt_runno): errors.append( 'mt_runno' )
+
+        mtratio = self.inventory.mtratio
+        if self._checkmtratio(mtratio): errors.append( 'mtratio' )
+        
+        if len(errors): raise InputProcessingError, errors
+        return base.processUserInputs(self, *args, **kwds)
+
+
+    def _checkrunno(self, runno):
+        from drchops.components.misc import find_arcs_run_dir
+        dir = find_arcs_run_dir(runno)
+        return not dir
+
+
+    def _checkE_params(self, E_params):
+        try: e_params = eval(E_params)
+        except: return 1
+        try: e_params = tuple( e_params )
+        except: return 1
+        if len(e_params) !=3 : return 1
+        for i in e_params:
+            try: float(i)
+            except: return 1
+            continue
+        start, stop, step = [float(i) for i in e_params]
+        if step<=0: return 1
+        if start >= stop: return 1
+        return 0
+    
+
+    def _checktof_params(self, tof_params):
+        try: params = eval(tof_params)
+        except: return 1
+        try: params = tuple( params )
+        except: return 1
+        if len(params) !=3 : return 1
+        for i in params:
+            try: float(i)
+            except: return 1
+            continue
+        start, stop, step = [float(i) for i in params]
+        if step<=0: return 1
+        if start >= stop: return 1
+        return 0
+    
+
+    def _checkEi(self, Ei):
+        try: float( Ei )
+        except: return 1
+        return 
+
+
+    def _checkmtratio(self, mtratio):
+        try: float( mtratio )
+        except: return 1
+        return mtratio < 0.1 or mtratio > 2.
+
+
+    pass # end of Form
+
+
+
+
+def new_id( director ):
+    #new token
+    token = director.idd.token()
+    uniquename = '%s-%s-%s' % (token.locator, token.tid, token.date)
+    return uniquename
+
+
+
+formactor_action_prefix = 'actor.form-received' # assumed actor is a form actor
+
+
+def form(): return Form()
+
+
+# version
+__id__ = "$Id$"
+
+# End of file 

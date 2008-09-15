@@ -12,38 +12,28 @@
 #
 
 
+from VanadiumReduction import VanadiumReduction
 from Job import Job
 
 from DbObject import DbObject
-class VanadiumReduction(DbObject):
+class ReductionToMslice(DbObject):
 
-    name = 'vanadiumreductions'
+    name = 'reductionstomslice'
 
     import pyre.db
 
-    runno = pyre.db.varchar( name = 'runno', length = 128)
+    main_runno = pyre.db.varchar( name = 'main_runno', length = 128)
+    mt_runno = pyre.db.varchar( name = 'mt_runno', length = 128)
+    mtratio = pyre.db.real( name = 'mtratio', default = 0.9 )
+    
     E_params = pyre.db.doubleArray( name = 'E_params', default = [-60,60,1] )
+    tof_params = pyre.db.doubleArray( name = 'tof_params', default = [3000,6000,5] )
     Ei = pyre.db.real( name = 'Ei', default = 100 )
+
+    calibration = pyre.db.reference(name='calibration', table = VanadiumReduction)
 
     job = pyre.db.reference(name='job', table = Job)
 
-
-def inittable(db):
-    def new(id, runno, E_params, Ei):
-        r = VanadiumReduction()
-        r.runno = runno
-        r.Ei = Ei
-        r.E_params = E_params
-        r.id
-        return r
-
-    db.insertRow( new( new_id(), 128, [-60,60,1], 100 ) )
-    return
-    
-
-def new_id():
-    from idgenerator import generator
-    return generator()
 
 
 # version

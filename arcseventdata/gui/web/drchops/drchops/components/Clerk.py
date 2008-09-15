@@ -27,6 +27,11 @@ class Clerk( base ):
         return
 
 
+    def newJob(self):
+        from drchops.dom.Job import Job
+        return self._newRecord( Job )
+
+
     def newVanadiumReduction(self):
         from drchops.dom.VanadiumReduction import VanadiumReduction
         return self._newRecord( VanadiumReduction )
@@ -54,18 +59,38 @@ class Clerk( base ):
         return reduction
 
 
-    def getReduction(self, id):
-        return self.getRecordByID( 'Reduction', id )
+    def getJob(self, id):
+        return self.getRecordByID( 'Job', id )
 
 
     def getVanadiumReduction(self, id):
         return self.getRecordByID( 'VanadiumReduction', id )
 
 
+    def getReductionToMslice(self, id):
+        return self.getRecordByID( 'ReductionToMslice', id )
+
+
     def getRecordByID(self, tablename, id):
         exec 'from drchops.dom.%s import %s as Table' % (tablename, tablename) \
              in locals()
         return self._getRecordByID( Table, id )
+
+
+    def updateRecord(self, record):
+        id = record.id
+        where = "id='%s'" % id
+        
+        assignments = []
+        
+        for column in record.getColumnNames():
+            value = getattr( record, column )
+            #value = _tostr( value )
+            assignments.append( (column, value) )
+            continue
+        
+        self.db.updateRow(record.__class__, assignments, where)
+        return record
 
 
     def insertRecord(self, record):

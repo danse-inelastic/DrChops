@@ -13,6 +13,7 @@
 
 
 class SchedulerDaemonNotStarted(Exception): pass
+class UnableToObtainStatus(Exception): pass
 
 
 # version

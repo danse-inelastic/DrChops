@@ -1,0 +1,49 @@
+# -*- Python -*-
+#
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#
+#                                   Jiao Lin
+#                      California Institute of Technology
+#                        (C) 2008  All Rights Reserved
+#
+# {LicenseText}
+#
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#
+
+
+
+from drchops.components.DBObjectForm import DBObjectForm as base
+
+
+class Measurement(base):
+
+
+    class Inventory(base.Inventory):
+
+        import pyre.inventory
+        
+        pass # end of Inventory
+
+
+    parameters = [ ]  # all fileds that you want to be presented in the form
+    
+    DBTable = 'Measurement'
+
+
+    def __init__(self, name = None):
+        if name is None:
+            name = 'measurement'
+
+        base.__init__(self, name)
+
+        return
+
+
+
+def form(): return Measurement()
+
+# version
+__id__ = "$Id$"
+
+# End of file 

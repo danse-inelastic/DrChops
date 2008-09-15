@@ -59,6 +59,9 @@ class WebApplication(Base):
         # initialize the accessors
         self.clerk.db = self.db
         self.clerk.director = self
+
+        from drchops.dom import register_alltables
+        register_alltables()
         return
         
 

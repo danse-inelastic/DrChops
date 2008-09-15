@@ -59,12 +59,13 @@ class Scheduler:
         cmds = [ 'scontrol show job %s' % (jobid,) ]
         failed, output, error  = self._launch( cmds )
         if failed:
-            line1 = error.split('\n')[0]
-            words = lines1.split()
+            line1 = output.split('\n')[0]
+            words = line1.split()
             if len(words) == 4 and words[0] == 'Job' and words[2] == 'not' and \
                words[3] == 'found':
                 #job already completed?
-                return
+                from exceptions import UnableToObtainStatus
+                raise UnableToObtainStatus
 
             msg = "error in executing cmds %s. output: %s, error: %s" % (
                 cmds, output, error )
@@ -132,7 +133,8 @@ import os
 
 _states = {
     'COMPLETED': 'finished',
-    'R': 'running',
+    'RUNNING': 'running',
+    'CANCELLED': 'cancelled',
     'Q': 'queued',
     'E': 'exiting', #after having run
     'H': 'onhold',

@@ -4,7 +4,7 @@
 #
 #                                   Jiao Lin
 #                      California Institute of Technology
-#                        (C) 2007  All Rights Reserved
+#                        (C) 2008  All Rights Reserved
 #
 # {LicenseText}
 #
@@ -12,11 +12,8 @@
 #
 
 
-def scheduler( name ):
-    package = 'drchops.clusterscheduler'
-    module = __import__( '%s.%s' % (package,name), {}, {}, [''] )
-    #exec 'import %s as module' % name in locals()
-    return module.Scheduler
+import pyre.db
+tableRegistry = pyre.db.tableRegistry()
 
 
 # version
