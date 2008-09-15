@@ -13,6 +13,10 @@
 
 
 def check(job, director):
+    if job.state in ['finished', 'failed', 'terminated']:
+        # should have no need to update
+        return
+    
     schedulerf = schedulerfactory('slurm')
     partition = 'arcs'
     node = 'arcs2'

@@ -34,7 +34,7 @@ def inittable(db):
         r.runno = runno
         r.Ei = Ei
         r.E_params = E_params
-        r.id
+        r.id = id
         return r
 
     db.insertRow( new( new_id(), 128, [-60,60,1], 100 ) )

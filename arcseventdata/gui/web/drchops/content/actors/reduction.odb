@@ -26,6 +26,43 @@ class Actor(base):
         type.meta['tip'] = 'type of reduction'
 
 
+    def default(self, director):
+        return self.listall( director )
+
+
+    def listall(self, director):
+        page = director.retrievePage( 'reduction' )
+        main = page._body._content._main
+        document = main.document(title='Reductions')
+
+        reductions = []
+        from drchops.dom import reductiontables
+        for table in reductiontables():
+            reductions += director.db.fetchall( table )
+            continue
+
+        from drchops.components.ReductionDescriptionRenderer import describe
+        for reduction in reductions:
+            p = document.paragraph()
+            link = action_link(
+                action(actor = 'reduction',
+                       routine = 'view',
+                       label = reduction.id,
+                       id = reduction.id,
+                       type = reduction.__class__.__name__,
+                       ),
+                director.cgihome
+                )
+            p.text = [
+                '%s: %s' % (
+                link, describe(reduction, director),
+                ),
+                ]
+            continue
+        
+        return page
+
+
     def start(self,director):
         return self.select_reduction_type( director )
 
@@ -85,7 +122,8 @@ class Actor(base):
         #prepare the page layout
         page = director.retrievePage( 'reduction' )
         main = page._body._content._main
-        document = main.document(title='Reduce a vanadium run to obtain mask and calibration constants')
+        document = main.document(
+            title='Reduce a vanadium run to obtain mask and calibration constants')
 
         # the reduction record
         clerk = director.clerk
@@ -233,16 +271,20 @@ class Actor(base):
 
         p = document.paragraph()
         job = reduction.job
-        link = action_link(
-            action(actor = 'job',
-                   routine = 'view',
-                   label = 'here',
-                   id = job.id,
-                   type = job.table.__name__,
-                   ),
-            director.cgihome
-            )
-        p.text = ["To see what the job submitted for this reduction, please click %s" % link]
+        if job:
+            link = action_link(
+                action(actor = 'job',
+                       routine = 'view',
+                       label = 'here',
+                       id = job.id,
+                       type = job.table.__name__,
+                       ),
+                director.cgihome
+                )
+            p.text = ["To see the job submitted for this reduction, please click %s" % link]
+        else:
+            p.text = ["No job has been created for this reduction"]
+            
 
         return page
         

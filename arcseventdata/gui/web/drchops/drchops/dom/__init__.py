@@ -17,6 +17,11 @@ def alltables():
     return tables
 
 
+def reductiontables():
+    from _reductions import all
+    return all()
+
+
 def set_idgenerator( generator ):
     import idgenerator
     idgenerator.generator = generator
