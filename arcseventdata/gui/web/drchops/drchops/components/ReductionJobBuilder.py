@@ -69,7 +69,7 @@ class ReductionJobBuilder:
         #calibration results
         calibration = reduction.calibration.dereference(self.director.db)
         from ReductionResultsRetriever import retrieve
-        calibrationh5,maskh5 = retrieve(calibration, director)
+        calibrationh5,maskh5 = retrieve(calibration, self.director)
         
         main_rundir = _rundir(main_runno)
         mt_rundir = _rundir(mt_runno)

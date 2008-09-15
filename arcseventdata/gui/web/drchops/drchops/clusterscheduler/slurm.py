@@ -83,7 +83,7 @@ class Scheduler:
             'timeStart': start_time,
             }
 
-        if ret['state'] == 'finished':
+        if ret['state'] in [ 'finished', 'failed' ]:
             output, error = self._readoutputerror(
                 self.outfilename, self.errfilename )
             ret.update(
@@ -135,6 +135,7 @@ _states = {
     'COMPLETED': 'finished',
     'RUNNING': 'running',
     'CANCELLED': 'cancelled',
+    'FAILED': 'failed',
     'Q': 'queued',
     'E': 'exiting', #after having run
     'H': 'onhold',

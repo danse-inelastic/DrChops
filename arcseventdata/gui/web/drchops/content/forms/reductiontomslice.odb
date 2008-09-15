@@ -75,7 +75,7 @@ class Form( base ):
             'Input incident energy as a positve number. Unit: meV',
             )
 
-        calibration = pyre.inventory.str( name = 'calibration' )
+        calibration = pyre.inventory.int( name = 'calibration' )
         
         pass # end of Inventory
 
@@ -138,8 +138,16 @@ class Form( base ):
         if self._checkmtratio(mtratio): errors.append( 'mtratio' )
         
         if len(errors): raise InputProcessingError, errors
-        return base.processUserInputs(self, *args, **kwds)
 
+        reduction =  base.processUserInputs(self, *args, **kwds)
+
+        finished_calibrations = self.director.clerk.getFinishedVanadiumReductions()
+        calibration = finished_calibrations[self.inventory.calibration]
+
+        reduction.calibration = calibration
+        self.director.clerk.updateRecord( reduction )
+        return reduction
+    
 
     def _checkrunno(self, runno):
         from drchops.components.misc import find_arcs_run_dir
@@ -186,7 +194,7 @@ class Form( base ):
 
 
     def _checkmtratio(self, mtratio):
-        try: float( mtratio )
+        try: mtratio = float( mtratio )
         except: return 1
         return mtratio < 0.1 or mtratio > 2.
 

@@ -61,6 +61,7 @@ class Form( base ):
         clerk = self.director.clerk
         factory = eval( 'clerk.new%s' % reduction_type )
         record = factory()
+        
         return record
 
 

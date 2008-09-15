@@ -61,7 +61,7 @@ def _findReductionResults(path, files):
     for f in files:
         p = os.path.join(path, f)
         if not os.path.exists(p): return
-        paths.append( p )
+        paths.append( os.path.abspath(p) )
         continue
     return paths
 
