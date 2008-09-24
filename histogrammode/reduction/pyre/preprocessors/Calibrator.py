@@ -43,9 +43,13 @@ class Calibrator(base):
         detIDs = detAxis.binCenters()
 
         print histogram.unit(), histogram.data().unit()
-        from numpy import array
+        from numpy import array, median
+        median = median(cc.I)
+        largenumber = median * 1e30
         for detID in detIDs:
             c = array(cc[detID]) / cc.unit()
+            if c[0] <=0: c[0] = largenumber
+            if c[1] <=0: c[1] = largenumber
             histogram[ {'detectorID': detID} ] /= c
             continue
         histogram /= cc.unit(), 0
