@@ -48,16 +48,17 @@ class RebinTof2E:
         rebin histogram in Itof to IE
         """
         tofAxis = Itof.axisFromName('tof')
-        tofAxis.changeUnit( 'microsecond' )
-        tof = tofAxis.storage().asNumarray()
+        #tofAxis.changeUnit( 'microsecond' )
+        from reduction import units
+        tof = tofAxis.storage().asNumarray() * (tofAxis.unit()/units.time.microsecond)
         
         if self._tmpE is None or self._tmpE.size != tofAxis.size():
             self._tmpE = tof.copy()
         tmpE = self._tmpE
 
         EAxis = IE.axisFromName('energy')
-        EAxis.changeUnit( 'meV' )
-        E = EAxis.storage().asNumarray()
+        #EAxis.changeUnit( 'meV' )
+        E = EAxis.storage().asNumarray() * (EAxis.unit()/units.energy.meV)
 
         engine = self._engine
 
