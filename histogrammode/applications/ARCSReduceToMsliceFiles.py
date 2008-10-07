@@ -123,6 +123,7 @@ class ARCSReduceToMsliceFilesApp(base):
 
     def _init(self):
         base._init(self)
+        if self._showHelpOnly: return
         calibration = self.calibration
         mask = self.mask
         inputs = [ calibration, mask ]

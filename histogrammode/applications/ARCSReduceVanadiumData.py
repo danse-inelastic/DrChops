@@ -64,6 +64,9 @@ class ArcsreducevanadiumdataApp(base):
             E_params = E_params, Ei = Ei,
             criteria_nocounts = lowerlimit,
             criteria_toomanycounts = upperlimit)
+
+        # only master node will generate ouput
+        if self.mpiRank != 0: return
         
         calibration = reduced['calibration']
         mask = reduced['mask']
