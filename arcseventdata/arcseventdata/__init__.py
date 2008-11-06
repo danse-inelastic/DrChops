@@ -192,6 +192,23 @@ def write_mslice_files( IpE, phi_p, psi_p, spefile, phxfile ):
     return
 
 
+def tomslice(ipdpE, outputprefix='mslice', ARCSxml='ARCS.xml'):
+    infos = getinstrumentinfo(ARCSxml)
+    phi_p = infos['phis']
+    psi_p = infos['psis']
+    
+    import numpy
+    phi_p.I[:] = numpy.nan_to_num( phi_p.I )
+    psi_p.I[:] = numpy.nan_to_num( psi_p.I )
+
+    prefix = outputprefix
+    spef = '%s.spe' % prefix
+    phxf = '%s.phx' % prefix
+    
+    #convert to mslice file
+    write_mslice_files( ipdpE, phi_p, psi_p, spef, phxf )
+    return
+
 
 from events2Idspacing import events2Idspacing
 from events2IpdpE import events2IpdpE

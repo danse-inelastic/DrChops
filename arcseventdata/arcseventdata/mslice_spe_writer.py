@@ -12,6 +12,16 @@
 #
 
 
+"""
+Difficulties of writing mslice files:
+
+spe
+ * Make sure data don't have nan or inf.
+ * Use E (scientific) format for output S and ERR.
+   sth like: +3.142E+00
+"""
+
+
 class Writer(object ):
 
     """writer for creating data files for mslice
@@ -83,6 +93,10 @@ class Writer(object ):
         print "mslice data writer: write spe file"
         
         assert I_pe.shape()[:-1] == phi_p.shape()
+
+        #make a copy so we can change it
+        I_pe = I_pe.copy()
+        self._adjustIntensity(I_pe)
         
         f = open(filename, 'w')
         
@@ -96,6 +110,26 @@ class Writer(object ):
         self._writePhiGrid( phi_p, f )
         self._writeEGrid( eAxis, f )
         self._writeSGrid( I_pe, ntotpxls, nes, f )
+        return
+
+
+    def _adjustIntensity(self, ipe):
+        import numpy as N
+
+        iarr = ipe.I
+        #remove negative numbers
+        iarr[iarr<0]=0
+        #remove nan
+        iarr[N.isnan(iarr)]=0
+        iarr[N.isinf(iarr)]=0
+
+        e2arr = ipe.E2
+        #remove negative numbers
+        e2arr[e2arr<0]=0
+        #remove nan
+        e2arr[N.isnan(e2arr)]=0        
+        e2arr[N.isinf(e2arr)]=0        
+
         return
 
 
@@ -173,7 +207,8 @@ class Writer(object ):
 def fortran_print_numbers( numbers, formatStr = "%10.3f", eol = '\n'):
     "print numbers in fortran format"
     l = [formatStr % d for d in numbers]
-    s = eol.join( [ ''.join(l[8*i:8*(i+1)]) for i in range(len(l)/8+1) ] )
+    if len(l)==0: raise ValueError, "number list is empty"
+    s = eol.join( [ ''.join(l[8*i:8*(i+1)]) for i in range((len(l)-1)/8+1) ] )
     s += eol
     return s    
 
@@ -183,7 +218,21 @@ import numpy as N
 writer = Writer()
 
 
-def test():
+def test1():
+    eol = Writer.eol
+    
+    s1 = fortran_print_numbers( range(3) )
+    assert s1[-1] == eol and s1[-2]!=eol
+
+    s1 = fortran_print_numbers( range(8) )
+    assert s1[-1] == eol and s1[-2]!=eol
+
+    s1 = fortran_print_numbers( range(15) )
+    assert s1[-1] == eol and s1[-2]!=eol
+
+    return
+
+def test2():
     import numpy as n
     from histogram import makeHistogram
     det = ( "detectorID", range(10) )
@@ -206,6 +255,10 @@ def test():
     writer.write_phx( phi_p, psi_p, "tmp.phx" )
     return
 
+def test():
+    test1()
+    test2()
+    return
 
 if __name__ =="__main__": test()
     
