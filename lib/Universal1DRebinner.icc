@@ -1,0 +1,280 @@
+// -*- C++ -*-
+//
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+//
+//                                   Jiao Lin
+//                      California Institute of Technology
+//                        (C) 2007  All Rights Reserved
+//
+// {LicenseText}
+//
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+//
+
+
+#ifndef DANSE_REDUCTION_UNIVERSAL1DREBINNER_ICC
+#error "Template implementation file meaningless outside of Universal1DRebinner.h"
+#endif
+
+#include "journal/debug.h"
+#include "ReverseIterator.h"
+
+namespace DANSE {
+  namespace Reduction {
+    
+    // implementation namespace for Universal1DRebinner
+    namespace Universal1DRebinner_Impl {
+      
+      // shall we just use std::min and std::max?
+      // I guess it does not really hurt to have these two small inline functions
+      template <typename FPT>
+      FPT greaterof( FPT a, FPT b){ return (a > b) ? a : b;}
+      template <typename FPT>
+      FPT lesserof( FPT a, FPT b) { return (a < b) ? a : b;}
+      
+      /// journal tag. to be defined in cc source
+      extern const char * jrnltag;
+      
+      /// The core implementation of Universal1DRebinner.
+      /// Again, let us use example to explain:
+      ///
+      ///    I'(E) to I(E)
+      ///
+      /// I'(E) has a unevenly spaced array of bins, I(E) has a evenly-spaced
+      /// array of bins. 
+      /// 
+      /// We need iterators for the input bins, the input intensity array,
+      /// and iterators for the output bins, the output intensity array.
+      ///
+      /// template paramters:
+      ///    OldBBIterator: input bin boundaries itertor
+      ///    OldDataIterator: input intensity array itertor
+      ///    NewBBIterator: output bin boundaries itertor
+      ///    NewDataIterator: output intensity array itertor
+      ///    
+      /// arguments:
+      ///    oldBBBegin: input bin boundaries [0]
+      ///    oldBBEnd: input bin boundaries [-1]
+      ///    oldDataBegin: input intensities [0]
+      ///    newBBBegin: output bin boundaries [0]
+      ///    newBBEnd: output bin boundaries [-1]
+      ///    newDataBegin: output intensities [0]
+      template< 
+	typename OldBBIterator, typename OldDataIterator,
+	typename NewBBIterator, typename NewDataIterator
+	>
+      void rebin_core
+      (OldBBIterator oldBBBegin, OldBBIterator oldBBEnd,
+       OldDataIterator oldDataBegin,
+       NewBBIterator newBBBegin, NewBBIterator newBBEnd,
+       NewDataIterator newDataBegin
+       )
+      {
+#ifdef DEEPDEBUG
+	journal::debug_t debug( jrnltag );
+	debug.activate();
+#endif
+#ifdef DEEPDEBUG
+	debug 
+	  << journal::at(__HERE__)
+	  << "oldBB: " << *oldBBBegin << "," << *(oldBBEnd-1) << journal::newline
+	  << "newBB: " << *newBBBegin << "," << *(newBBEnd-1) << journal::newline
+	  << journal::endl;
+	
+#endif
+	
+	OldBBIterator oldBBit( oldBBBegin );
+	OldDataIterator oldDataIt( oldDataBegin );
+	NewBBIterator newBBit( newBBBegin );
+	NewDataIterator newDataIt( newDataBegin ), newDataEnd( newDataBegin + (newBBEnd - newBBBegin -1) );
+	
+	// increment until bins overlap:
+	// either old bins start before new bins...:
+#ifdef DEEPDEBUG
+	debug 
+	  << journal::at(__HERE__)
+	  << "oldBB=" << *oldBBit << journal::newline
+	  << "newBB=" << *newBBit << journal::newline
+	  << "newDataEnd = " << newDataEnd-newDataBegin << journal::endl;
+#endif
+	while( *(oldBBit+1) < *newBBit) {
+	  ++oldBBit; ++oldDataIt; 
+	}
+#ifdef DEEPDEBUG
+	debug 
+	  << journal::at(__HERE__)
+	  << "oldBB=" << *oldBBit << journal::newline
+	  << "newBB=" << *newBBit << journal::endl;
+#endif
+	// ...or new bins start before old:
+	if (oldBBit==oldBBBegin) 
+	  while( *(newBBit+1) < *oldBBit) {
+	    ++newBBit; ++newDataIt;
+	  }
+#ifdef DEEPDEBUG
+	debug
+	  << journal::at(__HERE__)
+	  << "oldBBit=" << *oldBBit << journal::newline
+	  << "newBB=" << *newBBit << journal::endl;
+#endif
+	// ...or everything's fine, do nothing
+	
+	
+	// the rebin loop
+	do {
+#ifdef DEEPDEBUG
+	  debug
+	    << journal::at(__HERE__)
+	    << "oldBB=" << oldBBit-oldBBBegin << journal::newline
+	    << "newBB=" << newBBit-newBBBegin << journal::newline
+	    << "oldData=" << oldDataIt-oldDataBegin << journal::newline
+	    << "newData=" << newDataIt-newDataBegin << journal::newline
+	    << journal::endl;
+#endif
+	  
+	  if (! (newDataIt<newDataEnd) ) break;
+	  
+	  double overlap = 
+	    (lesserof( *(oldBBit+1), *(newBBit+1)) -
+	     greaterof( *(oldBBit), *(newBBit) )
+	     )/(*(oldBBit+1)-*oldBBit);
+	  
+	  *newDataIt += *oldDataIt * overlap; //
+	  
+	  // If the right edge of the old bin lies beyond the right edge of 
+	  // the new bin, move to next new bin; otherwise move on to 
+	  // the next old bin.
+	  if ( (newBBit < newBBEnd) && (*(oldBBit+1) >= *(newBBit+1) ) ) {
+	    newBBit++; newDataIt++;
+	  }
+	  else {
+	    oldBBit++; 
+	    oldDataIt++;
+	  }
+	  
+#ifdef DEEPDEBUG
+	  debug 
+	    << journal::at(__HERE__)
+	    << "oldBBIt=" << oldBBit-oldBBBegin << journal::newline
+	    << "newBBIt=" << newBBit-newBBBegin << journal::newline
+	    << "oldDataIt=" << oldDataIt-oldDataBegin << journal::newline
+	    << "newDataIt=" << newDataIt-newDataBegin << journal::newline
+	    // 	  << "oldBBEndIt = " << oldBBEnd << journal::newline
+	    // 	  << "newBBEndIt = " << newBBEnd << journal::newline
+	    << journal::endl;
+#endif
+	  
+	}while( (oldBBit < oldBBEnd-1) && ( newBBit < newBBEnd-1));
+	
+	return;
+      }
+    } // namespace Universal1DRebinner_Impl
+    
+    
+    // see Universal1DRebinner.h for declaration of this function
+    template <
+      typename InputBinDataType ,
+      typename InputBinIteratorType ,
+      typename InputIntensityDataType,
+      typename InputIntensityIteratorType,
+      typename OutputBinDataType,
+      typename OutputBinIteratorType,
+      typename OutputIntensityDataType,
+      typename OutputIntensityIteratorType
+      >  
+    void Universal1DRebinner<
+      InputBinDataType ,
+      InputBinIteratorType ,
+      InputIntensityDataType,
+      InputIntensityIteratorType,
+      OutputBinDataType,
+      OutputBinIteratorType,
+      OutputIntensityDataType,
+      OutputIntensityIteratorType
+      >
+    :: operator() 
+      (
+       InputBinIteratorType inputBBBegin, InputBinIteratorType inputBBEnd,
+       InputIntensityIteratorType inputDataBegin,
+       OutputBinIteratorType temp_outputBBBegin,
+       OutputBinIteratorType outputBBBegin, OutputBinIteratorType outputBBEnd,
+       OutputIntensityIteratorType outputDataBegin, 
+       Functor<InputBinDataType, OutputBinDataType> & mapper
+       )
+    {
+      // the implementation is very similar to the original implementation
+      // in ERebinAllInOne  
+      
+      using namespace Universal1DRebinner_Impl;
+      
+#ifdef DEEPDEBUG
+      journal::debug_t debug( jrnltag );
+      //debug.activate();
+      debug 
+	<< journal::at(__HERE__) 
+	<< "inputBB = " << *inputBBBegin << "," << *(inputBBEnd-1) << journal::newline
+	<< "outputBB = " << *outputBBBegin << "," << *(outputBBEnd-1) << journal::newline
+	<< journal::endl;
+#endif
+      
+      // map input bin boundaries to bin boundaries in the output phase space
+      OutputBinIteratorType temp_obit = temp_outputBBBegin;
+#ifdef DEEPDEBUG
+      debug << journal::at(__HERE__);
+#endif
+      for (InputBinIteratorType ibit =inputBBBegin; ibit != inputBBEnd; 
+	   ibit++, temp_obit++) {
+	*temp_obit = mapper( *ibit );
+	
+	//std::cout << "temp_ob: " << *temp_obit << std::endl;
+#ifdef DEEPDEBUG
+	debug
+	  << "temp_ob: " << *temp_obit << journal::newline;
+#endif
+      }
+#ifdef DEEPDEBUG
+      debug << journal::endl;
+#endif
+      
+      bool ascend = *(temp_outputBBBegin+1) - *temp_outputBBBegin > 0 ? 1 : 0;
+      size_t nInputBins = inputBBEnd - inputBBBegin - 1; // extra 1 because number of bins is 1 less than that of bin boundaries
+      
+      if (ascend) {
+	rebin_core( temp_outputBBBegin, temp_outputBBBegin + nInputBins + 1,
+		    inputDataBegin,
+		    outputBBBegin, outputBBEnd,
+		    outputDataBegin );
+	
+      } else {
+	// we need to reverse the iterator for the cases where
+	// the converted bin boundaries in the output phase
+	// is actually descending.
+	// be extremely careful here to make sure 
+	// when constructing the ReversedIterator.
+	ReverseIterator<InputBinIteratorType, InputBinDataType>
+	  oldBBBegin (temp_outputBBBegin + nInputBins );
+	
+	ReverseIterator<InputIntensityIteratorType, InputIntensityDataType>
+	  oldDataBegin( inputDataBegin + nInputBins -1 );
+	
+	rebin_core( oldBBBegin, oldBBBegin + nInputBins + 1,
+		    oldDataBegin,
+		    outputBBBegin, outputBBEnd, 
+		    outputDataBegin );
+	
+	return;
+      }
+      
+      
+    } // end of function 
+    
+  } // Reduction::
+
+} // DANSE::  
+  
+  // version
+  // $Id$
+  
+  
+  // End of file 
+  
