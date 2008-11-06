@@ -20,7 +20,9 @@ namespace ARCS_EventData {
     const char * STitle = "### S(Phi,w)";
     const char * SerrTitle = "### Errors";
 
-    oss.setf(ios::fixed);
+    oss.setf(ios::scientific, ios::floatfield);
+    oss.setf(ios::showpos);
+    oss.setf(ios::uppercase);
     oss.precision(3);
     
     for (size_t i=0; i<ntotpixels; i++) {
