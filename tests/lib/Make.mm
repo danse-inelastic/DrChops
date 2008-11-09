@@ -19,7 +19,7 @@ PACKAGE = tests
 PROJ_CLEAN += $(PROJ_CPPTESTS)
 
 PROJ_PYTESTS =  
-PROJ_CPPTESTS = testItof2IE 
+PROJ_CPPTESTS = testItof2IE testItof2IE_batch
 PROJ_TESTS = $(PROJ_PYTESTS) $(PROJ_CPPTESTS)
 PROJ_LIBRARIES = -L$(BLD_LIBDIR) -ldrchops -ljournal
 
@@ -43,6 +43,9 @@ update: clean
 
 testItof2IE: testItof2IE.cc 
 	$(CXX) $(CXXFLAGS) $(LCXXFLAGS) -o $@ testItof2IE.cc $(PROJ_LIBRARIES)
+
+testItof2IE_batch: testItof2IE_batch.cc 
+	$(CXX) $(CXXFLAGS) $(LCXXFLAGS) -o $@ testItof2IE_batch.cc $(PROJ_LIBRARIES)
 
 
 # version

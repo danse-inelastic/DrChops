@@ -200,9 +200,9 @@ void test2()
     std::cout << Ie[i] << ", " << jacobi[i] << std::endl;
     assert( std::abs((Ie[i]-jacobi[i])/Ie[i]) < 0.04 );
   }
-
+  
   std::cout << "test2 done." << std::endl;
-  return ;
+  return;
 }
 
 

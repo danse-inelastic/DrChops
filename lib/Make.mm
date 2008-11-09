@@ -20,6 +20,7 @@ PROJ_TMPDIR = $(BLD_TMPDIR)/$(PROJECT)/$(PACKAGE)
 PROJ_CLEAN += $(PROJ_SAR) $(PROJ_DLL)
 
 PROJ_SRCS = \
+	Itof2IE_batch.cc \
 	Universal1DRebinner.cc \
 	physics.cc \
 
@@ -55,6 +56,8 @@ endif
 EXPORT_HEADERS = \
 	Functor.h \
 	Itof2IE.h \
+	Itof2IE_batch.h \
+	Itof2IE_batch.icc \
 	ReverseIterator.h \
 	Universal1DRebinner.h \
 	Universal1DRebinner.icc \

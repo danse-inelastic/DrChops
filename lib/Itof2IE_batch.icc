@@ -1,0 +1,170 @@
+// -*- C++ -*-
+//
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+//
+//                                   Jiao Lin
+//                      California Institute of Technology
+//                      (C) 2007-2008  All Rights Reserved
+//
+// {LicenseText}
+//
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+//
+
+
+#ifndef DANSE_REDUCTION_ITOF2IE_BATCH_ICC
+#error Template definitions meaningless outside of Itof2IE_batch.h
+#endif
+
+#include <vector>
+#include <cassert>
+#include "exception.h"
+#include "ITof2IE.h"
+#include "findCellIndex.h"
+
+
+/// Reduce I(*,tof) to I(*,E)
+
+namespace DANSE { namespace Reduction{
+
+  /// implementation details
+  namespace Itof2IE_batch_impl {
+
+    const extern char *jrnltag;
+
+    template <typename XIterator, typename IIterator=XIterator>
+    struct Ix{
+      XIterator xbegin, xend;
+      IIterator Ibegin;
+    };
+
+    template <typename XIterator, typename IIterator=XIterator>
+    class IxIterator_fromIyx{
+    public:
+
+      // types
+      typedef IxIterator_fromIyx<XIterator, IIterator> mytype;
+      typedef Ix<XIterator, IIterator> mydatatype;
+      
+      // meta-methods
+      IxIterator_fromIyx(XIterator xbegin, XIterator xend, IIterator Ibegin, size_t xsize, size_t ysize)
+	: m_xbegin(xbegin), m_xend(xend),
+	  m_Ibegin(Ibegin),
+	  m_xsize(xsize), m_ysize(ysize),
+	  m_yindex(0)
+      {
+	assert (xend-xbegin==xsize+1); // number of bin boundaries = number of bins + 1
+      }
+
+//       IxIterator_fromIyx()
+// 	: m_xsize(0), m_ysize(0)
+//       {}
+      
+      IxIterator_fromIyx(const mytype &rhs) {
+	m_xbegin = rhs.m_xbegin; m_xend = rhs.m_xend;
+	m_Ibegin = rhs.m_Ibegin;
+	m_xsize = rhs.m_xsize; m_ysize = rhs.m_ysize;
+	m_yindex = rhs.m_yindex;
+      }
+
+      mytype &operator++()
+      {
+	++m_yindex;
+	return *this;
+      }
+      
+      bool operator < ( const mytype & rhs ) 
+      {
+	return m_yindex < rhs.m_yindex;
+      }
+      
+      mytype end() 
+      {
+	mytype ret( *this );
+	ret.m_yindex = m_ysize;
+	return ret;
+      }
+      
+      mydatatype operator*() const {
+	if (m_xsize == 0) throw Exception("Invalid iterator: not initd");
+	if (m_yindex<0 || m_yindex>m_ysize) throw Exception("out of bound");
+	mydatatype ret;
+	ret.xbegin = m_xbegin;
+	ret.xend = m_xend;
+	ret.Ibegin = m_Ibegin + m_xsize * m_yindex;
+	return ret;
+      }
+
+    private:
+      XIterator m_xbegin, m_xend;
+      IIterator m_Ibegin;
+      size_t m_xsize, m_ysize;
+      size_t m_yindex;
+    };
+
+  } // Itof2IE_batch_impl::
+
+  template<
+    typename FLT, 
+    typename InputBinIterator, typename InputDataIterator,
+    typename OutputBinIterator, typename OutputDataIterator
+    >
+  void Itof2IE_batch
+  ( InputBinIterator tofbb_begin, InputBinIterator tofbb_end,
+    InputDataIterator Itofs_begin, InputDataIterator ItofsE2_begin,
+    
+    OutputBinIterator ebb_begin, OutputBinIterator ebb_end,
+    OutputDataIterator IEs_begin, OutputDataIterator IEsE2_begin,
+    
+    FLT ei, FLT mod2sample, 
+    
+    InputDataIterator dist_begin,
+    size_t size,
+    OutputBinIterator tmpE)
+  {
+    using namespace Itof2IE_batch_impl;
+
+    typedef Itof2IE<FLT, InputBinIterator, InputDataIterator, 
+      OutputBinIterator, OutputDataIterator> itof2ie_t;
+    itof2ie_t itof2ie(ei, mod2sample);
+
+    typedef Ix<InputBinIterator, InputDataIterator> itof_t;
+    typedef Ix<OutputBinIterator, OutputDataIterator> ie_t;
+    
+    typedef IxIterator_fromIyx<InputBinIterator, InputDataIterator> itof_iterator_t;
+    typedef IxIterator_fromIyx<OutputDataIterator, OutputDataIterator> ie_iterator_t;
+    
+    itof_iterator_t itof_it(tofbb_begin, tofbb_end, Itofs_begin,
+			    tofbb_end-tofbb_begin-1, size);
+    ie_iterator_t ie_it(ebb_begin, ebb_end, IEs_begin, 
+			ebb_end-ebb_begin-1, size);
+    InputDataIterator dist_it=dist_begin;
+    
+#ifdef DEBUG
+    journal::debug_t debug(jrnltag);
+#endif
+    
+    for (size_t i=0; i<size; ++i) {
+      debug << journal::at(__HERE__)
+	    << "pixel #" << i
+	    << journal::endl;
+
+      itof2ie.set_distance(*dist_it);
+      itof_t itof=*itof_it;
+      ie_t ie=*ie_it;
+      itof2ie(itof.xbegin, itof.xend, itof.Ibegin,
+	      tmpE, 
+	      ie.xbegin, ie.xend, ie.Ibegin);
+      ++dist_it;
+      ++itof_it; ++ie_it;
+    }
+  }
+    
+
+}}//namespace DANSE::Reduction
+
+
+// version
+// $Id$
+
+// End of file 
