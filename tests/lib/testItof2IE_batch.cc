@@ -43,10 +43,6 @@ int main()
 
 void test()
 {
-  // a test without detector efficiency correction
-  // the pressure of detector is set to very high value so that detector efficiency
-  // is always 1. 
-
   using namespace DANSE::Reduction;
   using namespace DANSE::Physics::Units::Conversion;
 
