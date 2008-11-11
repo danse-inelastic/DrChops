@@ -1,0 +1,265 @@
+// -*- C++ -*-
+//
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+//
+//                                   Jiao Lin
+//                      California Institute of Technology
+//                      (C) 2007-2008  All Rights Reserved
+//
+// {LicenseText}
+//
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+//
+
+
+#ifndef DANSE_REDUCTION_IPIXE2IPHIE_ICC
+#error Template definitions meaningless outside of IpixE2IphiE.h
+#endif
+
+#include <cassert>
+//#include <iostream>
+#include <sstream>
+#include "exception.h"
+#include "histogram/EvenlySpacedGridData_1D.h"
+#include "Histogrammer.h"
+
+
+namespace DANSE { namespace Reduction{
+
+    /// implementation details
+    namespace IpixE2IphiE_impl {
+      
+      const extern char *jrnltag;
+      
+      template <typename IntensityIterator, typename FLT>
+      struct Y{
+	IntensityIterator intensity_it, intensityE2_it;
+	FLT *solidangle, *solidangleE2;
+	size_t nEbins;
+
+	Y(IntensityIterator i_intensity_it, IntensityIterator i_intensityE2_it,
+	  FLT &i_solidangle, FLT &i_solidangleE2,
+	  size_t i_nEbins)
+	  : intensity_it(i_intensity_it), intensityE2_it(i_intensityE2_it),
+	    solidangle(&i_solidangle), solidangleE2(&i_solidangleE2),
+	    nEbins(i_nEbins)
+	{
+	}
+	
+	Y()
+	  : solidangle(0), solidangleE2(0)
+	{
+	}
+	
+	typedef Y<IntensityIterator, FLT> y_t;
+	y_t & operator+= (const y_t &rhs) {
+	  assert (nEbins > 0);
+	  assert (nEbins == rhs.nEbins);
+	  *solidangle += *(rhs.solidangle);
+	  *solidangleE2 += *(rhs.solidangleE2);
+	  for (size_t i=0; i<nEbins; i++) {
+	    *(intensity_it+i) += *(rhs.intensity_it+i);
+	    *(intensityE2_it+i) += *(rhs.intensityE2_it+i);
+	  }
+	  return *this;
+	}
+      };
+      
+      // iterator to iterate over phi axis of I(phi, E) and solidangle(phi)
+      template <typename IntensityIterator, typename SolidangleIterator, typename FLT>
+      class YIterator{
+      public:
+	
+	// types
+	typedef YIterator<IntensityIterator, SolidangleIterator, FLT> mytype;
+	typedef Y<IntensityIterator, FLT> mydatatype;
+	
+	// meta-methods
+	YIterator(IntensityIterator I_begin, IntensityIterator IE2_begin,
+		  SolidangleIterator sa_begin, SolidangleIterator saE2_begin,
+		  size_t nphibins, size_t nEbins)
+	  : m_I_begin(I_begin), m_IE2_begin(IE2_begin),
+	    m_sa_begin(sa_begin), m_saE2_begine(saE2_begin),
+	    m_nphibins(nphibins), m_nEbins(nEbins),
+	    m_index(0)
+	{
+	}
+	
+	YIterator(const mytype &rhs) {
+	  m_I_begin = rhs.m_I_begin; m_IE2_begin = rhs.m_IE2_begin;
+	  m_sa_begin = rhs.m_sa_begin; m_saE2_begine = rhs.m_saE2_begine;
+	  m_nphibins = rhs.m_nphibins; m_nEbins = rhs.m_nEbins;
+	  m_index= rhs.m_index;
+	}
+
+	YIterator()
+	  : m_nphibins(0)
+	{
+	}
+	
+	mytype &operator++()
+	{
+	  ++m_index;
+	  return *this;
+	}
+	
+	mytype &operator+=(size_t n)
+	{
+	  m_index += n;
+	  return *this;
+	}
+
+	mytype operator+(size_t n)
+	{
+	  mytype ret(*this);
+	  ret += n;
+	  return ret;
+	}
+	
+	bool operator < ( const mytype & rhs ) 
+	{
+	  return m_index < rhs.m_index;
+	}
+	
+	mytype end() 
+	{
+	  mytype ret( *this );
+	  ret.m_index = m_nphibins;
+	  return ret;
+	}
+	
+	mydatatype & operator*() {
+	  if (m_nphibins == 0) throw Exception("Invalid iterator: not initd");
+
+	  if (m_index<0 || m_index>m_nphibins) {
+	    std::ostringstream oss;
+	    oss << "out of bound: " 
+		<< "index=" << m_index << ", "
+		<< "nphibins=" << m_nphibins 
+		<< std::endl;
+	    throw OutOfBound(oss.str().c_str());
+	  }
+
+	  m_data.intensity_it = m_I_begin + m_index*m_nEbins;
+	  m_data.intensityE2_it = m_IE2_begin + m_index*m_nEbins;
+	  m_data.solidangle = &(*(m_sa_begin+m_index));
+	  m_data.solidangleE2 = &(*(m_saE2_begine+m_index));
+	  m_data.nEbins = m_nEbins;
+	  
+	  return m_data;
+	}
+	
+      private:
+	IntensityIterator m_I_begin, m_IE2_begin;
+	SolidangleIterator m_sa_begin, m_saE2_begine;
+	size_t m_nphibins, m_nEbins;
+	size_t m_index;
+	mydatatype m_data;
+      };
+      
+      
+      template <typename Iterator, typename FLT>
+      bool isEvenlySpaced(const Iterator &begin, const Iterator &end)
+      {
+	FLT epsilon = 1.e-7;
+	
+	assert (end-begin>1);
+	FLT step=*(begin+1)-*begin;
+	for (size_t i=1; i<end-begin-1; i++) {
+	  FLT diff = std::abs( (*(begin+i+1)-*(begin+i))/step - 1. );
+	  if ( diff> epsilon) return 0;
+	}
+	return 1;
+      }
+      
+      template<typename pair_t, typename x_t, typename y_t>
+      struct Get{
+	void operator() (const pair_t &xy, x_t &x, y_t &y) const
+	{
+	  x = xy.first;
+	  y = xy.second;
+	}
+      };   
+	
+    } // IpixE2IphiE_impl
+    
+    
+    template<
+      typename FLT, 
+      typename InputBinIterator, typename InputDataIterator,
+      typename OutputBinIterator, typename OutputDataIterator,
+      typename MaskIterator
+      >
+    
+    void IpixE2IphiE
+    ( InputBinIterator ebb_begin, InputBinIterator ebb_end,
+      InputDataIterator IEs_begin, InputDataIterator IEsE2_begin,
+      
+      OutputBinIterator outphibb_begin, OutputBinIterator outphibb_end,
+      OutputDataIterator outS_begin, OutputDataIterator outSE2_begin,
+      OutputDataIterator outsolidangle_begin, OutputDataIterator outsolidangleE2_begin,
+      
+      InputDataIterator phi_begin, 
+      InputDataIterator solidangle_begin, InputDataIterator solidangleE2_begin,
+      MaskIterator mask_begin,
+      
+      size_t size
+      )
+    {
+      using namespace IpixE2IphiE_impl;
+      
+      assert (outphibb_end-outphibb_begin>1);
+      assert (ebb_end-ebb_begin>1);
+      
+      if (!isEvenlySpaced<InputBinIterator, FLT>(ebb_begin, ebb_end) )
+	  throw Exception("energy bin boundaries need to be evenly spaced.");
+      if (!isEvenlySpaced<OutputBinIterator, FLT>(outphibb_begin, outphibb_end))
+	  throw Exception("phi bin boundaries need to be evenly spaced.");
+
+      size_t nphibins = outphibb_end-outphibb_begin-1;
+      size_t nEbins = ebb_end-ebb_begin-1;
+
+      typedef Y<OutputDataIterator, FLT> y_t;
+      typedef YIterator<OutputDataIterator, OutputDataIterator, FLT> yiterator_t;
+      yiterator_t yiterator
+	(outS_begin, outSE2_begin, outsolidangle_begin, outsolidangleE2_begin, 
+	 nphibins, nEbins);
+      
+
+      typedef Histogram::EvenlySpacedGridData_1D
+	<FLT, y_t,  yiterator_t, unsigned int> griddata_t;
+      FLT phistep = *(outphibb_begin+1) - *outphibb_begin;
+      griddata_t griddata( *outphibb_begin, *(outphibb_end-1), phistep, yiterator);
+
+      typedef FLT x_t;
+      typedef std::pair<x_t, y_t> pair_t;
+      typedef Get<pair_t, x_t, y_t> get_t;
+      typedef Histogrammer1<pair_t, griddata_t, get_t, x_t, y_t> histogrammer_t;
+      
+      get_t get;
+      histogrammer_t histogrammer(griddata, get);
+
+      for (size_t i=0; i<size; i++) {
+
+	if (*(mask_begin+i)) continue;
+	
+	x_t x = *(phi_begin+i);
+
+	y_t y
+	  (IEs_begin+i*nEbins, IEsE2_begin+i*nEbins,
+	   *(solidangle_begin+i), *(solidangleE2_begin+i),
+	   nEbins);
+	
+	pair_t xy(x,y);
+	
+	histogrammer(xy);
+      }
+    }
+    
+}}//namespace DANSE::Reduction
+
+
+// version
+// $Id$
+
+// End of file 
