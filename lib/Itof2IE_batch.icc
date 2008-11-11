@@ -16,11 +16,9 @@
 #error Template definitions meaningless outside of Itof2IE_batch.h
 #endif
 
-#include <vector>
 #include <cassert>
 #include "exception.h"
 #include "ITof2IE.h"
-#include "findCellIndex.h"
 
 
 /// Reduce I(*,tof) to I(*,E)
@@ -134,10 +132,19 @@ namespace DANSE { namespace Reduction{
     typedef IxIterator_fromIyx<InputBinIterator, InputDataIterator> itof_iterator_t;
     typedef IxIterator_fromIyx<OutputDataIterator, OutputDataIterator> ie_iterator_t;
     
-    itof_iterator_t itof_it(tofbb_begin, tofbb_end, Itofs_begin,
-			    tofbb_end-tofbb_begin-1, size);
-    ie_iterator_t ie_it(ebb_begin, ebb_end, IEs_begin, 
-			ebb_end-ebb_begin-1, size);
+    assert (tofbb_end-tofbb_begin>1);
+    assert (ebb_end-ebb_begin>1);
+    
+    size_t ntofbins = tofbb_end-tofbb_begin-1;
+    size_t nebins = ebb_end-ebb_begin-1;
+
+    itof_iterator_t 
+      itof_it(tofbb_begin, tofbb_end, Itofs_begin, ntofbins, size),
+      itofE2_it(tofbb_begin, tofbb_end, ItofsE2_begin, ntofbins, size);
+    
+    ie_iterator_t 
+      ie_it(ebb_begin, ebb_end, IEs_begin, nebins, size),
+      ieE2_it(ebb_begin, ebb_end, IEsE2_begin, nebins, size);
     InputDataIterator dist_it=dist_begin;
     
 #ifdef DEBUG
@@ -150,13 +157,22 @@ namespace DANSE { namespace Reduction{
 	    << journal::endl;
 
       itof2ie.set_distance(*dist_it);
+      
       itof_t itof=*itof_it;
       ie_t ie=*ie_it;
       itof2ie(itof.xbegin, itof.xend, itof.Ibegin,
 	      tmpE, 
 	      ie.xbegin, ie.xend, ie.Ibegin);
+
+      itof_t itofE2=*itofE2_it;
+      ie_t ieE2=*ieE2_it;
+      itof2ie(itofE2.xbegin, itofE2.xend, itofE2.Ibegin,
+	      tmpE, 
+	      ieE2.xbegin, ieE2.xend, ieE2.Ibegin);
+
       ++dist_it;
       ++itof_it; ++ie_it;
+      ++itofE2_it; ++ieE2_it;
     }
   }
     
