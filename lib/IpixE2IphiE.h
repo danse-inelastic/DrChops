@@ -58,7 +58,7 @@ namespace DANSE { namespace Reduction{
 
 
 #define DANSE_REDUCTION_IPIXE2IPHIE_ICC
-#include "IpixE2IPhiE.icc"
+#include "IpixE2IphiE.icc"
 #undef DANSE_REDUCTION_IPIXE2IPHIE_ICC
 
 #endif// DANSE_REDUCTION_IPIXE2IPHIE_H

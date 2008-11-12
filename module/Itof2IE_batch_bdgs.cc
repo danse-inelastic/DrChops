@@ -96,7 +96,7 @@ namespace reductionmod
       }
 
       size_t 
-	distsize = PyArray_Size( pydistarr ),
+	distsize = PyArray_Size( pydistarr )
 	;
       if (npixels != distsize || npixels == 0) {
 	oss << "Size mismatch: "
