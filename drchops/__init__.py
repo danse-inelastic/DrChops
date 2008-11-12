@@ -2,9 +2,9 @@
 # 
 #  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # 
-#                               Michael A.G. Aivazis
+#                                    Jiao Lin
 #                        California Institute of Technology
-#                        (C) 1998-2005  All Rights Reserved
+#                        (C) 2005-2008  All Rights Reserved
 # 
 #  <LicenseText>
 # 
@@ -12,7 +12,7 @@
 # 
 
 def copyright():
-    return "drchops pyre module: Copyright (c) 1998-2005 Michael A.G. Aivazis";
+    return "drchops pyre module: Copyright (c) 2005-2008 Jiao Lin";
 
 
 # version
