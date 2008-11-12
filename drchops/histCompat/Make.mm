@@ -10,7 +10,7 @@
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 PROJECT = drchops
-PACKAGE = vectorCompat
+PACKAGE = histCompat
 
 #--------------------------------------------------------------------------
 #
@@ -36,6 +36,6 @@ export:: export-package-python-modules
 
 
 # version
-# $Id: Make.mm 1431 2007-11-03 20:36:41Z linjiao $
+# $Id: Make.mm 1484 2008-04-08 15:08:54Z linjiao $
 
 # End of file
