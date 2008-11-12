@@ -29,7 +29,7 @@ int main()
   debug1.activate();
 
   journal::debug_t debug2(DANSE::Reduction::Itof2IE_batch_impl::jrnltag);
-  debug2.activate();
+  //debug2.activate();
 
   test();
   //test2();

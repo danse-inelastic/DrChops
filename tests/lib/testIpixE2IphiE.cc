@@ -35,7 +35,7 @@ int main()
 
 #define NPIXELS 10000
 #define NEBINS 120
-#define NPHIBINS 135
+#define NPHIBINS 115
 
 
 void test()

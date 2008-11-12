@@ -24,6 +24,9 @@ class IpixE2IphiE_TestCase(ut.TestCase):
 
         NPIXELS=10000
         NPHIBINS=100
+        MINPHI = 0
+        DPHI = 1.35
+        MAXPHI = MINPHI + DPHI * NPHIBINS
         NEBINS=100
         
         from numpy import array, arange, ones, zeros, sum
@@ -31,7 +34,7 @@ class IpixE2IphiE_TestCase(ut.TestCase):
         IpixE = ones( NEBINS*NPIXELS, 'd' )
         E2pixE = ones( NEBINS*NPIXELS, 'd' )
 
-        phibb = arange( 0, NPHIBINS+1, 1., 'd' )
+        phibb = arange( MINPHI, MAXPHI+DPHI, DPHI, 'd' )
         
         print "len(ebb)=", len(ebb)
         print "len(phibb)=", len(phibb)
@@ -42,7 +45,7 @@ class IpixE2IphiE_TestCase(ut.TestCase):
         saE2phi = zeros( NPHIBINS, 'd' )
 
         phiarr = zeros( NPIXELS, 'd' )
-        for i in range( NPIXELS ): phiarr[i] = i%100
+        for i in range( NPIXELS ): phiarr[i] = i * MAXPHI/NPIXELS
 
         saarr = ones( NPIXELS, 'd' )
         saE2arr = zeros( NPIXELS, 'd' )
@@ -58,8 +61,9 @@ class IpixE2IphiE_TestCase(ut.TestCase):
             maskarr)
 
         print "reduction done."
-        print "I(phi,E)=", IphiE
+        #print "I(phi,E)=", IphiE
         print "solidangle=", saphi
+        for sa in saphi: self.assertAlmostEqual(sa/(1.*NPIXELS/NPHIBINS), 1., 1)
         return
     
     pass # end of IpixE2IphiE_TestCase
