@@ -17,6 +17,7 @@
 #endif
 
 #include <cassert>
+#include <cmath>
 //#include <iostream>
 #include <sstream>
 #include "exception.h"
@@ -65,97 +66,127 @@ namespace DANSE { namespace Reduction{
 	}
       };
       
-      // iterator to iterate over phi axis of I(phi, E) and solidangle(phi)
+      
+      // container
       template <typename IntensityIterator, typename SolidangleIterator, typename FLT>
-      class YIterator{
+      class YContainer{
       public:
 	
 	// types
-	typedef YIterator<IntensityIterator, SolidangleIterator, FLT> mytype;
+	typedef YContainer<IntensityIterator, SolidangleIterator, FLT> mytype;
 	typedef Y<IntensityIterator, FLT> mydatatype;
 	
+	// iterator to iterate over phi axis of I(phi, E) and solidangle(phi)
+	struct YIterator{
+	
+	  // types
+	  typedef YContainer<IntensityIterator, SolidangleIterator, FLT> mycontainertype;
+	
+	  // meta-methods
+	  YIterator(mycontainertype &container)
+	    : m_container(&container),
+	      m_index(0)
+	  {
+	  }
+	  
+	  YIterator(const YIterator &rhs) {
+	    m_container = rhs.m_container;
+	    m_index = rhs.m_index;
+	  }
+
+	  YIterator()
+	    : m_container(0),
+	      m_index(0)
+	  {
+	  }
+	
+	  YIterator &operator++()
+	  {
+	    ++m_index;
+	    return *this;
+	  }
+	
+	  YIterator &operator+=(size_t n)
+	  {
+	    m_index += n;
+	    return *this;
+	  }
+
+	  YIterator operator+(size_t n)
+	  {
+	    YIterator ret(*this);
+	    ret += n;
+	    return ret;
+	  }
+	
+	  bool operator < ( const YIterator & rhs ) 
+	  {
+	    return m_index < rhs.m_index;
+	  }
+		
+	  mydatatype & operator*() {
+	    if (m_container == 0) throw Exception("Invalid iterator: not initd");
+
+	    return m_container->getElement(m_index);
+	  }
+
+	  mycontainertype *m_container;
+	  size_t m_index;
+	};
+	typedef YIterator iterator_t;
+	
 	// meta-methods
-	YIterator(IntensityIterator I_begin, IntensityIterator IE2_begin,
-		  SolidangleIterator sa_begin, SolidangleIterator saE2_begin,
-		  size_t nphibins, size_t nEbins)
+	YContainer(IntensityIterator I_begin, IntensityIterator IE2_begin,
+		   SolidangleIterator sa_begin, SolidangleIterator saE2_begin,
+		   size_t nphibins, size_t nEbins)
 	  : m_I_begin(I_begin), m_IE2_begin(IE2_begin),
 	    m_sa_begin(sa_begin), m_saE2_begine(saE2_begin),
-	    m_nphibins(nphibins), m_nEbins(nEbins),
-	    m_index(0)
+	    m_nphibins(nphibins), m_nEbins(nEbins)
 	{
 	}
 	
-	YIterator(const mytype &rhs) {
-	  m_I_begin = rhs.m_I_begin; m_IE2_begin = rhs.m_IE2_begin;
-	  m_sa_begin = rhs.m_sa_begin; m_saE2_begine = rhs.m_saE2_begine;
-	  m_nphibins = rhs.m_nphibins; m_nEbins = rhs.m_nEbins;
-	  m_index= rhs.m_index;
-	}
-
-	YIterator()
-	  : m_nphibins(0)
+	mydatatype & getElement(size_t index)
 	{
-	}
-	
-	mytype &operator++()
-	{
-	  ++m_index;
-	  return *this;
-	}
-	
-	mytype &operator+=(size_t n)
-	{
-	  m_index += n;
-	  return *this;
-	}
-
-	mytype operator+(size_t n)
-	{
-	  mytype ret(*this);
-	  ret += n;
-	  return ret;
-	}
-	
-	bool operator < ( const mytype & rhs ) 
-	{
-	  return m_index < rhs.m_index;
-	}
-	
-	mytype end() 
-	{
-	  mytype ret( *this );
-	  ret.m_index = m_nphibins;
-	  return ret;
-	}
-	
-	mydatatype & operator*() {
-	  if (m_nphibins == 0) throw Exception("Invalid iterator: not initd");
-
-	  if (m_index<0 || m_index>m_nphibins) {
+	  if (index<0 || index>m_nphibins) {
 	    std::ostringstream oss;
 	    oss << "out of bound: " 
-		<< "index=" << m_index << ", "
+		<< "index=" << index << ", "
 		<< "nphibins=" << m_nphibins 
 		<< std::endl;
 	    throw OutOfBound(oss.str().c_str());
 	  }
-
-	  m_data.intensity_it = m_I_begin + m_index*m_nEbins;
-	  m_data.intensityE2_it = m_IE2_begin + m_index*m_nEbins;
-	  m_data.solidangle = &(*(m_sa_begin+m_index));
-	  m_data.solidangleE2 = &(*(m_saE2_begine+m_index));
+	  
+	  m_data.intensity_it = m_I_begin + index*m_nEbins;
+	  m_data.intensityE2_it = m_IE2_begin + index*m_nEbins;
+	  m_data.solidangle = &(*(m_sa_begin+index));
+	  m_data.solidangleE2 = &(*(m_saE2_begine+index));
 	  m_data.nEbins = m_nEbins;
 	  
 	  return m_data;
+	}
+
+	
+	iterator_t begin() 
+	{
+	  iterator_t it(*this);
+	  return it;
+	}
+	
+	iterator_t end() 
+	{
+	  iterator_t it(*this);
+	  it.m_index = m_nphibins;
+	  return it;
 	}
 	
       private:
 	IntensityIterator m_I_begin, m_IE2_begin;
 	SolidangleIterator m_sa_begin, m_saE2_begine;
 	size_t m_nphibins, m_nEbins;
-	size_t m_index;
 	mydatatype m_data;
       };
+      
+      
       
       
       template <typename Iterator, typename FLT>
@@ -220,8 +251,9 @@ namespace DANSE { namespace Reduction{
       size_t nEbins = ebb_end-ebb_begin-1;
 
       typedef Y<OutputDataIterator, FLT> y_t;
-      typedef YIterator<OutputDataIterator, OutputDataIterator, FLT> yiterator_t;
-      yiterator_t yiterator
+      typedef YContainer<OutputDataIterator, OutputDataIterator, FLT> ycontainer_t;
+      typedef typename ycontainer_t::iterator_t yiterator_t;
+      ycontainer_t ycontainer
 	(outS_begin, outSE2_begin, outsolidangle_begin, outsolidangleE2_begin, 
 	 nphibins, nEbins);
       
@@ -229,7 +261,7 @@ namespace DANSE { namespace Reduction{
       typedef Histogram::EvenlySpacedGridData_1D
 	<FLT, y_t,  yiterator_t, unsigned int> griddata_t;
       FLT phistep = *(outphibb_begin+1) - *outphibb_begin;
-      griddata_t griddata( *outphibb_begin, *(outphibb_end-1), phistep, yiterator);
+      griddata_t griddata( *outphibb_begin, *(outphibb_end-1), phistep, ycontainer.begin());
 
       typedef FLT x_t;
       typedef std::pair<x_t, y_t> pair_t;

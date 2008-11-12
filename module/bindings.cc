@@ -19,6 +19,7 @@
 #include "misc.h"          // miscellaneous methods
 
 #include "Itof2IE_batch_bdgs.h"
+#include "IpixE2IphiE_bdgs.h"
 
 // the method table
 
@@ -30,6 +31,10 @@ struct PyMethodDef pydrchops_methods[] = {
     // Itof2IE_batch
     {reductionmod::Itof2IE_batch_numpyarray__name__, reductionmod::Itof2IE_batch_numpyarray,
      METH_VARARGS, reductionmod::Itof2IE_batch_numpyarray__doc__},
+
+    // IpixE2IphiE
+    {reductionmod::IpixE2IphiE_numpyarray__name__, reductionmod::IpixE2IphiE_numpyarray,
+     METH_VARARGS, reductionmod::IpixE2IphiE_numpyarray__doc__},
 
 
 // Sentinel
