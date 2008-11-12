@@ -1,0 +1,45 @@
+// -*- C++ -*-
+//
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+//
+//                             Tim Kelley, Jiao Lin
+//                      California Institute of Technology
+//                      (C) 2004-2008  All Rights Reserved
+//
+// {LicenseText}
+//
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+//
+
+
+#ifndef DANSE_REDUCTION_UTILS_ICC
+#error Template definitions meaningless outside of utils.h
+#endif
+
+#ifndef STRING_INCLUDED
+#define STRING_INCLUDED
+#include <string>
+#endif
+
+
+namespace DANSE {
+  namespace Reduction {
+    namespace utils {
+      
+      template <typename T>
+      void deleteHeapObj( void *ptr)
+      {
+	T *oldt = static_cast<T*>( ptr);
+	delete oldt;
+	return;
+      }
+      
+    } // utils::
+  } // Reduction::  
+} // DANSE::
+
+
+// version
+// $Id: utils.icc 1431 2007-11-03 20:36:41Z linjiao $
+
+// End of file
