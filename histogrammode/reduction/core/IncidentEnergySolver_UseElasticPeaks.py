@@ -125,6 +125,8 @@ class IncidentEnergySolver_UseElasticPeaks(_base, ParallelComponent):
                 ei = self.mpiReceive( 0, channel )
                 pass
             pass # endif self.parallel
+
+        info.log( 'ei = %s meV' % (ei/meV,) )
         return ei
 
 
