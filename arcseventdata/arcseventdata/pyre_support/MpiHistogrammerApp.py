@@ -74,23 +74,40 @@ class Application(base):
 
 
     def compute(self):
-        import sys
-        event_source = self.inventory.event_source
+        nevents = int(self.inventory.nevents)
 
-        nevents = int( self.inventory.nevents )
+        event_source = self.inventory.event_source
+        eventfiles = event_source.split(',')
+        if len(eventfiles)>1 and nevents!=0:
+            raise RuntimeError, "You have selected to reduce multiple event files, which makes your selection of number-of-events not meaningful."
+
+        if len(eventfiles)==0:
+            raise RuntimeError, 'You have not specify any event files'
+
+        if len(eventfiles)==1:
+            h = self.process_one_file(event_source, nevents)
+        else:
+            hists = [self.process_one_file(f) for f in eventfiles]
+            assert len(hists)>1
+            h = hists[0]
+            if self.mpiRank==0:
+                for h1 in hists[1:]: h += h1
+
+        self.histogram = h
+        self._info.log( "times: %s" % (os.times(),) )
+        return
+
+    
+    def process_one_file(self, path, nevents=0):
         if nevents == 0:
-            ntotal = arcseventdata.getnumberofevents( event_source )
+            ntotal = arcseventdata.getnumberofevents( path )
             nevents = ntotal
             pass
-             
+        
         reduction_args = self.build_args()
         
         engine = self.inventory.engine
-        h = engine(event_source, nevents, *reduction_args )
-        self.histogram = h
-
-        self._info.log( "times: %s" % (os.times(),) )
-        return
+        return engine(path, nevents, *reduction_args )
 
 
     def save(self):
