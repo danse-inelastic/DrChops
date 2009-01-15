@@ -32,7 +32,7 @@ class TrivialIncidentEnergySolver(base):
     to be using monitors at present. To determine energy, they fit the
     time at which the elastic peak arrives in the detectors.
     
-    To create a component that determines E_i for Pharos, one will need
+    To create a component that determines Ei for Pharos, one will need
     to do something similar to what the existing IncidentEnergySolver
     does, but working on the detector data. You have several choices for
     how to do that. For instance, the Pharos file stores C( det#, tof)
@@ -43,25 +43,27 @@ class TrivialIncidentEnergySolver(base):
     PharosMeasurement--it's the same data set, only you're looking for
     the one in the data file, not the one in the calibration file.
     
-    In the meantime, I'll hard code E_i, but leave the logic for calling
-    the E_i solver in place.
+    In the meantime, I'll hard code Ei, but leave the logic for calling
+    the Ei solver in place.
     """
     
     class Inventory(base.Inventory):
         import pyre
-        e_i = pyre.inventory.float('e_i', default = 75 )
-        e_i.meta['tip'] = 'set this one to the neutron incidenet energy'
+        Ei = pyre.inventory.float('Ei', default = 75 )
+        Ei.meta['tip'] = 'set this one to the neutron incidenet energy'
         pass
     
-    def __call__(self, *args, **kwds): return self.e_i
+    def __call__(self, *args, **kwds):
+        from reduction.units import energy
+        return self.Ei * energy.meV
 
-    def __init__(self,name = "TrivialIncidentEnergySolver"):
+    def __init__(self, name = "TrivialIncidentEnergySolver"):
         base.__init__(self, name)
         return
 
     def _configure(self):
         base._configure(self)
-        self.e_i = self.inventory.e_i
+        self.Ei = self.inventory.Ei
         return
     
     pass
