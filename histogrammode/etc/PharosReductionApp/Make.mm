@@ -36,6 +36,7 @@ EXPORT_ETC = \
 	Preprocess_Main_and_MT.odb \
 	Preprocess_Main_and_Calib.pml \
 	Preprocess_Main_and_Calib.odb \
+	SetEi.odb \
 	TimeIndependentBackgroundRemover_PerDetector.odb \
 	TimeIndependentBackgroundRemover_AverageOverAllDetectors.odb \
 	VPlateDataProcessor.odb \
