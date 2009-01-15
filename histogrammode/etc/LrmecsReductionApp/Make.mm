@@ -25,6 +25,7 @@ all: export
 
 EXPORT_ETC = \
     LrmecsReductionApp.pml \
+    SetEi.odb \
     preStep1.odb \
     preStep1_withTibgWindowPicker.odb \
     __vault__.odb
