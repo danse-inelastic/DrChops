@@ -156,6 +156,10 @@ class MeasurementObserver:
         else:
             pass
 
+        # this is a hack to add alias to the component. should probably use a string
+        # to load the component so that alias is attached automatically
+        SpeReducer.inventory.preprocess.aliases.append(SpeReducer.Inventory.preprocess.name)
+        
         SpeReducer.inventory.configureComponents()
         return
 
