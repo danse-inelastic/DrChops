@@ -65,6 +65,9 @@ class Idpt2Spe(AbstractIdpt2Spe):
         Idpt = self._getInput( 'Idpt' )
         instrument, geometer = self._getInput('instrument')
         mask = self._getInput('mask')
+
+        from reduction import units
+        self._debug.log('Ei=%s meV' % (Ei/units.energy.meV))
         
         spe = self( Ei, Idpt, instrument, geometer, mask = mask )
 
