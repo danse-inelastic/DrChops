@@ -47,10 +47,12 @@ class Application(base):
     def __init__(self, name):
         #event stream source arguments will be the last argument
         import sys
+        sys.argv = [sys.argv[0]] + _mergeArgs(sys.argv[1:])
         source = sys.argv[-1]
         if not source.startswith( '-' ):
             sys.argv[-1] = '--event-source=%s' % source
             pass
+        print sys.argv
         base.__init__(self, name)
         return
 
@@ -148,6 +150,25 @@ class Application(base):
         return
     
     pass # end of Application
+
+
+def _mergeArgs(argv):
+    index = len(argv)
+    iargv = list(argv); iargv.reverse()
+    for i, arg in enumerate(iargv):
+        if arg.startswith('-'): index = i; break
+        continue
+
+    # index will be the index of the first arg (not options)
+    index = len(argv)-index
+    
+    lastopt = argv[index-1]
+    if lastopt.startswith('-') and '=' not in lastopt and not lastopt.startswith('--'):
+        index += 1
+    if index >= len(argv): return argv
+    opts = argv[:index]
+    args = argv[index:]
+    return opts + [','.join(args)]
 
 
 import os
