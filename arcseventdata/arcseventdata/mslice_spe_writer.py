@@ -118,14 +118,14 @@ class Writer(object ):
 
         iarr = ipe.I
         #remove negative numbers
-        iarr[iarr<0]=0
+        #iarr[iarr<0]=0
         #remove nan
         iarr[N.isnan(iarr)]=0
         iarr[N.isinf(iarr)]=0
 
         e2arr = ipe.E2
         #remove negative numbers
-        e2arr[e2arr<0]=0
+        e2arr[e2arr<0] *= -1
         #remove nan
         e2arr[N.isnan(e2arr)]=0        
         e2arr[N.isinf(e2arr)]=0        
