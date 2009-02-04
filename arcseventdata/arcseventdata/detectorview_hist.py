@@ -39,11 +39,14 @@ shortpack1 = 70
 shortpack2 = 71
 shortpacks = [shortpack1, shortpack2]
 slratios = {
-    shortpack1: 0.28,
-    shortpack2: 0.38,
+    shortpack1: 0.38,
+    shortpack2: 0.28,
     }
 #max number of packs per row
-maxnpacksperrow = 39
+# 38 packs per row for upper and lower rows.
+# 39 packs in the middle row. But because we combine the
+# shorter packs to one pack, so we can reduce 39 by 1.
+maxnpacksperrow = max(38, 39-1, 38)
 #ntotpacks
 ntotpacks = 115
 #id of first pack
