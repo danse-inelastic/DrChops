@@ -87,12 +87,13 @@ def mpiRank():
 import os
 
 def main():
-    Application('idspacing').run( )
+    Application('events2mslicefiles').run( )
     return
 
 if __name__ == '__main__':
     import journal
     journal.warning( 'arcseventdata.Histogrammer2' ).deactivate()
+    journal.debug('events2mslicefiles').activate()
     main()
     
 
