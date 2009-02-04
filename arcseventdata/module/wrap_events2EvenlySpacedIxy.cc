@@ -25,6 +25,7 @@
 #include "arcseventdata/Event2QE.h"
 #include "arcseventdata/Event2pixtof.h"
 #include "arcseventdata/Event2pixd.h"
+#include "arcseventdata/Event2pixEi.h"
 
 #ifdef DEBUG
 #include "journal/debug.h"
@@ -386,6 +387,80 @@ namespace wrap_arcseventdata
        pyevents, N,
        pixel_begin, pixel_end, pixel_step, 
        d_begin, d_end, d_step, 
+       pyintensities)
+      ;
+  }
+
+
+  // 
+  char events2IpixEi_numpyarray__name__[] = "events2IpixEi_numpyarray";
+  char events2IpixEi_numpyarray__doc__[] = "events2IpixEi_numpyarray\n" \
+"events2IpixEi( events, N, pixel_begin, pixel_end, pixel_step, \n"\
+"              Ei_begin, Ei_end, Ei_step, \n"\
+"              intensities, pixelPositions, ntotpixels, tofUnit, \n"\
+"              mod2sample, emission_time)"
+;
+  // events: PyCObject of pointer to events
+  // N: number of events to process
+  // pixel_begin, pixel_end, pixel_step: pixel axis parameters
+  // Ei_begin, Ei_end, Ei_step: E axis parameters
+  // intensities: numpy array to store I(d)
+  // pixelPositions: PyCObject of pixel positions array
+  // ntotpixels: number of total pixels. actually npack*ndetsperpack*npixelsperdet
+  // tofUnit: unit of tof in the event data file
+  // mod2sample: moderator-sampel distance (meter)
+  // emission_time: emssion time (microsecond)
+  
+  PyObject * events2IpixEi_numpyarray(PyObject *, PyObject *args)
+  {
+    PyObject *pyevents, *pyintensities;
+    PyObject *pypixelPositions;
+    long N;
+    int pixel_begin, pixel_end, pixel_step;
+    double Ei_begin, Ei_end, Ei_step;
+    long ntotpixels=  (115)*8*128;
+    
+    double tofUnit = 1e-7;
+    double mod2sample = 13.6;
+    double emission_time = 0.0;
+    
+    int ok = PyArg_ParseTuple
+      (args, "OliiidddOO|lddd", 
+       &pyevents, &N, 
+       &pixel_begin, &pixel_end, &pixel_step,
+       &Ei_begin, &Ei_end, &Ei_step,
+       &pyintensities,
+       &pypixelPositions,
+       &ntotpixels, &tofUnit,
+       &mod2sample, &emission_time);
+    
+    if (!ok) return 0;
+    
+    const double * pixelPositions = static_cast<const double *>
+      ( PyCObject_AsVoidPtr( pypixelPositions ) );
+
+    Event2pixEi e2pixEi
+      (pixelPositions, ntotpixels, tofUnit, mod2sample, emission_time );
+
+    /*
+    std::cout << "pixel axis" 
+	      << pixel_begin << ", "
+	      << pixel_end << ", "
+	      << pixel_step << ", "
+	      << std::endl;
+    std::cout << "E axis" 
+	      << Ei_begin << ", "
+	      << Ei_end << ", "
+	      << Ei_step << ", "
+	      << std::endl;
+    */
+    return events2EvenlySpacedIxy_impl::call_numpyarray
+      <Event2pixEi,
+      unsigned int, double, npy_int, NPY_INT>
+      (e2pixEi,
+       pyevents, N,
+       pixel_begin, pixel_end, pixel_step, 
+       Ei_begin, Ei_end, Ei_step, 
        pyintensities)
       ;
   }

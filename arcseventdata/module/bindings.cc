@@ -74,6 +74,11 @@ struct PyMethodDef pyarcseventdata_methods[] = {
      wrap_arcseventdata::events2Ipixd_numpyarray,
      METH_VARARGS, wrap_arcseventdata::events2Ipixd_numpyarray__doc__},
     
+    // events2IpixEi
+    {wrap_arcseventdata::events2IpixEi_numpyarray__name__, 
+     wrap_arcseventdata::events2IpixEi_numpyarray,
+     METH_VARARGS, wrap_arcseventdata::events2IpixEi_numpyarray__doc__},
+    
     // events2IQQQE
     {wrap_arcseventdata::events2IQQQE_numpyarray__name__, 
      wrap_arcseventdata::events2IQQQE_numpyarray,

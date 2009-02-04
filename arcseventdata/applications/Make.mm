@@ -62,6 +62,7 @@ EXPORT_PYAPPS = \
 	idspacing.py \
 	ipdpd.py \
 	ipdpE.py \
+	ipdpI.py \
 	ipdpt.py \
 	iqe.py \
 	iqqqe.py \

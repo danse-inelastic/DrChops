@@ -21,7 +21,9 @@ PROJ_CLEAN += $(PROJ_SAR) $(PROJ_DLL)
 
 PROJ_SRCS = \
 	Event2d.cc \
+	Event2Ei.cc \
 	Event2pixd.cc \
+	Event2pixEi.cc \
 	Event2pixE.cc \
 	Event2pixtof.cc \
 	Event2QE.cc \
@@ -66,7 +68,9 @@ EXPORT_HEADERS = \
 	Event.h \
 	Event2Quantity.h \
 	Event2d.h \
+	Event2Ei.h \
 	Event2pixd.h \
+	Event2pixEi.h \
 	Event2pixE.h \
 	Event2pixtof.h \
 	Event2QE.h \
