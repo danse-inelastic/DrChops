@@ -23,7 +23,7 @@ class IpdpEiHistogrammer(base):
               emission_time):
         
         info.log( "eventdatafilename = %s" % eventdatafilename )
-        info.log( 'Ei_params (unit: AA) = %s' % (Ei_params, ) )
+        info.log( 'Ei_params (unit: meV) = %s' % (Ei_params, ) )
         info.log( 'emission_time (unit: microsecond) = %s' % (emission_time, ) )
         info.log( 'neutrons: start = %d, n = %d' % (
             start, nevents ) )
