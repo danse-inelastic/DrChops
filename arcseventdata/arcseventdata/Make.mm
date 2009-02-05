@@ -44,6 +44,7 @@ EXPORT_PYTHON_MODULES = \
 	events2Ipdpd.py \
 	events2IpdpEi.py \
 	events2IpdpE.py \
+	events2IpdpL.py \
 	events2IQE.py \
 	events2IQQQE.py \
 	events2Ipdpt.py \

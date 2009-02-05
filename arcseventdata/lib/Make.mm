@@ -25,6 +25,7 @@ PROJ_SRCS = \
 	Event2pixd.cc \
 	Event2pixEi.cc \
 	Event2pixE.cc \
+	Event2pixL.cc \
 	Event2pixtof.cc \
 	Event2QE.cc \
 	Event2QQQE.cc \
@@ -72,6 +73,7 @@ EXPORT_HEADERS = \
 	Event2pixd.h \
 	Event2pixEi.h \
 	Event2pixE.h \
+	Event2pixL.h \
 	Event2pixtof.h \
 	Event2QE.h \
 	Event2QQQE.h \

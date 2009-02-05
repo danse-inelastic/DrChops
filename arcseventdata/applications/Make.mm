@@ -63,6 +63,7 @@ EXPORT_PYAPPS = \
 	ipdpd.py \
 	ipdpE.py \
 	ipdpI.py \
+	ipdpL.py \
 	ipdpt.py \
 	iqe.py \
 	iqqqe.py \

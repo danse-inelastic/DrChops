@@ -52,6 +52,12 @@ namespace wrap_arcseventdata
   extern "C"
   PyObject * events2IpixEi_numpyarray(PyObject *, PyObject *args);
 
+  // events2IpixL
+  extern char events2IpixL_numpyarray__name__[];
+  extern char events2IpixL_numpyarray__doc__[];
+  extern "C"
+  PyObject * events2IpixL_numpyarray(PyObject *, PyObject *args);
+
 } // wrap_arcseventdata::
 
 #endif // WRAP_EVENTS2EVENLYSPACEDIXY_H
