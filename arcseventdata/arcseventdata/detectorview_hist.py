@@ -88,6 +88,16 @@ def super_indexes_71(tubeid, pixelid):
     return stubeid, spixelid
 
 
+
+
+
+def pdp_from_superindexes(super_tubeid, super_pixelid):
+    rowno = super_pixelid/npixelspertube
+    pack,tube = packtube_from_supertubeid(super_tubeid, rowno=rowno, super_pixelid=super_pixelid)
+    pixel = pixel_from_superpixelid(super_pixelid, super_tubeid=super_tubeid)
+    return pack, tube, pixel
+
+
 supertubeid_shorttubestart = ntubesperpack * (shortpack1-startpacks[1])
 supertubeid_shorttubeend = supertubeid_shorttubestart + ntubesperpack
 def packtube_from_supertubeid( super_tubeid, rowno = 0, super_pixelid=None ):
@@ -131,6 +141,21 @@ def pixel_from_superpixelid( super_pixelid, super_tubeid=None ):
 
 
 def pixel_from_superpixelid_inshortpacks(super_pixelid):
+    if super_pixelid < 1.5*npixelspertube:
+        pack = 70
+        ratio = slratios[pack]
+        start = int(npixelspertube-1-(super_pixelid-npixelspertube)/ratio)
+        step = int(1./ratio +0.5)
+        return start-int(step/2)
+    else:
+        pack = 71
+        ratio = slratios[pack]
+        start = int((2*npixelspertube-1-super_pixelid)/ratio)
+        step = int(1./ratio+0.5)
+        return start+int(step/2)
+
+
+def pixels_from_superpixelid_inshortpacks(super_pixelid):
     if super_pixelid < 1.5*npixelspertube:
         pack = 70
         ratio = slratios[pack]
@@ -262,8 +287,11 @@ def test2():
     assert ( packtube_from_supertubeid( 248, rowno=1, super_pixelid=170) == (70,0) )
     assert ( packtube_from_supertubeid( 251, rowno=1, super_pixelid=170) == (70,3) )
 
-    assert pixel_from_superpixelid(128+127, super_tubeid=248)==(0,3)
-    assert pixel_from_superpixelid(128, super_tubeid=248)==(123,127)
+    assert pixels_from_superpixelid_inshortpacks(128+127)==(0,4)
+    assert pixels_from_superpixelid_inshortpacks(128)==(124,127)
+
+    assert pdp_from_superindexes(248, 128+127) == (71, 0, 2)
+    assert pdp_from_superindexes(248, 128) == (70, 0, 126)
     return
 
 
