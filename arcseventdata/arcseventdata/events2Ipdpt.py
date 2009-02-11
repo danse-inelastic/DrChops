@@ -21,9 +21,14 @@ def events2Ipdpt(events, n, Ipdpt,
     assert len(axes[1].binCenters()) == 8
     assert axes[1].binCenters()[0] == 0
     assert axes[1].binCenters()[-1] == 7
+    
     assert axes[2].name() == 'pixelID'
-    assert len(axes[2].binCenters()) in [128, 256]
-    npixelspertube = len(axes[2].binCenters())
+    pixelIDs = Ipdpt.pixelID
+    npixelbinsspertube = len(pixelIDs)
+    assert 256 % npixelbinsspertube == 0
+    pixelStep = pixelIDs[1]-pixelIDs[0]
+    npixelspertube = npixelbinsspertube * pixelStep
+    
     ntubesperpack = 8
 
     assert axes[3].name() == 'tof'
@@ -33,7 +38,7 @@ def events2Ipdpt(events, n, Ipdpt,
     tof_step = tof_boundaries[1] - tof_boundaries[0]
     tof_end = tof_boundaries[-1]
 
-    ntotpixels = Ipdpt.size() / tof_axis.size()
+    ntotpixelbins = Ipdpt.size() / tof_axis.size()
 
     #make sure pack is continuous
     packs = Ipdpt.detectorpackID
@@ -42,15 +47,19 @@ def events2Ipdpt(events, n, Ipdpt,
         continue
     startpack = packs[0]
     assert startpack > 0, "pack should start at 1: %s" % startpack
+    
     startpixelindex = (startpack-1)*ntubesperpack*npixelspertube
+    endpixelindex = startpixelindex + ntotpixelbins*pixelStep
+
+    maxpixelindex = endpixelindex
     
     import arcseventdata as binding
     return binding.events2Ipixtof_numpyarray(
         events, n,
-        startpixelindex, startpixelindex+ntotpixels, 1,
+        startpixelindex, endpixelindex, pixelStep,
         tof_begin, tof_end, tof_step,
         Ipdpt.data().storage().asNumarray(),
-        ntotpixels, tofUnit)
+        maxpixelindex, tofUnit)
 
 
 # version

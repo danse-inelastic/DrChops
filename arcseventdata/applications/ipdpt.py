@@ -32,6 +32,8 @@ class Application(base):
         pack_params = Tuple( 'p', default = '1,115' )
         pack_params.meta['tip'] = 'pack parameters (begin, end)'
 
+        pixel_step = pinv.int( 'pixel-resolution', default = '1' )
+
         ARCSxml = pinv.str('x', default = "ARCS.xml")
         ARCSxml.meta['tip'] = "ARCS instrument xml"
 
@@ -42,7 +44,8 @@ class Application(base):
         ARCSxml = self.inventory.ARCSxml
         tof_params = self.inventory.tof_params
         pack_params = self.inventory.pack_params
-        return ARCSxml, tof_params, pack_params
+        pixel_step = self.inventory.pixel_step
+        return ARCSxml, tof_params, pack_params, pixel_step
         
 
     def _defaults(self):

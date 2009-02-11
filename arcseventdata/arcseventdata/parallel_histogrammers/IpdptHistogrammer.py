@@ -17,7 +17,7 @@ class IpdptHistogrammer(base):
 
     def _run( self,
               eventdatafilename, start, nevents,
-              ARCSxml, tof_params, pack_params = (1,115) ):
+              ARCSxml, tof_params, pack_params = (1,115), pixel_step = 1 ):
 
         from arcseventdata import getinstrumentinfo
         infos = getinstrumentinfo(ARCSxml)
@@ -41,7 +41,17 @@ class IpdptHistogrammer(base):
             unit = 'second' )
         detaxes = infos['detector axes']
 
-        #pack axis needs attention
+        #pixel axis need to be changed if pixel resolution is not 1
+        if pixel_step != 1:
+            pixelAxis = detaxes[2]
+            npixelspertube = pixelAxis.size()
+            pixelAxis = histogram.axis(
+                'pixelID',
+                boundaries = range(0, npixelspertube+1, pixel_step),
+                )
+            detaxes[2] = pixelAxis
+
+        #pack axis
         startpack, endpack = pack_params
         packaxis = histogram.axis(
             'detectorpackID',
