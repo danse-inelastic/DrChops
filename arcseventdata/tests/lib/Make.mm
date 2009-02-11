@@ -30,6 +30,7 @@ PROJ_CPPTESTS = test_Histogrammer1 test_Histogrammer2 test_Histogrammer4 \
 	test_Event2pixd \
 	test_normalize_iqe \
 	test_normalize_iqqqe \
+	test_normalize_ihkle \
 	test_pixel_solidangle \
 
 PROJ_CPPEXE = 
@@ -107,6 +108,9 @@ test_normalize_iqe: test_normalize_iqe.cc $(BLD_LIBDIR)/libarcseventdata.$(EXT_S
 
 test_normalize_iqqqe: test_normalize_iqqqe.cc $(BLD_LIBDIR)/libarcseventdata.$(EXT_SAR)
 	$(CXX) $(CXXFLAGS) $(LCXXFLAGS) -o $@ test_normalize_iqqqe.cc $(PROJ_LIBRARIES)
+
+test_normalize_ihkle: test_normalize_ihkle.cc $(BLD_LIBDIR)/libarcseventdata.$(EXT_SAR)
+	$(CXX) $(CXXFLAGS) $(LCXXFLAGS) -o $@ test_normalize_ihkle.cc $(PROJ_LIBRARIES)
 
 test_pixel_solidangle: test_pixel_solidangle.cc $(BLD_LIBDIR)/libarcseventdata.$(EXT_SAR)
 	$(CXX) $(CXXFLAGS) $(LCXXFLAGS) -o $@ test_pixel_solidangle.cc $(PROJ_LIBRARIES)

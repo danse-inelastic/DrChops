@@ -37,7 +37,7 @@ class IhkleHistogrammer(base):
         ub = self.ub
         pixelPositions = self.pixelPositions
         from arcseventdata.normalize_ihkle import normalize_ihkle
-        normalize_ihkle( IhklE, Ei, pixelPositions )
+        normalize_ihkle( IhklE, Ei, ub, pixelPositions )
         return IhklE
     
 

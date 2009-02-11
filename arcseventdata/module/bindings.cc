@@ -26,6 +26,7 @@
 #include "wrap_mslice_formating.h"
 #include "wrap_normalize_iqe.h"
 #include "wrap_normalize_iqqqe.h"
+#include "wrap_normalize_ihkle.h"
 
 
 // the method table
@@ -118,6 +119,11 @@ struct PyMethodDef pyarcseventdata_methods[] = {
     {wrap_arcseventdata::calcSolidAngleQQQE_numpyarray__name__, 
      wrap_arcseventdata::calcSolidAngleQQQE_numpyarray,
      METH_VARARGS, wrap_arcseventdata::calcSolidAngleQQQE_numpyarray__doc__},
+
+    // calcSolidAngleHKLE
+    {wrap_arcseventdata::calcSolidAngleHKLE_numpyarray__name__, 
+     wrap_arcseventdata::calcSolidAngleHKLE_numpyarray,
+     METH_VARARGS, wrap_arcseventdata::calcSolidAngleHKLE_numpyarray__doc__},
 
 
 // Sentinel

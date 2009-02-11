@@ -34,6 +34,7 @@ PROJ_SRCS = \
 	EventsReader.cc \
 	normalize_iqe.cc \
 	normalize_iqqqe.cc \
+	normalize_ihkle.cc \
 	readPixelPositions.cc \
 
 
@@ -102,6 +103,7 @@ EXPORT_HEADERS = \
 	mslice_formating.icc \
 	normalize_iqe.h normalize_iqe.icc \
 	normalize_iqqqe.h normalize_iqqqe.icc \
+	normalize_ihkle.h normalize_ihkle.icc \
 	pixel_solidangle.h  pixel_solidangle.icc \
 	readPixelPositions.h \
 

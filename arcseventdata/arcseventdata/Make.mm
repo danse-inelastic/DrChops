@@ -59,6 +59,7 @@ EXPORT_PYTHON_MODULES = \
 	normalize_iqe.py \
 	normalize_iqe_py_prototype.py \
 	normalize_iqqqe.py \
+	normalize_ihkle.py \
 	pixelpositions2angles.py \
 	read2colascii.py \
 	units.py \

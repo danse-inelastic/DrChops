@@ -55,7 +55,7 @@ class Application(base):
 
     def main(self):
         self.compute()
-        #self.normalize()
+        self.normalize()
         self.save()
         return
 
