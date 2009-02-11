@@ -44,6 +44,7 @@ EXPORT_PYTHON_MODULES = \
 	IpdptHistogrammer.py \
 	IqeHistogrammer.py \
 	IqqqeHistogrammer.py \
+	IhkleHistogrammer.py \
 	ItofHistogrammer.py \
 	__init__.py \
 

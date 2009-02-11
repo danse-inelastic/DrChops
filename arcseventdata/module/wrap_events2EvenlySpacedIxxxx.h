@@ -28,6 +28,12 @@ namespace wrap_arcseventdata
   extern "C"
   PyObject * events2IQQQE_numpyarray(PyObject *, PyObject *args);
 
+  // events2IhklE
+  extern char events2IhklE_numpyarray__name__[];
+  extern char events2IhklE_numpyarray__doc__[];
+  extern "C"
+  PyObject * events2IhklE_numpyarray(PyObject *, PyObject *args);
+
 } // wrap_arcseventdata::
 
 #endif // WRAP_EVENTS2EVENLYSPACEDIXXXX_H

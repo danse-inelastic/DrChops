@@ -45,6 +45,7 @@ EXPORT_PYTHON_MODULES = \
 	IpdptHistogrammer.py \
 	IqeHistogrammer.py \
 	IqqqeHistogrammer.py \
+	IhkleHistogrammer.py \
 	ItofHistogrammer.py \
 	ParallelComponent.py \
 	ParallelHistogrammer.py \

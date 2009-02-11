@@ -26,6 +26,7 @@ PROJ_CPPTESTS = test_Histogrammer1 test_Histogrammer2 test_Histogrammer4 \
 	test_Event2tof \
 	test_Event2QE \
 	test_Event2QQQE \
+	test_Event2hklE \
 	test_Event2pixd \
 	test_normalize_iqe \
 	test_normalize_iqqqe \
@@ -85,6 +86,9 @@ test_Event2QE: test_Event2QE.cc $(BLD_LIBDIR)/libarcseventdata.$(EXT_SAR)
 
 test_Event2QQQE: test_Event2QQQE.cc $(BLD_LIBDIR)/libarcseventdata.$(EXT_SAR)
 	$(CXX) $(CXXFLAGS) $(LCXXFLAGS) -o $@ test_Event2QQQE.cc $(PROJ_LIBRARIES)
+
+test_Event2hklE: test_Event2hklE.cc $(BLD_LIBDIR)/libarcseventdata.$(EXT_SAR)
+	$(CXX) $(CXXFLAGS) $(LCXXFLAGS) -o $@ test_Event2hklE.cc $(PROJ_LIBRARIES)
 
 test_events2EvenlySpacedIx: test_events2EvenlySpacedIx.cc $(BLD_LIBDIR)/libarcseventdata.$(EXT_SAR)
 	$(CXX) $(CXXFLAGS) $(LCXXFLAGS) -o $@ test_events2EvenlySpacedIx.cc $(PROJ_LIBRARIES)

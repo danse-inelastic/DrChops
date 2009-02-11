@@ -67,6 +67,7 @@ EXPORT_PYAPPS = \
 	ipdpt.py \
 	iqe.py \
 	iqqqe.py \
+	ihkle.py \
 	itof.py \
 	createmap-pixelID2position.py \
 	mitof.py \

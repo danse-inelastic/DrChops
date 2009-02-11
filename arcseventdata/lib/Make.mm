@@ -29,6 +29,7 @@ PROJ_SRCS = \
 	Event2pixtof.cc \
 	Event2QE.cc \
 	Event2QQQE.cc \
+	Event2hklE.cc \
 	Event2tof.cc \
 	EventsReader.cc \
 	normalize_iqe.cc \
@@ -77,6 +78,7 @@ EXPORT_HEADERS = \
 	Event2pixtof.h \
 	Event2QE.h \
 	Event2QQQE.h \
+	Event2hklE.h \
 	Event2tof.h \
 	EventsReader.h \
 	Exception.h \

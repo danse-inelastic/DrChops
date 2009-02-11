@@ -217,6 +217,7 @@ from events2IpdpEi import events2IpdpEi
 from events2IpdpL import events2IpdpL
 from events2IQE import events2IQE
 from events2IQQQE import events2IQQQE
+from events2IhklE import events2IhklE
 from events2Ipdpt import events2Ipdpt
 from events2Itof import events2Itof
 

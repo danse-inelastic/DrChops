@@ -22,6 +22,7 @@
 #include "arcseventdata/events2EvenlySpacedIxxxx.h"
 
 #include "arcseventdata/Event2QQQE.h"
+#include "arcseventdata/Event2hklE.h"
 
 
 #ifdef DEBUG
@@ -222,6 +223,161 @@ namespace wrap_arcseventdata
 	 Qx_begin, Qx_end, Qx_step, 
 	 Qy_begin, Qy_end, Qy_step, 
 	 Qz_begin, Qz_end, Qz_step, 
+	 E_begin, E_end, E_step, 
+	 pyintensities)
+	;
+
+    default:
+      std::ostringstream oss;
+      oss << "Not implemented yet: intensity array data type is " 
+	  << intensity_npy_typecode
+	  << "."
+	  << "int: " << NPY_INT << ", "
+	  << "long: " << NPY_LONG << ", "
+	  << "double: " << NPY_DOUBLE << ", "
+	  << std::endl;
+      PyErr_SetString( PyExc_NotImplementedError, oss.str().c_str() );
+      return 0;
+      
+    }
+  }
+  
+
+  // 
+  char events2IhklE_numpyarray__name__[] = "events2IhklE_numpyarray";
+  char events2IhklE_numpyarray__doc__[] = "events2IhklE_numpyarray\n" \
+"events2IhklE( events, N, \n"\
+"            h_begin, h_end, h_step, \n"\
+"            k_begin, k_end, k_step, \n"\
+"            l_begin, l_end, l_step, \n"\
+"            E_begin, E_end, E_step, \n"\
+"            intensities, Ei, ub, pixelPositions, ntotpixels, tofUnit, \n"\
+"            mod2sample, toffset, intensity_npy_typecode)"
+;
+  // events: PyCObject of pointer to events
+  // N: number of events to process
+  // h_begin, h_end, h_step: h axis parameters
+  // k_begin, k_end, k_step: k axis parameters
+  // l_begin, l_end, l_step: l axis parameters
+  // E_begin, E_end, E_step: E axis parameters
+  // intensities: numpy array to store Intensities
+  // Ei: incident neutron energy
+  // ub: matrix to convert Q vector to hkl
+  // pixelPositions: double * pointer to pixel positions 
+  // ntotpixels: number of total pixels. actually (npack+1)*ndetsperpack*npixelsperdet
+  // tofUnit: unit of tof in the event data file
+  // mod2sample: moderator sample distance. unit: meter
+  // toffset: shutter time offset. unit: microsecond
+  // intensity_npy_typecode: numpy typecode for the intensity array
+  
+  PyObject * events2IhklE_numpyarray(PyObject *, PyObject *args)
+  {
+    PyObject *pyevents, *pyintensities;
+    long N;
+    double h_begin, h_end, h_step;
+    double k_begin, k_end, k_step;
+    double l_begin, l_end, l_step;
+    double E_begin, E_end, E_step;
+    double Ei;
+    PyObject *pyub;
+    PyObject *pypixelPositions;
+    long ntotpixels=  115*8*128;
+    double tofUnit = 1e-7, mod2sample = 13.5;
+    double toffset = 0;
+    int intensity_npy_typecode = NPY_INT;
+    
+    int ok = PyArg_ParseTuple
+      (args, "OlddddddddddddOdOO|ldddi", 
+       &pyevents, &N, 
+       &h_begin, &h_end, &h_step,
+       &k_begin, &k_end, &k_step,
+       &l_begin, &l_end, &l_step,
+       &E_begin, &E_end, &E_step,
+       &pyintensities,
+       &Ei,
+       &pyub,
+       &pypixelPositions, 
+       &ntotpixels, &tofUnit, &mod2sample,
+       &toffset,
+       &intensity_npy_typecode);
+    
+    if (!ok) return 0;
+
+    // convert ub from python object to a double array
+    if (!PyTuple_Check(pyub) || PyTuple_Size(pyub)!=3 ) {
+      PyErr_SetString( PyExc_ValueError, "ub matrix must be a 3-tuple");
+      return 0;
+    }
+    double ub[9];
+    for (int i=0; i<3; i++) {
+      PyObject *item = PyTuple_GetItem(pyub, i);
+
+      if (!PyTuple_Check(item) || PyTuple_Size(item)!=3) {
+	PyErr_SetString( PyExc_ValueError, "ub matrix must be a 3-tuple of 3-tuples");
+	return 0;
+      }
+      for (int j=0; j<3; j++) {
+	PyObject *pynum = PyTuple_GetItem(item,j);
+	if (!PyFloat_Check(pynum)) {
+	  PyErr_SetString( PyExc_ValueError, "ub matrix must be a 3-tuple of 3-tuples of floats");
+	  return 0;
+	}
+	ub[3*i+j] = PyFloat_AsDouble(pynum);
+      }
+    }
+    
+    const double * pixelPositions = static_cast<const double *>
+      ( PyCObject_AsVoidPtr( pypixelPositions ) );
+    Event2hklE e2hklE( Ei, ub, pixelPositions, ntotpixels, tofUnit, mod2sample, toffset );
+    /*
+    std::cout << "pixel axis" 
+	      << Q_begin << ", "
+	      << Q_end << ", "
+	      << Q_step << ", "
+	      << std::endl;
+    std::cout << "E axis" 
+	      << E_begin << ", "
+	      << E_end << ", "
+	      << E_step << ", "
+	      << std::endl;
+    */
+    switch (intensity_npy_typecode) {
+
+    case NPY_INT:
+      return events2EvenlySpacedIxxxx_impl::call_numpyarray
+      <Event2hklE,
+	double, double, double, double, npy_int, NPY_INT>
+	(e2hklE,
+	 pyevents, N,
+	 h_begin, h_end, h_step, 
+	 k_begin, k_end, k_step, 
+	 l_begin, l_end, l_step, 
+	 E_begin, E_end, E_step, 
+	 pyintensities)
+	;
+
+    case NPY_LONG:
+      return events2EvenlySpacedIxxxx_impl::call_numpyarray
+      <Event2hklE,
+	double, double, double, double, npy_long, NPY_LONG>
+	(e2hklE,
+	 pyevents, N,
+	 h_begin, h_end, h_step, 
+	 k_begin, k_end, k_step, 
+	 l_begin, l_end, l_step, 
+	 E_begin, E_end, E_step, 
+	 pyintensities)
+	;
+
+    case NPY_DOUBLE:
+      return events2EvenlySpacedIxxxx_impl::call_numpyarray
+      <Event2hklE,
+	double, double, double, double, npy_double, NPY_DOUBLE>
+	(e2hklE,
+	 pyevents, N,
+	 h_begin, h_end, h_step, 
+	 k_begin, k_end, k_step, 
+	 l_begin, l_end, l_step, 
 	 E_begin, E_end, E_step, 
 	 pyintensities)
 	;
