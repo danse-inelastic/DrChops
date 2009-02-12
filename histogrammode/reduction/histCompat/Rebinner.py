@@ -140,13 +140,9 @@ class Rebinner( object):
         #create a matrix of coordinates of cells for the input histogram
         from histogram import meshgrid
         Xmesh = meshgrid( *axisBinCentersList )
-        t = range(1, dim+1) + [ 0 ]
-        Xmesh = numpy.array(Xmesh).transpose( *t )
-
-        #save the shape
-        shape = Xmesh.shape
-        #flatten so that it is easier to apply mapper
-        Xmesh.shape = -1, dim
+        Xmesh = [item.flatten() for item in Xmesh]
+        Xmesh = numpy.array(Xmesh)
+        Xmesh = Xmesh.transpose()
 
         # apply mapper to get the coordinates of each cell
         # in the output phase space

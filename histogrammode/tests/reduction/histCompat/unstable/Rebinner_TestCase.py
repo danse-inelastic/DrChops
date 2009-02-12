@@ -90,7 +90,7 @@ class Rebinner_TestCase(TestCase):
 
         #check output
         outdataNA = outHist.data().storage().asNumarray()
-        print outdataNA
+        #print outdataNA
         self.assertVectorAlmostEqual( outdataNA, [2., 2.] )
 
         return
@@ -239,12 +239,12 @@ class Rebinner_TestCase(TestCase):
         axisX = axis( 'x', arange(0., R, 1.) )
         axisY = axis( 'y', arange(0., R, 1.) )
         axisZ = axis( 'z', arange(0., R, 1.) )
-        axisU = axis( 'u', arange(0., R, 1.) )
+        axisU = axis( 'u', arange(0., R, 0.5) )
         inHist = histogram('in',  [axisX,axisY,axisZ,axisU])
 
         def f(x,y,z,u): return x+y+z+u
-        
-        inHist[(), (), (), ()] = datasetFromFunction( f, [axisX, axisY, axisZ, axisU]), None
+        Iarr = datasetFromFunction( f, [axisX, axisY, axisZ, axisU])
+        inHist[(), (), (), ()] = Iarr, None
 
         
         #create output histogram
@@ -263,7 +263,8 @@ class Rebinner_TestCase(TestCase):
         def J(x,y,z,u):
             return 0*x+1
         Jacobians = inHist.copy()
-        Jacobians[(), (), (), ()] = datasetFromFunction( J, [axisX, axisY, axisZ, axisU] ), None
+        Iarr = datasetFromFunction( J, [axisX, axisY, axisZ, axisU] )
+        Jacobians[(), (), (), ()] = Iarr, None
 
         #call rebinner
         from reduction.histCompat.Rebinner import rebinner
@@ -279,7 +280,9 @@ def pysuite():
     return unittest.TestSuite( (suite1,) )
 
 def main():
-    debug.activate()
+    #debug.activate()
+    #import histogram
+    #histogram.debug.activate()
     pytests = pysuite()
     alltests = unittest.TestSuite( (pytests, ) )
     unittest.TextTestRunner(verbosity=2).run(alltests)
