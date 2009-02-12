@@ -63,7 +63,8 @@ class Rebinner_TestCase(TestCase):
 
         #create input histogram
         inHist = histogram(name = 'in', axes = [axisX,])
-        inHist[ () ] = [1,1,1,1], [0,0,0,0]
+        from numpy import array
+        inHist[ () ] = array([1,1,1,1]), array([0,0,0,0])
                       
         #create axis y
         min = 0.; delta = 1.0; nBinsY = 2
@@ -106,7 +107,8 @@ class Rebinner_TestCase(TestCase):
         #create input histogram
         inHist = histogram('in',  [axisX,axisY])
 
-        inHist[(), ()] =  [[1]*R]*R, None
+        from numpy import array
+        inHist[(), ()] =  array([[1]*R]*R), None
 
         #create axis r
         axisR = axis( 'r', arange(0, R * 1.42, 1.) )
@@ -190,6 +192,85 @@ class Rebinner_TestCase(TestCase):
                 self.assertEqual( outHist[x,y][0], y-x )
         return
     
+
+    def test3DTo3D(self):
+        "Rebinner: 3D --> 3D"
+        R = 10
+
+        #create input histogram
+        axisX = axis( 'x', arange(0., R, 1.) )
+        axisY = axis( 'y', arange(0., R, 1.) )
+        axisZ = axis( 'z', arange(0., R, 1.) )
+        inHist = histogram('in',  [axisX,axisY,axisZ])
+
+        def f(x,y,z): return x+y+z
+        
+        inHist[(), (), ()] = datasetFromFunction( f, [axisX, axisY, axisZ]), None
+
+        
+        #create output histogram
+        axisX1 = axis( 'x1', arange(0., R, 1.) )
+        axisY1 = axis( 'y1', arange(0., R, 1.) )
+        axisZ1 = axis( 'z1', arange(0., R, 1.) )
+        outHist = histogram('out',  [axisX1,axisY1,axisZ1])
+
+        #create mapper
+        def mapper(X):
+            x,y,z = X
+            return z,y,x
+
+        #the Jacobians
+        def J(x,y,z):
+            return 0*x+1
+        Jacobians = inHist.copy()
+        Jacobians[ (), (), () ] = datasetFromFunction( J, [axisX, axisY, axisZ] ), None
+
+        #call rebinner
+        from reduction.histCompat.Rebinner import rebinner
+        rebinner.rebin( inHist, outHist, mapper, Jacobians)
+
+        return
+    
+    def test4DTo4D(self):
+        "Rebinner: 4D --> 4D"
+        R = 5
+
+        #create input histogram
+        axisX = axis( 'x', arange(0., R, 1.) )
+        axisY = axis( 'y', arange(0., R, 1.) )
+        axisZ = axis( 'z', arange(0., R, 1.) )
+        axisU = axis( 'u', arange(0., R, 1.) )
+        inHist = histogram('in',  [axisX,axisY,axisZ,axisU])
+
+        def f(x,y,z,u): return x+y+z+u
+        
+        inHist[(), (), (), ()] = datasetFromFunction( f, [axisX, axisY, axisZ, axisU]), None
+
+        
+        #create output histogram
+        axisX1 = axis( 'x1', arange(0., R, 1.) )
+        axisY1 = axis( 'y1', arange(0., R, 1.) )
+        axisZ1 = axis( 'z1', arange(0., R, 1.) )
+        axisU1 = axis( 'u1', arange(0., R, 1.) )
+        outHist = histogram('out',  [axisX1,axisY1,axisZ1,axisU1])
+
+        #create mapper
+        def mapper(X):
+            x,y,z,u = X
+            return u,z,y,x
+
+        #the Jacobians
+        def J(x,y,z,u):
+            return 0*x+1
+        Jacobians = inHist.copy()
+        Jacobians[(), (), (), ()] = datasetFromFunction( J, [axisX, axisY, axisZ, axisU] ), None
+
+        #call rebinner
+        from reduction.histCompat.Rebinner import rebinner
+        rebinner.rebin( inHist, outHist, mapper, Jacobians)
+
+        return
+
     pass # end of Rebinner_TestCase
 
     
