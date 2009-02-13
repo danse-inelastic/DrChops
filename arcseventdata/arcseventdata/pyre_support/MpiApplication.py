@@ -54,12 +54,17 @@ class Application(base, ParallelComponent):
             'engine',
             'event-source',
             ]
+        lines = []
         for name in self.inventory.propertyNames():
             if name in excluded: continue
             trait = self.inventory.getTrait( name )
             prefix = '-' * {True:1, False:2}[ len(name)==1 ]
-            print '  %s%s: %s, default = %s' % (
+            line = '  %s%s: %s, default = %s' % (
                 prefix, name, trait.meta.get('tip') or '', trait.default )
+            lines.append(line)
+            continue
+        lines.sort()
+        print '\n'.join(lines)
         return
 
 
