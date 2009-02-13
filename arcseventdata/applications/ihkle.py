@@ -30,13 +30,13 @@ class Application(base):
         E_params.meta['tip'] = "energy bin parameters (begin, end, step). units: meV"
 
         h_params = Tuple( 'hh', default = '-10,10,1.' )
-        h_params.meta['tip'] = "momentum transfer bin parameters (begin, end, step). units: angstrom**-1"
+        h_params.meta['tip'] = "momentum transfer bin parameters (begin, end, step)."
 
         k_params = Tuple( 'kk', default = '-10,10,1.' )
-        k_params.meta['tip'] = "momentum transfer bin parameters (begin, end, step). units: angstrom**-1"
+        k_params.meta['tip'] = "momentum transfer bin parameters (begin, end, step)."
 
         l_params = Tuple( 'll', default = '-10,10,1.' )
-        l_params.meta['tip'] = "momentum transfer bin parameters (begin, end, step). units: angstrom**-1"
+        l_params.meta['tip'] = "momentum transfer bin parameters (begin, end, step)."
 
         ARCSxml = pinv.str('x', default = "ARCS.xml")
         ARCSxml.meta['tip'] = "ARCS instrument xml"
@@ -109,7 +109,7 @@ def _matrix33(m):
     r = []
     for e in m:
         assert len(e) == 3
-        e = float(e(0)), float(e(1)), float(e(2))
+        e = float(e[0]), float(e[1]), float(e[2])
         r.append(e)
         continue
     return tuple(r)
