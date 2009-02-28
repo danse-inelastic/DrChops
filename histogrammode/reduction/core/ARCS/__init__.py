@@ -15,17 +15,10 @@ import reduction.units as units
 cm = units.length.cm
 
 
-def solid_angles( ARCSxml = 'ARCS.xml', pixelradius = 1.27*cm, pixelheight = 100./128*cm):
+def solid_angles( ARCSxml = 'ARCS.xml'):
     import arcseventdata as aed
     ii = aed.getinstrumentinfo( ARCSxml )
-    pixelpositions = ii['pixelID-position mapping array']
-    detaxes = ii['detector axes']
-    from histogram import histogram
-    solidangles = histogram( 'solid angles', detaxes )
-
-    from SolidAngleCalculator import SolidAngleCalculator
-    calculator = SolidAngleCalculator()
-    calculator(solidangles.I, pixelpositions, pixelradius, pixelheight)
+    solidangles = ii['solidangles']
     return solidangles
 
 

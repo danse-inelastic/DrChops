@@ -88,6 +88,8 @@ def reduce( vrundir, ARCSxml = 'ARCS.xml', nevents = None,
 
     # the mask
     mask = newmask( detaxes )
+    ## think more about what intensities to use as masking standard
+    ## should we do a normalization over 
     maskbadtubes( mask, c, lowerlimit = criteria_nocounts, upperlimit = criteria_toomanycounts )
     
     # Reassign tubes with 0 intensity with a large number
