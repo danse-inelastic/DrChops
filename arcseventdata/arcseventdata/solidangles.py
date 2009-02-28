@@ -130,32 +130,6 @@ def solidangle1(area, radius_square):
 
 
 
-def test():
-    calculator = SolidAngleCalculator()
-    import numpy
-    pixelpositions = numpy.array(
-        [ [0,3.,0], [0,3,1], [3,0,0], [3,0,1] ] )
-    solidangles = numpy.zeros( 4 )
-    cm = units.length.cm
-    pixelradius = 1*cm
-    pixelheight = 1*cm
-    calculator(solidangles, pixelpositions, pixelradius, pixelheight)
-    assert numpy.abs( solidangles[0] - 2.222e-5 ) < 1e-7
-    assert numpy.abs( solidangles[1] - 2.222e-5* (3/numpy.sqrt(10.))**3 ) < 1e-7
-    assert numpy.abs( solidangles[2] - solidangles[0] ) < 1e-10
-    assert numpy.abs( solidangles[3] - solidangles[1] ) < 1e-10
-    return
-    
-
-
-def main():
-    test()
-    return
-
-
-if __name__ == '__main__' : main()
-
-
 # version
 __id__ = "$Id$"
 
