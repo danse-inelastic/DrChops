@@ -111,12 +111,13 @@ def _updateCache(ARCSxml):
     pickle.dump( infos, open('ARCS-instrument-info.pkl', 'w') )
 
     from getpixelinfo import getpixelinfo
-    phi_p, psi_p, dist_p = getpixelinfo(
-        pixelID2position, detaxes )
+    phi_p, psi_p, dist_p, solidangle_p = getpixelinfo(
+        pixelID2position, detaxes, instrument )
 
     pickle.dump( phi_p, open('phi_pdp.pkl', 'w') )
     pickle.dump( psi_p, open('psi_pdp.pkl', 'w') )
     pickle.dump( dist_p, open('dist_pdp.pkl', 'w') )
+    pickle.dump( solidangle_p, open('solidangle_pdp.pkl', 'w') )
 
     os.chdir( cwd )
     return
@@ -130,11 +131,13 @@ def _getInfoFromCache( ARCSxml ):
     phis = pickle.load( open('phi_pdp.pkl') )
     psis = pickle.load( open('psi_pdp.pkl') )
     dists = pickle.load( open('dist_pdp.pkl') )
+    solidangles = pickle.load( open('solidangle_pdp.pkl') )
     positions = pickle.load( open('pixelID2position.pkl') )
     os.chdir( cwd )
     infos[ 'phis' ] = phis
     infos[ 'psis' ] = psis
     infos[ 'dists' ] = dists
+    infos[ 'solidangles' ] = solidangles
     infos[ 'pixelID-position mapping binary file' ] =  os.path.join(
         cache_dir, 'pixelID2position.bin' )
     infos[ 'pixelID-position mapping array' ] = positions

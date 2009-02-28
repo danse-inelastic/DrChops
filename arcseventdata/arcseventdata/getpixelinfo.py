@@ -19,28 +19,32 @@
 
 
 def getpixelinfo(
-    positions, detaxes):
+    positions, detaxes, instrument):
     
-    '''convert pixel positions to angles of pixels
-    
-    positions: an array of positions (3*ntotpixels floats)
-    npacks: # of packs
-    ndetsperpack: # of detectors per pack
-    npixelsperdet: # of pixels per detector
-    return: histograms phi(pixel) and psi(pixel)
-    '''
-
     from numpy import sqrt, sum, arccos, arctan2, fromstring, array, pi
 
     positions.shape = -1, 3
 
     import histogram
+    # solid angles
+    solidangle_p = histogram.histogram(
+        'solidangle_pdp', detaxes)
+    npacks, ndetsperpack, npixelsperdet = solidangle_p.shape()
+    from solidangles import solidangles
+    sas = solidangles(
+        positions, instrument,
+        npixelsperdet, ndetsperpack, npacks)
+    sas.shape = solidangle_p.shape()
+    solidangle_p.I[:] = sas
+
+    # scattering angles
     phi_p = histogram.histogram(
         'phi_pdp', detaxes )
     
     psi_p = histogram.histogram(
         'psi_pdp', detaxes )
 
+    # distances
     dist_p = histogram.histogram(
         'dist_pdp', detaxes )
 
@@ -71,7 +75,7 @@ def getpixelinfo(
     phi_arr *= 180/pi
     psi_arr *= 180/pi
     
-    return phi_p, psi_p, dist_p
+    return phi_p, psi_p, dist_p, solidangle_p
 
 # version
 __id__ = "$Id$"

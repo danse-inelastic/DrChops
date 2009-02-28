@@ -36,8 +36,9 @@ class IhkleHistogrammer(base):
         Ei = self.Ei
         ub = self.ub
         pixelPositions = self.pixelPositions
+        pixelSolidAngles = self.pixelSolidAngles
         from arcseventdata.normalize_ihkle import normalize_ihkle
-        normalize_ihkle( IhklE, Ei, ub, pixelPositions )
+        normalize_ihkle( IhklE, Ei, ub, pixelPositions, pixelSolidAngles )
         return IhklE
     
 
@@ -97,7 +98,9 @@ class IhkleHistogrammer(base):
 
         # remember a few things so that we can do normalization
         mpiRank = self.mpiRank
-        if mpiRank == 0: self._remember( Ei, ub, pixelPositions )
+        if mpiRank == 0:
+            pixelSolidAngles = infos['solidangles'].I
+            self._remember( Ei, ub, pixelPositions, pixelSolidAngles )
         
         h = arcseventdata.events2IhklE(
             events, nevents, h, Ei, ub, pixelPositions,
@@ -108,10 +111,11 @@ class IhkleHistogrammer(base):
         return h
 
 
-    def _remember(self, Ei, ub, pixelPositions):
+    def _remember(self, Ei, ub, pixelPositions, pixelSolidAngles):
         self.Ei = Ei
         self.ub = ub
         self.pixelPositions = pixelPositions
+        self.pixelSolidAngles = pixelSolidAngles
         return
 
     pass # end of Engine

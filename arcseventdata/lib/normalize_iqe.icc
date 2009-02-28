@@ -37,7 +37,8 @@ Float ARCS_EventData::calcQ( const Float *position, Float ei, Float e )
 template <typename IQE, typename Float, typename Index>
 void ARCS_EventData::calcSolidAngleQE
 ( IQE & sa, Float ei, 
-  Index npixels, const Float * pixelpositions, 
+  Index npixels, 
+  const Float * pixelpositions, const Float * pixelsolidangles,
   const AbstractMask & mask)
 {
   Float ebegin = sa.ybegin, eend = sa.yend, estep = sa.ystep;
@@ -51,7 +52,7 @@ void ARCS_EventData::calcSolidAngleQE
       const Float *position = pixelpositions +  pixelID * 3;
       Float q = calcQ( position, ei, e );
       try {
-	sa( q,e ) = sa(q,e) + 1.;
+	sa( q,e ) = sa(q,e) + pixelsolidangles[pixelID];
       }
       catch (DANSE::Histogram::OutOfBound err) {
 #ifdef DEBUG

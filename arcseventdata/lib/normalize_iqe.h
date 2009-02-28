@@ -29,7 +29,8 @@ namespace ARCS_EventData{
   template <typename IQE, typename Float, typename Index>
   void calcSolidAngleQE
   ( IQE & saqe, Float ei, 
-    Index npixels, const Float * pixelpositions, 
+    Index npixels, 
+    const Float * pixelpositions, const Float * pixelsolidangles,
     const AbstractMask & mask);
 
   template <typename Float>

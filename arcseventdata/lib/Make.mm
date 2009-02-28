@@ -104,7 +104,6 @@ EXPORT_HEADERS = \
 	normalize_iqe.h normalize_iqe.icc \
 	normalize_iqqqe.h normalize_iqqqe.icc \
 	normalize_ihkle.h normalize_ihkle.icc \
-	pixel_solidangle.h  pixel_solidangle.icc \
 	readPixelPositions.h \
 
 EXPORT_LIBS = $(PROJ_SAR)

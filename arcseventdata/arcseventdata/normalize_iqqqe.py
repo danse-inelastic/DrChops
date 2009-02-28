@@ -12,10 +12,10 @@
 #
 
 
-def normalize_iqqqe( IQQQE, ei, pixelPositions, pixel_area = 0.025*1./128):
+def normalize_iqqqe( IQQQE, ei, pixelPositions, pixelSolidAngles):
     from histogram import histogram
     sa = histogram( 'solid_angle', IQQQE.axes() )
-    calcSolidAngleQQQE( sa, ei, pixel_area, pixelPositions )
+    calcSolidAngleQQQE( sa, ei, pixelPositions, pixelSolidAngles )
 
     #get numpy arrays
     I = IQQQE.I
@@ -33,7 +33,8 @@ def normalize_iqqqe( IQQQE, ei, pixelPositions, pixel_area = 0.025*1./128):
     return IQQQE
 
 
-def calcSolidAngleQQQE( sa, ei, pixel_area, pixelPositions, mask_functor = None):
+def calcSolidAngleQQQE( sa, ei, pixelPositions, pixelSolidAngles,
+                        mask_functor = None):
     '''calculate solid_angle(Qx,Qy,Qz,E)
 
     ei: incident energy
@@ -68,6 +69,7 @@ def calcSolidAngleQQQE( sa, ei, pixel_area, pixelPositions, mask_functor = None)
     npixels = len(pixelPositions)
     from numpyext import getdataptr
     pixelPositions = getdataptr( pixelPositions )
+    pixelSolidAngles = getdataptr( pixelSolidAngles )
     
     from arcseventdata import calcSolidAngleQQQE_numpyarray
 
@@ -78,8 +80,7 @@ def calcSolidAngleQQQE( sa, ei, pixel_area, pixelPositions, mask_functor = None)
         ebegin, eend, estep,
         sa.data().storage().asNumarray(),
         ei,
-        pixel_area,
-        npixels, pixelPositions)
+        npixels, pixelPositions, pixelSolidAngles)
 
 
 # version

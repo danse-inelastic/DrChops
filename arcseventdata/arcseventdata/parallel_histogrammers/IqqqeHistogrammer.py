@@ -35,8 +35,9 @@ class IqqqeHistogrammer(base):
                   % self.mpiRank)
         Ei = self.Ei
         pixelPositions = self.pixelPositions
+        pixelSolidAngles = self.pixelSolidAngles
         from arcseventdata.normalize_iqqqe import normalize_iqqqe
-        normalize_iqqqe( IQQQE, Ei, pixelPositions )
+        normalize_iqqqe( IQQQE, Ei, pixelPositions, pixelSolidAngles )
         return IQQQE
     
 
@@ -95,7 +96,9 @@ class IqqqeHistogrammer(base):
 
         # remember a few things so that we can do normalization
         mpiRank = self.mpiRank
-        if mpiRank == 0: self._remember( Ei, pixelPositions )
+        if mpiRank == 0:
+            pixelSolidAngles = infos['solidangles'].I
+            self._remember( Ei, pixelPositions, pixelSolidAngles )
         
         h = arcseventdata.events2IQQQE(
             events, nevents, h, Ei, pixelPositions,
@@ -106,9 +109,10 @@ class IqqqeHistogrammer(base):
         return h
 
 
-    def _remember(self, Ei, pixelPositions):
+    def _remember(self, Ei, pixelPositions, pixelSolidAngles):
         self.Ei = Ei
         self.pixelPositions = pixelPositions
+        self.pixelSolidAngles = pixelSolidAngles
         return
 
     pass # end of Engine

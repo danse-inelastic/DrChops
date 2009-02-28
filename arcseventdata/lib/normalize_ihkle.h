@@ -29,8 +29,8 @@ namespace ARCS_EventData{
   template <typename IhklE, typename Float, typename Index>
   void calcSolidAngleHKLE
   ( IhklE & sahkle, Float ei, Float *ub[3],
-    Float pixelarea,
-    Index npixels, const Float * pixelpositions, 
+    Index npixels, 
+    const Float * pixelpositions, const Float * pixelsolidangles,
     const AbstractMask & mask);
 
   template <typename Float>

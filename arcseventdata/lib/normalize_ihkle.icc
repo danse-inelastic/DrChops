@@ -18,7 +18,6 @@
 
 #include <cmath>
 #include "conversion.h"
-#include "pixel_solidangle.h"
 #include "Exception.h"
 
 
@@ -56,8 +55,8 @@ void ARCS_EventData::calchkl( Float &h, Float & k, Float &l,
 template <typename IhklE, typename Float, typename Index>
 void ARCS_EventData::calcSolidAngleHKLE
 ( IhklE & sa, Float ei, Float *ub[3],
-  Float pixelarea,
-  Index npixels, const Float * pixelpositions, 
+  Index npixels, 
+  const Float * pixelpositions, const Float * pixelsolidangles,
   const AbstractMask & mask)
 {
   Float h, k, l;
@@ -72,8 +71,7 @@ void ARCS_EventData::calcSolidAngleHKLE
       const Float *position = pixelpositions +  pixelID * 3;
       calchkl( h, k, l, position, ei, ub, e );
       try {
-	sa( h, k, l, e ) = sa(h, k, l, e) + \
-	  pixel_solidangle<Float>(pixelarea, position[0], position[1], position[2]);
+	sa( h, k, l, e ) = sa(h, k, l, e) + pixelsolidangles[pixelID];
       }
       catch (DANSE::Histogram::OutOfBound err) {
 #ifdef DEBUG

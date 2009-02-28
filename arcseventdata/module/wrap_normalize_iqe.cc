@@ -38,7 +38,8 @@ namespace wrap_arcseventdata
       double ebegin, double eend, double estep,
       PyObject *pySAarray,
       double ei, 
-      unsigned int npixels, const double *pixelPositions,
+      unsigned int npixels, 
+      const double *pixelPositions, const double *pixelsolidangles,
       const AbstractMask *mask)
     {
       if (checkDataType(pySAarray, "saarray", NPY_DOUBLE)) return 0;
@@ -71,7 +72,7 @@ namespace wrap_arcseventdata
       calcSolidAngleQE
 	<IQE, double, unsigned int>
 	( sa, ei, 
-	  npixels, pixelPositions, 
+	  npixels, pixelPositions, pixelsolidangles,
 	  *mask);
       
       return Py_None;
@@ -84,17 +85,18 @@ namespace wrap_arcseventdata
   char calcSolidAngleQE_numpyarray__name__[] = "calcSolidAngleQE_numpyarray";
   char calcSolidAngleQE_numpyarray__doc__[] = "calcSolidAngleQE_numpyarray\n" \
 "calcSolidAngleQE( qbegin, qend, qstep, ebegin, eend, estep, SAnpyarr, "\
-"               ei, npixels, pixelPositions, mask)"
+"               ei, npixels, pixelPositions, pixelsolidangles, mask)"
 ;
   // qbegin, qend, qstep, ebegin, eend, estep, SAnpyarr defines a "histogram"
   // ei: incident energy
   // npixels: total number of pixels
   // pixelPositions: double array of pixel positions
+  // pixelsolidangles: double array of pixel solid angles
   // mask: detector mask (optional)
   //
   PyObject * calcSolidAngleQE_numpyarray(PyObject *, PyObject *args)
   {
-    PyObject *pySAnpyarr, *pypixelPositions, *pymask = NULL;
+    PyObject *pySAnpyarr, *pypixelPositions, *pypixelsolidangles, *pymask = NULL;
     double qbegin, qend, qstep, ebegin, eend, estep;
     double ei;
     long npixels;
@@ -102,10 +104,11 @@ namespace wrap_arcseventdata
     int ok = PyArg_ParseTuple
       (args, "ddddddOdlO|O", 
        &qbegin, &qend, &qstep, &ebegin, &eend, &estep, &pySAnpyarr, 
-       &ei,&npixels, &pypixelPositions, &pymask);
+       &ei,&npixels, &pypixelPositions, &pypixelsolidangles, &pymask);
     
     if (!ok) return 0;
 
+    // pixelPositions
     if (pypixelPositions == NULL) {
 	std::ostringstream oss;
 	oss << "The PyCObject for pixelPositions is a null pointer.";
@@ -123,6 +126,26 @@ namespace wrap_arcseventdata
 	return 0;
     }
 
+    // pixelsolidangles
+    if (pypixelsolidangles == NULL) {
+	std::ostringstream oss;
+	oss << "The PyCObject for pixelsolidangles is a null pointer.";
+	PyErr_SetString( PyExc_ValueError, oss.str().c_str() );
+	return 0;
+    }
+
+    const double * pixelsolidangles = static_cast<const double *>
+      ( PyCObject_AsVoidPtr( pypixelsolidangles ) );
+
+    if (pixelsolidangles == NULL ) {
+	std::ostringstream oss;
+	oss << "The pixelsolidangles pointer is a null pointer.";
+	PyErr_SetString( PyExc_ValueError, oss.str().c_str() );
+	return 0;
+    }
+
+    
+    // mask
     AbstractMask * mask;
     if (pymask != NULL) {
       mask = static_cast< AbstractMask * >
@@ -138,9 +161,10 @@ namespace wrap_arcseventdata
       mask = new NoMask;
     }
 
+    // call 
     PyObject * ret =  normalize_iqe_impl::call_calcSolidAngleQE(
       qbegin, qend, qstep, ebegin, eend, estep, pySAnpyarr, 
-      ei,npixels, pixelPositions, mask);
+      ei,npixels, pixelPositions, pixelsolidangles, mask);
 
     if (pymask == NULL) {
       delete mask;

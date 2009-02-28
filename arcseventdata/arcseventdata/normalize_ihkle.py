@@ -12,10 +12,10 @@
 #
 
 
-def normalize_ihkle( IHKLE, ei, ub, pixelPositions, pixel_area = 0.025*1./128):
+def normalize_ihkle( IHKLE, ei, ub, pixelPositions, pixelSolidAngles):
     from histogram import histogram
     sa = histogram( 'solid_angle', IHKLE.axes() )
-    calcSolidAngleHKLE( sa, ei, ub, pixel_area, pixelPositions )
+    calcSolidAngleHKLE( sa, ei, ub, pixelPositions, pixelSolidAngles )
 
     #get numpy arrays
     I = IHKLE.I
@@ -33,7 +33,8 @@ def normalize_ihkle( IHKLE, ei, ub, pixelPositions, pixel_area = 0.025*1./128):
     return IHKLE
 
 
-def calcSolidAngleHKLE( sa, ei, ub, pixel_area, pixelPositions, mask_functor = None):
+def calcSolidAngleHKLE( sa, ei, ub, pixelPositions, pixelSolidAngles,
+                        mask_functor = None):
     '''calculate solid_angle(h,k,l,E)
 
     ei: incident energy
@@ -68,6 +69,7 @@ def calcSolidAngleHKLE( sa, ei, ub, pixel_area, pixelPositions, mask_functor = N
     npixels = len(pixelPositions)
     from numpyext import getdataptr
     pixelPositions = getdataptr( pixelPositions )
+    pixelSolidAngles = getdataptr( pixelSolidAngles )
     
     from arcseventdata import calcSolidAngleHKLE_numpyarray
 
@@ -78,8 +80,7 @@ def calcSolidAngleHKLE( sa, ei, ub, pixel_area, pixelPositions, mask_functor = N
         ebegin, eend, estep,
         sa.data().storage().asNumarray(),
         ei, ub,
-        pixel_area,
-        npixels, pixelPositions)
+        npixels, pixelPositions, pixelSolidAngles)
 
 
 # version
