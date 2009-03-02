@@ -39,8 +39,10 @@ shortpack1 = 70
 shortpack2 = 71
 shortpacks = [shortpack1, shortpack2]
 slratios = {
-    shortpack1: 0.38,
-    shortpack2: 0.28,
+    shortpack1: 1./3,
+    shortpack2: 1./3,
+    #shortpack1: 0.38,
+    #shortpack2: 0.28,
     }
 #max number of packs per row
 # 38 packs per row for upper and lower rows.
@@ -170,7 +172,7 @@ def pixels_from_superpixelid_inshortpacks(super_pixelid):
         return start, start+step
 
 
-def detectorview( Ipdp_ ):
+def detectorview( Ipdp_, averagingShortTubes = False ):
     '''create a histogram that is just a view of the original Ipdpt
     The horizontal axis is 'detectorID', which actually includes
     both the packID (in a detector array, top, middle, or bottom)
@@ -190,6 +192,8 @@ def detectorview( Ipdp_ ):
           ] + otheraxes )
 
     for packid in range(firstpackid, firstpackid+ntotpacks):
+        slratio = slratios.get(packid)
+            
         for tubeid in range(0,ntubesperpack):
             stube, spixel = super_indexes( packid, tubeid, 0 )
 
@@ -202,6 +206,8 @@ def detectorview( Ipdp_ ):
                 for pixelid in range(0, npixelspertube):
                     stube, spixel = super_indexes(packid, tubeid, pixelid)
                     slice = Ipdp_.I[packid-firstpackid, tubeid, pixelid]
+                    if averagingShortTubes:
+                        slice = slice * slratio
                     view.I[stube, spixel] += slice
                     #print packid, npixelspertube, pixelid, spixel
             continue
@@ -270,6 +276,22 @@ def test1():
     return
 
 
+def test1a(pack):
+    currentsuperpixel = None
+    np = 0
+    for pixel in range(128):
+        supertube, superpixel = super_indexes(pack,0,pixel)
+        if currentsuperpixel is None:
+            currentsuperpixel = superpixel
+        elif currentsuperpixel != superpixel:
+            currentsuperpixel = superpixel
+            print np
+            np = 0
+        np += 1
+        continue
+    return
+
+
 def test2():
     assert ( packtube_from_supertubeid( 1, rowno = 0 ) == (1,1) )
     assert ( pixel_from_superpixelid( npixelspertube - 2 ) == 1 )
@@ -287,16 +309,34 @@ def test2():
     assert ( packtube_from_supertubeid( 248, rowno=1, super_pixelid=170) == (70,0) )
     assert ( packtube_from_supertubeid( 251, rowno=1, super_pixelid=170) == (70,3) )
 
-    assert pixels_from_superpixelid_inshortpacks(128+127)==(0,4)
+    #print pixels_from_superpixelid_inshortpacks(128+127)
+    #shortpack1: 0.38,
+    #shortpack2: 0.28,
+    #assert pixels_from_superpixelid_inshortpacks(128+127)==(0,4)
+    #shortpack1: 1./3,
+    #shortpack2: 1./3,
+    assert pixels_from_superpixelid_inshortpacks(128+127)==(0,3)
+    
+    #print pixels_from_superpixelid_inshortpacks(128)
     assert pixels_from_superpixelid_inshortpacks(128)==(124,127)
-
-    assert pdp_from_superindexes(248, 128+127) == (71, 0, 2)
+    
+    #print pdp_from_superindexes(248, 128+127)
+    #shortpack1: 0.38,
+    #shortpack2: 0.28,
+    #assert pdp_from_superindexes(248, 128+127) == (71, 0, 2)
+    #shortpack1: 1./3,
+    #shortpack2: 1./3,
+    assert pdp_from_superindexes(248, 128+127) == (71, 0, 1)
+    
+    #print pdp_from_superindexes(248, 128)
     assert pdp_from_superindexes(248, 128) == (70, 0, 126)
     return
 
 
 def main():
     test1()
+    #test1a(70)
+    #test1a(71)
     test2()
     return
 

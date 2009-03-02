@@ -12,12 +12,12 @@
 # 
 
 
-def detectorview( pdphist ):
+def detectorview( pdphist, **kwds ):
     '''create a 2d view of ARCS detectors given a histogram.
     The first 3 axes of given histogram must be pack, tube, pixel.
     '''
     from detectorview_hist import detectorview
-    return detectorview( pdphist )
+    return detectorview( pdphist, **kwds )
 
 
 
