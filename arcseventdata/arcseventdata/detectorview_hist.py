@@ -78,14 +78,14 @@ def super_indexes( packid, tubeid, pixelid ):
 def super_indexes_70(tubeid, pixelid):
     stubeid = (shortpack1-startpacks[1]) * ntubesperpack + tubeid
     ratio = slratios[70]
-    spixelid = int((ratio+1)*npixelspertube - 1 - pixelid*ratio)
+    spixelid = int((ratio+1)*npixelspertube - (pixelid+1)*ratio)
     return stubeid, spixelid
 
 
 def super_indexes_71(tubeid, pixelid):
     ratio = slratios[71]
     stubeid = (shortpack1-startpacks[1]) * ntubesperpack + tubeid
-    spixelid = int((1+1)*npixelspertube - 1 - pixelid*ratio)
+    spixelid = int((1+1)*npixelspertube - (pixelid+1)*ratio)
     #print tubeid, pixelid, stubeid, spixelid
     return stubeid, spixelid
 
