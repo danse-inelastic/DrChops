@@ -18,6 +18,7 @@ class IpdpEHistogrammer(base):
     def _run( self,
               eventdatafilename, start, nevents,
               ARCSxml, E_params,
+              pack_params, pixel_step,
               Ei, emission_time):
         
         info.log( "eventdatafilename = %s" % eventdatafilename )
@@ -40,7 +41,25 @@ class IpdpEHistogrammer(base):
         import arcseventdata, histogram 
         E_axis = histogram.axis('energy', boundaries = histogram.arange(
             E_begin, E_end, E_step) )
+
         detaxes = infos['detector axes']
+        #pack axis
+        startpack, endpack = pack_params
+        packaxis = histogram.axis(
+            'detectorpackID',
+            range( startpack, endpack+1 ) )
+        detaxes[0] = packaxis
+
+        #pixel axis need to be changed if pixel resolution is not 1
+        if pixel_step != 1:
+            pixelAxis = detaxes[2]
+            npixelspertube = pixelAxis.size()
+            pixelAxis = histogram.axis(
+                'pixelID',
+                boundaries = range(0, npixelspertube+1, pixel_step),
+                )
+            detaxes[2] = pixelAxis
+
         h = histogram.histogram(
             'I(pdpE)',
             detaxes + [E_axis],

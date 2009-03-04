@@ -29,6 +29,11 @@ class Application(base):
         E_params = Tuple( 'E', default = '-50,50,1.' )
         E_params.meta['tip'] = "energy bin parameters (begin, end, step). units: meV"
 
+        pack_params = Tuple( 'p', default = '1,115' )
+        pack_params.meta['tip'] = 'pack parameters (begin, end)'
+
+        pixel_step = pinv.int( 'pixel-resolution', default = '1' )
+
         ARCSxml = pinv.str('x', default = "ARCS.xml")
         ARCSxml.meta['tip'] = "ARCS instrument xml"
 
@@ -44,9 +49,11 @@ class Application(base):
     def build_args(self):
         ARCSxml = self.inventory.ARCSxml
         E_params = self.inventory.E_params
+        pack_params = self.inventory.pack_params
+        pixel_step = self.inventory.pixel_step
         Ei = self.inventory.Ei
         emission_time = self.inventory.emission_time
-        return ARCSxml, E_params, Ei, emission_time
+        return ARCSxml, E_params, pack_params, pixel_step, Ei, emission_time
         
 
     def _defaults(self):

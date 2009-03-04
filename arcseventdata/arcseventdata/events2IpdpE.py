@@ -22,8 +22,15 @@ def events2IpdpE(events, n, IpdpE, Ei, pixelpositions,
     assert len(axes[1].binCenters()) == 8
     assert axes[1].binCenters()[0] == 0
     assert axes[1].binCenters()[-1] == 7
+
     assert axes[2].name() == 'pixelID'
-    assert len(axes[2].binCenters()) in [128, 256]
+    pixelIDs = IpdpE.pixelID
+    npixelbinsspertube = len(pixelIDs)
+    assert 256 % npixelbinsspertube == 0
+    pixelStep = pixelIDs[1]-pixelIDs[0]
+    npixelspertube = npixelbinsspertube * pixelStep
+
+    ntubesperpack = 8
 
     assert axes[3].name() == 'energy'
     E_axis = axes[3]
@@ -32,18 +39,34 @@ def events2IpdpE(events, n, IpdpE, Ei, pixelpositions,
     E_step = E_boundaries[1] - E_boundaries[0]
     E_end = E_boundaries[-1]
 
-    ntotpixels = len( pixelpositions )
+    ntotpixelbins = IpdpE.size() / E_axis.size()
+
+    #make sure pack is continuous
+    packs = IpdpE.detectorpackID
+    for i in range(len(packs)-1):
+        assert packs[i] + 1 == packs[i+1]
+        continue
+    startpack = packs[0]
+    assert startpack > 0, "pack should start at 1: %s" % startpack
+
+    # 
+    startpixelindex = (startpack-1)*ntubesperpack*npixelspertube
+    endpixelindex = startpixelindex + ntotpixelbins*pixelStep
+
+    maxpixelindex = endpixelindex
+
+    #
     from numpyext import getdataptr
     pixelpositions = getdataptr( pixelpositions )
     
     import arcseventdata as binding
     return binding.events2IpixE_numpyarray(
         events, n,
-        0, ntotpixels, 1,
+        startpixelindex, endpixelindex, pixelStep,
         E_begin, E_end, E_step,
         IpdpE.data().storage().asNumarray(),
         Ei,
-        pixelpositions, ntotpixels, tofUnit, mod2sample,
+        pixelpositions, maxpixelindex, tofUnit, mod2sample,
         emission_time)
 
 
