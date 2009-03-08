@@ -52,6 +52,7 @@ EXPORT_PYTHON_MODULES = \
 	events2Itof.py \
 	events2Idspacing.py \
 	getpixelinfo.py \
+	getpixelsizes.py \
 	histogramFrom2colascii.py \
 	ihkleutils.py \
 	longpixelID.py \
@@ -63,7 +64,6 @@ EXPORT_PYTHON_MODULES = \
 	normalize_ihkle.py \
 	pixelpositions2angles.py \
 	read2colascii.py \
-	solidangles.py \
 	units.py \
 	__init__.py \
 	_getinstrumentinfo.py \
