@@ -131,6 +131,12 @@ class Idpt2Spe_a(ParallelComponent, AbstractIdpt2Spe):
         # make sure solid angle histogram does not contain 0.0
         self._checkSolidAngleHist( solidAngleHist )
 
+        # for debug
+        import histogram.hdf as hh, os
+        filename = 'solidangle.h5'
+        if os.path.exists(filename): os.remove(filename)
+        hh.dump(solidAngleHist, filename, '/', 'c')
+
         #normalize
         for e in sphiEHist.axisFromName('energy').binCenters():
             slice = sphiEHist[(),e].copy()
