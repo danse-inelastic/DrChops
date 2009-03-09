@@ -51,6 +51,8 @@ class Application( base ):
             infos = getinstrumentinfo(self.inventory.ARCSxml)
             phi_p = infos['phis']
             psi_p = infos['psis']
+            dphi_p = infos['dphis']
+            dpsi_p = infos['dpsis']
             
             import numpy
             phi_p.I[:] = numpy.nan_to_num( phi_p.I )
@@ -58,7 +60,7 @@ class Application( base ):
             
             #convert to mslice file
             import arcseventdata
-            arcseventdata.write_mslice_files( h, phi_p, psi_p, spef, phxf )
+            arcseventdata.write_mslice_files( h, phi_p, psi_p, dphi_p, dpsi_p, spef, phxf )
             
         return
 

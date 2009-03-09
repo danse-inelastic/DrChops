@@ -45,7 +45,7 @@ class Writer(object ):
         return
 
 
-    def write_phx( self, sa_p, psi_p, filename ):
+    def write_phx( self, sa_p, psi_p, dphi_p, dpsi_p, filename ):
         """write_phx( sa_p, psi_p, filename ) --> write phx file for mslice
         filename: output filename in mslice spe format
         sa_p: scattering_angle( ..., pix ) histogram
@@ -67,18 +67,25 @@ class Writer(object ):
         col1 = 10.0; col2 = 0.0;
         counter = 0
         
-        sa_arr = N.array( sa_p.data().storage().asNumarray(), copy = 0 )
+        sa_arr = N.array( sa_p.I, copy = 0 )
         sa_arr.shape = -1,
 
-        psi_arr = N.array( psi_p.data().storage().asNumarray(), copy = 0 )
+        psi_arr = N.array( psi_p.I, copy = 0 )
         psi_arr.shape = -1,
+
+        dphi_arr = N.array( dphi_p.I, copy=0)
+        dphi_arr.shape = -1,
+
+        dpsi_arr = N.array( dpsi_p.I, copy=0)
+        dpsi_arr.shape = -1,
+        
         
         for i in range(size):
             counter += 1
             twotheta = sa_arr[i]
             psi = psi_arr[i]
-            dtwotheta = 0.5 #  ???
-            dpsi = 2.0 # ???
+            dtwotheta = dphi_arr[i]
+            dpsi = dpsi_arr[i]
             f.write( fmtstr % ( col1, col2, twotheta, psi, dtwotheta, dpsi, counter ) )
             continue
         return

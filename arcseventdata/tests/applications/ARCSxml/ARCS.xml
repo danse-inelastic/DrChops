@@ -482,7 +482,7 @@
   Its width is the 3rd dimension.
   
             -->
-            <block width="0.217424*m" height="0.277368*m" thickness="0.0254*m"/>
+            <block width="0.217424*m" height="0.377444*m" thickness="0.0254*m"/>
             </Shape>
 
             <Detector name="det0" pressure="1.01325e+06*m**-1*kg*s**-2" holdOff="1e-06*s" deadTime="1e-05*s" guid="212" type="He3 LPSD" id="0">
@@ -497,7 +497,7 @@
     - height
   
                 -->
-                <cylinder height="0.277368*m" radius="0.0127*m"/>
+                <cylinder height="0.377444*m" radius="0.0127*m"/>
                 </Shape>
 
                 <Pixel solidAngle="1.0" guid="213" name="pixel0" id="0">
@@ -512,7 +512,7 @@
     - height
   
                     -->
-                    <cylinder height="0.00216694*m" radius="0.0127*m"/>
+                    <cylinder height="0.00294878*m" radius="0.0127*m"/>
                     </Shape>
                 </Pixel>
 
@@ -644,134 +644,134 @@
                 <Copy guid="339" name="pixel126" reference="213" id="126" />
                 <Copy guid="340" name="pixel127" reference="213" id="127" />
                 <LocalGeometer registry-coordinate-system="InstrumentScientist">
-                    <Register name="pixel0" position="(0*m, 0*m, -0.137601*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel1" position="(0*m, 0*m, -0.135434*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel2" position="(0*m, 0*m, -0.133267*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel3" position="(0*m, 0*m, -0.1311*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel4" position="(0*m, 0*m, -0.128933*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel5" position="(0*m, 0*m, -0.126766*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel6" position="(0*m, 0*m, -0.124599*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel7" position="(0*m, 0*m, -0.122432*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel8" position="(0*m, 0*m, -0.120265*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel9" position="(0*m, 0*m, -0.118098*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel10" position="(0*m, 0*m, -0.115931*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel11" position="(0*m, 0*m, -0.113764*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel12" position="(0*m, 0*m, -0.111597*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel13" position="(0*m, 0*m, -0.10943*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel14" position="(0*m, 0*m, -0.107263*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel15" position="(0*m, 0*m, -0.105096*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel16" position="(0*m, 0*m, -0.10293*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel17" position="(0*m, 0*m, -0.100763*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel18" position="(0*m, 0*m, -0.0985957*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel19" position="(0*m, 0*m, -0.0964287*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel20" position="(0*m, 0*m, -0.0942618*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel21" position="(0*m, 0*m, -0.0920948*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel22" position="(0*m, 0*m, -0.0899279*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel23" position="(0*m, 0*m, -0.087761*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel24" position="(0*m, 0*m, -0.085594*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel25" position="(0*m, 0*m, -0.0834271*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel26" position="(0*m, 0*m, -0.0812602*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel27" position="(0*m, 0*m, -0.0790932*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel28" position="(0*m, 0*m, -0.0769263*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel29" position="(0*m, 0*m, -0.0747593*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel30" position="(0*m, 0*m, -0.0725924*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel31" position="(0*m, 0*m, -0.0704255*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel32" position="(0*m, 0*m, -0.0682585*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel33" position="(0*m, 0*m, -0.0660916*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel34" position="(0*m, 0*m, -0.0639247*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel35" position="(0*m, 0*m, -0.0617577*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel36" position="(0*m, 0*m, -0.0595908*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel37" position="(0*m, 0*m, -0.0574238*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel38" position="(0*m, 0*m, -0.0552569*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel39" position="(0*m, 0*m, -0.05309*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel40" position="(0*m, 0*m, -0.050923*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel41" position="(0*m, 0*m, -0.0487561*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel42" position="(0*m, 0*m, -0.0465892*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel43" position="(0*m, 0*m, -0.0444222*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel44" position="(0*m, 0*m, -0.0422553*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel45" position="(0*m, 0*m, -0.0400883*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel46" position="(0*m, 0*m, -0.0379214*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel47" position="(0*m, 0*m, -0.0357545*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel48" position="(0*m, 0*m, -0.0335875*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel49" position="(0*m, 0*m, -0.0314206*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel50" position="(0*m, 0*m, -0.0292537*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel51" position="(0*m, 0*m, -0.0270867*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel52" position="(0*m, 0*m, -0.0249198*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel53" position="(0*m, 0*m, -0.0227528*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel54" position="(0*m, 0*m, -0.0205859*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel55" position="(0*m, 0*m, -0.018419*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel56" position="(0*m, 0*m, -0.016252*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel57" position="(0*m, 0*m, -0.0140851*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel58" position="(0*m, 0*m, -0.0119182*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel59" position="(0*m, 0*m, -0.00975122*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel60" position="(0*m, 0*m, -0.00758428*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel61" position="(0*m, 0*m, -0.00541734*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel62" position="(0*m, 0*m, -0.00325041*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel63" position="(0*m, 0*m, -0.00108347*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel64" position="(0*m, 0*m, 0.00108347*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel65" position="(0*m, 0*m, 0.00325041*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel66" position="(0*m, 0*m, 0.00541734*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel67" position="(0*m, 0*m, 0.00758428*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel68" position="(0*m, 0*m, 0.00975122*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel69" position="(0*m, 0*m, 0.0119182*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel70" position="(0*m, 0*m, 0.0140851*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel71" position="(0*m, 0*m, 0.016252*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel72" position="(0*m, 0*m, 0.018419*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel73" position="(0*m, 0*m, 0.0205859*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel74" position="(0*m, 0*m, 0.0227528*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel75" position="(0*m, 0*m, 0.0249198*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel76" position="(0*m, 0*m, 0.0270867*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel77" position="(0*m, 0*m, 0.0292537*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel78" position="(0*m, 0*m, 0.0314206*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel79" position="(0*m, 0*m, 0.0335875*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel80" position="(0*m, 0*m, 0.0357545*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel81" position="(0*m, 0*m, 0.0379214*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel82" position="(0*m, 0*m, 0.0400883*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel83" position="(0*m, 0*m, 0.0422553*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel84" position="(0*m, 0*m, 0.0444222*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel85" position="(0*m, 0*m, 0.0465892*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel86" position="(0*m, 0*m, 0.0487561*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel87" position="(0*m, 0*m, 0.050923*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel88" position="(0*m, 0*m, 0.05309*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel89" position="(0*m, 0*m, 0.0552569*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel90" position="(0*m, 0*m, 0.0574238*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel91" position="(0*m, 0*m, 0.0595908*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel92" position="(0*m, 0*m, 0.0617577*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel93" position="(0*m, 0*m, 0.0639247*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel94" position="(0*m, 0*m, 0.0660916*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel95" position="(0*m, 0*m, 0.0682585*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel96" position="(0*m, 0*m, 0.0704255*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel97" position="(0*m, 0*m, 0.0725924*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel98" position="(0*m, 0*m, 0.0747593*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel99" position="(0*m, 0*m, 0.0769263*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel100" position="(0*m, 0*m, 0.0790932*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel101" position="(0*m, 0*m, 0.0812602*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel102" position="(0*m, 0*m, 0.0834271*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel103" position="(0*m, 0*m, 0.085594*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel104" position="(0*m, 0*m, 0.087761*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel105" position="(0*m, 0*m, 0.0899279*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel106" position="(0*m, 0*m, 0.0920948*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel107" position="(0*m, 0*m, 0.0942618*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel108" position="(0*m, 0*m, 0.0964287*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel109" position="(0*m, 0*m, 0.0985957*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel110" position="(0*m, 0*m, 0.100763*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel111" position="(0*m, 0*m, 0.10293*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel112" position="(0*m, 0*m, 0.105096*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel113" position="(0*m, 0*m, 0.107263*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel114" position="(0*m, 0*m, 0.10943*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel115" position="(0*m, 0*m, 0.111597*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel116" position="(0*m, 0*m, 0.113764*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel117" position="(0*m, 0*m, 0.115931*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel118" position="(0*m, 0*m, 0.118098*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel119" position="(0*m, 0*m, 0.120265*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel120" position="(0*m, 0*m, 0.122432*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel121" position="(0*m, 0*m, 0.124599*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel122" position="(0*m, 0*m, 0.126766*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel123" position="(0*m, 0*m, 0.128933*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel124" position="(0*m, 0*m, 0.1311*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel125" position="(0*m, 0*m, 0.133267*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel126" position="(0*m, 0*m, 0.135434*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel127" position="(0*m, 0*m, 0.137601*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel0" position="(0*m, 0*m, -0.187248*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel1" position="(0*m, 0*m, -0.184299*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel2" position="(0*m, 0*m, -0.18135*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel3" position="(0*m, 0*m, -0.178401*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel4" position="(0*m, 0*m, -0.175452*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel5" position="(0*m, 0*m, -0.172504*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel6" position="(0*m, 0*m, -0.169555*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel7" position="(0*m, 0*m, -0.166606*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel8" position="(0*m, 0*m, -0.163657*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel9" position="(0*m, 0*m, -0.160709*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel10" position="(0*m, 0*m, -0.15776*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel11" position="(0*m, 0*m, -0.154811*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel12" position="(0*m, 0*m, -0.151862*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel13" position="(0*m, 0*m, -0.148913*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel14" position="(0*m, 0*m, -0.145965*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel15" position="(0*m, 0*m, -0.143016*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel16" position="(0*m, 0*m, -0.140067*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel17" position="(0*m, 0*m, -0.137118*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel18" position="(0*m, 0*m, -0.13417*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel19" position="(0*m, 0*m, -0.131221*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel20" position="(0*m, 0*m, -0.128272*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel21" position="(0*m, 0*m, -0.125323*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel22" position="(0*m, 0*m, -0.122374*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel23" position="(0*m, 0*m, -0.119426*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel24" position="(0*m, 0*m, -0.116477*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel25" position="(0*m, 0*m, -0.113528*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel26" position="(0*m, 0*m, -0.110579*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel27" position="(0*m, 0*m, -0.107631*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel28" position="(0*m, 0*m, -0.104682*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel29" position="(0*m, 0*m, -0.101733*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel30" position="(0*m, 0*m, -0.0987842*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel31" position="(0*m, 0*m, -0.0958354*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel32" position="(0*m, 0*m, -0.0928866*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel33" position="(0*m, 0*m, -0.0899378*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel34" position="(0*m, 0*m, -0.086989*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel35" position="(0*m, 0*m, -0.0840403*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel36" position="(0*m, 0*m, -0.0810915*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel37" position="(0*m, 0*m, -0.0781427*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel38" position="(0*m, 0*m, -0.0751939*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel39" position="(0*m, 0*m, -0.0722451*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel40" position="(0*m, 0*m, -0.0692964*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel41" position="(0*m, 0*m, -0.0663476*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel42" position="(0*m, 0*m, -0.0633988*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel43" position="(0*m, 0*m, -0.06045*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel44" position="(0*m, 0*m, -0.0575012*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel45" position="(0*m, 0*m, -0.0545525*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel46" position="(0*m, 0*m, -0.0516037*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel47" position="(0*m, 0*m, -0.0486549*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel48" position="(0*m, 0*m, -0.0457061*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel49" position="(0*m, 0*m, -0.0427573*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel50" position="(0*m, 0*m, -0.0398085*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel51" position="(0*m, 0*m, -0.0368598*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel52" position="(0*m, 0*m, -0.033911*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel53" position="(0*m, 0*m, -0.0309622*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel54" position="(0*m, 0*m, -0.0280134*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel55" position="(0*m, 0*m, -0.0250646*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel56" position="(0*m, 0*m, -0.0221159*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel57" position="(0*m, 0*m, -0.0191671*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel58" position="(0*m, 0*m, -0.0162183*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel59" position="(0*m, 0*m, -0.0132695*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel60" position="(0*m, 0*m, -0.0103207*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel61" position="(0*m, 0*m, -0.00737195*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel62" position="(0*m, 0*m, -0.00442317*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel63" position="(0*m, 0*m, -0.00147439*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel64" position="(0*m, 0*m, 0.00147439*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel65" position="(0*m, 0*m, 0.00442317*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel66" position="(0*m, 0*m, 0.00737195*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel67" position="(0*m, 0*m, 0.0103207*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel68" position="(0*m, 0*m, 0.0132695*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel69" position="(0*m, 0*m, 0.0162183*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel70" position="(0*m, 0*m, 0.0191671*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel71" position="(0*m, 0*m, 0.0221159*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel72" position="(0*m, 0*m, 0.0250646*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel73" position="(0*m, 0*m, 0.0280134*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel74" position="(0*m, 0*m, 0.0309622*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel75" position="(0*m, 0*m, 0.033911*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel76" position="(0*m, 0*m, 0.0368598*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel77" position="(0*m, 0*m, 0.0398085*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel78" position="(0*m, 0*m, 0.0427573*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel79" position="(0*m, 0*m, 0.0457061*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel80" position="(0*m, 0*m, 0.0486549*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel81" position="(0*m, 0*m, 0.0516037*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel82" position="(0*m, 0*m, 0.0545525*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel83" position="(0*m, 0*m, 0.0575012*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel84" position="(0*m, 0*m, 0.06045*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel85" position="(0*m, 0*m, 0.0633988*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel86" position="(0*m, 0*m, 0.0663476*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel87" position="(0*m, 0*m, 0.0692964*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel88" position="(0*m, 0*m, 0.0722451*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel89" position="(0*m, 0*m, 0.0751939*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel90" position="(0*m, 0*m, 0.0781427*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel91" position="(0*m, 0*m, 0.0810915*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel92" position="(0*m, 0*m, 0.0840403*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel93" position="(0*m, 0*m, 0.086989*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel94" position="(0*m, 0*m, 0.0899378*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel95" position="(0*m, 0*m, 0.0928866*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel96" position="(0*m, 0*m, 0.0958354*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel97" position="(0*m, 0*m, 0.0987842*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel98" position="(0*m, 0*m, 0.101733*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel99" position="(0*m, 0*m, 0.104682*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel100" position="(0*m, 0*m, 0.107631*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel101" position="(0*m, 0*m, 0.110579*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel102" position="(0*m, 0*m, 0.113528*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel103" position="(0*m, 0*m, 0.116477*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel104" position="(0*m, 0*m, 0.119426*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel105" position="(0*m, 0*m, 0.122374*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel106" position="(0*m, 0*m, 0.125323*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel107" position="(0*m, 0*m, 0.128272*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel108" position="(0*m, 0*m, 0.131221*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel109" position="(0*m, 0*m, 0.13417*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel110" position="(0*m, 0*m, 0.137118*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel111" position="(0*m, 0*m, 0.140067*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel112" position="(0*m, 0*m, 0.143016*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel113" position="(0*m, 0*m, 0.145965*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel114" position="(0*m, 0*m, 0.148913*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel115" position="(0*m, 0*m, 0.151862*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel116" position="(0*m, 0*m, 0.154811*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel117" position="(0*m, 0*m, 0.15776*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel118" position="(0*m, 0*m, 0.160709*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel119" position="(0*m, 0*m, 0.163657*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel120" position="(0*m, 0*m, 0.166606*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel121" position="(0*m, 0*m, 0.169555*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel122" position="(0*m, 0*m, 0.172504*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel123" position="(0*m, 0*m, 0.175452*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel124" position="(0*m, 0*m, 0.178401*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel125" position="(0*m, 0*m, 0.18135*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel126" position="(0*m, 0*m, 0.184299*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel127" position="(0*m, 0*m, 0.187248*m)" orientation="(0.0, 0.0, 0.0)"/>
                 </LocalGeometer>
             </Detector>
 
@@ -808,7 +808,7 @@
   Its width is the 3rd dimension.
   
             -->
-            <block width="0.217424*m" height="0.377444*m" thickness="0.0254*m"/>
+            <block width="0.217424*m" height="0.277368*m" thickness="0.0254*m"/>
             </Shape>
 
             <Detector name="det0" pressure="1.01325e+06*m**-1*kg*s**-2" holdOff="1e-06*s" deadTime="1e-05*s" guid="349" type="He3 LPSD" id="0">
@@ -823,7 +823,7 @@
     - height
   
                 -->
-                <cylinder height="0.377444*m" radius="0.0127*m"/>
+                <cylinder height="0.277368*m" radius="0.0127*m"/>
                 </Shape>
 
                 <Pixel solidAngle="1.0" guid="350" name="pixel0" id="0">
@@ -838,7 +838,7 @@
     - height
   
                     -->
-                    <cylinder height="0.00294878*m" radius="0.0127*m"/>
+                    <cylinder height="0.00216694*m" radius="0.0127*m"/>
                     </Shape>
                 </Pixel>
 
@@ -970,134 +970,134 @@
                 <Copy guid="476" name="pixel126" reference="350" id="126" />
                 <Copy guid="477" name="pixel127" reference="350" id="127" />
                 <LocalGeometer registry-coordinate-system="InstrumentScientist">
-                    <Register name="pixel0" position="(0*m, 0*m, -0.187248*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel1" position="(0*m, 0*m, -0.184299*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel2" position="(0*m, 0*m, -0.18135*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel3" position="(0*m, 0*m, -0.178401*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel4" position="(0*m, 0*m, -0.175452*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel5" position="(0*m, 0*m, -0.172504*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel6" position="(0*m, 0*m, -0.169555*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel7" position="(0*m, 0*m, -0.166606*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel8" position="(0*m, 0*m, -0.163657*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel9" position="(0*m, 0*m, -0.160709*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel10" position="(0*m, 0*m, -0.15776*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel11" position="(0*m, 0*m, -0.154811*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel12" position="(0*m, 0*m, -0.151862*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel13" position="(0*m, 0*m, -0.148913*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel14" position="(0*m, 0*m, -0.145965*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel15" position="(0*m, 0*m, -0.143016*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel16" position="(0*m, 0*m, -0.140067*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel17" position="(0*m, 0*m, -0.137118*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel18" position="(0*m, 0*m, -0.13417*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel19" position="(0*m, 0*m, -0.131221*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel20" position="(0*m, 0*m, -0.128272*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel21" position="(0*m, 0*m, -0.125323*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel22" position="(0*m, 0*m, -0.122374*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel23" position="(0*m, 0*m, -0.119426*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel24" position="(0*m, 0*m, -0.116477*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel25" position="(0*m, 0*m, -0.113528*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel26" position="(0*m, 0*m, -0.110579*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel27" position="(0*m, 0*m, -0.107631*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel28" position="(0*m, 0*m, -0.104682*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel29" position="(0*m, 0*m, -0.101733*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel30" position="(0*m, 0*m, -0.0987842*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel31" position="(0*m, 0*m, -0.0958354*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel32" position="(0*m, 0*m, -0.0928866*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel33" position="(0*m, 0*m, -0.0899378*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel34" position="(0*m, 0*m, -0.086989*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel35" position="(0*m, 0*m, -0.0840403*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel36" position="(0*m, 0*m, -0.0810915*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel37" position="(0*m, 0*m, -0.0781427*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel38" position="(0*m, 0*m, -0.0751939*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel39" position="(0*m, 0*m, -0.0722451*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel40" position="(0*m, 0*m, -0.0692964*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel41" position="(0*m, 0*m, -0.0663476*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel42" position="(0*m, 0*m, -0.0633988*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel43" position="(0*m, 0*m, -0.06045*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel44" position="(0*m, 0*m, -0.0575012*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel45" position="(0*m, 0*m, -0.0545525*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel46" position="(0*m, 0*m, -0.0516037*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel47" position="(0*m, 0*m, -0.0486549*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel48" position="(0*m, 0*m, -0.0457061*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel49" position="(0*m, 0*m, -0.0427573*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel50" position="(0*m, 0*m, -0.0398085*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel51" position="(0*m, 0*m, -0.0368598*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel52" position="(0*m, 0*m, -0.033911*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel53" position="(0*m, 0*m, -0.0309622*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel54" position="(0*m, 0*m, -0.0280134*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel55" position="(0*m, 0*m, -0.0250646*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel56" position="(0*m, 0*m, -0.0221159*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel57" position="(0*m, 0*m, -0.0191671*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel58" position="(0*m, 0*m, -0.0162183*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel59" position="(0*m, 0*m, -0.0132695*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel60" position="(0*m, 0*m, -0.0103207*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel61" position="(0*m, 0*m, -0.00737195*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel62" position="(0*m, 0*m, -0.00442317*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel63" position="(0*m, 0*m, -0.00147439*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel64" position="(0*m, 0*m, 0.00147439*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel65" position="(0*m, 0*m, 0.00442317*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel66" position="(0*m, 0*m, 0.00737195*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel67" position="(0*m, 0*m, 0.0103207*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel68" position="(0*m, 0*m, 0.0132695*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel69" position="(0*m, 0*m, 0.0162183*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel70" position="(0*m, 0*m, 0.0191671*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel71" position="(0*m, 0*m, 0.0221159*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel72" position="(0*m, 0*m, 0.0250646*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel73" position="(0*m, 0*m, 0.0280134*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel74" position="(0*m, 0*m, 0.0309622*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel75" position="(0*m, 0*m, 0.033911*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel76" position="(0*m, 0*m, 0.0368598*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel77" position="(0*m, 0*m, 0.0398085*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel78" position="(0*m, 0*m, 0.0427573*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel79" position="(0*m, 0*m, 0.0457061*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel80" position="(0*m, 0*m, 0.0486549*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel81" position="(0*m, 0*m, 0.0516037*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel82" position="(0*m, 0*m, 0.0545525*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel83" position="(0*m, 0*m, 0.0575012*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel84" position="(0*m, 0*m, 0.06045*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel85" position="(0*m, 0*m, 0.0633988*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel86" position="(0*m, 0*m, 0.0663476*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel87" position="(0*m, 0*m, 0.0692964*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel88" position="(0*m, 0*m, 0.0722451*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel89" position="(0*m, 0*m, 0.0751939*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel90" position="(0*m, 0*m, 0.0781427*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel91" position="(0*m, 0*m, 0.0810915*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel92" position="(0*m, 0*m, 0.0840403*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel93" position="(0*m, 0*m, 0.086989*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel94" position="(0*m, 0*m, 0.0899378*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel95" position="(0*m, 0*m, 0.0928866*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel96" position="(0*m, 0*m, 0.0958354*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel97" position="(0*m, 0*m, 0.0987842*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel98" position="(0*m, 0*m, 0.101733*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel99" position="(0*m, 0*m, 0.104682*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel100" position="(0*m, 0*m, 0.107631*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel101" position="(0*m, 0*m, 0.110579*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel102" position="(0*m, 0*m, 0.113528*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel103" position="(0*m, 0*m, 0.116477*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel104" position="(0*m, 0*m, 0.119426*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel105" position="(0*m, 0*m, 0.122374*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel106" position="(0*m, 0*m, 0.125323*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel107" position="(0*m, 0*m, 0.128272*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel108" position="(0*m, 0*m, 0.131221*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel109" position="(0*m, 0*m, 0.13417*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel110" position="(0*m, 0*m, 0.137118*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel111" position="(0*m, 0*m, 0.140067*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel112" position="(0*m, 0*m, 0.143016*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel113" position="(0*m, 0*m, 0.145965*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel114" position="(0*m, 0*m, 0.148913*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel115" position="(0*m, 0*m, 0.151862*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel116" position="(0*m, 0*m, 0.154811*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel117" position="(0*m, 0*m, 0.15776*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel118" position="(0*m, 0*m, 0.160709*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel119" position="(0*m, 0*m, 0.163657*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel120" position="(0*m, 0*m, 0.166606*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel121" position="(0*m, 0*m, 0.169555*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel122" position="(0*m, 0*m, 0.172504*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel123" position="(0*m, 0*m, 0.175452*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel124" position="(0*m, 0*m, 0.178401*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel125" position="(0*m, 0*m, 0.18135*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel126" position="(0*m, 0*m, 0.184299*m)" orientation="(0.0, 0.0, 0.0)"/>
-                    <Register name="pixel127" position="(0*m, 0*m, 0.187248*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel0" position="(0*m, 0*m, -0.137601*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel1" position="(0*m, 0*m, -0.135434*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel2" position="(0*m, 0*m, -0.133267*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel3" position="(0*m, 0*m, -0.1311*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel4" position="(0*m, 0*m, -0.128933*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel5" position="(0*m, 0*m, -0.126766*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel6" position="(0*m, 0*m, -0.124599*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel7" position="(0*m, 0*m, -0.122432*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel8" position="(0*m, 0*m, -0.120265*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel9" position="(0*m, 0*m, -0.118098*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel10" position="(0*m, 0*m, -0.115931*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel11" position="(0*m, 0*m, -0.113764*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel12" position="(0*m, 0*m, -0.111597*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel13" position="(0*m, 0*m, -0.10943*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel14" position="(0*m, 0*m, -0.107263*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel15" position="(0*m, 0*m, -0.105096*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel16" position="(0*m, 0*m, -0.10293*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel17" position="(0*m, 0*m, -0.100763*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel18" position="(0*m, 0*m, -0.0985957*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel19" position="(0*m, 0*m, -0.0964287*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel20" position="(0*m, 0*m, -0.0942618*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel21" position="(0*m, 0*m, -0.0920948*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel22" position="(0*m, 0*m, -0.0899279*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel23" position="(0*m, 0*m, -0.087761*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel24" position="(0*m, 0*m, -0.085594*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel25" position="(0*m, 0*m, -0.0834271*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel26" position="(0*m, 0*m, -0.0812602*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel27" position="(0*m, 0*m, -0.0790932*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel28" position="(0*m, 0*m, -0.0769263*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel29" position="(0*m, 0*m, -0.0747593*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel30" position="(0*m, 0*m, -0.0725924*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel31" position="(0*m, 0*m, -0.0704255*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel32" position="(0*m, 0*m, -0.0682585*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel33" position="(0*m, 0*m, -0.0660916*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel34" position="(0*m, 0*m, -0.0639247*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel35" position="(0*m, 0*m, -0.0617577*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel36" position="(0*m, 0*m, -0.0595908*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel37" position="(0*m, 0*m, -0.0574238*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel38" position="(0*m, 0*m, -0.0552569*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel39" position="(0*m, 0*m, -0.05309*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel40" position="(0*m, 0*m, -0.050923*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel41" position="(0*m, 0*m, -0.0487561*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel42" position="(0*m, 0*m, -0.0465892*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel43" position="(0*m, 0*m, -0.0444222*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel44" position="(0*m, 0*m, -0.0422553*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel45" position="(0*m, 0*m, -0.0400883*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel46" position="(0*m, 0*m, -0.0379214*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel47" position="(0*m, 0*m, -0.0357545*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel48" position="(0*m, 0*m, -0.0335875*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel49" position="(0*m, 0*m, -0.0314206*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel50" position="(0*m, 0*m, -0.0292537*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel51" position="(0*m, 0*m, -0.0270867*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel52" position="(0*m, 0*m, -0.0249198*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel53" position="(0*m, 0*m, -0.0227528*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel54" position="(0*m, 0*m, -0.0205859*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel55" position="(0*m, 0*m, -0.018419*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel56" position="(0*m, 0*m, -0.016252*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel57" position="(0*m, 0*m, -0.0140851*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel58" position="(0*m, 0*m, -0.0119182*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel59" position="(0*m, 0*m, -0.00975122*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel60" position="(0*m, 0*m, -0.00758428*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel61" position="(0*m, 0*m, -0.00541734*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel62" position="(0*m, 0*m, -0.00325041*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel63" position="(0*m, 0*m, -0.00108347*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel64" position="(0*m, 0*m, 0.00108347*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel65" position="(0*m, 0*m, 0.00325041*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel66" position="(0*m, 0*m, 0.00541734*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel67" position="(0*m, 0*m, 0.00758428*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel68" position="(0*m, 0*m, 0.00975122*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel69" position="(0*m, 0*m, 0.0119182*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel70" position="(0*m, 0*m, 0.0140851*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel71" position="(0*m, 0*m, 0.016252*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel72" position="(0*m, 0*m, 0.018419*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel73" position="(0*m, 0*m, 0.0205859*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel74" position="(0*m, 0*m, 0.0227528*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel75" position="(0*m, 0*m, 0.0249198*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel76" position="(0*m, 0*m, 0.0270867*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel77" position="(0*m, 0*m, 0.0292537*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel78" position="(0*m, 0*m, 0.0314206*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel79" position="(0*m, 0*m, 0.0335875*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel80" position="(0*m, 0*m, 0.0357545*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel81" position="(0*m, 0*m, 0.0379214*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel82" position="(0*m, 0*m, 0.0400883*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel83" position="(0*m, 0*m, 0.0422553*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel84" position="(0*m, 0*m, 0.0444222*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel85" position="(0*m, 0*m, 0.0465892*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel86" position="(0*m, 0*m, 0.0487561*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel87" position="(0*m, 0*m, 0.050923*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel88" position="(0*m, 0*m, 0.05309*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel89" position="(0*m, 0*m, 0.0552569*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel90" position="(0*m, 0*m, 0.0574238*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel91" position="(0*m, 0*m, 0.0595908*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel92" position="(0*m, 0*m, 0.0617577*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel93" position="(0*m, 0*m, 0.0639247*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel94" position="(0*m, 0*m, 0.0660916*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel95" position="(0*m, 0*m, 0.0682585*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel96" position="(0*m, 0*m, 0.0704255*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel97" position="(0*m, 0*m, 0.0725924*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel98" position="(0*m, 0*m, 0.0747593*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel99" position="(0*m, 0*m, 0.0769263*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel100" position="(0*m, 0*m, 0.0790932*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel101" position="(0*m, 0*m, 0.0812602*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel102" position="(0*m, 0*m, 0.0834271*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel103" position="(0*m, 0*m, 0.085594*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel104" position="(0*m, 0*m, 0.087761*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel105" position="(0*m, 0*m, 0.0899279*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel106" position="(0*m, 0*m, 0.0920948*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel107" position="(0*m, 0*m, 0.0942618*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel108" position="(0*m, 0*m, 0.0964287*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel109" position="(0*m, 0*m, 0.0985957*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel110" position="(0*m, 0*m, 0.100763*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel111" position="(0*m, 0*m, 0.10293*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel112" position="(0*m, 0*m, 0.105096*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel113" position="(0*m, 0*m, 0.107263*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel114" position="(0*m, 0*m, 0.10943*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel115" position="(0*m, 0*m, 0.111597*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel116" position="(0*m, 0*m, 0.113764*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel117" position="(0*m, 0*m, 0.115931*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel118" position="(0*m, 0*m, 0.118098*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel119" position="(0*m, 0*m, 0.120265*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel120" position="(0*m, 0*m, 0.122432*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel121" position="(0*m, 0*m, 0.124599*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel122" position="(0*m, 0*m, 0.126766*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel123" position="(0*m, 0*m, 0.128933*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel124" position="(0*m, 0*m, 0.1311*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel125" position="(0*m, 0*m, 0.133267*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel126" position="(0*m, 0*m, 0.135434*m)" orientation="(0.0, 0.0, 0.0)"/>
+                    <Register name="pixel127" position="(0*m, 0*m, 0.137601*m)" orientation="(0.0, 0.0, 0.0)"/>
                 </LocalGeometer>
             </Detector>
 
@@ -1297,7 +1297,7 @@
 <!-- version-->
 <!-- $Id$-->
 
-<!-- Generated automatically by Renderer on Wed Jan 14 10:05:40 2009-->
+<!-- Generated automatically by Renderer on Wed Mar  4 11:42:56 2009-->
 
 <!-- End of file -->
-<!-- created by makeARCSxml.py -short2="10*atm, 128, 0.5*inch, 10.92*inch, 0.08*inch" -long="10*atm, 128, 0.5*inch, 38.06*inch, 0.08*inch" -detconfigfile="/SNS/users/lj7/DrChops-1.3pre1-dev/src/instrument/trunk/share/ARCS/ARCS_pixel_positions_small.txt" -short1="10*atm, 128, 0.5*inch, 14.86*inch, 0.08*inch" -->
+<!-- created by makeARCSxml.py -short2="10*atm, 128, 0.5*inch, 14.86*inch, 0.08*inch" -long="10*atm, 128, 0.5*inch, 38.06*inch, 0.08*inch" -detconfigfile="/SNS/users/lj7/DrChops-1.3pre1-dev/src/instrument/trunk/share/ARCS/ARCS_pixel_positions_small.txt" -short1="10*atm, 128, 0.5*inch, 10.92*inch, 0.08*inch" -->

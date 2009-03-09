@@ -59,11 +59,11 @@ def getpixelinfo(
 
     # dphi
     dphi_p = histogram.histogram('dphi_pdp', detaxes )
-    dphi_p.I[:] = dphi(zs, dists, radii, heights) * (180/N.pi)
+    dphi_p.I[:] = dphi(xs, ys, zs, dists, radii, heights) * (180/N.pi)
 
     # dpsi
     dpsi_p = histogram.histogram('dpsi_pdp', detaxes )
-    dpsi_p.I[:] = dpsi(ys, zs, radii, heights) * (180/N.pi)
+    dpsi_p.I[:] = dpsi(xs, ys, zs, dists, radii, heights) * (180/N.pi)
     
     return phi_p, psi_p, dist_p, solidangle_p, dphi_p, dpsi_p
 
@@ -102,7 +102,74 @@ def solidangle1(area, radius_square):
     return area/radius_square
 
 
-def dphi(z, r, radius, height):
+
+def dphi(x,y,z,r, radius, height):
+    # the vector along the direction of dphi
+    p1 = r**2/x -x
+    p2 = -y
+    p3 = -z
+    
+    xis0 = x<0.01
+    p1[xis0]=1
+    p2[xis0]=0
+    p3[xis0]=0
+
+    #normalize
+    tmp = N.sqrt(p1**2 + p2**2 + p3**2)
+    p1/=tmp; p2/=tmp; p3/=tmp
+    del tmp
+
+    # horizontal span of pixel
+    rxy = N.sqrt(x**2+y**2)
+    h1 = -2*radius*y/rxy
+    h2 = 2*radius*x/rxy
+    h3 = 0
+
+    # vertical span of pixel
+    v1=v2=0
+    v3 = height
+
+    # dot products. ignore zeros
+    dphi1 = N.abs(p1*h1+p2*h2)
+    dphi2 = N.abs(p3*v3)
+
+    return (dphi1+dphi2)/r
+
+
+def dpsi(x,y,z,r, radius, height):
+    # the vector along the direction of dpsi
+    p1 = 0
+    p2 = z
+    p3 = -y
+    
+    #normalize
+    tmp = N.sqrt(p2**2 + p3**2)
+    p2/=tmp; p3/=tmp
+    iszero = tmp<0.01
+    p2[iszero] = 1; p3[iszero] = 0
+    del tmp
+
+    # horizontal span of pixel
+    rxy = N.sqrt(x**2+y**2)
+    #h1 = -2*radius*y/rxy
+    h2 = 2*radius*x/rxy
+    h3 = 0
+
+    # vertical span of pixel
+    v1=v2=0
+    v3 = height
+
+    # dot products. ignore zeros
+    dpsi1 = N.abs(p2*h2)
+    dpsi2 = N.abs(p3*v3)
+
+    ret = (dpsi1+dpsi2)/r
+    ret[iszero] = maxdpsi
+    ret[ret>maxdpsi] = maxdpsi
+    return ret
+
+
+def dphi_impl1(z, r, radius, height):
     cost = N.sqrt(1-z*z/r**2)
     dphi1 = height * cost / r
     dphi2 = 2*radius / r
@@ -111,7 +178,7 @@ def dphi(z, r, radius, height):
 
 
 maxdpsi = N.pi/2 # quite random
-def dpsi(y, z, radius, height):
+def dpsi_impl2(y, z, radius, height):
     r2 = y**2 + z**2
     smallr2 = r2 < 1.e-2
     r2[smallr2] = 1.
@@ -127,18 +194,35 @@ def dpsi(y, z, radius, height):
 #tests
 def test_dphi():
     n = 5
+    x=y=z = N.ones(5) * 1.
+    r = N.ones(5) * 3.
+    radius = N.ones(5) * 0.02
+    height = N.ones(5) * 0.01
+    print dphi(x,y,z,r,radius,height)
+
+def test_dpsi():
+    n = 5
+    x = y = z = N.ones(5) * 1.
+    r = N.ones(5) * 3.
+    radius = N.ones(5) * 0.02
+    height = N.ones(5) * 0.01
+    print dpsi(x,y,z,r, radius,height)
+
+
+def test_dphi_impl1():
+    n = 5
     z = N.ones(5) * 1.
     r = N.ones(5) * 3.
     radius = N.ones(5) * 0.02
     height = N.ones(5) * 0.01
-    print dphi(z,r,radius,height)
+    print dphi_impl1(z,r,radius,height)
 
-def test_dpsi():
+def test_dpsi_impl1():
     n = 5
     y = z = N.ones(5) * 1.
     radius = N.ones(5) * 0.02
     height = N.ones(5) * 0.01
-    print dpsi(y,z,radius,height)
+    print dpsi_impl1(y,z,radius,height)
 
 
 def main():

@@ -185,10 +185,10 @@ def e2Itof(
 
 #from pixelpositions2angles import pixelpositions2angles
 
-def write_mslice_files( IpE, phi_p, psi_p, spefile, phxfile ):
+def write_mslice_files( IpE, phi_p, psi_p, dphi_p, dpsi_p, spefile, phxfile ):
     from mslice_spe_writer import writer
     writer.write_spe( IpE, phi_p, spefile )
-    writer.write_phx( phi_p, psi_p, phxfile )
+    writer.write_phx( phi_p, psi_p, dphi_p, dpsi_p, phxfile )
     return
 
 
