@@ -29,10 +29,10 @@ class ARCSReduceToMsliceFilesApp(base):
 
         import pyre.inventory
 
-        mainrun = pyre.inventory.str('r', default='ARCS_279')
+        mainrun = pyre.inventory.str('r', default='') #'ARCS_279')
         mainrun.meta['tip'] = 'The main run data directory'
 
-        mtrun = pyre.inventory.str('M', default='ARCS_289')
+        mtrun = pyre.inventory.str('M', default='') #'ARCS_289'
         mtrun.meta['tip'] = 'The emtpy can run data directory'
 
         mtratio = pyre.inventory.float('R', default=0.9)
@@ -47,6 +47,9 @@ class ARCSReduceToMsliceFilesApp(base):
 
         tof_params = NumberList('t', default=(3000,6000,5.))
         tof_params.meta['tip'] = 'Define tof axis: min, max, step'
+
+        pack_params = NumberList('pack', default=(1,115))
+        pixel_resolution = pyre.inventory.int('pixel-resolution', default=1)
 
         Ei = pyre.inventory.float('I', default=99)
         Ei.meta['tip'] = 'Nominal incident neutron energy for this vanadium calibration run'
@@ -70,6 +73,8 @@ class ARCSReduceToMsliceFilesApp(base):
         ARCSxml = self.ARCSxml
         E_params = self.E_params
         tof_params = self.tof_params
+        pack_params = self.pack_params
+        pixel_resolution = self.pixel_resolution
         Ei = self.Ei
         #lowerlimit, upperlimit = self.mask_counts_bracket
         calibration = self.calibration
@@ -87,6 +92,8 @@ class ARCSReduceToMsliceFilesApp(base):
             E_params = E_params,
             Ei = Ei,
             outputprefix = outputprefix,
+            pack_params = pack_params,
+            pixel_resolution = pixel_resolution,
             )
         return
 
@@ -108,6 +115,8 @@ class ARCSReduceToMsliceFilesApp(base):
         self.ARCSxml = self.inventory.ARCSxml
         self.E_params = self.inventory.E_params
         self.tof_params = self.inventory.tof_params
+        self.pack_params = self.inventory.pack_params
+        self.pixel_resolution = self.inventory.pixel_resolution
         self.Ei = self.inventory.Ei
         #lowerlimit, upperlimit = self.inventory.mask_counts_bracket
         #if lowerlimit == 0: lowerlimit = None

@@ -102,6 +102,7 @@ class ArcsreducevanadiumdataApp(base):
 
     def _init(self):
         base._init(self)
+        if  self._showHelpOnly: return
         calibration_output = self.inventory.calibration_output
         mask_output = self.mask_output
         outputs = [ calibration_output, mask_output ]

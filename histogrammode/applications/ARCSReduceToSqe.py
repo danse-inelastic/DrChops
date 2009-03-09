@@ -98,6 +98,7 @@ class ARCSReduceToSqeApp(base):
             spe_output = False,
             )
 
+        if self.mpiRank: return
         sqe_output = self.sqe_output
         from histogram.hdf import dump
         dump( sqe, sqe_output, '/', 'c' )
