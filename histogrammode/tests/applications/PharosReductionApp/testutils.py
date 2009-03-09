@@ -11,7 +11,7 @@ def test(appName = "PharosReductionApp", caseName = "fulltest"):
 
     getDataFiles()
 
-    os.system("%s.py"%appName)
+    if os.system("%s.py"%appName): raise RuntimeError, '%s failed' % appName
     
     compareS( "spehist.pkl", "spehist.pkl.%s"%caseName, "S(phi,E)" )
     compareS( "sqehist.pkl", "sqehist.pkl.%s"%caseName, "S(Q,E)" )

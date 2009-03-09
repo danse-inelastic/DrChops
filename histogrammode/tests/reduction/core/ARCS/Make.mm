@@ -14,7 +14,7 @@ PROJECT = reduction
 PACKAGE = tests
 
 PROJ_CLEAN += $(PROJ_CPPTESTS)
-PROJ_TIDY += *.pyc *.pkl
+PROJ_TIDY += *.pyc *.pkl *.h5 *.spe *.phx
 
 PROJ_PYTESTS = runalltestcases.py #alltests.py 
 PROJ_CPPTESTS = 

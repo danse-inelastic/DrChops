@@ -62,8 +62,8 @@ class Rebinner_TestCase(TestCase):
         axisX = axis( 'x', unit = 'meter', centers = arange( 0., 4.0, 1.0 ) )
 
         #create input histogram
-        inHist = histogram(name = 'in', axes = [axisX,])
         from numpy import array
+        inHist = histogram(name = 'in', axes = [axisX,])
         inHist[ () ] = array([1,1,1,1]), array([0,0,0,0])
                       
         #create axis y
@@ -106,7 +106,6 @@ class Rebinner_TestCase(TestCase):
 
         #create input histogram
         inHist = histogram('in',  [axisX,axisY])
-
         from numpy import array
         inHist[(), ()] =  array([[1]*R]*R), None
 
@@ -166,7 +165,7 @@ class Rebinner_TestCase(TestCase):
         axisX1 = axis( 'x1', arange(0., R, 1.) )
 
         #create axis y1
-        axisY1 = axis( 'y1', arange(0., R, 1.) )
+        axisY1 = axis( 'y1', arange(0., R, 2.) )
         
         #create output histogram
         outHist = histogram('out',  [axisX1,axisY1])
@@ -189,7 +188,7 @@ class Rebinner_TestCase(TestCase):
         #check output
         for x in axisX1.binCenters():
             for y in axisY1.binCenters():
-                self.assertEqual( outHist[x,y][0], y-x )
+                self.assertEqual( outHist[x,y][0], 2*(y-x) )
         return
     
 

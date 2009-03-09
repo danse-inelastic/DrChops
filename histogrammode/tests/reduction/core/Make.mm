@@ -13,8 +13,12 @@
 PROJECT = reduction
 PACKAGE = tests
 
+
+RECURSE_DIRS = \
+	ARCS \
+
 PROJ_CLEAN += $(PROJ_CPPTESTS)
-PROJ_TIDY += *.pyc *.pkl
+PROJ_TIDY += *.pyc *.pkl *.xml
 
 PROJ_PYTESTS = runalltestcases.py `#alltests.py 
 PROJ_CPPTESTS = 
@@ -26,6 +30,9 @@ PROJ_LIBRARIES = -L$(BLD_LIBDIR)
 #
 
 all: $(PROJ_TESTS)
+
+tidy::
+	BLD_ACTION="tidy" $(MM) recurse
 
 test:
 	for test in $(PROJ_TESTS) ; do $${test}; done

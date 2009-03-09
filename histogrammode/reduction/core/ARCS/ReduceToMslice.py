@@ -13,7 +13,9 @@
 
 
 import journal
-info = journal.info('reduction.core.ARCS.ReduceToMslice')
+jrnltag = 'reduction.core.ARCS.ReduceToMslice'
+info = journal.info(jrnltag)
+debug = journal.debug(jrnltag)
 
 try:
     import mpi
@@ -32,6 +34,8 @@ def reduce(
     tof_params = (3000,6000,5),
     E_params = (-60,60,1),
     Ei = 70, emission_time = 0,
+    pack_params = (1,115),
+    pixel_resolution = 1,
     ):
     '''
     rundir: directory of the ARCS run to be reduced
@@ -76,6 +80,8 @@ def reduce(
         E_params = E_params,
         Ei = calculated_ei/meV,
         emission_time = 0,
+        pack_params = pack_params,
+        pixel_resolution = pixel_resolution,
         )
 
     if mpiRank !=0 : return
@@ -85,17 +91,17 @@ def reduce(
     pdpefile = '%s-IpdpE.h5' % outputprefix
     hh.dump( ipdpE, pdpefile, '/', 'c' )
 
-    info.log('prepare to write mslice files')
-    
-    from arcseventdata import getinstrumentinfo
-    infos = getinstrumentinfo(ARCSxml)
-    phi_p = infos['phis']
-    psi_p = infos['psis']
-    
-    import numpy
-    phi_p.I[:] = numpy.nan_to_num( phi_p.I )
-    psi_p.I[:] = numpy.nan_to_num( psi_p.I )
+    write_mslice_files(outputprefix, ipdpE, ARCSxml, pack_params, pixel_resolution)
+    return
 
+
+
+def write_mslice_files(outputprefix, ipdpE, ARCSxml, pack_params, pixel_resolution):
+    info.log('prepare to write mslice files')
+
+    detaxes = ipdpE.axes()[:3]
+    phi_p, psi_p, dphi_p, dpsi_p = get_pixel_infos(ARCSxml, detaxes, pack_params, pixel_resolution)
+    
     prefix = outputprefix
     spef = '%s.spe' % prefix
     phxf = '%s.phx' % prefix
@@ -103,8 +109,45 @@ def reduce(
     #convert to mslice file
     import arcseventdata
     info.log('writing mslice files')
-    arcseventdata.write_mslice_files( ipdpE, phi_p, psi_p, spef, phxf )
+    debug.log('shapes=' + str( (ipdpE.shape(), phi_p.shape(), psi_p.shape())) )
+    arcseventdata.write_mslice_files( ipdpE, phi_p, psi_p, dphi_p, dpsi_p, spef, phxf )
     return
+
+
+def get_pixel_infos(ARCSxml, detaxes, pack_params, pixel_resolution):
+    # data for resolution=1
+    from arcseventdata import getinstrumentinfo
+    infos = getinstrumentinfo(ARCSxml)
+    phi_p1 = infos['phis'][pack_params, (), ()]
+    psi_p1 = infos['psis'][pack_params, (), ()]
+    dphi_p1 = infos['dphis'][pack_params, (), ()]
+    dpsi_p1 = infos['dpsis'][pack_params, (), ()]
+
+    import numpy
+    phi_p1.I[:] = numpy.nan_to_num( phi_p1.I )
+    psi_p1.I[:] = numpy.nan_to_num( psi_p1.I )
+
+    import histogram as H
+    phi_p = H.histogram('phi(pixel)', detaxes)
+    psi_p = H.histogram('psi(pixel)', detaxes)
+
+    pixels1 = phi_p1.pixelID
+    for pixelID in pixels1:
+        phi_p[(), (), pixelID] += phi_p1[(), (), int(pixelID)]
+        psi_p[(), (), pixelID] += psi_p1[(), (), int(pixelID)]
+        continue
+    phi_p /= pixel_resolution,0
+    psi_p /= pixel_resolution,0
+
+    # 
+    dphi_p = H.histogram('dphi(pixel)', detaxes)
+    dpsi_p = H.histogram('dpsi(pixel)', detaxes)
+    for pixelID in pixels1:
+        dphi_p[(), (), pixelID] += dphi_p1[(), (), int(pixelID)]
+        dpsi_p[(), (), pixelID] += dpsi_p1[(), (), int(pixelID)]
+        continue
+    return phi_p, psi_p, dphi_p, dpsi_p
+
 
 
 def mslice_output_filenames( prefix ):
@@ -123,6 +166,8 @@ def reduceToIpdpE(
     ARCSxml = 'ARCS.xml',
     E_params = (-60,60,1),
     Ei = 70, emission_time = 0,
+    pack_params = (1,115),
+    pixel_resolution = 1,
     ):
     '''
     rundir: directory of the ARCS run to be reduced
@@ -141,7 +186,7 @@ def reduceToIpdpE(
     nevents = getnumberofevents(eventdatafilename)
     info.log('constructing I(pdpE) for main run')
     ipdpE = toipdpE(
-        eventdatafilename, nevents, ARCSxml, E_params, Ei, emission_time)
+        eventdatafilename, nevents, ARCSxml, E_params, pack_params, pixel_resolution, Ei, emission_time)
 
     if mpiRank == 0:
         ipdpE = ipdpE.as_floattype()
@@ -157,7 +202,8 @@ def reduceToIpdpE(
         mtnevents = getnumberofevents(mteventdatafilename)
         mtipdpE = toipdpE(
             mteventdatafilename, mtnevents, ARCSxml,
-            E_params, Ei, emission_time)
+            E_params, pack_params, pixel_resolution,
+            Ei, emission_time)
 
         if mpiRank == 0:
             mtipdpE = mtipdpE.as_floattype()
@@ -178,6 +224,10 @@ def reduceToIpdpE(
     
     if calibration:
         info.log('calibrating')
+        # change resolution
+        if pixel_resolution != 1:
+            calibration = _coarseCalibration(
+                calibration, ipdpE.axisFromName('pixelID'), pixel_resolution)
         calib_pdpE = _fullcalibrationhist(
             calibration, ipdpE.axisFromName('energy' ))
         hh.dump( calib_pdpE, 'calibration-full.h5', '/', 'c' )
@@ -195,6 +245,25 @@ def getIpdpt(eventdatafilename, ARCSxml, tof_params):
         eventdatafilename, nevents, ARCSxml, tof_params)
     if mpiRank == 0: return ipdpt.as_floattype()
     return
+
+
+def _coarseCalibration(calibration, new_pixelID_axis, pixel_resolution,
+                       average=False):
+    detaxes = calibration.axes()
+    newaxes = list(detaxes)
+    newaxes[-1] = new_pixelID_axis
+
+    import histogram as H
+    new = H.histogram('calibration', newaxes)
+
+    for pixelID in calibration.pixelID:
+        new[(), (), pixelID] += calibration[(), (), pixelID]
+        continue
+
+    if average:
+        new /= (pixel_resolution, 0)
+
+    return new
 
 
 def _fullcalibrationhist( calibration_pdp, Eaxis ):

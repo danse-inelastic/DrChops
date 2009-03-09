@@ -22,7 +22,7 @@ OTHER_DIRS = \
 RECURSE_DIRS = $(BUILD_DIRS) $(OTHER_DIRS)
 
 
-PROJ_TIDY += *.log *.pkl *~ *.pyc
+PROJ_TIDY += *.log *.pkl *~ *.pyc *.xml *.h5
 PROJ_CLEAN += $(PROJ_CPPTESTS)
 
 PROJ_PYTESTS = alltests.py

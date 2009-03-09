@@ -31,6 +31,49 @@ import unittest
 from unittestX import TestCase as base
 class TestCase(base):
 
+
+    def _test0(self):
+        ARCSxml = 'ARCS.xml'
+        
+        from arcseventdata import getinstrumentinfo
+        ii = getinstrumentinfo(ARCSxml)
+        detaxes = ii['detector axes']
+        
+        import histogram as H
+        Eaxis = H.axis('energy', H.arange(-50,50,20))
+
+        axes = detaxes + [Eaxis]
+        ipdpE = H.histogram('I(pdpE)', axes)
+        
+        from reduction.core.ARCS.ReduceToMslice import write_mslice_files
+        outputprefix = 'mslice'
+        write_mslice_files(
+            outputprefix, ipdpE, ARCSxml, (1,115), 1)
+        return
+    
+
+    def _test0a(self):
+        ARCSxml = 'ARCS.xml'
+        
+        import histogram as H
+        from arcseventdata import getinstrumentinfo
+        ii = getinstrumentinfo(ARCSxml)
+        detaxes = ii['detector axes']
+        pixelaxis = H.axis('pixelID', H.arange(1, 128, 2.))
+        detaxes[-1] = pixelaxis
+        
+        Eaxis = H.axis('energy', H.arange(-50,50,20))
+
+        axes = detaxes + [Eaxis]
+        ipdpE = H.histogram('I(pdpE)', axes)
+        
+        from reduction.core.ARCS.ReduceToMslice import write_mslice_files
+        outputprefix = 'mslice'
+        write_mslice_files(
+            outputprefix, ipdpE, ARCSxml, (1,115), 2)
+        return
+
+
     def test1(self):
         'no calibration, no mask, no empty can data'
         mainrun = '/ARCS-DAS-FS/2008_2_18_SCI/ARCS_279'
@@ -57,7 +100,7 @@ class TestCase(base):
             )
         return
 
-    def test2(self):
+    def _test2(self):
         'no calibration, no mask. with empty can data'
         mainrun = '/ARCS-DAS-FS/2008_2_18_SCI/ARCS_279'
         mtrun = '/ARCS-DAS-FS/2008_2_18_SCI/ARCS_289'
@@ -86,7 +129,7 @@ class TestCase(base):
             )
         return
 
-    def test3(self):
+    def _test3(self):
         'do calibration. use mask. use empty can data'
         mainrun = '/ARCS-DAS-FS/2008_2_18_SCI/ARCS_279'
         mtrun = '/ARCS-DAS-FS/2008_2_18_SCI/ARCS_289'
@@ -152,6 +195,9 @@ def pysuite():
 
 
 def main():
+    from reduction.core.ARCS.ReduceToMslice import debug
+    debug.activate()
+    
     import journal
     #journal.debug('reduction.core.getPixelInfo' ).activate()
     journal.info('histogrammer' ).activate()
