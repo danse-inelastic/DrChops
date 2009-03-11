@@ -38,6 +38,7 @@ all: export
 # export
 
 EXPORT_PYTHON_MODULES = \
+	combinepixels.py \
 	createmap_pixelID2position.py \
 	detectorview_hist.py \
 	events2Ipdp.py \

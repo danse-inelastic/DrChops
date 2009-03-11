@@ -30,42 +30,63 @@ def getpixelinfo(
 
     save = positions.shape
     positions.shape = npacks, ndetsperpack, npixelsperdet, 3
-    xs = positions[:,:,:,0]; ys = positions[:,:,:,1]; zs = positions[:,:,:,2]
-    positions.shape = save
+
+    from getpixelsizes import getpixelsizes
+    radii, heights = getpixelsizes(
+        instrument, npacks, ndetsperpack, npixelsperdet)
     
-    dists = N.sqrt(xs**2+ys**2+zs**2)
+    dists, phis, psis, solidangles, dphis, dpsis = \
+           calcpixelinfo(positions, radii, heights)
+
+    positions.shape = save
 
     # scattering angles
     phi_p = histogram.histogram('phi_pdp', detaxes )
-    phi_p.I[:] = phi(xs, dists) * (180/N.pi)
+    phi_p.I[:] = phis
     
     psi_p = histogram.histogram('psi_pdp', detaxes )
-    psi_p.I[:] = psi(zs, ys) * (180/N.pi)
+    psi_p.I[:] = psis
     
     # distances
     dist_p = histogram.histogram('dist_pdp', detaxes )
     dist_p.I[:] = dists
 
     # quantities related to the sizes of pixels
-
-    # first get the sizes
-    from getpixelsizes import getpixelsizes
-    radii, heights = getpixelsizes(
-        instrument, npacks, ndetsperpack, npixelsperdet)
-
     # solid angles
     solidangle_p = histogram.histogram('solidangle_pdp', detaxes)
-    solidangle_p.I[:] = solidangle2(xs,ys,zs,radii,heights)
+    solidangle_p.I[:] = solidangles
 
     # dphi
     dphi_p = histogram.histogram('dphi_pdp', detaxes )
-    dphi_p.I[:] = dphi(xs, ys, zs, dists, radii, heights) * (180/N.pi)
+    dphi_p.I[:] = dphis
 
     # dpsi
     dpsi_p = histogram.histogram('dpsi_pdp', detaxes )
-    dpsi_p.I[:] = dpsi(xs, ys, zs, dists, radii, heights) * (180/N.pi)
+    dpsi_p.I[:] = dpsis
     
     return phi_p, psi_p, dist_p, solidangle_p, dphi_p, dpsi_p
+
+
+
+def calcpixelinfo(positions, radii, heights):
+    xs = positions[:,:,:,0]; ys = positions[:,:,:,1]; zs = positions[:,:,:,2]
+    dists = N.sqrt(xs**2+ys**2+zs**2)
+
+    # scattering angles
+    phis = phi(xs, dists) * (180/N.pi)
+    psis = psi(zs, ys) * (180/N.pi)
+    
+    # quantities related to the sizes of pixels
+    # solid angles
+    solidangles = solidangle2(xs,ys,zs,radii,heights)
+
+    # dphi
+    dphis = dphi(xs, ys, zs, dists, radii, heights) * (180/N.pi)
+
+    # dpsi
+    dpsis = dpsi(xs, ys, zs, dists, radii, heights) * (180/N.pi)
+    
+    return dists, phis, psis, solidangles, dphis, dpsis
 
 
 

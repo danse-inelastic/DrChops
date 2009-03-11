@@ -47,12 +47,20 @@ class Application( base ):
             from histogram.hdf import load
             h = load( self.inventory.h5filename, 'I(pdpE)' )
 
-            from arcseventdata import getinstrumentinfo
-            infos = getinstrumentinfo(self.inventory.ARCSxml)
-            phi_p = infos['phis']
-            psi_p = infos['psis']
-            dphi_p = infos['dphis']
-            dpsi_p = infos['dpsis']
+            pixel_resolution = self.inventory.pixel_step
+            if pixel_resolution == 1:
+                from arcseventdata import getinstrumentinfo
+                infos = getinstrumentinfo(self.inventory.ARCSxml)
+                phi_p = infos['phis']
+                psi_p = infos['psis']
+                dphi_p = infos['dphis']
+                dpsi_p = infos['dpsis']
+            else:
+                from arcseventdata.combinepixels import combinepixels
+                detaxes = h.axes()[:3]
+                ARCSxml = self.inventory.ARCSxml
+                phi_p, psi_p, dist_p, solidangle_p, dphi_p, dpsi_p \
+                       = combinepixels(ARCSxml, detaxes, pixel_resolution)
             
             import numpy
             phi_p.I[:] = numpy.nan_to_num( phi_p.I )

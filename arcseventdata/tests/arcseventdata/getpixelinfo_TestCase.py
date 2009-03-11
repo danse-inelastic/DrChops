@@ -20,18 +20,20 @@ class TestCase(TestCase):
 
     def test1(self):
         '''getpixelinfo'''
-        from histogram import axis
-        pack = axis('packID', range(1,4) )
-        tube = axis('tubeID', range(4) )
-        pixel = axis( 'pixelID', range(10) )
-        detaxes = [pack, tube, pixel]
 
-        import numpy
-        positions = numpy.ones( (3*4*10, 3 ), numpy.double )
+        ARCSxml = 'ARCS.xml'
+        
+        import arcseventdata as aed
+        infos = aed.getinstrumentinfo(ARCSxml)
+
+        positions = infos['pixelID-position mapping array']
+        detaxes = infos['detector axes']
+
+        from instrument.nixml import parse_file
+        instrument = parse_file( ARCSxml )
         
         from arcseventdata.getpixelinfo import getpixelinfo
-        histograms = getpixelinfo( positions, detaxes )
-        print histograms
+        histograms = getpixelinfo(positions, detaxes, instrument)
         return
     
     pass # end of TestCase
