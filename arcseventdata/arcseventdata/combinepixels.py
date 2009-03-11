@@ -12,7 +12,7 @@
 # 
 
 
-def combinepixels(ARCSxml, detaxes, pixel_resolution):
+def combinepixels(ARCSxml, pixelaxis, pixel_resolution):
     # data for resolution=1
 
     # positions
@@ -35,6 +35,7 @@ def combinepixels(ARCSxml, detaxes, pixel_resolution):
            calcpixelinfo(positions, radii, heights, pixel_resolution)
 
     import histogram
+    detaxes = detaxes0[0:2] + [pixelaxis]
     # scattering angles
     phi_p = histogram.histogram('phi_pdp', detaxes )
     phi_p.I[:] = phis

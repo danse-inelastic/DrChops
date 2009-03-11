@@ -29,7 +29,7 @@ class Application(base):
         tof_params = Tuple( 't', default = '0,16000,100' )
         tof_params.meta['tip'] = "tof bin parameters (begin, end, step). units: us"
 
-        pack_params = Tuple( 'p', default = '1,115' )
+        pack_params = Tuple( 'packs', default = '1,115' )
         pack_params.meta['tip'] = 'pack parameters (begin, end)'
 
         pixel_step = pinv.int( 'pixel-resolution', default = '1' )

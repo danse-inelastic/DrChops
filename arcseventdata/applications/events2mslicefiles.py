@@ -56,12 +56,21 @@ class Application( base ):
                 dphi_p = infos['dphis']
                 dpsi_p = infos['dpsis']
             else:
+                # find out info about combined pixels
                 from arcseventdata.combinepixels import combinepixels
-                detaxes = h.axes()[:3]
+                pixelaxis = h.axisFromName('pixelID')
                 ARCSxml = self.inventory.ARCSxml
                 phi_p, psi_p, dist_p, solidangle_p, dphi_p, dpsi_p \
-                       = combinepixels(ARCSxml, detaxes, pixel_resolution)
-            
+                       = combinepixels(ARCSxml, pixelaxis, pixel_resolution)
+
+                # pick out the requested packs
+                pack_params = self.inventory.pack_params
+                phi_p = phi_p[pack_params, (), ()]
+                psi_p = psi_p[pack_params, (), ()]
+                dphi_p = dphi_p[pack_params, (), ()]
+                dpsi_p = dpsi_p[pack_params, (), ()]
+
+            # is this still necessary?
             import numpy
             phi_p.I[:] = numpy.nan_to_num( phi_p.I )
             psi_p.I[:] = numpy.nan_to_num( psi_p.I )

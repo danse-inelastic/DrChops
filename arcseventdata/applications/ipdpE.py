@@ -29,7 +29,7 @@ class Application(base):
         E_params = Tuple( 'E', default = '-50,50,1.' )
         E_params.meta['tip'] = "energy bin parameters (begin, end, step). units: meV"
 
-        pack_params = Tuple( 'p', default = '1,115' )
+        pack_params = Tuple( 'packs', default = '1,115' )
         pack_params.meta['tip'] = 'pack parameters (begin, end)'
 
         pixel_step = pinv.int( 'pixel-resolution', default = '1' )
