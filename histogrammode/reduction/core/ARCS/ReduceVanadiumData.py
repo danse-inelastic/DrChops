@@ -39,9 +39,12 @@ def reduce( vrundir, ARCSxml = 'ARCS.xml', nevents = None,
 
     from arcseventdata.parallel_histogrammers.IpdpEHistogrammer import IpdpEHistogrammer
     toipdpE = IpdpEHistogrammer()
+    
+    pack_params = (1,115); pixel_resolution = 1
     ipdpE = toipdpE( 
         eventdatafilename, nevents,
         ARCSxml, E_params,
+        pack_params, pixel_resolution,
         Ei, emission_time)
 
     # only the master node will carry on

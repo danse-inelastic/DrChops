@@ -14,20 +14,13 @@
 PROJECT = reduction
 
 
-PROJ_TIDY += *.log
+PROJ_TIDY += *.log \
+	mslice-IpdpE.h5 mslice.spe mslice.phx \
+	calibration-full.h5 *ipdpE*.h5 *.pkl sqe.h5 solidangle.h5
 
 # directory structure
 
 BUILD_DIRS = \
-	ARCSReduceToMsliceFiles \
-	ARCSReduceToSqe \
-	ARCSReduceVanadiumData \
-	LrmecsReductionApp \
-	PharosReductionApp \
-	plotiphi \
-	plotitof \
-	plotmonitoritof \
-
 
 OTHER_DIRS = \
 
@@ -58,3 +51,4 @@ test::
 # $Id: Make.mm 475 2006-04-07 08:07:06Z jiao $
 
 # End of file
+

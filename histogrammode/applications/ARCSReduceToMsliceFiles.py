@@ -48,7 +48,7 @@ class ARCSReduceToMsliceFilesApp(base):
         tof_params = NumberList('t', default=(3000,6000,5.))
         tof_params.meta['tip'] = 'Define tof axis: min, max, step'
 
-        pack_params = NumberList('pack', default=(1,115))
+        pack_params = NumberList('packs', default=(1,115))
         pixel_resolution = pyre.inventory.int('pixel-resolution', default=1)
 
         Ei = pyre.inventory.float('I', default=99)

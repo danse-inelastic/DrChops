@@ -24,6 +24,8 @@ except ImportError:
     mpiRank = 0
 
 
+fullrangepacks = 1,115
+
 def reduce(
     rundir,
     mtrundir = None, mtratio = 0.9,
@@ -34,7 +36,7 @@ def reduce(
     tof_params = (3000,6000,5),
     E_params = (-60,60,1),
     Ei = 70, emission_time = 0,
-    pack_params = (1,115),
+    pack_params = fullrangepacks,
     pixel_resolution = 1,
     ):
     '''
@@ -115,38 +117,12 @@ def write_mslice_files(outputprefix, ipdpE, ARCSxml, pack_params, pixel_resoluti
 
 
 def get_pixel_infos(ARCSxml, detaxes, pack_params, pixel_resolution):
-    # data for resolution=1
-    from arcseventdata import getinstrumentinfo
-    infos = getinstrumentinfo(ARCSxml)
-    phi_p1 = infos['phis'][pack_params, (), ()]
-    psi_p1 = infos['psis'][pack_params, (), ()]
-    dphi_p1 = infos['dphis'][pack_params, (), ()]
-    dpsi_p1 = infos['dpsis'][pack_params, (), ()]
-
-    import numpy
-    phi_p1.I[:] = numpy.nan_to_num( phi_p1.I )
-    psi_p1.I[:] = numpy.nan_to_num( psi_p1.I )
-
-    import histogram as H
-    phi_p = H.histogram('phi(pixel)', detaxes)
-    psi_p = H.histogram('psi(pixel)', detaxes)
-
-    pixels1 = phi_p1.pixelID
-    for pixelID in pixels1:
-        phi_p[(), (), pixelID] += phi_p1[(), (), int(pixelID)]
-        psi_p[(), (), pixelID] += psi_p1[(), (), int(pixelID)]
-        continue
-    phi_p /= pixel_resolution,0
-    psi_p /= pixel_resolution,0
-
-    # 
-    dphi_p = H.histogram('dphi(pixel)', detaxes)
-    dpsi_p = H.histogram('dpsi(pixel)', detaxes)
-    for pixelID in pixels1:
-        dphi_p[(), (), pixelID] += dphi_p1[(), (), int(pixelID)]
-        dpsi_p[(), (), pixelID] += dpsi_p1[(), (), int(pixelID)]
-        continue
-    return phi_p, psi_p, dphi_p, dpsi_p
+    from arcseventdata.combinepixels import combinepixels
+    pixelaxis = detaxes[2]
+    phi_p, psi_p, dist_p, solidangle_p, dphi_p, dpsi_p \
+           = combinepixels(ARCSxml, pixelaxis, pixel_resolution)
+    return phi_p[pack_params,(),()], psi_p[pack_params,(),()], \
+           dphi_p[pack_params, (), ()], dpsi_p[pack_params, (), ()]
 
 
 
@@ -166,7 +142,7 @@ def reduceToIpdpE(
     ARCSxml = 'ARCS.xml',
     E_params = (-60,60,1),
     Ei = 70, emission_time = 0,
-    pack_params = (1,115),
+    pack_params = fullrangepacks,
     pixel_resolution = 1,
     ):
     '''
@@ -228,6 +204,8 @@ def reduceToIpdpE(
         if pixel_resolution != 1:
             calibration = _coarseCalibration(
                 calibration, ipdpE.axisFromName('pixelID'), pixel_resolution)
+        if pack_params != fullrangepacks:
+            calibration = calibration[pack_params, (), ()]
         calib_pdpE = _fullcalibrationhist(
             calibration, ipdpE.axisFromName('energy' ))
         hh.dump( calib_pdpE, 'calibration-full.h5', '/', 'c' )
