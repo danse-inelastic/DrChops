@@ -17,11 +17,7 @@
 
     <component name="ARCSReductionApp">
 
-        <property name="reducer">PowderReduction</property>
-
         <component name="PowderReduction">
-
-            <property name="measurementFactory">ARCSMeasurement</property>
 
             <component name="SpeReducer">
 

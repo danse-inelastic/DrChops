@@ -17,11 +17,7 @@
 
     <component name="PharosReductionApp">
 
-        <property name="reducer">PowderReduction</property>
-
         <component name="PowderReduction">
-
-            <property name="measurementFactory">PharosMeasurement</property>
 
             <component name="SpeReducer">
 

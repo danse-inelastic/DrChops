@@ -17,11 +17,7 @@
 
     <component name="LrmecsReductionApp">
 
-        <property name="reducer">PowderReduction</property>
-
         <component name="PowderReduction">
-
-            <property name="measurementFactory">LrmecsMeasurement</property>
 
             <component name="SpeReducer">
 
