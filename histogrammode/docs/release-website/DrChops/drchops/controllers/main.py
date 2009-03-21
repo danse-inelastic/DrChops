@@ -8,8 +8,9 @@ log = logging.getLogger(__name__)
 class MainController(BaseController):
 
     def index(self, menuitem = None, url = None):
+        if menuitem is None: menuitem = 'Home'
         if menuitem not in self.navigator.names:
-            raise "no such page: %s, %s" % (menuitem, url)
+            raise RuntimeError, "no such page: %r, %r" % (menuitem, url)
         if url is None: url = menuitem + '.html'
         environ = request.environ
         remote_host = environ.get('REMOTE_HOST')
