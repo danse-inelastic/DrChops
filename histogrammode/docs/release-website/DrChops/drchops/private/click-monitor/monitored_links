@@ -48,3 +48,5 @@ LRMECS_Reduction_GUI_Tutorial
 --> /Docs/docs/reduction/UserGuide/html/ch04s02.html
 LRMECS_Reduction
 --> /Docs/docs/reduction/UserGuide/html/ch04.html
+webinstall.py
+--> /releases/webinstall.py

@@ -1,1 +1,1 @@
-/home/linjiao/dv/danse/buildInelast/template/create_binary_release/webinstall.py
+/home/drcsweb/dv/danse/buildInelast/common/utils/binary_release/webinstall.py
