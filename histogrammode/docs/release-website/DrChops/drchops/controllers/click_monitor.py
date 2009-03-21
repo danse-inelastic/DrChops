@@ -41,6 +41,7 @@ class ClickMonitorController(BaseController):
     def index(self, id):
         engine = self._engine
         if not engine.monitored( id ):
+            return '%s is not monitored' % id
             return Response('%s is not monitored' % id)
         
         import time
