@@ -570,6 +570,26 @@ for which the download links can be found in
   </title>
 
 <sect4>
+  <title> Ubuntu 8.10 </title>
+You will need to use apt-get or package manager to install
+following software packages.
+
+  <itemizedlist >
+    <listitem > python-numpy </listitem>
+    <listitem > python-wxgtk2.8 </listitem>
+    <listitem > python-matplotlib </listitem>
+    <listitem > hdf5-tools </listitem>
+  </itemizedlist>
+
+For example, to install those packages using apt-get, please
+run the following commands
+
+<programlisting>
+ sudo apt-get install python-numpy python-wxgtk2.8 python-matplotlib hdf5-tools
+</programlisting>
+</sect4>
+
+<sect4>
   <title> OpenSuse 10.2 </title>
 
 Examples:

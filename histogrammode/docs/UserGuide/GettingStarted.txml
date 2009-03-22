@@ -69,11 +69,11 @@ For example, if you have installed the DRCS software to
 Then the command to set up environment variables is
 
 <programlisting>
-  source $HOME/DRCS/DRCS-&lt;version&gt;
+  source $HOME/DRCS/DRCS-&lt;version&gt;/bin/envs.sh
 </programlisting>
 
 If you are not using bash variants,
-please following the example in
+please follow the example in
 <programlisting>
  /path/to/your/DRCS/installation/bin/envs.sh
 </programlisting>
