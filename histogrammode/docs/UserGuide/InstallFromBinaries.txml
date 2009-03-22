@@ -514,6 +514,29 @@ before you can start reducing your data.
 </para>
 
 <para>
+You will also need to configure matplotlib correctly in order to get
+some plotting capabilities of DrChops working correctly. 
+To do this, please use your favorite editor to open the matplotlib
+configuration file in your home directory, ~/.matplotlib/matplotlibrc.
+If this configuration file already exists, please look for a line
+that starts with "backend    :".
+For example, it may look like
+<programlisting>
+  backend    : TkAgg
+</programlisting>
+You will need to change this line to
+<programlisting>
+  backend    : WxAgg
+</programlisting>
+If this configuration file does not exist, you just need to create
+it to read
+<programlisting>
+  backend    : WxAgg
+</programlisting>
+
+</para>
+
+<para>
 Other than the DRCS software itself, you may need sample data files, 
 for which the download links can be found in
 <xref linkend="Install_ARCS_software_from_Binaries.linux.linux_Downloads"/>
