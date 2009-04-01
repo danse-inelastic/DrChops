@@ -52,7 +52,7 @@ class Application(base):
         if not source.startswith( '-' ):
             sys.argv[-1] = '--event-source=%s' % source
             pass
-        print sys.argv
+        #print sys.argv
         base.__init__(self, name)
         return
 

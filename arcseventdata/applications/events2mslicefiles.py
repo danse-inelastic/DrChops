@@ -112,7 +112,7 @@ def main():
 if __name__ == '__main__':
     import journal
     journal.warning( 'arcseventdata.Histogrammer2' ).deactivate()
-    journal.debug('events2mslicefiles').activate()
+    #journal.debug('events2mslicefiles').activate()
     main()
     
 
