@@ -38,6 +38,7 @@ all: export
 EXPORT_PYTHON_MODULES = \
 	__init__.py \
 	LauncherMPICH2.py \
+	LauncherMR.py \
 	MpiApplication.py \
 	MpiHistogrammerApp.py \
 	Tuple.py \
