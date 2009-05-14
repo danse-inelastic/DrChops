@@ -29,6 +29,7 @@ class LauncherMR(Launcher):
         debug = pyre.inventory.bool("debug", default=False)
         command = pyre.inventory.str("command", default="mr")
         extra = pyre.inventory.str("extra", default="")
+        nodes = pyre.inventory.str("nodes", default="")
         python_mpi = pyre.inventory.str("python-mpi", default="`which mpipython.exe`")
 
 
@@ -55,10 +56,16 @@ class LauncherMR(Launcher):
 
 
     def _buildArgumentList(self):
-        # assume that if a user does not have mr.nodes in the current dir
-        # he does not want to run parallely.
+        nodes = self.inventory.nodes
+        if not nodes: return []
+        
         import os
-        if not os.path.exists('mr.nodes'): return []
+        nodes = os.path.expanduser(nodes)
+        if not os.path.exists(nodes): 
+            raise RuntimeError, "No such file %s" % nodes
+        if nodes != 'mr.nodes':
+            import shutil
+            shutil.copyfile(nodes, 'mr.nodes')
 
         import sys
 
