@@ -34,7 +34,7 @@ class ParallelHistogrammer(ParallelComponent):
         # the number of neutrons that each node need to process
         chunk = int( math.ceil( 1.*nevents/mpiSize ) )
         start = mpiRank * chunk
-        info.log('node %d: histogramming...' % (mpiRank, ))
+        info.log('node %d: histogramming events: file=%s, chunk=[%s, %s)...' % (mpiRank, eventdatafilename, start, start+chunk))
         h = self._run( eventdatafilename, start, chunk, *args)
         info.log('node %d: histogramming done' % (mpiRank, ))
 
