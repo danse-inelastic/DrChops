@@ -74,7 +74,7 @@ class He3DetEffic( Base):
         created for you. This is potentially time consuming. """
         #if energy.__class__.__name__ in [ "StdVector", "NdArray" ]:
         if energy.__class__.__name__ == 'NdArray':
-            energy = energy.as( vectorType )
+            energy = energy.as_( vectorType )
             if energy.datatype() != self.datatype():
                 raise TypeError,"Energy type (%s) different"%energy.datatype()
             if not output:

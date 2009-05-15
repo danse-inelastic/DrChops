@@ -28,7 +28,7 @@ class RDriver( TemplateCObject):
         Exceptions: ValueError, TypeError
         Notes: None"""
         #if sourceVec.datatype() != self._templateType:
-        sourceVec = sourceVec.as( vectorType )
+        sourceVec = sourceVec.as_( vectorType )
         if sourceVec._templateType != self._templateType:
             raise TypeError,'sourceVec datatype does not match this instance'
         red.RDriver_call( self._handle, self._templateType, sourceVec._handle, 

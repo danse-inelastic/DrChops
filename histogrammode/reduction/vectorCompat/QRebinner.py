@@ -27,8 +27,8 @@ class QRebinner( object):
         """
         self._qbincalc( e_final, self._qbbo)
 
-        indata = indata.as(vectorType)
-        inerrs = inerrs.as(vectorType)
+        indata = indata.as_(vectorType)
+        inerrs = inerrs.as_(vectorType)
         red.ERebinAllInOne_call( self._rebinner._templateType, self._rebinner._handle,
                                  self._qbbo._handle, self._qbbn._handle,
                                  indata._handle, inerrs._handle,

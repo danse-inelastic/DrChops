@@ -42,9 +42,9 @@ class ERebinAllInOne( Base):
         Exceptions: ValueError, RuntimeError
         Notes: It is likely unwise to split off the error propagation in the
         normal course of things, as separate loops will run slower."""
-        indata = indata.as( vectorType )
-        inerrs = inerrs.as( vectorType )
-        tBB = tBB.as( vectorType )
+        indata = indata.as_( vectorType )
+        inerrs = inerrs.as_( vectorType )
+        tBB = tBB.as_( vectorType )
         eps = self._epsilon
         #if ( pixelDistance + eps < self._currdist) or \
         #      ( pixelDistance - eps > self._currdist):
