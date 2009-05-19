@@ -39,9 +39,15 @@ def deteff_hist( energy, ARCSxml = 'ARCS.xml' ):
     geometer = instrument.geometer
     bottom, middle, top = theoeff_bottom_middle_top(
         energy, tubeaxis, pixelaxis, instrument, geometer)
+
+    if isAxis(energy): energyAxis = energy
+    else: energyAxis = None
+    
+    axes = list(detaxes)
+    if energyAxis: axes.append(energyAxis)
+    
     import histogram
-    result = histogram.histogram(
-        'theoretical detector efficiency', detaxes )
+    result = histogram.histogram('theoretical detector efficiency', axes )
     for pack in bottompacks:
         result[ { 'detectorpackID': (bottompacks[0], bottompacks[-1]) } ].I[:] = bottom.I
     for pack in middlepacks:
@@ -60,21 +66,27 @@ def getdetaxes(ARCSxml):
 
 def theoeff_bottom_middle_top(
     energy, tubeaxis, pixelaxis, instrument, geometer ):
+
+    if isAxis(energy): energyAxis = energy
+    else: energyAxis = None
     
     ds = instrument.getDetectorSystem()
 
     bottom_eff = make_pack_eff_hist(
-        'bottom packs theoretical efficiency', tubeaxis, pixelaxis )
+        'bottom packs theoretical efficiency', tubeaxis, pixelaxis,
+        energyAxis=energyAxis)
     pack20 = ds.elementFromId( 20 )
     calc_pack_eff( bottom_eff, energy, pack20, instrument, geometer )
 
     middle_eff = make_pack_eff_hist(
-        'middle packs theoretical efficiency', tubeaxis, pixelaxis )
+        'middle packs theoretical efficiency', tubeaxis, pixelaxis,
+        energyAxis=energyAxis)
     pack57 = ds.elementFromId( 57 )
     calc_pack_eff( middle_eff, energy, pack57, instrument, geometer )
 
     top_eff = make_pack_eff_hist(
-        'top packs theoretical efficiency', tubeaxis, pixelaxis )
+        'top packs theoretical efficiency', tubeaxis, pixelaxis,
+        energyAxis=energyAxis)
     pack94 = ds.elementFromId( 94 )
     calc_pack_eff( top_eff, energy, pack94, instrument, geometer )
 
@@ -84,20 +96,25 @@ def theoeff_bottom_middle_top(
 
 
 
-def make_pack_eff_hist( name, tubeaxis, pixelaxis ):
+def make_pack_eff_hist( name, tubeaxis, pixelaxis, energyAxis=None):
+    axes = [ tubeaxis, pixelaxis ]
+    if energyAxis: axes.append(energyAxis)
     from histogram import histogram
-    return histogram( name, [ tubeaxis, pixelaxis ] )
+    return histogram(name, axes)
 
 
 
 def calc_pack_eff( eff_hist, energy, pack, instrument, geometer ):
     '''calculate detector efficiency for a detector pack
 
-    eff_hist: the histogram to hold the result
-    energy: neutron energy
+    eff_hist: the histogram to hold the result. axes should be [...detaxes...] if energy is one number (with unit), or [...detaxes..., energy] if energy is an axis.
+    energy: neutron energy (a number (with unit) or an axis)
     pack: detector pack data object
     instrument, geometer: 
     '''
+    if isAxis(energy): energyAxis = energy
+    else: energyAxis = None
+    
     ds = instrument.getDetectorSystem()
     
     from reduction.histCompat.He3DetEffic import He3DetEffic
@@ -120,21 +137,32 @@ def calc_pack_eff( eff_hist, energy, pack, instrument, geometer ):
             x,y,z = position
             costheta = sqrt( (x*x+y*y)/(x*x+y*y+z*z) )
             
-            effcalculator = He3DetEffic(
-                radius = radius, pressure = pressure, costheta = costheta )
+            calcEff = He3DetEffic(
+                radius = radius,
+                pressure = pressure,
+                costheta = costheta )
 
-            eff = effcalculator( energy )
-
-            #print eff
-            
-            eff_hist[ { 'detectorID': tube_id,
-                        'pixelID': pixel_id, } ] = eff, 0
+            slicing = {
+                'detectorID': tube_id,
+                'pixelID': pixel_id,
+                }
+            if energyAxis:
+                calcEff(energyAxis, eff_hist[slicing])
+            else:
+                eff = calcEff( energy )
+                eff_hist[slicing] = eff, 0
 
             continue
 
         continue
 
     return
+
+
+
+def isAxis(candidate):
+    from histogram.Axis import Axis
+    return isinstance(candidate, Axis)
 
 
 

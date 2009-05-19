@@ -68,9 +68,10 @@ class He3DetEffic:
         if isAxis(ef):
             efAxis = ef
             efAxis.changeUnit('meV')
-            efsVect = efAxis.storage()
-            detEfficVect = detEfficHist.data().storage()
+            efsVect = efAxis.storage().as_('StdVectorNdArray')
+            detEfficVect = detEfficHist.data().storage().as_('StdVectorNdArray')
             self._engine( efsVect, detEfficVect)
+            detEfficHist.I = detEfficVect.asNumarray()
             return
 
         ef = ef/meV
