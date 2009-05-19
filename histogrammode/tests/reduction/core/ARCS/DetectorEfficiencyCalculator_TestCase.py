@@ -21,7 +21,7 @@ class TestCase(base):
 
     interactive = False
 
-    def _test1(self):
+    def test1(self):
         """DetectorEfficiencyCalculator: one energy value
         """
         from reduction.core.ARCS.DetectorEfficiencyCalculator import deteff_hist
