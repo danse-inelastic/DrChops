@@ -63,6 +63,35 @@ class TestCase(base):
             pylab.colorbar()
         return
         
+
+    def test3(self):
+        """DetectorEfficiencyCalculator: energy axis constructed from Ei-E
+        """
+        from reduction.core.ARCS.DetectorEfficiencyCalculator import deteff_hist
+        import histogram 
+        Eaxis = histogram.axis('energy', histogram.arange(-50,50,1), 'meV')
+        import reduction.units as units
+        Ei = 60*units.energy.meV
+        Efaxis = -Eaxis + Ei
+        #Efaxis.changeUnit('meV')
+        eff = deteff_hist(Efaxis)
+
+        import histogram.hdf as hh
+        filename = 'efficiency.h5'
+        import os
+        if os.path.exists(filename): os.remove(filename)
+        hh.dump(eff, filename, '/', 'c')
+
+        if self.interactive:
+            # sum over pixels
+            effpde = eff.sum('pixelID')
+        
+            from histogram.plotter import defaultPlotter
+            defaultPlotter.plot(effpde[{'detectorpackID':1}])
+            import pylab
+            pylab.colorbar()
+        return
+        
     pass # end of TestCase
 
 
