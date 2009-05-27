@@ -20,7 +20,7 @@
     </noscript>
 
     <div id="hd">
-        <div id="logo"><h1 class="invisible"></h1></div>
+        <div id="logo" onclick="window.location='http://danse.us';"><h1 class="invisible" ></h1></div>
         <div id="download">Latest Version: <a href="/Install">${c.latest_version}</a></div>
         <div id="nav-items">
 
