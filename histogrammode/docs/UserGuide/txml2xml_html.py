@@ -13,4 +13,5 @@ urldict = {
     'xxxDOWNLOADSxxx': "%s/click_monitor" % webserver,
     'xxxARCSBOOKxxx': "../../../ARCSBook/Inelastic_Book/latex/Inelastic_Book.pdf",
     'xxxlrmecs2asciixxx': "%s/lrmecs2ascii" % webserver,
+    'xxxVERSIONxxx': '1.3pre1',
     }

@@ -33,7 +33,10 @@
     More demos can be found in 
     <xref linkend='Interactive.Demo'/>. 
     An excellent preparation for using the interactive reduction interface is some
-    knowledge of the language Python.
+    knowledge of the language
+    <ulink url='http://www.python.org'>
+      <citetitle>Python </citetitle>
+    </ulink>
     </para>
 
 <para>
@@ -41,7 +44,7 @@ The DRCS interactive reduction interface consists of several python
 "commands".
 Each command performs one kind of operation. 
 I will use the command "solveEi" as an example, and
-other commands have similar usage.
+other commands have similar interface.
 Command "solveEi" calculates the 
 incident neutron energy for a given
 experimental run. 
@@ -185,7 +188,21 @@ Now let us start python interpreter:
   $ python
 </programlisting>
 
-and then import the interactive reduction support:
+You can also use the embedded python shell in HistogramGUI. To do that, first
+start the histogram GUI application by
+
+<programlisting>
+$ HistogramGUIApp.py
+</programlisting>
+
+A graphical user interface will come up.
+Then, point your mouse pointer into the embedded python shell there,
+and click your mouse once so that the embedded python shell is the
+current active window.
+
+<para>
+Now you can start doing interactive reduction. First import the interactive reduction support:
+</para>
 
 <programlisting>
   >>> from reduction.interactive import *
@@ -242,9 +259,10 @@ that take you there:
 
 <programlisting>
   >>> instrument, geometer = run.getInstrument()
-  >>> Idpt = run.getDetPixTOFData()
-  >>> sqe = idpt2sqe( 60, Idpt, instrument, geometer )
-  >>> plot(sqe)
+  >>> Idpt = run.getIdpt()
+  >>> meV = units.energy.meV
+  >>> sqe = idpt2sqe( 60;*meV, Idpt, instrument, geometer )
+  >>> plot(sqe) # this is not necessary if you are using HistogramGUI
 </programlisting>
 
 The first line
@@ -265,7 +283,7 @@ instrument.
 The second line
   
 <programlisting>
-  >>> Idpt = run.getDetPixTOFData()
+  >>> Idpt = run.getIdpt()
 </programlisting>
 
 extracts the main dataset, I(detector, pixel, tof), out of
@@ -276,7 +294,7 @@ the experimental run data object.
 The third line, 
 
 <programlisting>
-  >>> sqe = idpt2sqe( 60, Idpt, instrument, geometer )
+  >>> sqe = idpt2sqe( 60*meV, Idpt, instrument, geometer )
 </programlisting>
 
 performs reduction and convert I(detector, pixel, tof)
@@ -335,10 +353,17 @@ I(tof) spectrum summed over all detectors and pixels
 </para>
 
 <para>
+Please zoom in on this I(tof) spectrum and find out the 
+region where you think the background counts are. 
+Please remember this region by defining it as (tofmin, tofmax).
+</para>
+
+<para>
 Now we can use the removeTIBG command to remove time-independent
 background:
     
 <programlisting>
+  >>> removeTIBG.reconstruct( tofmin, tofmax )
   >>> removeTIBG( Idpt )
 </programlisting>
 
@@ -395,8 +420,9 @@ Establish an "experimental-run"  data object
   <title> Engines </title>
 
   <itemizedlist >
-    <listitem > LRMECS </listitem>
-    <listitem > PHAROS </listitem>
+    <listitem > lrmecs </listitem>
+    <listitem > pharos </listitem>
+    <listitem > arcs </listitem>
   </itemizedlist>
 </sect3>
 
@@ -486,14 +512,14 @@ class LrmecsRun(measurement.ins.Run.Run)
  |      @param geometer: instance of instrument.geometers.Geometer
  |      @param filename: data file name
  |  
- |  getDetPixTOFData(self, dummy=None)
+ |  getIdpt(self, dummy=None)
  |      get I(det,pix,tof) histogram
  |  
  |  getDetPixTOFHistCollection(self)
 
 </programlisting>
 
-The most important methods are "getDetPixTOFData" and "getInstrument".
+The most important methods are "getIdpt" and "getInstrument".
 </para>
 
 </sect3>
@@ -703,10 +729,10 @@ Compute calibration constants
   The calibration constants are now obtained by
 
   <programlisting>
-    cc = getCC( vr, 60 )
+    cc = getCC( vr, 60*meV )
   </programlisting>
 
-  Here, the number "60" is the incident energy of the experimental runs.
+  Here, the number "60*meV" is the incident energy of the experimental runs.
 
 </sect3>
 
@@ -749,18 +775,18 @@ Convert I(det,pix,tof) to S(phi,E)
   <programlisting>
     run = getRun( '4849' )
     instrument, geometer = run.getInstrument()
-    idpt = run.getDetPixTOFData()
-    ei = 60
+    idpt = run.getIdpt()
+    ei = 60*meV
     spe = idpt2spe( ei, idpt, instrument, geometer )
     plot(spe)
   </programlisting>
 </sect3>
     </sect2>
 
-    <sect2 id="Interactive.CommandReference.idpt2sqe">
-      <title>idp2sqe</title>
+    <sect2 id="Interactive.CommandReference.spe2sqe">
+      <title>spe2sqe</title>
 
-Convert I(det,pix,tof) to S(Q,E)
+Convert S(phi,E) to S(Q,E)
 
 <sect3>
   <title> Engines </title>
@@ -772,17 +798,9 @@ Convert I(det,pix,tof) to S(Q,E)
 
 <sect3>
   <title> Description </title>
-  This command transforms the raw experimental data,
-  I(det,pix,tof), to S(Q,E). 
+  This command transforms the S(phi,E) histogram
+  to S(Q,E). 
   It has only one engine available.
-  First the I(det, pix, tof ) histogram is converted
-  to the S(phi, E) histogram, and the latter is converted
-  to the S(Q, E) histogram.
-  For more details about this tranformation, please read
-  <ulink url="xxxARCSBOOKxxx">Reference Manual</ulink>, 
-  Chapter "Essential Data Processing", 
-  Section "Steps to Transforming Data into a Function of 
-  Energy and Momentum".
 </sect3>  
 
 <sect3>
@@ -792,9 +810,12 @@ Convert I(det,pix,tof) to S(Q,E)
   <programlisting>
     run = getRun( '4849' )
     instrument, geometer = run.getInstrument()
-    idpt = run.getDetPixTOFData()
-    ei = 60
+    idpt = run.getIdpt()
+    ei = 60*meV
     spe = idpt2sqe( ei, idpt, instrument, geometer )
+    import histogram as H
+    qaxis = H.axis( 'Q', H.arange(0,13,0.1), unit = 'angstrom**-1')
+    sqe = spe2sqe( ei, spe, qaxis)
     plot(sqe)
   </programlisting>
 </sect3>
@@ -876,7 +897,7 @@ Plot a histogram
 
   <programlisting>
     run = getRun( '4849' )
-    idpt = run.getDetPixTOFData()
+    idpt = run.getIdpt()
     it = idpt.sum( 'detectorID' ).sum( 'pixelID' )
     plot(it)
     removeTIBG.reconstruct( tbgMin = 5000, tbgMax = 5500 )

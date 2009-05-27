@@ -85,7 +85,7 @@ make-executables:
 	done
 
 
-WEBSERVER=http://131.215.30.242:5001
+WEBSERVER=http://drchops.caltech.edu
 
 %.py: %.py.t
 	cat $< | sed 's|xxxDoxygenDocsxxx|$(DOXYGEN_DOCS)|g' | sed 's|xxxWEBSERVERxxx|$(WEBSERVER)|g'  >   $@

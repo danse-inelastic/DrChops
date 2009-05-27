@@ -31,6 +31,7 @@ plot = HistogramPlotter()
 from histogram.plotter import HistogramMplPlotter as _Plotter
 class Plotter(_Plotter):
     def __call__(self, *args, **kwds):
+        'plot( histogram ): new plot of a histogram'
         _Plotter.plot( self, *args, **kwds )
         return
     __call__.__doc__ = _Plotter.plot.__doc__

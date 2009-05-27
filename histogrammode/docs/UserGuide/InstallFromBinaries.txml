@@ -20,7 +20,7 @@
   
 <!--
   <note>
-    Reduction software is upgrading to version 1.2 ...
+    Reduction software is upgrading to version xxxVERSIONxxx ...
     Please come back 1 day or two to download the most
     up-to-date binaries.
     
@@ -34,7 +34,7 @@
   </note>
 -->
 <note>
-  Reduction software is upgrading to version 1.2.
+  Reduction software is upgrading to version xxxVERSIONxxx.
   There are now only two binary installers available.
   The installation instructions might be not detailed enough
   for a smooth installation. Please send all your complaints
@@ -447,14 +447,14 @@ other Mac software installations.
 </figure>
 
 <para>
-  Everytime you want to use DRCS-1.2, please start a X11 terminal
+  Everytime you want to use DRCS-xxxVERSIONxxx, please start a X11 terminal
   and enter
 
 <programlisting>
-  source ~/DRCS/DRCS-1.2-macosx10.4-python2.3/bin/envs.sh
+  source ~/DRCS/DRCS-xxxVERSIONxxx-macosx10.4-python2.3/bin/envs.sh
 </programlisting>
 
-and you are now ready to use DRCS 1.2.
+and you are now ready to use DRCS xxxVERSIONxxx.
 </para>
 
 <para >
@@ -495,7 +495,7 @@ Here,  &lt;version&gt; is the version number of DRCS you want to install,
 <para>
 An example of the installation command is 
 <programlisting>
-  ./webinstall.py DRCS -v 1.2 -p suse10.2 ~/DRCS
+  ./webinstall.py DRCS -v xxxVERSIONxxx -p suse10.2 ~/DRCS
 </programlisting>
 
 <xref linkend="reduction.Install.Linux.SpecificInstructions"/> has 
@@ -610,6 +610,13 @@ run the following commands
 <programlisting>
  sudo apt-get install python-numpy python-wxgtk2.8 python-matplotlib hdf5-tools
 </programlisting>
+
+Then you can install DRCS (DrChops) by 
+
+<programlisting>
+  ./webinstall.py DrChops -v xxxVERSIONxxx -p ubuntu8.10 ~/DrChops
+</programlisting>
+
 </sect4>
 
 <sect4>
@@ -617,7 +624,7 @@ run the following commands
 
 Examples:
 <programlisting>
-  ./webinstall.py DRCS -v 1.2 -p suse10.2 ~/DRCS
+  ./webinstall.py DRCS -v xxxVERSIONxxx -p suse10.2 ~/DRCS
 </programlisting>
 
 </sect4>
