@@ -20,7 +20,7 @@ PROJ_TIDY += *.log *.tmp
 
 BUILD_DIRS = \
     histogrammode \
-    arcsevendata \
+    arcseventdata \
 
 OTHER_DIRS = \
 
