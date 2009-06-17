@@ -22,7 +22,7 @@ from unittestX import TestCase
 class Spe2Sqe_TestCase(TestCase):
 
 
-    def test(self):
+    def test1(self):
         """
         """
         intensity_scale = 3.
@@ -48,10 +48,64 @@ class Spe2Sqe_TestCase(TestCase):
         
         sqe = spe2sqe( ei, spe,  QAxis)
 
-        pickle.dump(sqe, open('sqe.pkl','w') )
+        pickle.dump(sqe, open('sqe1.pkl','w') )
                 
         #compare reduced data to direct computatiion
-        self._check(spe, ei, QAxis, sqe)
+        self._check(spe, ei, QAxis, sqe, outfile='sqe1-oracle.pkl')
+        return
+
+
+    def test2(self):
+        """
+        """
+        intensity_scale = 3.
+
+        #prepare data
+        from histogram import axis, histogram, arange, datasetFromFunction
+        phiAxis = axis( 'phi', boundaries = arange( 0., 120., 1. ), unit = 'degree'  )
+        EAxis = axis( 'energy', arange( -50, 50, 1.), unit='meV' )
+
+        axes = phiAxis, EAxis
+        spe = histogram('spe', axes )
+
+        spe.I = intensity_scale
+
+        from reduction.core.Spe2Sqe import spe2sqe
+
+        QAxis = axis( 'Q', arange(0.,13.,0.1), 'angstrom**-1' )
+
+        ei = 60. * meV
+        
+        sqe = spe2sqe( ei, spe,  QAxis)
+
+        pickle.dump(sqe, open('sqe2.pkl','w') )
+        return
+
+
+    def test3(self):
+        """
+        """
+        intensity_scale = 3.
+
+        #prepare data
+        from histogram import axis, histogram, arange, datasetFromFunction
+        phiAxis = axis( 'phi', boundaries = arange( 10., 120., 1. ), unit = 'degree'  )
+        EAxis = axis( 'energy', arange( -50, 50, 1.), unit='meV' )
+
+        axes = phiAxis, EAxis
+        spe = histogram('spe', axes )
+
+        spe.I = intensity_scale
+
+        from reduction.core.Spe2Sqe import spe2sqe
+
+        QAxis = axis( 'Q', arange(0.,13.,0.1), 'angstrom**-1' )
+
+        ei = 60. * meV
+        
+        sqe = spe2sqe( ei, spe,  QAxis)
+
+        pickle.dump(sqe, open('sqe3.pkl','w') )
         return
 
 
@@ -60,9 +114,9 @@ class Spe2Sqe_TestCase(TestCase):
         return spe2sqe( spe, ei, QAxis )
 
 
-    def _check(self, spe, ei, QAxis, sqe):
+    def _check(self, spe, ei, QAxis, sqe, outfile):
         sqe1 = self.oracle( spe, ei, QAxis )
-        pickle.dump(sqe1, open('sqe1.pkl','w') )
+        pickle.dump(sqe1, open(outfile,'w') )
         return
             
     pass # end of Spe2Sqe_TestCase

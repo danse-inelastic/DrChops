@@ -98,6 +98,15 @@ class Spe2Sqe(ParallelComponent):
             # feed it to QRebinner
             e_final = ei - exfer * EAxis.unit()
             qrebinner.rebin( phiData, qEnergyData, e_final)
+
+            # set the left-most bin to zero
+            try:
+                leftbin1 = qEnergyData.I.nonzero()[0][0]
+            except:
+                pass
+            else:
+                qEnergyData.I[leftbin1] = qEnergyData.E2[leftbin1] = 0
+                qEnergyData.I[leftbin1+1] = qEnergyData.E2[leftbin1+1] = 0
             
             # accumulate the result into correct bin of S( Q, E)
             sQEHist[(), exfer] += qEnergyData
