@@ -51,7 +51,23 @@ class He3DetEffic_TestCase(unittest.TestCase):
     
 
     pass # end of class
-     
+
+
+# a simple pure python function to calculate detector efficiency
+def efficiency(radius, pressure, E, n=100):
+    '''radius: cm
+    pressure: atm
+    E: meV
+    '''
+    import numpy as N
+    rho = pressure*1.468e20/6
+    sig = 5333e-24/1.798*N.sqrt(81.81/E)
+    print rho, sig
+    x = N.arange(-1,1,2./n)
+    y = N.sqrt( 1 - x**2) * radius * 2
+    eff = 1.-N.exp(-rho*sig*y)
+    return N.average(eff)
+
     
 def pysuite():
     suite1 = unittest.makeSuite(He3DetEffic_TestCase)
