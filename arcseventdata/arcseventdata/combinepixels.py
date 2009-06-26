@@ -66,6 +66,14 @@ def combinepixels(ARCSxml, pixelaxis, pixel_resolution):
 def calcpixelinfo(
     positions, radii, heights, resolution):
 
+    newpositions, newradii, newheights = geometricInfo_MergedPixels(
+        positions, radii, heights, resolution)
+    
+    from getpixelinfo import calcpixelinfo
+    return calcpixelinfo(newpositions, newradii, newheights)
+
+
+def geometricInfo_MergedPixels(positions, radii, heights, resolution):
     # make sure shapes are consistent
     npacks, ntubesperpack, npixelspertube = shape = radii.shape
     assert heights.shape == shape
@@ -91,9 +99,7 @@ def calcpixelinfo(
     assert newradii.shape == newshape
     assert newheights.shape == newshape
 
-    from getpixelinfo import calcpixelinfo
-    return calcpixelinfo(newpositions, newradii, newheights)
-
+    return newpositions, newradii, newheights
 
 import numpy as N
 
