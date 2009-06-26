@@ -14,26 +14,14 @@
 
 def combinepixels(ARCSxml, pixelaxis, pixel_resolution):
     # data for resolution=1
-
-    # positions
-    from _getinstrumentinfo import getinstrumentinfo
-    infos = getinstrumentinfo(ARCSxml)
-    positions = infos['pixelID-position mapping array']
-    detaxes0 = infos['detector axes']
-    npacks, ndetsperpack, npixelsperdet = [axis.size() for axis in detaxes0]
-    positions.shape = npacks, ndetsperpack, npixelsperdet, 3
-
-    # radii and heights
-    from instrument.nixml import parse_file
-    instrument = parse_file( ARCSxml )
-    from getpixelsizes import getpixelsizes
-    radii, heights = getpixelsizes(
-        instrument, npacks, ndetsperpack, npixelsperdet)
-
+    positions, radii, heights = geometricInfo(ARCSxml)
+    
     #
     dists, phis, psis, solidangles, dphis, dpsis = \
            calcpixelinfo(positions, radii, heights, pixel_resolution)
 
+    #
+    detaxes0 = getDetAxes(ARCSxml)
     import histogram
     detaxes = detaxes0[0:2] + [pixelaxis]
     # scattering angles
@@ -72,6 +60,33 @@ def calcpixelinfo(
     from getpixelinfo import calcpixelinfo
     return calcpixelinfo(newpositions, newradii, newheights)
 
+
+def getDetAxes(ARCSxml):
+    from _getinstrumentinfo import getinstrumentinfo
+    infos = getinstrumentinfo(ARCSxml)
+    return infos['detector axes']
+
+
+def geometricInfo(ARCSxml):
+    #geometrical data for resolution=1
+
+    # positions
+    from _getinstrumentinfo import getinstrumentinfo
+    infos = getinstrumentinfo(ARCSxml)
+    positions = infos['pixelID-position mapping array']
+    detaxes0 = infos['detector axes']
+    npacks, ndetsperpack, npixelsperdet = [axis.size() for axis in detaxes0]
+    positions.shape = npacks, ndetsperpack, npixelsperdet, 3
+
+    # radii and heights
+    from instrument.nixml import parse_file
+    instrument = parse_file( ARCSxml )
+    from getpixelsizes import getpixelsizes
+    radii, heights = getpixelsizes(
+        instrument, npacks, ndetsperpack, npixelsperdet)
+
+    return positions, radii, heights
+    
 
 def geometricInfo_MergedPixels(positions, radii, heights, resolution):
     # make sure shapes are consistent

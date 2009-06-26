@@ -38,6 +38,28 @@ def getpixelinfo(ARCSxml):
     return dists, phis, psis, widths, heights
 
 
+def getpixelinfo_mergedpixels(ARCSxml, pixelresolution):
+    npixels = 128
+    assert npixels%pixelresolution==0
+    
+    from arcseventdata.combinepixels import combinepixels, geometricInfo, geometricInfo_MergedPixels
+    from histogram import axis
+    pixelaxis = axis('pixelID', range(0, 128, pixelresolution))
+
+    phi_p, psi_p, dist_p, sa_p, dphi_p, dpsi_p = combinepixels(ARCSxml, pixelaxis, pixelresolution)
+    positions, radii, heights = geometricInfo(ARCSxml)
+    positions, radii, heights = geometricInfo_MergedPixels(positions, radii, heights, pixelresolution)
+
+    widths = radii*2
+    
+    phis = phi_p.I
+    psis = psi_p.I
+    dists = dist_p.I
+    
+    dists.shape = phis.shape = psis.shape = widths.shape = heights.shape = -1,
+    return dists, phis, psis, widths, heights
+
+
 def writePar(stream, dists, phis, psis, widths, heights):
     info.log('writing to par file')
     n = len(dists)
@@ -64,12 +86,17 @@ class App(Script):
         import pyre.inventory
         arcsxml = pyre.inventory.str('x', default='ARCS.xml')
         outfile = pyre.inventory.str('o', default='ARCS.par')
+        resolution = pyre.inventory.int('r', default=1)
 
     def main(self):
         arcsxml = self.inventory.arcsxml
         outfile = self.inventory.outfile
-        
-        dists, phis, psis, widths, heights = getpixelinfo(arcsxml)
+        resolution = self.inventory.resolution
+
+        if resolution == 1:
+            dists, phis, psis, widths, heights = getpixelinfo(arcsxml)
+        else:
+            dists, phis, psis, widths, heights = getpixelinfo_mergedpixels(arcsxml, resolution)
         writePar(open(outfile, 'w'), dists, phis, psis, widths, heights)
         return
 

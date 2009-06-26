@@ -73,6 +73,7 @@ EXPORT_PYAPPS = \
 	mitof.py \
 	numpyarray2binary.py \
 	pixelpositions2angles.py \
+	make-tobyfit-par.py \
 
 
 EXPORT_BINS = $(PROJ_CPPEXE) $(EXPORT_PYAPPS)
