@@ -19,6 +19,8 @@
 
         <component name="PowderReduction">
 
+            <facility name='measurementFactory'>ARCSMeasurement</facility>
+
             <component name="SpeReducer">
 
                 <component name="Idpt2Spe">

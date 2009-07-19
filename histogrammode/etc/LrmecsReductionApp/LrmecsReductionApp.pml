@@ -19,6 +19,8 @@
 
         <component name="PowderReduction">
 
+            <facility name='measurementFactory'>LrmecsMeasurement</facility>
+
             <component name="SpeReducer">
 
                 <component name="Idpt2Spe">

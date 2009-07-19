@@ -61,7 +61,9 @@ class Composite(Connectable):
 
 
     def _update(self):
-        
+        self._debug.log('_update: start')
+
+        self._debug.log('_update: retrieve components')
         components = {}
         for facname in self.inventory.facilityNames():
             components[ facname ]  = self.inventory.getTraitValue( facname )
@@ -69,11 +71,16 @@ class Composite(Connectable):
         
         connections = self.connections
         
+        self._debug.log('_update: establish connections')
         composite = dsm.composite( components, connections )
         composite.sockets = self.sockets
         composite._inputs = self._inputs
+        
+        self._debug.log('_update: run connections')
         composite._update()
+        
         self._outputs = composite._outputs
+        self._debug.log('_update: end')
         return 
 
 

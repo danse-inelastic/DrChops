@@ -100,6 +100,7 @@ class PowderReduction(base):
         mi = self.inventory.measurementFactory.inventory
         self._measurementObserver.update( mi )
 
+        self._debug.log('_configure: reinit preprocess in case running in a gui')
         if self.inventory.gui:
             preprocess = self.inventory.SpeReducer.inventory.preprocess
             preprocess.inventory.preStep1 = 'preStep1_withTibgWindowPicker'
