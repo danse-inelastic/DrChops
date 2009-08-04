@@ -58,7 +58,8 @@ def Ipixtof2IpixE(
     mm = units.length.mm
     meV = units.energy.meV
 
-    pixaxis = Ipixtof.axisFromName('pixelID')
+    #pixaxis = Ipixtof.axisFromName('pixelID')
+    pixaxes = Ipixtof.axes()[:-1]
     tofaxis = Ipixtof.axisFromName('tof')
     tofbb = tofaxis.binBoundaries() * (tofaxis.unit()/microsecond)
 
@@ -71,7 +72,7 @@ def Ipixtof2IpixE(
         if Eaxis is None:
             raise ValueError, "Neither IpixE nor Eaxis is supplied"
         from histogram import histogram
-        IpixE = histogram('I(pix,E)', [pixaxis, Eaxis])
+        IpixE = histogram('I(pix,E)', pixaxes+[Eaxis])
     else:
         Eaxis = IpixE.axisFromName('energy')
     ebb = Eaxis.binBoundaries()
