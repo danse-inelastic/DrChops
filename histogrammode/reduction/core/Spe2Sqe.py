@@ -39,13 +39,22 @@ class Spe2Sqe(ParallelComponent):
     """
 
 
-    def __call__(self, ei, sphiEHist, QAxis):
+    def __call__(self, ei, sphiEHist, QAxis, **kwds):
         """spe2sqe(ei, sphiEHist, QAxis): convert s(phi,E) histogram to S(Q,E) histogram
         
         ei: incident energy
         sphiEHist: S(phi,E) histogram
         QAxis: Q (momentum transfer) axis
+
+        options:
+          remove_leftmost
         """
+        if kwds.has_key('remove_leftmost_bin'):
+            remove_leftmost_bin = kwds['remove_leftmost_bin']
+        else:
+            remove_leftmost_bin = True
+        self.remove_leftmost_bin = remove_leftmost_bin
+        
         #trivial parallel (non-parallel)
         channel = 333
         if not self.parallel or self.mpiRank == 0:
@@ -99,14 +108,15 @@ class Spe2Sqe(ParallelComponent):
             e_final = ei - exfer * EAxis.unit()
             qrebinner.rebin( phiData, qEnergyData, e_final)
 
-            # set the left-most bin to zero
-            try:
-                leftbin1 = qEnergyData.I.nonzero()[0][0]
-            except:
-                pass
-            else:
-                qEnergyData.I[leftbin1] = qEnergyData.E2[leftbin1] = 0
-                qEnergyData.I[leftbin1+1] = qEnergyData.E2[leftbin1+1] = 0
+            if self.remove_leftmost_bin:
+                # set the left-most bin to zero
+                try:
+                    leftbin1 = qEnergyData.I.nonzero()[0][0]
+                except:
+                    pass
+                else:
+                    qEnergyData.I[leftbin1] = qEnergyData.E2[leftbin1] = 0
+                    qEnergyData.I[leftbin1+1] = qEnergyData.E2[leftbin1+1] = 0
             
             # accumulate the result into correct bin of S( Q, E)
             sQEHist[(), exfer] += qEnergyData
