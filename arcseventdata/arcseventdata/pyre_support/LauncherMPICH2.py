@@ -48,6 +48,7 @@ class LauncherMPICH2(Launcher):
             
     def __init__(self):
         Launcher.__init__(self, "mpirun")
+        self.aliases = ['mpirun', 'launcher']
         return
 
 
