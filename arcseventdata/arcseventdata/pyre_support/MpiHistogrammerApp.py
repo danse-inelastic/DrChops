@@ -33,6 +33,9 @@ class Application(base):
         histogramname = pinv.str( 'histogramname', default = '' )
         histogramname.meta['tip'] = 'name of the histogram'
 
+        compression = pinv.int('compression', default=0, validator=pinv.choice(range(10)))
+        compression.meta['tip'] = 'compression ratio for hdf5 output'
+
         nevents = pinv.float( "n", default = 0 )
         nevents.meta['tip'] ="number of events to reduce"
 
@@ -129,7 +132,8 @@ class Application(base):
             fs.makedirs( pathinh5 )
             
             from histogram.hdf import dump
-            dump(h, h5filename, pathinh5, mode = 'w', fs = fs )
+            compression = self.inventory.compression
+            dump(h, h5filename, pathinh5, mode = 'w', fs = fs, compression=compression )
             pass
         return
 
