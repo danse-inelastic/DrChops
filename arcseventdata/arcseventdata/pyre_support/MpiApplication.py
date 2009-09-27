@@ -28,7 +28,7 @@ class Application(base, ParallelComponent):
 
     class Inventory(base.Inventory):
 
-        import pyre.inventory as pinv
+        import pyre.inventory 
 
         pass # end of Inventory
 
