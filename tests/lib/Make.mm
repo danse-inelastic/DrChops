@@ -20,7 +20,7 @@ PROJ_CLEAN += $(PROJ_CPPTESTS)
 
 PROJ_PYTESTS =  
 PROJ_CPPTESTS = test_Histogrammer1 test_Histogrammer2 test_Histogrammer4\
-	 testItof2IE testItof2IE_batch testIpixE2IphiE
+	 testItof2IE testItof2IE_batch testIpixE2IphiE testZt2Zxy
 PROJ_TESTS = $(PROJ_PYTESTS) $(PROJ_CPPTESTS)
 PROJ_LIBRARIES = -L$(BLD_LIBDIR) -ldrchops -ljournal
 
@@ -59,6 +59,9 @@ testItof2IE_batch: testItof2IE_batch.cc
 
 testIpixE2IphiE: testIpixE2IphiE.cc 
 	$(CXX) $(CXXFLAGS) $(LCXXFLAGS) -o $@ testIpixE2IphiE.cc $(PROJ_LIBRARIES)
+
+testZt2Zxy: testZt2Zxy.cc 
+	$(CXX) $(CXXFLAGS) $(LCXXFLAGS) -o $@ testZt2Zxy.cc $(PROJ_LIBRARIES)
 
 
 # version

@@ -1,0 +1,145 @@
+// -*- C++ -*-
+//
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+//
+//                                   Jiao Lin
+//                      California Institute of Technology
+//                      (C) 2007-2008  All Rights Reserved
+//
+// {LicenseText}
+//
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+//
+
+
+#ifndef DANSE_REDUCTION_ZT2ZXY_ICC
+#error Template definitions meaningless outside of Zt2Zxy.h
+#endif
+
+#include <cassert>
+#include <cmath>
+//#include <iostream>
+#include <sstream>
+#include "journal/debug.h"
+#include "exception.h"
+#include "histogram/EvenlySpacedGridData_2D.h"
+#include "Histogrammer.h"
+
+
+namespace DANSE { namespace Reduction{
+
+    /// implementation details
+    namespace Zt2Zxy_impl {
+      
+      const extern char *jrnltag;
+      
+      template <typename Iterator, typename FLT>
+      bool isEvenlySpaced(const Iterator &begin, const Iterator &end)
+      {
+	FLT epsilon = 1.e-7;
+	
+	assert (end-begin>1);
+	FLT step=*(begin+1)-*begin;
+	for (size_t i=1; i<end-begin-1; i++) {
+	  FLT diff = std::abs( (*(begin+i+1)-*(begin+i))/step - 1. );
+	  if ( diff> epsilon) return 0;
+	}
+	return 1;
+      }
+
+      template <typename X, typename Y, typename Z>
+      struct XYZ{
+	const X& x;
+	const Y& y;
+	const Z& z;
+	XYZ(const X&_x, const Y&_y, const Z&_z) 
+	  : x(_x), y(_y), z(_z)
+	{}
+      };
+      
+      template<typename X, typename Y, typename Z>
+      struct Get{
+	typedef XYZ<X,Y,Z> xyz_t;
+	void operator() (const xyz_t &xyz, X &x, Y &y, Z &z) const
+	{
+	  x = xyz.x;
+	  y = xyz.y;
+	  z = xyz.z;
+	}
+      };   
+	
+    } // Zt2Zxy_impl
+    
+    
+    template<
+      typename Xvalue, typename Yvalue, typename Zvalue,
+      typename InputXIterator, typename InputYIterator, typename InputZIterator,
+      typename MaskIterator,
+      typename OutputXBinIterator, typename OutputYBinIterator, typename OutputZIterator
+      >
+    void Zt2Zxy
+    ( 
+      InputXIterator x_begin, InputYIterator y_begin,
+      InputZIterator z_begin,
+      MaskIterator mask_begin,
+      size_t size,
+      
+      OutputXBinIterator outxbb_begin, OutputXBinIterator outxbb_end,
+      OutputYBinIterator outybb_begin, OutputYBinIterator outybb_end,
+      OutputZIterator outz_begin
+      )
+    {
+      using namespace Zt2Zxy_impl;
+
+      journal::debug_t debug(jrnltag);
+      
+      assert (outxbb_end-outxbb_begin>1);
+      assert (outybb_end-outybb_begin>1);
+      
+      if (!isEvenlySpaced<OutputXBinIterator, Xvalue>(outxbb_begin, outxbb_end) )
+	  throw Exception("x bin boundaries need to be evenly spaced.");
+      if (!isEvenlySpaced<OutputYBinIterator, Yvalue>(outybb_begin, outybb_end) )
+	  throw Exception("y bin boundaries need to be evenly spaced.");
+
+      typedef Histogram::EvenlySpacedGridData_2D
+	<Xvalue, Yvalue, Zvalue, OutputZIterator, unsigned int> griddata2d_t;
+      
+      Xvalue xstep = *(outxbb_begin+1) - *outxbb_begin;
+      Yvalue ystep = *(outybb_begin+1) - *outybb_begin;
+      griddata2d_t griddata( *outxbb_begin, *(outxbb_end-1), xstep,
+			     *outybb_begin, *(outybb_end-1), ystep,
+			     outz_begin);
+
+      typedef XYZ<Xvalue, Yvalue, Zvalue> xyz_t;
+      typedef Get<Xvalue, Yvalue, Zvalue> get_t;
+      
+      typedef Histogrammer2<xyz_t, griddata2d_t, get_t, Xvalue, Yvalue, Zvalue> histogrammer_t;
+      
+      get_t get;
+      histogrammer_t histogrammer(griddata, get);
+
+      for (size_t i=0; i<size; i++) {
+
+	if (*(mask_begin+i)) continue;
+	
+	Xvalue x = *(x_begin+i);
+	Yvalue y = *(y_begin+i);
+	Zvalue z = *(z_begin+i);
+	
+	xyz_t xyz(x,y,z);
+	/*
+	debug << journal::at(__HERE__) 
+	      << "x,y,z=" << x << "," << y << "," << z 
+	      << journal::endl;
+	*/
+	histogrammer(xyz);
+      }
+    }
+    
+}}//namespace DANSE::Reduction
+
+
+// version
+// $Id$
+
+// End of file 

@@ -23,6 +23,7 @@ PROJ_SRCS = \
 	IpixE2IphiE.cc \
 	Itof2IE_batch.cc \
 	Universal1DRebinner.cc \
+	Zt2Zxy.cc \
 	physics.cc \
 
 
@@ -65,6 +66,8 @@ EXPORT_HEADERS = \
 	ReverseIterator.h \
 	Universal1DRebinner.h \
 	Universal1DRebinner.icc \
+	Zt2Zxy.h \
+	Zt2Zxy.icc \
 	exception.h \
 	findCellIndex.h \
 	physics.h \
