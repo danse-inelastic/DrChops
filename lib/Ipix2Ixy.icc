@@ -1,0 +1,228 @@
+// -*- C++ -*-
+//
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+//
+//                                   Jiao Lin
+//                      California Institute of Technology
+//                      (C) 2007-2008  All Rights Reserved
+//
+// {LicenseText}
+//
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+//
+
+
+#ifndef DANSE_REDUCTION_IPIX2IXY_ICC
+#error Template definitions meaningless outside of Ipix2Ixy.h
+#endif
+
+#include "Zt2Zxy.h"
+
+namespace DANSE { namespace Reduction{
+
+    /// implementation details
+    namespace Ipix2Ixy_impl {
+      
+      const extern char *jrnltag;
+      
+      // the structure to facilitate the aggregation
+      template <typename IntensityIterator, typename SolidangleIterator>
+      struct Z{
+	IntensityIterator intensity_it, intensityE2_it;
+	SolidangleIterator solidangle_it, solidangleE2_it;
+
+	Z(IntensityIterator i_intensity_it, IntensityIterator i_intensityE2_it,
+	  SolidangleIterator i_solidangle_it, SolidangleIterator &i_solidangleE2_it
+	  )
+	  : intensity_it(i_intensity_it), intensityE2_it(i_intensityE2_it),
+	    solidangle_it(i_solidangle_it), solidangleE2_it(i_solidangleE2_it)
+	{
+	}
+	
+	Z()
+	{
+	}
+	
+	typedef Z<IntensityIterator, SolidangleIterator> z_t;
+	z_t & operator+= (const z_t &rhs) {
+	  *intensity_it += *rhs.intensity_it;
+	  *intensityE2_it += *rhs.intensityE2_it;
+	  *solidangle_it += *rhs.solidangle_it;
+	  *solidangleE2_it += *rhs.solidangleE2_it;
+	  return *this;
+	}
+      };
+      
+      
+      // container
+      template <typename IntensityIterator, typename SolidangleIterator>
+      class ZContainer{
+      public:
+	
+	// types
+	typedef ZContainer<IntensityIterator, SolidangleIterator> mytype;
+	typedef Z<IntensityIterator, SolidangleIterator> mydatatype;
+	
+	// iterator 
+	struct ZIterator{
+	
+	  // types
+	  typedef ZContainer<IntensityIterator, SolidangleIterator> mycontainertype;
+	
+	  // meta-methods
+	  ZIterator(mycontainertype &container)
+	    : m_container(&container),
+	      m_index(0)
+	  {
+	  }
+	  
+	  ZIterator(const ZIterator &rhs) {
+	    m_container = rhs.m_container;
+	    m_index = rhs.m_index;
+	  }
+
+	  ZIterator()
+	    : m_container(0),
+	      m_index(0)
+	  {
+	  }
+	
+	  ZIterator &operator++()
+	  {
+	    ++m_index;
+	    return *this;
+	  }
+	
+	  ZIterator &operator+=(size_t n)
+	  {
+	    m_index += n;
+	    return *this;
+	  }
+
+	  ZIterator operator+(size_t n)
+	  {
+	    ZIterator ret(*this);
+	    ret += n;
+	    return ret;
+	  }
+	
+	  bool operator < ( const ZIterator & rhs ) 
+	  {
+	    return m_index < rhs.m_index;
+	  }
+		
+	  mydatatype & operator*() {
+	    if (m_container == 0) throw Exception("Invalid iterator: not initd");
+
+	    return m_container->getElement(m_index);
+	  }
+
+	  mycontainertype *m_container;
+	  size_t m_index;
+	};
+	typedef ZIterator iterator_t;
+	
+	// meta-methods
+	ZContainer(IntensityIterator I_begin, IntensityIterator IE2_begin,
+		   SolidangleIterator sa_begin, SolidangleIterator saE2_begin,
+		   size_t nbins)
+	  : m_I_begin(I_begin), m_IE2_begin(IE2_begin),
+	    m_sa_begin(sa_begin), m_saE2_begine(saE2_begin),
+	    m_nbins(nbins)
+	{
+	}
+	
+	mydatatype & getElement(size_t index)
+	{
+	  if (index<0 || index>m_nbins) {
+	    std::ostringstream oss;
+	    oss << "out of bound: " 
+		<< "index=" << index << ", "
+		<< "nbins=" << m_nbins 
+		<< std::endl;
+	    throw OutOfBound(oss.str().c_str());
+	  }
+	  
+	  m_data.intensity_it = m_I_begin + index;
+	  m_data.intensityE2_it = m_IE2_begin + index;
+	  m_data.solidangle_it = m_sa_begin+index;
+	  m_data.solidangleE2_it = m_saE2_begine+index;
+	  
+	  return m_data;
+	}
+
+	
+	iterator_t begin() 
+	{
+	  iterator_t it(*this);
+	  return it;
+	}
+	
+	iterator_t end() 
+	{
+	  iterator_t it(*this);
+	  it.m_index = m_nbins;
+	  return it;
+	}
+	
+      private:
+	IntensityIterator m_I_begin, m_IE2_begin;
+	SolidangleIterator m_sa_begin, m_saE2_begine;
+	size_t m_nbins;
+	mydatatype m_data;
+      };
+      
+      
+    } // Ipix2Ixy_impl
+    
+    
+    template<
+      typename Xvalue, typename Yvalue,
+      typename XIterator, typename YIterator, typename IntensityIterator, typename SolidangleIterator,
+      typename MaskIterator,
+      typename XBinIterator, typename YBinIterator 
+      >
+    void Ipix2Ixy
+    (
+      XIterator x_begin, YIterator y_begin,
+      IntensityIterator Is_begin, IntensityIterator IsE2_begin,
+      SolidangleIterator solidangle_begin, SolidangleIterator solidangleE2_begin,
+      MaskIterator mask_begin,
+      size_t size,
+      
+      XBinIterator outxbb_begin, XBinIterator outxbb_end,
+      YBinIterator outybb_begin, YBinIterator outybb_end,
+      IntensityIterator outI_begin, IntensityIterator outIE2_begin,
+      SolidangleIterator outsolidangle_begin, SolidangleIterator outsolidangleE2_begin
+      )
+    {
+      using namespace Ipix2Ixy_impl;
+      
+      typedef Z<IntensityIterator, SolidangleIterator> z_t;
+      typedef ZContainer<IntensityIterator, SolidangleIterator> zcontainer_t;
+      typedef typename zcontainer_t::iterator_t ziterator_t;
+
+      zcontainer_t z(Is_begin, IsE2_begin, solidangle_begin, solidangleE2_begin, size);
+      zcontainer_t outz(outI_begin, outIE2_begin, outsolidangle_begin, outsolidangleE2_begin, size);
+
+      Zt2Zxy< Xvalue, Yvalue, z_t,
+	XIterator, YIterator, ziterator_t,
+	MaskIterator, 
+	XBinIterator, YBinIterator, ziterator_t
+	>(x_begin, y_begin, z.begin(),
+	  mask_begin,
+	  size,
+	  
+	  outxbb_begin, outxbb_end,
+	  outybb_begin, outybb_end,
+	  outz.begin()
+	  );	    
+    }
+    
+}}//namespace DANSE::Reduction
+
+
+// version
+// $Id$
+
+// End of file 

@@ -20,6 +20,7 @@ PROJ_TMPDIR = $(BLD_TMPDIR)/$(PROJECT)/$(PACKAGE)
 PROJ_CLEAN += $(PROJ_SAR) $(PROJ_DLL)
 
 PROJ_SRCS = \
+	Ipix2Ixy.cc \
 	IpixE2IphiE.cc \
 	Itof2IE_batch.cc \
 	Universal1DRebinner.cc \
@@ -58,6 +59,8 @@ endif
 EXPORT_HEADERS = \
 	Functor.h \
 	Histogrammer.h \
+	Ipix2Ixy.h \
+	Ipix2Ixy.icc \
 	IpixE2IphiE.h \
 	IpixE2IphiE.icc \
 	Itof2IE.h \
