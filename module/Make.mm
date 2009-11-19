@@ -23,6 +23,7 @@ PROJ_CXX_SRCLIB = -ldrchops -ljournal
 PROJ_SRCS = \
 	IpixE2IphiE_bdgs.cc \
 	Itof2IE_batch_bdgs.cc \
+	Zt2Zxy_bdgs.cc \
 	bindings.cc \
 	exceptions.cc \
 	misc.cc \

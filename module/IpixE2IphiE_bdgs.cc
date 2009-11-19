@@ -207,6 +207,6 @@ namespace reductionmod
 
 
 // version
-// $Id: IpixE2IphiE_bdgs.h 512 2005-07-08 20:19:55Z tim $
+// $Id$
 
 // End of file
