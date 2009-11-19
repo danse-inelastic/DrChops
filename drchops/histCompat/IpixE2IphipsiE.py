@@ -40,7 +40,7 @@ def IpixE2IphipsiE(
       
     outputs
       (optional) IphipsiE: I[phi,psi,E] histogram. This histogram will be created for you if you don't supply one. But you will need to specify phiaxis and psiaxis.
-      solidangle_phipsi: solidangle[phi,psi] histogram
+      (optional) solidangle_phipsi: solidangle[phi,psi] histogram. This histogram will be created for you if you don't supply one. But you will need to specify phiaxis and psiaxis.
 
     All inputs should be either histograms or physical quantities with units
     """
