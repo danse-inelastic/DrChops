@@ -29,6 +29,7 @@ update: clean
 
 EXPORT_PYTHON_MODULES = \
 	IpixE2IphiE.py \
+	IpixE2IphipsiE.py \
 	Ipixtof2IpixE.py \
 	__init__.py\
 

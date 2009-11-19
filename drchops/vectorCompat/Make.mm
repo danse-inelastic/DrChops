@@ -30,6 +30,7 @@ update: clean
 EXPORT_PYTHON_MODULES = \
 	Ipixtof2IpixE.py \
 	IpixE2IphiE.py \
+	Zt2Zxy.py \
 	__init__.py\
 
 export:: export-package-python-modules
