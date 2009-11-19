@@ -31,20 +31,18 @@ def IpixE2IphipsiE(
     IphipsiE = None, solidangle_phipsi = None, phiaxis = None, psiaxis=None):
     Rebin I(pix,E) to I(phi, psi, E) 
 
-    I[pix,psi,E]: data to be reduced.
-
     inputs:
       IpixE: I[pix,E] histogram
 
-      phi_pix, psi_pix, solidangle_pix, mask_pix: phi[pix], psi[pix], solidangle[pix], mask[pix]
+      phi_pix, psi_pix, solidangle_pix, mask_pix: phi[pix], psi[pix], solidangle[pix], mask[pix] histograms
 
-      phiaxis, psiaxis: axes for the out histogram
+      (optional) phiaxis, psiaxis: axes for the output histogram. If IphipsiE is supplied as a keyword arugment to this function, phiaxis and psiaxis are automatically obtained from the IphipsiE histogram.
       
     outputs
-      IphipsiE: I[phi,psi,E] histogram
+      (optional) IphipsiE: I[phi,psi,E] histogram. This histogram will be created for you if you don't supply one. But you will need to specify phiaxis and psiaxis.
       solidangle_phipsi: solidangle[phi,psi] histogram
 
-    All input should be either histograms or physical quantities with units
+    All inputs should be either histograms or physical quantities with units
     """
 
     # make sure input histogram has the right unit
