@@ -42,10 +42,11 @@ class Writer(object ):
 
     def __init__(self):
         """ctor( ) --> mslice spe file writer"""
+        self._writer_usingnparray = WriterUsingNumpyArray()
         return
 
 
-    def write_phx( self, sa_p, psi_p, dphi_p, dpsi_p, filename ):
+    def write_phx( self, sa_p, psi_p, dphi_p, dpsi_p, filename, mask_p=None ):
         """write_phx( sa_p, psi_p, filename ) --> write phx file for mslice
         filename: output filename in mslice spe format
         sa_p: scattering_angle( ..., pix ) histogram
@@ -53,11 +54,86 @@ class Writer(object ):
                 angle between the scattering direction and the principle
                 scattering plane
         """
+        if mask_p is not None:
+            mask_p = N.array(mask_p.I, bool)
+        else:
+            mask_p = None
+        self._writer_usingnparray.write_phx(
+            sa_p.I, psi_p.I, dphi_p.I, dpsi_p.I, filename,
+            mask_p = mask_p)
+
+
+    def write_spe(self, I_pe, phi_p, filename, mask_p=None): 
+        """write( I_pe, phi_p, filename) --> write I(...,pxl,E) and phi(...,pxl) to file in mslice format
+        filename: output filename in mslice spe format
+        I_pe: I(...,pix,E) histogram
+        phi_p: phi( ..., pix ) histogram
+        """
+        if mask_p is not None:
+            mask_p = N.array(mask_p.I, bool)
+        else:
+            mask_p = None
+        eAxis = I_pe.axisFromName( "energy" )
+        ebbs = eAxis.binBoundaries()
+        self._writer_usingnparray.write_spe(
+            ebbs, I_pe.I, I_pe.E2, phi_p.I, filename,
+            mask_p = mask_p)
+        return
+
+
+
+class WriterUsingNumpyArray(object):
+
+    """writer for creating data files for mslice
+
+    All inputs are numpy array
+    
+    In mslice
+
+     - phi is the scattering angle
+     - psi is the angle between scattering direction and principle scattering
+       plane
+    """
+
+    phiGridTitle = "### Phi Grid"
+    EGridTitle = "### Energy Grid"
+    STitle = "### S(Phi,w)"
+    SerrTitle = "### Errors"
+    eol = '\n'
+
+    def __init__(self):
+        """ctor( ) --> mslice spe file writer"""
+        return
+
+
+    def write_phx( self, sa_p, psi_p, dphi_p, dpsi_p, filename, mask_p=None):
+        """write_phx( sa_p, psi_p, filename ) --> write phx file for mslice
+        filename: output filename in mslice spe format
+        sa_p: scattering_angle( ..., pix ) array
+        psi_p: psi(..., pix) array. psi is the azimuthal angle, or the
+                angle between the scattering direction and the principle
+                scattering plane
+        """
         print "mslice data writer: write phx file"
         f = open(filename, 'w')
 
-        assert sa_p.shape() == psi_p.shape()
-        size = sa_p.size()
+        if mask_p is not None:
+            # the convention was that when mask is 1, when need to remove the pixel
+            # here we need to use mask to get rid of pixels using numpy
+            # array's masking capability, which requires the opposite.
+            mask_p = -mask_p
+            sa_p = sa_p[mask_p].copy()
+            psi_p = psi_p[mask_p].copy()
+            dphi_p = dphi_p[mask_p].copy()
+            dpsi_p = dpsi_p[mask_p].copy()
+        else:
+            sa_p = sa_p.copy()
+            psi_p = psi_p.copy()
+            dphi_p = dphi_p.copy()
+            dpsi_p = dpsi_p.copy()
+        
+        assert sa_p.shape == psi_p.shape
+        size = sa_p.size
         f.write( "%s\n" % size)
 
         fmtstr = "%10.4f"*6 + "%10d" + '\n'
@@ -67,87 +143,86 @@ class Writer(object ):
         col1 = 10.0; col2 = 0.0;
         counter = 0
         
-        sa_arr = N.array( sa_p.I, copy = 0 )
-        sa_arr.shape = -1,
-
-        psi_arr = N.array( psi_p.I, copy = 0 )
-        psi_arr.shape = -1,
-
-        dphi_arr = N.array( dphi_p.I, copy=0)
-        dphi_arr.shape = -1,
-
-        dpsi_arr = N.array( dpsi_p.I, copy=0)
-        dpsi_arr.shape = -1,
+        sa_p.shape = -1
+        psi_p.shape = -1
+        dphi_p.shape = -1
+        dpsi_p.shape = -1
         
         
         for i in range(size):
             counter += 1
-            twotheta = sa_arr[i]
-            psi = psi_arr[i]
-            dtwotheta = dphi_arr[i]
-            dpsi = dpsi_arr[i]
+            twotheta = sa_p[i]
+            psi = psi_p[i]
+            dtwotheta = dphi_p[i]
+            dpsi = dpsi_p[i]
             f.write( fmtstr % ( col1, col2, twotheta, psi, dtwotheta, dpsi, counter ) )
             continue
         return
 
 
-    def write_spe(self, I_pe, phi_p, filename): 
-        """write( I_pe, phi_p, filename) --> write I(...,pxl,E) and phi(...,pxl) to file in mslice format
+    def write_spe(self, ebbs, I_pe, E2_pe, phi_p, filename, mask_p=None): 
+        """write( ebbs, I_pe, E2_pe, phi_p, filename) --> write I(pxl,E), IE2(pxl,E) and phi(...,pxl) to file in mslice format
         filename: output filename in mslice spe format
-        I_pe: I(...,pix,E) histogram
-        phi_p: phi( ..., pix ) histogram
+        ebbs: energy bin boundaries
+        I_pe: I(...,pix,E) array
+        E2_pe: IE2(...,pix,E) array
+        phi_p: phi( ..., pix ) array
         """
         print "mslice data writer: write spe file"
-        
-        assert I_pe.shape()[:-1] == phi_p.shape()
 
-        #make a copy so we can change it
-        I_pe = I_pe.copy()
-        self._adjustIntensity(I_pe)
-        
+        if mask_p is not None:
+            # the convention was that when mask is 1, when need to remove the pixel
+            # here we need to use mask to get rid of pixels using numpy
+            # array's masking capability, which requires the opposite.
+            mask_p = -mask_p
+            I_pe = I_pe[mask_p].copy()
+            E2_pe = E2_pe[mask_p].copy()
+            phi_p = phi_p[mask_p].copy()
+        else:
+            I_pe = I_pe.copy()
+            E2_pe = E2_pe.copy()
+            phi_p = phi_p.copy()
+
+        assert I_pe.shape[:-1] == phi_p.shape
+
+        self._adjustIntensity(I_pe, E2_pe)
+
         f = open(filename, 'w')
         
-        eAxis = I_pe.axisFromName( "energy" )
-        nes = eAxis.size()
+        nes = len(ebbs)-1
 
-        ntotpxls = phi_p.size()
+        ntotpxls = phi_p.size
         
         f.write( "%s %s\n" % ( ntotpxls, nes ) )
 
         self._writePhiGrid( phi_p, f )
-        self._writeEGrid( eAxis, f )
-        self._writeSGrid( I_pe, ntotpxls, nes, f )
+        self._writeEGrid( ebbs, f )
+        self._writeSGrid( I_pe, E2_pe, ntotpxls, nes, f )
         return
 
 
-    def _adjustIntensity(self, ipe):
-        import numpy as N
-
-        iarr = ipe.I
+    def _adjustIntensity(self, ipe, E2pe):
         #remove negative numbers
-        #iarr[iarr<0]=0
+        #ipe[ipe<0]=0
         #remove nan
-        iarr[N.isnan(iarr)]=0
-        iarr[N.isinf(iarr)]=0
+        ipe[N.isnan(ipe)]=0
+        ipe[N.isinf(ipe)]=0
 
-        e2arr = ipe.E2
         #remove negative numbers
-        e2arr[e2arr<0] *= -1
+        E2pe[E2pe<0] *= -1
         #remove nan
-        e2arr[N.isnan(e2arr)]=0        
-        e2arr[N.isinf(e2arr)]=0        
-
+        E2pe[N.isnan(E2pe)]=0        
+        E2pe[N.isinf(E2pe)]=0        
         return
 
 
-    def _writeSGrid(self, I_pe, ntotpixels, nEbins, fout):
-        "I_pe: I(...,pix,E) histogram"
+    def _writeSGrid(self, I_pe, E2_pe, ntotpixels, nEbins, fout):
+        "I_pe: I(...,pix,E) array"
         print "S grid"
-        eAxis = I_pe.axisFromName( "energy" )
-        Ina = N.array( I_pe.data().storage().asNumarray(), 'd' )
+        Ina = N.array( I_pe, 'd' )
         Ina.shape = ntotpixels, nEbins
         from numpy import sqrt
-        Ena = sqrt(N.array(I_pe.errors().storage().asNumarray(), 'd'))
+        Ena = sqrt(N.array(E2_pe, 'd'))
         Ena.shape = ntotpixels, nEbins
 
         import arcseventdata
@@ -157,16 +232,15 @@ class Writer(object ):
         return
         
 
-    def _writeSGrid_slow( self, I_pe, ntotpixels, nEbins, fout):
+    def _writeSGrid_slow( self, I_pe, E2_pe, ntotpixels, nEbins, fout):
         "I_pe: I(...,pix,E) histogram"
         print "S grid"
-        eAxis = I_pe.axisFromName( "energy" )
         s = ""
         eol = self.eol
-        Ina = N.array( I_pe.data().storage().asNumarray(), copy = 0 )
+        Ina = N.array( I_pe, copy = 0 )
         Ina.shape = ntotpixels, nEbins
         from numpy import sqrt
-        Ena = sqrt(I_pe.errors().storage().asNumarray())
+        Ena = sqrt(E2_pe)
         Ena.shape = ntotpixels, nEbins
 
         for i in range(ntotpixels):
@@ -185,11 +259,10 @@ class Writer(object ):
         return
 
 
-    def _writeEGrid( self, eAxis, fout):
+    def _writeEGrid( self, ebbs, fout):
         print "Energy Grid"
         s =  self.EGridTitle + self.eol 
-        es = eAxis.binBoundaries()
-        s += fortran_print_numbers( es )
+        s += fortran_print_numbers( ebbs )
         fout.write(s)
         return
 
@@ -200,7 +273,7 @@ class Writer(object ):
         s = self.phiGridTitle + self.eol
         eol = self.eol
         
-        phis = N.array( phi_p.data().storage().asNumarray(), copy = 0 )
+        phis = N.array(phi_p, copy = 0 )
         phis.shape = -1,
         phis = list(phis)
         phis.append( 0.0 ) # need one extra entry. strange thing about mslice
@@ -259,12 +332,39 @@ def test2():
     errs2 = n.ones( (10,40) ) * 0.
     psi_p = makeHistogram( "psi_p", [det,pxl], data1, errs1)
 
-    writer.write_phx( phi_p, psi_p, "tmp.phx" )
+    sa_p = psi_p = dphi_p = dpsi_p = phi_p
+    writer.write_phx(sa_p, psi_p, dphi_p, dpsi_p, "tmp.phx" )
+    return
+
+def test3():
+    import numpy as n
+    from histogram import makeHistogram
+    det = ( "detectorID", range(10) )
+    pxl = ( "pixelID", range(40) )
+    E   = ( "energy", n.arange( -6,6, 1.0) )
+    data = n.ones( (10,40,12) )
+    errs = n.ones( (10,40,12) ) * 0.5
+    I_pe =  makeHistogram( "I_pe", [det, pxl, E], data, errs)
+    
+    data1 = n.ones( (10,40) )
+    errs1 = n.ones( (10,40) ) * 0.
+    phi_p = makeHistogram( "phi_p", [det,pxl], data1, errs1)
+
+    data2 = n.ones( (10,40),  int )
+    errs2 = n.zeros( (10,40),  int )
+    data2[:,0] = 0
+    mask_p = makeHistogram( "mask_p", [det,pxl], data2, errs2)
+
+    writer.write_spe( I_pe, phi_p, "tmp-withmask.spe", mask_p=mask_p)
+
+    sa_p = psi_p = dphi_p = dpsi_p = phi_p
+    writer.write_phx(sa_p, psi_p, dphi_p, dpsi_p, "tmp-withmask.phx" , mask_p=mask_p)
     return
 
 def test():
     test1()
     test2()
+    test3()
     return
 
 if __name__ =="__main__": test()
