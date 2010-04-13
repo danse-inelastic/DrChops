@@ -19,8 +19,13 @@
 ##  3. inherit also from ParallelComponent so we have access to self.mpiRank and other mpi thing.
 ##  4. build a help message out of meta['tip']
 
+try: 
+    from mpi.Application import Application as base
+except ImportError:
+    import warnings
+    warnings.warn( 'mpi not available.' )
+    from pyre.applications.Script import Script as base
 
-from mpi.Application import Application as base
 from arcseventdata.parallel_histogrammers.ParallelComponent import ParallelComponent
 
 
@@ -69,8 +74,14 @@ class Application(base, ParallelComponent):
 
 
     def _defaults(self):
-        from LauncherMPICH2 import LauncherMPICH2
-        self.inventory.launcher = LauncherMPICH2()
+        try:
+            from LauncherMPICH2 import LauncherMPICH2
+        except ImportError:
+            launcher = None
+        else:
+            launcher = LauncherMPICH2()
+        
+        self.inventory.launcher = launcher
         return
 
 
