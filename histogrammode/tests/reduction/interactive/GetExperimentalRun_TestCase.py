@@ -21,7 +21,7 @@ from reduction.interactive import getRun
 class GetExperimentalRun_TestCase(unittest.TestCase):
 
 
-    def testLrmecs(self):
+    def _testLrmecs(self):
         """GetExperimentalRun: Lrmecs
         """
         getRun.select('lrmecs')
@@ -29,13 +29,40 @@ class GetExperimentalRun_TestCase(unittest.TestCase):
         return
 
 
-    def testPharos(self):
+    def _testPharos(self):
         """GetExperimentalRun: Pharos
         """
         getRun.select('pharos')
         getRun( '../../ins-data/Pharos/PharosDefinitions.txt',
                 '../../ins-data/Pharos/Pharos_342.nx.h5')
         return
+
+
+    def testARCS(self):
+        """GetExperimentalRun: ARCS
+        """
+        getRun.select('arcs')
+        run = getRun('../../ins-data/ARCS/ARCS-DAS-FS/2008_2_18_SCI/ARCS_297')
+
+        number, unit = run.getIntegratedCurrent()
+
+        self.assertAlmostEqual(number, 510627000000.0)
+        self.assertEqual(unit, 'pC')
+        return
+
+
+    def testARCS2(self):
+        """GetExperimentalRun: ARCS: parameter "runid"
+        """
+        getRun.select('arcs')
+        run = getRun('ARCS_297_datadir', runid='ARCS_297')
+
+        number, unit = run.getIntegratedCurrent()
+
+        self.assertAlmostEqual(number, 510627000000.0)
+        self.assertEqual(unit, 'pC')
+        return
+
 
     pass # end of TimeBG_TestCase
 

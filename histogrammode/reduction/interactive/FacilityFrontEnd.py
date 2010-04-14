@@ -74,7 +74,15 @@ class FacilityFrontEndCurator(type):
     
 
     def __init__(klass, name, bases, dict):
-        type.__init__(name, bases, dict)
+        import sys
+        vinfo = sys.version_info
+        if vinfo[0] == 2:
+            if vinfo[1] <= 5:
+                type.__init__(name, bases, dict)
+            else:
+                type.__init__(klass, name, bases, dict)
+        else:
+            raise NotImplementedError
 
         doc = docstr( name )
         klass.__doc__ = doc
