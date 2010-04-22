@@ -88,8 +88,10 @@ namespace wrap_arcseventdata
       if (nzarrsize != size_t( (x_end-x_begin)/x_step) * size_t( (y_end-y_begin)/y_step) )  {
 	oss << "Size mismatch: "
 	    << "zarray: size = " << nzarrsize << "; "
-	    << "x bin boundaries parameters = " << x_begin << ", " << x_end << ", " << x_step
-	    << "y bin boundaries parameters = " << y_begin << ", " << y_end << ", " << y_step
+	    << "x bin boundaries parameters = " << x_begin << ", " << x_end << ", " << x_step << "; "
+	    << "y bin boundaries parameters = " << y_begin << ", " << y_end << ", " << y_step << "; "
+	    << "xsize=" << size_t( (x_end-x_begin)/x_step) << "; "
+	    << "ysize=" << size_t( (y_end-y_begin)/y_step) << "; "
 	    << std::endl;
 	oss << "This could be caused by python floating-point-number error."
 	    << "You can try to change the step size and see if that helps."

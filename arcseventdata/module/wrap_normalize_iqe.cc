@@ -46,12 +46,14 @@ namespace wrap_arcseventdata
 
       size_t nSAarrsize = PyArray_Size( pySAarray );
       
-      if (nSAarrsize != size_t( (qend-qbegin)/qstep * (eend-ebegin)/estep ) ) {
+      if (nSAarrsize != size_t( (qend-qbegin)/qstep) * size_t((eend-ebegin)/estep ) ) {
 	std::ostringstream oss;
 	oss << "Size mismatch: "
 	    << "SAarray: size = " << nSAarrsize << "; "
-	    << "q bin boundaries parameters = " << qbegin << ", " << qend << ", " << qstep
-	    << "e bin boundaries parameters = " << ebegin << ", " << eend << ", " << estep
+	    << "q bin boundaries parameters = " << qbegin << ", " << qend << ", " << qstep << "; "
+	    << "e bin boundaries parameters = " << ebegin << ", " << eend << ", " << estep << "; "
+	    << "qsize=" << size_t( (qend-qbegin)/qstep) << "; "
+	    << "esize=" << size_t( (eend-ebegin)/estep) << "; "
 	    << std::endl;
 	oss << "This could be caused by python floating-point-number error."
 	    << "You can try to change the step size and see if that helps."
