@@ -48,9 +48,7 @@ class ParallelHistogrammer(ParallelComponent):
             pass
 
         # partition the load
-        eventsource_for_nodes = partition(eventdatafiles, mpiSize, nevents)
-        # the load for this node
-        eventsourcecollection = eventsource_for_nodes[mpiRank]
+        eventsourcecollection = self._getLoad(eventdatafiles, nevents)
         
         # initialize this histogrammer
         self.setParameters(*args)
@@ -98,6 +96,31 @@ class ParallelHistogrammer(ParallelComponent):
         info.log( "times: %s" % str(os.times()) )
         return h
 
+
+    def _getLoad(self, eventdatafiles, nevents):
+        'figure out how much load this node need to work on'
+        mpiSize = self.mpiSize
+        mpiRank = self.mpiRank
+        
+        tag = 700
+        if mpiRank == 0:
+            eventsource_for_nodes = partition(eventdatafiles, mpiSize, nevents)
+            
+            # event source collection for master node
+            eventsourcecollection = eventsource_for_nodes[0]
+
+            # send event source collection to each node
+            for node in range(1, mpiSize):
+                # the load for the node
+                t = eventsource_for_nodes[node]
+                # send
+                self.mpiSend(t, node, tag)
+                continue
+        else:
+            # receive partition result from master node
+            eventsourcecollection = self.mpiReceive(0, tag)
+        return eventsourcecollection
+    
 
     def _readInstrumentInfo(self, ARCSxml):
         info.log('reading instrument info')
