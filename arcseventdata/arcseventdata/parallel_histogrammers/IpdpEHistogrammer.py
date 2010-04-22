@@ -76,27 +76,6 @@ class IpdpEHistogrammer(base):
         return
 
 
-    def _readInstrumentInfo(self, ARCSxml):
-        info.log('reading instrument info')
-        mpiRank = self.mpiRank
-        mpiSize = self.mpiSize
-        if mpiRank == 0:
-            from arcseventdata import getinstrumentinfo
-            infos = getinstrumentinfo(ARCSxml)
-
-        #  send/receive
-        tag =999
-        if mpiRank == 0:
-            info.log( "%s: sending infos to all nodes..." % mpiRank )
-            for node in range(1, mpiSize):
-                self.mpiSend(infos, node, tag)
-        else:
-            info.log( "%s: receiving infos..." % mpiRank )
-            infos = self.mpiReceive(0, tag)
-            
-        return infos
-    
-
     def _processEvents(self, events):
         info.log( "histograming..." )
         arcseventdata.events2IpdpE(

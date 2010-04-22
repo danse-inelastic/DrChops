@@ -11,6 +11,15 @@
 #  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # 
 
+
+'''base class for histogrammers that can parallely
+
+limitations:
+ * must run on a filesystem that is common to all nodes
+
+'''
+
+
 import journal
 info = journal.info('histogrammer')
 warning = journal.warning('ParallelHistogrammer')
@@ -89,6 +98,37 @@ class ParallelHistogrammer(ParallelComponent):
         info.log( "times: %s" % str(os.times()) )
         return h
 
+
+    def _readInstrumentInfo(self, ARCSxml):
+        info.log('reading instrument info')
+        mpiRank = self.mpiRank
+        mpiSize = self.mpiSize
+        if mpiRank == 0:
+            from arcseventdata import getinstrumentinfo
+            allinfos = getinstrumentinfo(ARCSxml)
+            # only keep the necessary ones
+            infos = {}
+            keys = [
+                'detector-system-dimensions',
+                'moderator-sample distance',
+                'pixelID-position mapping binary file',
+                'detector axes',
+                ]
+            for k in keys: infos[k] = allinfos[k]
+            del allinfos
+
+        #  send/receive
+        tag =999
+        if mpiRank == 0:
+            info.log( "%s: sending infos to all nodes..." % mpiRank )
+            for node in range(1, mpiSize):
+                self.mpiSend(infos, node, tag)
+        else:
+            info.log( "%s: receiving infos..." % mpiRank )
+            infos = self.mpiReceive(0, tag)
+            
+        return infos
+    
 
     def _processEventSourceCollection(self, events_collection):
         '''process a list of events. each item is a tuple of (events, nevents)
