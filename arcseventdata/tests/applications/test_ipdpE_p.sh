@@ -6,3 +6,5 @@ ipdpE.py -o IpdpE.h5 -n 50000 -E -50,50,1 -x ARCS.xml -I 70 -t 20 --mpirun.nodes
 
 
 python -c "import histogram.hdf as hh; ipdpE = hh.load('IpdpE.h5', 'I(pdpE)'); IE = ipdpE.sum('detectorpackID').sum('detectorID').sum('pixelID'); from histogram.plotter import defaultPlotter as plotter; plotter.plot( IE )"
+
+./compareHistogram.py "IpdpE.h5/I(pdpE)" "oracle/IpdpE.h5/I(pdpE)"

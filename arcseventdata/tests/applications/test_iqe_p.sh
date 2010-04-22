@@ -5,3 +5,4 @@ iqe.py -o IQE.h5 --n 50000 -E -50,50,1. -Q 0,13,0.1 -x ARCS.xml -I 70 -t 20  --m
 
 PlotHist.py IQE.h5 "I(Q,E)"
 
+./compareHistogram.py "IQE.h5/I(Q,E)" "oracle/IQE.h5/I(Q,E)"

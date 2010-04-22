@@ -6,3 +6,5 @@ idspacing.py -o Id.h5 -n 50000 -t 0,4.0,0.01 -x ARCS.xml --mpirun.nodes=4 --jour
 #idspacing.py -o Id.h5 -n 50000 -t 0,4.0,0.01 -x ARCS.xml --mpirun.nodes=4 --journal.info.mpirun --journal.debug.mpirun --journal.info.mpi events.dat
 
 PlotHist.py Id.h5 "I(d spacing)"
+
+./compareHistogram.py "Id.h5/I(d spacing)" "oracle/Id.h5/I(d spacing)"
