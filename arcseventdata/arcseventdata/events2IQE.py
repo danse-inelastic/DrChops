@@ -23,14 +23,14 @@ def events2IQE(events, n, IQE, Ei, pixelpositions,
     Q_boundaries = Q_axis.binBoundaries().asNumarray()
     Q_begin = Q_boundaries[0]
     Q_step = Q_boundaries[1] - Q_boundaries[0]
-    Q_end = Q_boundaries[-1]
+    Q_end = Q_boundaries[-1] + Q_step/10.
 
     assert axes[1].name() == 'energy'
     E_axis = axes[1]
     E_boundaries = E_axis.binBoundaries().asNumarray()
     E_begin = E_boundaries[0]
     E_step = E_boundaries[1] - E_boundaries[0]
-    E_end = E_boundaries[-1]
+    E_end = E_boundaries[-1] + E_step/10.
 
     ntotpixels = len(pixelpositions)
     

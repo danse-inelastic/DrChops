@@ -53,10 +53,12 @@ def calcSolidAngleQE( sa, ei, pixelPositions, pixelSolidAngles,
     qaxis = sa.axisFromName( 'Q' )
     qbbs = qaxis.binBoundaries().asNumarray()
     qbegin, qend, qstep = qbbs[0], qbbs[-1], qbbs[1]-qbbs[0]
+    qend += qstep/10.
     
     eaxis = sa.axisFromName( 'energy' )
     ebbs = eaxis.binBoundaries().asNumarray()
     ebegin, eend, estep = ebbs[0], ebbs[-1], ebbs[1]-ebbs[0]
+    eend += estep/10.
     
     npixels = len(pixelPositions)
     from numpyext import getdataptr

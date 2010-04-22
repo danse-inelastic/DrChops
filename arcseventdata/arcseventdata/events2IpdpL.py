@@ -30,7 +30,7 @@ def events2IpdpL(events, n, IpdpL, pixelpositions,
     L_boundaries = L_axis.binBoundaries().asNumarray()
     L_begin = L_boundaries[0]
     L_step = L_boundaries[1] - L_boundaries[0]
-    L_end = L_boundaries[-1]
+    L_end = L_boundaries[-1] + L_step/10.
 
     ntotpixels = len( pixelpositions )
     from numpyext import getdataptr
