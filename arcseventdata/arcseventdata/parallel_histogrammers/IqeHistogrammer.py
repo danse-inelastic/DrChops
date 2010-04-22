@@ -12,6 +12,9 @@
 #
 
 
+import arcseventdata, histogram 
+
+
 from ParallelHistogrammer import ParallelHistogrammer as base, info
 
 
@@ -47,9 +50,9 @@ class IqeHistogrammer(base):
         return newIQE
 
 
-    def _run( self,
-              eventdatafilename, start, nevents,
-              Q_params, E_params, ARCSxml, Ei, emission_time):
+    def setParameters(
+        self,
+        Q_params, E_params, ARCSxml, Ei, emission_time):
         
         from arcseventdata import getinstrumentinfo
         infos = getinstrumentinfo(ARCSxml)
@@ -59,8 +62,6 @@ class IqeHistogrammer(base):
         pixelPositionsFilename = infos[
             'pixelID-position mapping binary file']
     
-        self._debug.log( "eventdatafilename = %s" % eventdatafilename)
-        self._debug.log( "nevents = %s" % nevents)
         self._debug.log( "pixel-positions-filename=%s" % pixelPositionsFilename)
         self._debug.log( 'E_params (unit: meV) = %s' % (E_params, ) )
         self._debug.log( 'Q_params (unit: angstrom^-1) = %s' % (Q_params, ) )
@@ -71,7 +72,6 @@ class IqeHistogrammer(base):
         E_begin, E_end, E_step = E_params # meV
         Q_begin, Q_end, Q_step = Q_params # angstrom^-1
         
-        import arcseventdata, histogram 
         Q_axis = histogram.axis('Q', boundaries = histogram.arange(
             Q_begin, Q_end, Q_step) )
         E_axis = histogram.axis('energy', boundaries = histogram.arange(
@@ -85,7 +85,6 @@ class IqeHistogrammer(base):
             data_type = 'int',
             )
 
-        events, nevents = arcseventdata.readevents( eventdatafilename, nevents, start )
         pixelPositions = arcseventdata.readpixelpositions(
             pixelPositionsFilename, npacks, ndetsperpack, npixelsperdet )
 
@@ -94,13 +93,23 @@ class IqeHistogrammer(base):
         if mpiRank == 0:
             pixelSolidAngles = infos['solidangles'].I
             self._remember( Ei, pixelPositions, pixelSolidAngles )
-        
+            
+        self.out_histogram = h
+        self.pixelPositions = pixelPositions
+        self.Ei = Ei
+        self.mod2sample = mod2sample
+        self.emission_time = emission_time
+        return 
+
+
+    def _processEvents(self, events):
+        h = self.out_histogram
         h = arcseventdata.events2IQE(
-            events, nevents, h, Ei, pixelPositions,
-            mod2sample = mod2sample,
-            emission_time = emission_time,
+            events.ptr, events.n, 
+            h, self.Ei, self.pixelPositions,
+            mod2sample = self.mod2sample,
+            emission_time = self.emission_time,
             )
-    
         return h
 
 

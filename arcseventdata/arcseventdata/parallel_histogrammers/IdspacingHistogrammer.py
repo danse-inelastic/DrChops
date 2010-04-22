@@ -12,14 +12,15 @@
 #
 
 
+import arcseventdata, histogram 
+
 from ParallelHistogrammer import ParallelHistogrammer as base, info
 
 class IdspacingHistogrammer(base):
     
-    def _run(self, eventdatafilename, start, nevents,
-             ARCSxml, dspacingparams ):
-        
-        info.log( "nevents = %s" % nevents )
+    def setParameters(
+        self, 
+        ARCSxml, dspacingparams ):
         
         from arcseventdata import getinstrumentinfo
         infos = getinstrumentinfo(ARCSxml)
@@ -31,8 +32,6 @@ class IdspacingHistogrammer(base):
         
         info.log( "pixel-positions-filename=%s" % pixelPositionsFilename )
         
-        import arcseventdata, histogram 
-        events, nevents = arcseventdata.readevents( eventdatafilename, nevents, start )
         pixelPositions = arcseventdata.readpixelpositions(
             pixelPositionsFilename, npacks, ndetsperpack, npixelsperdet )
 
@@ -40,10 +39,20 @@ class IdspacingHistogrammer(base):
         m = PixelIDMapper( npixelsperdet, ndetsperpack, npacks )
         assert m.ntotpixels == len( pixelPositions )
         
-        h = arcseventdata.e2Id(
-            events, nevents, pixelPositions, dspacingparams,
-            mod2sample = mod2sample )
-        
+        self.out_histogram = None
+
+        self.pixelPositions = pixelPositions
+        self.dspacingparams = dspacingparams
+        self.mod2sample = mod2sample
+        return
+
+
+    def _processEvents(self, events):
+        h = self.out_histogram = arcseventdata.e2Id(
+            events.ptr, events.n, self.pixelPositions,
+            self.dspacingparams,
+            Idspacing = self.out_histogram,
+            mod2sample = self.mod2sample)
         return h
 
 

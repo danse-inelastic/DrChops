@@ -12,38 +12,43 @@
 #
 
 
+import arcseventdata
+
 
 from ParallelHistogrammer import ParallelHistogrammer as base, info
 
 
 class ItofHistogrammer(base):
-
-    def _run( self,
-              eventdatafilename, start, nevents,
-              ARCSxml, tof_params):
+    
+    def setParameters(
+        self,
+        ARCSxml, tof_params):
 
         from arcseventdata import getinstrumentinfo
         infos = getinstrumentinfo(ARCSxml)
         npacks, ndetsperpack, npixelsperdet = infos[
             'detector-system-dimensions']
-        import arcseventdata
         ntotpixels = arcseventdata.npixels( npacks, ndetsperpack, npixelsperdet )
         
         mod2sample = infos['moderator-sample distance']
 
-        info.log( "eventdatafilename = %s" % eventdatafilename )
-        info.log( "nevents = %s" % nevents )
         info.log( 'tof_params (unit: us) = %s' % (tof_params, ) )
-        
-        events, nevents = arcseventdata.readevents( eventdatafilename, nevents, start )
-    
-        tof_begin, tof_end, tof_step = tof_params
 
-        h = arcseventdata.e2Itof(
-            events, nevents, ntotpixels,
-            tof_params = tof_params)
-        
-        return h
+        self.out_histogram = None
+        self.ntotpixels = ntotpixels
+        self.tof_params = tof_params
+        return 
+
+
+    def _processEvents( self,events):
+        h = self.out_histogram
+        Itof = arcseventdata.e2Itof(
+            events.ptr, events.n, 
+            self.ntotpixels,
+            tof_params = self.tof_params,
+            Itof = h,
+            )
+        return Itof
 
 
 # version

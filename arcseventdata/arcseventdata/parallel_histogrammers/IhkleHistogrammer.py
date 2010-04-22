@@ -12,6 +12,8 @@
 #
 
 
+import arcseventdata, histogram 
+
 from ParallelHistogrammer import ParallelHistogrammer as base, info
 
 
@@ -42,10 +44,10 @@ class IhkleHistogrammer(base):
         return IhklE
     
 
-    def _run( self,
-              eventdatafilename, start, nevents,
-              h_params, k_params, l_params,
-              E_params, ARCSxml, Ei, ub, emission_time):
+    def setParameters(
+        self,
+        h_params, k_params, l_params,
+        E_params, ARCSxml, Ei, ub, emission_time):
         
         from arcseventdata import getinstrumentinfo
         infos = getinstrumentinfo(ARCSxml)
@@ -55,8 +57,6 @@ class IhkleHistogrammer(base):
         pixelPositionsFilename = infos[
             'pixelID-position mapping binary file']
 
-        self._debug.log( "eventdatafilename = %s" % eventdatafilename)
-        self._debug.log( "nevents = %s" % nevents)
         self._debug.log( "pixel-positions-filename=%s" % pixelPositionsFilename)
         self._debug.log( 'E_params (unit: meV) = %s' % (E_params, ) )
         self._debug.log( 'h_params = %s' % (h_params, ) )
@@ -72,7 +72,6 @@ class IhkleHistogrammer(base):
         k_begin, k_end, k_step = k_params 
         l_begin, l_end, l_step = l_params 
         
-        import arcseventdata, histogram 
         h_axis = histogram.axis('h', boundaries = histogram.arange(
             h_begin, h_end, h_step))
         k_axis = histogram.axis('k', boundaries = histogram.arange(
@@ -92,7 +91,6 @@ class IhkleHistogrammer(base):
             data_type = 'double',
             )
 
-        events, nevents = arcseventdata.readevents( eventdatafilename, nevents, start )
         pixelPositions = arcseventdata.readpixelpositions(
             pixelPositionsFilename, npacks, ndetsperpack, npixelsperdet )
 
@@ -101,11 +99,24 @@ class IhkleHistogrammer(base):
         if mpiRank == 0:
             pixelSolidAngles = infos['solidangles'].I
             self._remember( Ei, ub, pixelPositions, pixelSolidAngles )
+            
+        self.out_histogram = h
+        self.Ei = Ei
+        self.ub = ub
+        self.pixelPositions = pixelPositions
+        self.mod2sample = mod2sample
+        self.emission_time = emission_time
+        return
+
+
+    def _processEvents(self, events):
+        h = self.out_histogram
         
         h = arcseventdata.events2IhklE(
-            events, nevents, h, Ei, ub, pixelPositions,
-            mod2sample = mod2sample,
-            emission_time = emission_time,
+            events.ptr, events.n, h,
+            self.Ei, self.ub, self.pixelPositions,
+            mod2sample = self.mod2sample,
+            emission_time = self.emission_time,
             )
     
         return h

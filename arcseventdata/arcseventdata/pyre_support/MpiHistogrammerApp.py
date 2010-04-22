@@ -90,29 +90,21 @@ class Application(base):
             raise RuntimeError, 'You have not specify any event files'
 
         if len(eventfiles)==1:
-            h = self.process_one_file(event_source, nevents)
+            if nevents == 0:
+                nevents = None
         else:
-            hists = [self.process_one_file(f) for f in eventfiles]
-            assert len(hists)>1
-            h = hists[0]
-            if self.mpiRank==0:
-                for h1 in hists[1:]: h += h1
+            nevents = None
 
-        self.histogram = h
+        self.histogram = self.process(eventfiles, nevents)
+
         self._info.log( "times: %s" % (os.times(),) )
         return
 
     
-    def process_one_file(self, path, nevents=0):
-        if nevents == 0:
-            ntotal = arcseventdata.getnumberofevents( path )
-            nevents = ntotal
-            pass
-        
+    def process(self, files, nevents):
         reduction_args = self.build_args()
-        
         engine = self.inventory.engine
-        return engine(path, nevents, *reduction_args )
+        return engine(files, nevents, *reduction_args )
 
 
     def save(self):

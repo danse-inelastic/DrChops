@@ -12,21 +12,22 @@
 #
 
 
+import arcseventdata, histogram 
+
+
 from ParallelHistogrammer import ParallelHistogrammer as base, info
 
 
 class IpdpdHistogrammer(base):
 
-    def _run( self,
-              eventdatafilename, start, nevents,
-              ARCSxml, d_params,
-              emission_time):
+    
+    def setParameters(
+        self,
+        ARCSxml, d_params,
+        emission_time):
         
-        info.log( "eventdatafilename = %s" % eventdatafilename )
         info.log( 'd_params (unit: AA) = %s' % (d_params, ) )
         info.log( 'emission_time (unit: microsecond) = %s' % (emission_time, ) )
-        info.log( 'neutrons: start = %d, n = %d' % (
-            start, nevents ) )
     
         from arcseventdata import getinstrumentinfo
         infos = getinstrumentinfo(ARCSxml)
@@ -38,9 +39,8 @@ class IpdpdHistogrammer(base):
     
         d_begin, d_end, d_step = d_params # angstrom
 
-        import arcseventdata, histogram 
         d_axis = histogram.axis('d spacing', boundaries = histogram.arange(
-            d_begin, d_end, d_step) )
+                d_begin, d_end, d_step) )
         detaxes = infos['detector axes']
         h = histogram.histogram(
             'I(pdpd)',
@@ -48,24 +48,26 @@ class IpdpdHistogrammer(base):
             data_type = 'int',
             )
 
-        info.log( "reading %d events..." % nevents )
-        events, nevents = arcseventdata.readevents( eventdatafilename, nevents, start )
         info.log( "reading pixelID->position map..." )
         pixelPositions = arcseventdata.readpixelpositions(
             pixelPositionsFilename, npacks, ndetsperpack, npixelsperdet)
 
-        info.log( "histograming..." )
+        self.out_histogram = h
+        self.pixelPositions = pixelPositions
+        self.mod2sample = mod2sample
+        self.emission_time = emission_time
+        return
+
+
+    def _processEvents( self, events):
         arcseventdata.events2Ipdpd(
-            events, nevents, h, pixelPositions,
-            mod2sample = mod2sample,
-            emission_time = emission_time,
+            events.ptr, events.n, self.out_histogram, 
+            self.pixelPositions,
+            mod2sample = self.mod2sample,
+            emission_time = self.emission_time,
             )
-
-        info.log( "done histogramming." )
-    
-        return h
-
-
+        return self.out_histogram
+        
 
 # version
 __id__ = "$Id$"

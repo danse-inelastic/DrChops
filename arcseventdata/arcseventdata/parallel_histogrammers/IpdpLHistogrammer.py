@@ -12,21 +12,20 @@
 #
 
 
+import arcseventdata, histogram 
+
 from ParallelHistogrammer import ParallelHistogrammer as base, info
 
 
 class IpdpLHistogrammer(base):
 
-    def _run( self,
-              eventdatafilename, start, nevents,
-              ARCSxml, L_params,
-              emission_time):
+    def setParameters(
+        self,
+        ARCSxml, L_params,
+        emission_time):
         
-        info.log( "eventdatafilename = %s" % eventdatafilename )
         info.log( 'L_params (unit: AA) = %s' % (L_params, ) )
         info.log( 'emission_time (unit: microsecond) = %s' % (emission_time, ) )
-        info.log( 'neutrons: start = %d, n = %d' % (
-            start, nevents ) )
     
         from arcseventdata import getinstrumentinfo
         infos = getinstrumentinfo(ARCSxml)
@@ -38,7 +37,6 @@ class IpdpLHistogrammer(base):
     
         L_begin, L_end, L_step = L_params # meV
 
-        import arcseventdata, histogram 
         L_axis = histogram.axis('L', boundaries = histogram.arange(
             L_begin, L_end, L_step) )
         detaxes = infos['detector axes']
@@ -48,21 +46,25 @@ class IpdpLHistogrammer(base):
             data_type = 'int',
             )
 
-        info.log( "reading %d events..." % nevents )
-        events, nevents = arcseventdata.readevents( eventdatafilename, nevents, start )
         info.log( "reading pixelID->position map..." )
         pixelPositions = arcseventdata.readpixelpositions(
             pixelPositionsFilename, npacks, ndetsperpack, npixelsperdet)
 
-        info.log( "histograming..." )
-        arcseventdata.events2IpdpL(
-            events, nevents, h, pixelPositions,
-            mod2sample = mod2sample,
-            emission_time = emission_time,
-            )
+        self.out_histogram = h
+        self.pixelPositions = pixelPositions
+        self.mod2sample = mod2sample
+        self.emission_time = emission_time
+        return
 
-        info.log( "done histogramming." )
-    
+
+    def _processEvents( self, events):
+        h = self.out_histogram
+        arcseventdata.events2IpdpL(
+            events.ptr, events.n, h, 
+            self.pixelPositions,
+            mod2sample = self.mod2sample,
+            emission_time = self.emission_time,
+            )
         return h
 
 

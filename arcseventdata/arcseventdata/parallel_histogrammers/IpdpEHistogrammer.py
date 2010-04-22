@@ -11,23 +11,23 @@
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
 
+import arcseventdata, histogram 
+
 from ParallelHistogrammer import ParallelHistogrammer as base, info
 
 class IpdpEHistogrammer(base):
 
-    def _run( self,
-              eventdatafilename, start, nevents,
-              ARCSxml, E_params,
-              pack_params, pixel_step,
-              Ei, emission_time):
-        
-        info.log( "eventdatafilename = %s" % eventdatafilename )
+
+    def setParameters(
+        self, 
+        ARCSxml, E_params,
+        pack_params, pixel_step,
+        Ei, emission_time):
+
         info.log( 'E_params (unit: meV) = %s' % (E_params, ) )
         info.log( 'Incident energy (unit: meV) = %s' % (Ei, ) )
         info.log( 'emission_time (unit: microsecond) = %s' % (emission_time, ) )
-        info.log( 'neutrons: start = %d, n = %d' % (
-            start, nevents ) )
-    
+
         from arcseventdata import getinstrumentinfo
         infos = getinstrumentinfo(ARCSxml)
         npacks, ndetsperpack, npixelsperdet = infos[
@@ -38,7 +38,6 @@ class IpdpEHistogrammer(base):
     
         E_begin, E_end, E_step = E_params # angstrom
 
-        import arcseventdata, histogram 
         E_axis = histogram.axis('energy', boundaries = histogram.arange(
             E_begin, E_end, E_step) )
 
@@ -65,23 +64,27 @@ class IpdpEHistogrammer(base):
             detaxes + [E_axis],
             data_type = 'int',
             )
+        self.out_histogram = h
+        self.Ei = Ei
+        self.mod2sample = mod2sample
+        self.emission_time = emission_time
 
-        info.log( "reading %d events..." % nevents )
-        events, nevents = arcseventdata.readevents( eventdatafilename, nevents, start )
         info.log( "reading pixelID->position map..." )
-        pixelPositions = arcseventdata.readpixelpositions(
+        self.pixelPositions = arcseventdata.readpixelpositions(
             pixelPositionsFilename, npacks, ndetsperpack, npixelsperdet)
+        
+        return
+    
 
+    def _processEvents(self, events):
         info.log( "histograming..." )
         arcseventdata.events2IpdpE(
-            events, nevents, h, Ei, pixelPositions,
-            mod2sample = mod2sample,
-            emission_time = emission_time,
+            events.ptr, events.n, self.out_histogram, self.Ei, self.pixelPositions,
+            mod2sample = self.mod2sample,
+            emission_time = self.emission_time,
             )
-
-        info.log( "done histogramming." )
-    
-        return h
+        info.log( "done histogramming." )    
+        return self.out_histogram
 
 
 # version
