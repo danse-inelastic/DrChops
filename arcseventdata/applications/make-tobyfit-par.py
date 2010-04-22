@@ -28,14 +28,22 @@ def getpixelinfo(ARCSxml):
     dists = ii['dists']
     phis = ii['phis']
     psis = ii['psis']
+    sas = ii['solidangles']
      
     from reduction.units import length, angle
     dists = dists.I
     phis = phis.I
     psis = psis.I
+    sas = sas.I
+
+    # 06/30/2009: was told that the last two columns are angles
+    da1 = widths/dists
+    da2 = sas/da1
 
     dists.shape = phis.shape = psis.shape = widths.shape = heights.shape = -1,
-    return dists, phis, psis, widths, heights
+    da1.shape = da2.shape = -1,
+    #return dists, phis, psis, widths, heights
+    return dists, phis, psis, da1, da2
 
 
 def getpixelinfo_mergedpixels(ARCSxml, pixelresolution):
@@ -46,6 +54,7 @@ def getpixelinfo_mergedpixels(ARCSxml, pixelresolution):
     from histogram import axis
     pixelaxis = axis('pixelID', range(0, 128, pixelresolution))
 
+    info.log('merging pixels')
     phi_p, psi_p, dist_p, sa_p, dphi_p, dpsi_p = combinepixels(ARCSxml, pixelaxis, pixelresolution)
     positions, radii, heights = geometricInfo(ARCSxml)
     positions, radii, heights = geometricInfo_MergedPixels(positions, radii, heights, pixelresolution)
@@ -55,9 +64,16 @@ def getpixelinfo_mergedpixels(ARCSxml, pixelresolution):
     phis = phi_p.I
     psis = psi_p.I
     dists = dist_p.I
+    sas = sa_p.I
     
+    # 06/30/2009: was told that the last two columns are angles
+    da1 = widths/dists
+    da2 = sas/da1
+
     dists.shape = phis.shape = psis.shape = widths.shape = heights.shape = -1,
-    return dists, phis, psis, widths, heights
+    da1.shape = da2.shape = -1,
+    #return dists, phis, psis, widths, heights
+    return dists, phis, psis, da1, da2
 
 
 def writePar(stream, dists, phis, psis, widths, heights):
