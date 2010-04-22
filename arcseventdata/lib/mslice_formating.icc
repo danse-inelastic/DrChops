@@ -21,8 +21,13 @@ namespace ARCS_EventData {
     const char * SerrTitle = "### Errors";
 
     oss.setf(ios::scientific, ios::floatfield);
-    oss.setf(ios::showpos);
-    oss.setf(ios::uppercase);
+
+    // the following two formatting might be necessary.
+    // mslice file format does not have a clear specification.
+    //
+    //oss.setf(ios::showpos);
+    //oss.setf(ios::uppercase);
+
     oss.precision(3);
     
     for (size_t i=0; i<ntotpixels; i++) {
