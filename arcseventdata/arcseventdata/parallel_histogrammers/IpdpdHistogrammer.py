@@ -29,8 +29,7 @@ class IpdpdHistogrammer(base):
         info.log( 'd_params (unit: AA) = %s' % (d_params, ) )
         info.log( 'emission_time (unit: microsecond) = %s' % (emission_time, ) )
     
-        from arcseventdata import getinstrumentinfo
-        infos = getinstrumentinfo(ARCSxml)
+        infos = self._readInstrumentInfo(ARCSxml)
         npacks, ndetsperpack, npixelsperdet = infos[
             'detector-system-dimensions']
         mod2sample = infos['moderator-sample distance']

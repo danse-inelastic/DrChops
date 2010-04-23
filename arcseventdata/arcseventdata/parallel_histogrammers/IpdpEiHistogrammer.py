@@ -29,8 +29,7 @@ class IpdpEiHistogrammer(base):
         info.log( 'Ei_params (unit: meV) = %s' % (Ei_params, ) )
         info.log( 'emission_time (unit: microsecond) = %s' % (emission_time, ) )
 
-        from arcseventdata import getinstrumentinfo
-        infos = getinstrumentinfo(ARCSxml)
+        infos = self._readInstrumentInfo(ARCSxml)
         npacks, ndetsperpack, npixelsperdet = infos[
             'detector-system-dimensions']
         mod2sample = infos['moderator-sample distance']

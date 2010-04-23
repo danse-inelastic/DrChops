@@ -54,8 +54,14 @@ class IqeHistogrammer(base):
         self,
         Q_params, E_params, ARCSxml, Ei, emission_time):
         
-        from arcseventdata import getinstrumentinfo
-        infos = getinstrumentinfo(ARCSxml)
+        keys = [
+            'detector-system-dimensions',
+            'moderator-sample distance',
+            'pixelID-position mapping binary file',
+            'detector axes',
+            'solidangles',
+            ]
+        infos = self._readInstrumentInfo(ARCSxml, keys=keys)
         npacks, ndetsperpack, npixelsperdet = infos[
             'detector-system-dimensions']
         mod2sample = infos['moderator-sample distance']

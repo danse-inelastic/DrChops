@@ -22,8 +22,7 @@ class IdspacingHistogrammer(base):
         self, 
         ARCSxml, dspacingparams ):
         
-        from arcseventdata import getinstrumentinfo
-        infos = getinstrumentinfo(ARCSxml)
+        infos = self._readInstrumentInfo(ARCSxml)
         npacks, ndetsperpack, npixelsperdet = infos[
             'detector-system-dimensions']
         mod2sample = infos['moderator-sample distance']

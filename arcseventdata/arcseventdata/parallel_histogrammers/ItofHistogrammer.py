@@ -24,8 +24,7 @@ class ItofHistogrammer(base):
         self,
         ARCSxml, tof_params):
 
-        from arcseventdata import getinstrumentinfo
-        infos = getinstrumentinfo(ARCSxml)
+        infos = self._readInstrumentInfo(ARCSxml)
         npacks, ndetsperpack, npixelsperdet = infos[
             'detector-system-dimensions']
         ntotpixels = arcseventdata.npixels( npacks, ndetsperpack, npixelsperdet )

@@ -22,8 +22,7 @@ class IpdptHistogrammer(base):
         self,
         ARCSxml, tof_params, pack_params = (1,115), pixel_step = 1 ):
 
-        from arcseventdata import getinstrumentinfo
-        infos = getinstrumentinfo(ARCSxml)
+        infos = self._readInstrumentInfo(ARCSxml)
         npacks, ndetsperpack, npixelsperdet = infos[
             'detector-system-dimensions']
         mod2sample = infos['moderator-sample distance']

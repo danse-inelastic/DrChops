@@ -122,7 +122,7 @@ class ParallelHistogrammer(ParallelComponent):
         return eventsourcecollection
     
 
-    def _readInstrumentInfo(self, ARCSxml):
+    def _readInstrumentInfo(self, ARCSxml, keys=None):
         info.log('reading instrument info')
         mpiRank = self.mpiRank
         mpiSize = self.mpiSize
@@ -131,12 +131,13 @@ class ParallelHistogrammer(ParallelComponent):
             allinfos = getinstrumentinfo(ARCSxml)
             # only keep the necessary ones
             infos = {}
-            keys = [
-                'detector-system-dimensions',
-                'moderator-sample distance',
-                'pixelID-position mapping binary file',
-                'detector axes',
-                ]
+            if keys is None:
+                keys = [
+                    'detector-system-dimensions',
+                    'moderator-sample distance',
+                    'pixelID-position mapping binary file',
+                    'detector axes',
+                    ]
             for k in keys: infos[k] = allinfos[k]
             del allinfos
 
