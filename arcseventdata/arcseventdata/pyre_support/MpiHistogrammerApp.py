@@ -12,8 +12,12 @@
 #
 
 
-## base class of mpi histogrammer application. derived from MpiApplication.
-## The customization done here are:
+'''
+base class of mpi histogrammer application. derived from MpiApplication.
+
+limitations:
+ * must be run on a file system that is common to all nodes (see arcseventdata.parallel_histogrammers.ParallelHistogrammer for details)
+'''
 
 
 from MpiApplication import Application as base
