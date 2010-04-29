@@ -51,6 +51,13 @@ class Application(base):
         return
 
 
+    def help(self):
+        base.help(self)
+        print
+        print "Note: make sure the E axis and the Q axis have good ranges to include most neutron events, otherwise the reduction may be slow."
+        print
+
+
     def build_args(self):
         Q_params = self.inventory.Q_params
         E_params = self.inventory.E_params

@@ -40,13 +40,18 @@ class IqeHistogrammer(base):
         newIQE = histogram( IQE.name(), IQE.axes() )
         newIQE[(), ()] = IQE[(), ()]
         
-        info.log( 'node %s: normalize I(Q,E) by solid angle' 
-                  % self.mpiRank)
         Ei = self.Ei
         pixelPositions = self.pixelPositions
         pixelSolidAngles = self.pixelSolidAngles
         from arcseventdata.normalize_iqe import normalize_iqe
+        info.log( 'node %s: normalize I(Q,E) by solid angle: Ei=%s, positions.shape=%s, solidangles.shape=%s' 
+                  % (self.mpiRank, Ei, pixelPositions.shape, pixelSolidAngles.shape))
+        import time
+        t0 = time.time()
         normalize_iqe( newIQE, Ei, pixelPositions, pixelSolidAngles )
+        t1 = time.time()
+        info.log( 'node %s: normalization done: %s seconds' % (
+            self.mpiRank, t1-t0))
         return newIQE
 
 
