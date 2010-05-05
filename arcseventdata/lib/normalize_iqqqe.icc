@@ -63,6 +63,10 @@ void ARCS_EventData::calcSolidAngleQQQE
 
       const Float *position = pixelpositions +  pixelID * 3;
       calcQQQ( Qx, Qy, Qz, position, ei, e );
+
+      // catch outofbound as early as possible
+      if (sa.isOutofbound(Qx,Qy,Qz,e)) continue;
+      
       try {
 	sa( Qx, Qy, Qz, e ) = sa(Qx, Qy, Qz, e) + \
 	  pixelsolidangles[pixelID];

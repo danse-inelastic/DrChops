@@ -70,6 +70,10 @@ void ARCS_EventData::calcSolidAngleHKLE
 
       const Float *position = pixelpositions +  pixelID * 3;
       calchkl( h, k, l, position, ei, ub, e );
+
+      // catch outofbound as early as possible
+      if (sa.isOutofbound(h,k,l,e)) continue;
+
       try {
 	sa( h, k, l, e ) = sa(h, k, l, e) + pixelsolidangles[pixelID];
       }
