@@ -49,10 +49,18 @@ namespace ARCS_EventData{
     void operator() ( const Event & e )
     {
       IDataType i = m_e2x( e, m_x );
+      if (m_fx.isOutofbound(m_x)) {
+#ifdef DEBUG
+	journal::warning_t warning("arcseventdata.Histogrammer1");
+	warning << journal::at(__HERE__)
+		<< "OutOfBound: " << m_x
+		<< journal::endl;
+#endif
+	return;
+      }
       try {
 	m_fx( m_x ) += i;
-      }
-      catch (OutOfBound err)  {
+      } catch (OutOfBound err) {
 #ifdef DEBUG
 	journal::warning_t warning("arcseventdata.Histogrammer1");
 	warning << journal::at(__HERE__)
@@ -103,10 +111,18 @@ namespace ARCS_EventData{
     void operator() ( const Event & e )
     {
       IDataType i = m_e2xy( e, m_x, m_y );
+      if (m_fxy.isOutofbound(m_x, m_y)) {
+#ifdef DEBUG
+	journal::warning_t warning("arcseventdata.Histogrammer2");
+	warning << journal::at(__HERE__)
+		<< "OutOfBound: " << m_x << ", " << m_y
+		<< journal::endl;
+#endif
+	return;
+      }
       try {
 	m_fxy( m_x, m_y ) += i;
-      }
-      catch (OutOfBound err)  {
+      } catch (OutOfBound err) {
 #ifdef DEBUG
 	journal::warning_t warning("arcseventdata.Histogrammer2");
 	warning << journal::at(__HERE__)
@@ -160,10 +176,18 @@ namespace ARCS_EventData{
     void operator() ( const Event & e )
     {
       IDataType i = m_e2xxxx( e, m_x1, m_x2, m_x3, m_x4 );
+      if (m_fxxxx.isOutofbound( m_x1, m_x2, m_x3, m_x4 )) {
+#ifdef DEBUG
+	journal::warning_t warning("arcseventdata.Histogrammer4");
+	warning << journal::at(__HERE__)
+		<< "OutOfBound: " << m_x1 << ", " << m_x2 << ", " << m_x3 << ", " << m_x4
+		<< journal::endl;
+#endif
+	return;
+      }
       try {
 	m_fxxxx( m_x1, m_x2, m_x3, m_x4 ) += i;
-      }
-      catch (OutOfBound err)  {
+      } catch (OutOfBound err) {
 #ifdef DEBUG
 	journal::warning_t warning("arcseventdata.Histogrammer4");
 	warning << journal::at(__HERE__)
