@@ -62,6 +62,7 @@ EXPORT_BINS = \
 	PlotSqe.py \
 	PowderReductionApp.py \
 	PowderReductionApp_Parallel.py \
+	fitGaussian.py \
 	makePixelInfoCache.py \
 	plotcalibrationresults.py \
 	plotiphi.py \
