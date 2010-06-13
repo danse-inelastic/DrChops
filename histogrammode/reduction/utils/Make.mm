@@ -37,6 +37,7 @@ EXPORT_PYTHON_MODULES = \
 	PseudoSingleton.py 	\
 	__init__.py 	\
 	conversion.py 	\
+	conversion2.py 	\
 	hpickle.py 	\
 	plotter.py  	\
 

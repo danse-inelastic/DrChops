@@ -31,7 +31,9 @@ class IncidentEnergySolver_UseMonitors(base):
                  monitor2tofrange = None,
                  monitor1FitGuess = None,
                  monitor2FitGuess = None,
-                 fitter = None ):
+                 fitter = None,
+                 expectedEnergy = None,
+                 ):
         '''IncidentEnergySolver_UseMonitors( monitor1Id, monitor2Id,
     monitor1FitGuess = None, monitor2FitGuess = None, fitter = None )
 
@@ -57,6 +59,17 @@ class IncidentEnergySolver_UseMonitors(base):
         self.monitor2tofrange = monitor2tofrange
         self.monitor1FitGuess = monitor1FitGuess
         self.monitor2FitGuess = monitor2FitGuess
+        self.expectedEnergy = expectedEnergy
+        if expectedEnergy:
+            from pyre.units.energy import meV
+            E = expectedEnergy/meV
+            from reduction.utils.conversion2 import e2v
+            v = e2v(E)
+            from pyre.units.length import meter
+            from pyre.units.time import second
+            self.expectedVelocity = v*(meter/second)
+        else:
+            self.expectedVelocity = None
         
         if not fitter:
             from reduction.histCompat.PolynomialFitter import PolynomialFitter
@@ -92,14 +105,22 @@ class IncidentEnergySolver_UseMonitors(base):
         mon1Inits = self.monitor1FitGuess
         mon2Inits = self.monitor2FitGuess
 
-        if self._isdefault(mon1Inits): mon1Inits = _guess( m1data )
-        if self._isdefault(mon2Inits): mon2Inits = _guess( m2data )
+        mon1 = instrument.getMonitors()[ self.monitor1Id ]
+        mon2 = instrument.getMonitors()[ self.monitor2Id ]
+        moderator = instrument.getModerator()
+        
+        expectedVelocity = self.expectedVelocity
+        if self._isdefault(mon1Inits):
+            mon1Inits = self._guess(
+                m1data, mon1, moderator, geometer, expectedVelocity)
+
+        if self._isdefault(mon2Inits):
+            mon2Inits = self._guess(
+                m2data, mon2, moderator, geometer, expectedVelocity)
 
         debug.log( "guess of monitor 1 peak: %s" % (mon1Inits,))
         debug.log( "guess of monitor 2 peak: %s" % (mon2Inits,))
 
-        mon1 = instrument.getMonitors()[ self.monitor1Id ]
-        mon2 = instrument.getMonitors()[ self.monitor2Id ]
         distance = geometer.distance( mon1, mon2 )
 
         from pyre.units.length import mm
@@ -123,18 +144,19 @@ class IncidentEnergySolver_UseMonitors(base):
 
         debug.log("fit for monitor 3: %s" % mon3Fit)
 
-        # square of time from m2 to m3
-        tSq_m3_m2 = (mon3Fit - mon2Fit)**2
+        # t
+        t = mon3Fit-mon2Fit
+        t /= 1e6
+        
+        # velocity
+        distance /= 1e3
+        debug.log('distance: %s' % distance)
+        vel = distance/t
+        debug.log('velocity: %s' % vel)
 
-        debug.log("t^2 = %s" % tSq_m3_m2)
-
-        # square of distance from m2 to m3
-        dSq_m2_m3 = distance ** 2
-
-        debug.log("d^2 = %s" % dSq_m2_m3)
-
-        # cf Squires, eq 1-9 (ISBN 0-486-69447-X)
-        self._ei = 5.227*dSq_m2_m3/tSq_m3_m2
+        #
+        from reduction.utils.conversion2 import v2e
+        self._ei = v2e(vel)
 
         return self._ei
 
@@ -155,6 +177,22 @@ class IncidentEnergySolver_UseMonitors(base):
             monitorData[ SlicingInfo( (min, max) ) ], None )
         center = -a[1]/2./a[2]
         return center
+
+
+    def _guess(self, monitorData, monitor, moderator, geometer, expectedVelocity):
+        '''guess the position, width, and area of the peak
+        for the given monitor.
+        use expectedEnergy to make a better guess of the range
+        of the the monitor data.
+        '''
+        if expectedVelocity:
+            distance = geometer.distance(moderator, monitor)
+            expectedTof = distance/expectedVelocity
+            left = expectedTof * 0.9
+            right = expectedTof * 1.1
+            monitorData = monitorData[(left,right)]
+        return _guess(monitorData)
+               
     pass
 
 
