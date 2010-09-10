@@ -20,7 +20,7 @@ def readHistogram( filename ):
     import numpy as N
     I = N.fromstring( s, 'u4' )
     n = len(I)
-    tof = N.arange( 0, n, 1. )
+    tof = N.arange( 0.5, n+0.4, 1. )
     import histogram as H
     Itof = H.histogram(
         'I(tof)',
