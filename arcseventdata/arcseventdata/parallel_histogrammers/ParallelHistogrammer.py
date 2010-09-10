@@ -29,15 +29,19 @@ from ParallelComponent import ParallelComponent
 
 class ParallelHistogrammer(ParallelComponent):
 
-    def __call__( self, eventdatafiles, nevents, *args):
+    def __call__( self, eventdatafiles_or_filename, nevents, *args):
         '''histogram event data in the given list of event data files
 
-        eventdatafiles: a list of event data files
+        eventdatafiles_or_filename: a list of event data files or one filename string
         nevents: number of total events to histogram. if None, then all events in all files will be histogrammed
         *args: addtional arguments for initializing this histogrammer
 
         return: a histogram
         '''
+        if isinstance(eventdatafiles_or_filename, str):
+            eventdatafiles = [eventdatafiles_or_filename]
+        else:
+            eventdatafiles = eventdatafiles_or_filename
         
         mpiRank = self.mpiRank
         mpiSize = self.mpiSize
