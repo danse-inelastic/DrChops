@@ -23,7 +23,7 @@ PROJ_CPPTESTS = test_Histogrammer1 test_Histogrammer2 test_Histogrammer4\
 	 testItof2IE testItof2IE_batch testIpixE2IphiE testZt2Zxy testIpix2Ixy
 PROJ_TESTS = $(PROJ_PYTESTS) $(PROJ_CPPTESTS)
 PROJ_LIBRARIES = -L$(BLD_LIBDIR) -ldrchops -ljournal
-
+PROJ_CXX_DEFINES += USE_DANSE_NAMESPACE
 
 #--------------------------------------------------------------------------
 #
