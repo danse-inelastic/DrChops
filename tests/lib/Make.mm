@@ -19,8 +19,17 @@ PACKAGE = tests
 PROJ_CLEAN += $(PROJ_CPPTESTS)
 
 PROJ_PYTESTS =  
-PROJ_CPPTESTS = test_Histogrammer1 test_Histogrammer2 test_Histogrammer4\
-	 testItof2IE testItof2IE_batch testIpixE2IphiE testZt2Zxy testIpix2Ixy
+PROJ_CPPTESTS = \
+	test_Histogrammer1 \
+	test_Histogrammer2 \
+	test_Histogrammer4 \
+	testItof2IE \
+	testItof2IE_batch \
+	testIpixE2IphiE \
+	testZt2Zxy \
+	testIpix2Ixy \
+	testevents2iqe \
+
 PROJ_TESTS = $(PROJ_PYTESTS) $(PROJ_CPPTESTS)
 PROJ_LIBRARIES = -L$(BLD_LIBDIR) -ldrchops -ljournal
 PROJ_CXX_DEFINES += USE_DANSE_NAMESPACE
@@ -65,6 +74,9 @@ testZt2Zxy: testZt2Zxy.cc
 
 testIpix2Ixy: testIpix2Ixy.cc 
 	$(CXX) $(CXXFLAGS) $(LCXXFLAGS) -o $@ testIpix2Ixy.cc $(PROJ_LIBRARIES)
+
+testevents2iqe: testevents2iqe.cc 
+	$(CXX) $(CXXFLAGS) $(LCXXFLAGS) -o $@ testevents2iqe.cc $(PROJ_LIBRARIES)
 
 
 # version

@@ -57,6 +57,8 @@ export:: export-headers export-libraries
 endif
 
 EXPORT_HEADERS = \
+	Event2QE.h \
+	Event2QE.icc \
 	Functor.h \
 	Histogrammer.h \
 	Ipix2Ixy.h \
@@ -71,6 +73,7 @@ EXPORT_HEADERS = \
 	Universal1DRebinner.icc \
 	Zt2Zxy.h \
 	Zt2Zxy.icc \
+	events2iqe.h \
 	exception.h \
 	findCellIndex.h \
 	physics.h \
