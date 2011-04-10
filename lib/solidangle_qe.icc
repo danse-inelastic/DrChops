@@ -1,0 +1,82 @@
+// -*- C++ -*-
+//
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+//
+//                                   Jiao Lin
+//                      California Institute of Technology
+//                        (C) 2007  All Rights Reserved
+//
+// {LicenseText}
+//
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+//
+
+
+#ifndef DRCHOPS_SOLIDANGLE_QE_H
+#error solidangle_qe.icc not meaningful outside solidangle_qe.h
+#else
+
+#include <cmath>
+#include "physics.h"
+
+
+DRCHOPS_NAMESPACE_START
+
+template <typename Float>
+Float
+calcQ( const Float *position, Float ei, Float e ) 
+{
+  using std::sqrt;
+  using Physics::Units::Conversion::se2k;
+  
+  Float ef = ei - e;
+  // q**2 = ki**2 + kf**2 - 2ki*kf*cos(theta)
+  // cos(theta) = x/r
+  Float x = position[0], y = position[1], z = position[2];
+  Float r = sqrt( x*x + y*y + z*z );
+  Float cost = x/r;
+  Float q2inmev = ei + ef - 2 * sqrt(ei)*sqrt(ef) * cost;
+  return  sqrt( q2inmev ) * se2k;
+}
+
+
+template <typename IQE, typename Float, typename Index>
+void calcSolidAngleQE
+( IQE & sa, Float ei, 
+  Index npixels, 
+  const Float * pixelpositions, const Float * pixelsolidangles,
+  const bool * mask)
+{
+  Float ebegin = sa.ybegin, eend = sa.yend, estep = sa.ystep;
+
+  for ( Float e = ebegin + estep/2.; e < eend; e+=estep/2. ) {
+
+    for ( Index pixelID = 0; pixelID < npixels; pixelID ++ ) {
+
+      if (mask && mask[pixelID]) continue;
+
+      const Float *position = pixelpositions +  pixelID * 3;
+      Float q = calcQ( position, ei, e );
+      if (sa.isOutofbound(q,e)) continue;
+      try {
+	sa( q,e ) = sa(q,e) + pixelsolidangles[pixelID];
+      }
+      catch (DANSE::Histogram::OutOfBound err) {
+#ifdef DEBUG
+	// use journal to record this error
+#endif
+      }
+    }
+  }
+
+}
+
+DRCHOPS_NAMESPACE_END
+
+#endif
+
+
+// version
+// $Id$
+
+// End of file 

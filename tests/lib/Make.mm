@@ -23,6 +23,7 @@ PROJ_CPPTESTS = \
 	test_Histogrammer1 \
 	test_Histogrammer2 \
 	test_Histogrammer4 \
+	test_solidangle_qe \
 	testItof2IE \
 	testItof2IE_batch \
 	testIpixE2IphiE \
@@ -59,6 +60,9 @@ test_Histogrammer2: test_Histogrammer2.cc
 
 test_Histogrammer4: test_Histogrammer4.cc 
 	$(CXX) $(CXXFLAGS) $(LCXXFLAGS) -o $@ test_Histogrammer4.cc $(PROJ_LIBRARIES)
+
+test_solidangle_qe: test_solidangle_qe.cc 
+	$(CXX) $(CXXFLAGS) $(LCXXFLAGS) -o $@ test_solidangle_qe.cc $(PROJ_LIBRARIES)
 
 testItof2IE: testItof2IE.cc 
 	$(CXX) $(CXXFLAGS) $(LCXXFLAGS) -o $@ testItof2IE.cc $(PROJ_LIBRARIES)

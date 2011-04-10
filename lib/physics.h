@@ -38,6 +38,10 @@ namespace DANSE{
 	//! neutron velocity (m/s) to wave vector k (AA^-1)
 	const double v2k = 1.58801E-3;
 	
+	const double se2v = 437.3949;  /* Convert sqrt(E)[meV] to v[m/s] */
+	const double vs2e = 5.227e-6;	 /* Convert (v[m/s])**2 to E[meV] */
+	const double se2k = se2v * v2k;  /* Convert sqrt(E)[meV] to k[AA^-1] */
+
 	//! neutron energy (meV) to velocity (m/s)
 	inline double E2v( double energy ) {
 	  return std::sqrt(energy)*437.3949;

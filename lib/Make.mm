@@ -26,6 +26,7 @@ PROJ_SRCS = \
 	Universal1DRebinner.cc \
 	Zt2Zxy.cc \
 	physics.cc \
+	readPixelPositions.cc \
 
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -57,6 +58,7 @@ export:: export-headers export-libraries
 endif
 
 EXPORT_HEADERS = \
+	_macros.h \
 	Event2QE.h \
 	Event2QE.icc \
 	Functor.h \
@@ -77,6 +79,8 @@ EXPORT_HEADERS = \
 	exception.h \
 	findCellIndex.h \
 	physics.h \
+	readPixelPositions.h \
+	solidangle_qe.h solidangle_qe.icc \
 	tof2E.h \
 
 EXPORT_LIBS = $(PROJ_SAR)
