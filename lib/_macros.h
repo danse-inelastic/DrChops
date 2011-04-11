@@ -20,10 +20,12 @@
 #define DRCHOPS_NAMESPACE_START namespace DANSE {namespace reduction{
 #define DRCHOPS_NAMESPACE_END }}
 #define USING_DRCHOPS_NAMESPACE using namespace DANSE::reduction;
+#define DRCHOPS_NAMESPACE_PREFIX DANSE::reduction
 #else
 #define DRCHOPS_NAMESPACE_START namespace drchops{
 #define DRCHOPS_NAMESPACE_END }
 #define USING_DRCHOPS_NAMESPACE using namespace drchops;
+#define DRCHOPS_NAMESPACE_PREFIX drchops
 #endif
 
 

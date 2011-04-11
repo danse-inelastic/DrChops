@@ -21,6 +21,13 @@
 
 namespace DANSE{ namespace reduction {
 
+    /// Qbegin, Qend, dQ: Qaxis
+    /// Ebegin, Eend, dQ: Eaxis
+    /// Note: axes are defined by bin boundaries:
+    ///   begin, begin+d, begin+2*d, ..., begin+n*d
+    ///   where n = int((end-begin)/d).
+    ///   So be careful to leave room for floating point errors
+    ///   Usually it is better to have end = begin + d*n + d*epsilon
     /// Ei: neutron incident energy. meV
     /// pixelPositions: mapping of pixelID --> position 
     ///     pixelPositions[pixelID*3, pixelID*3+1, pixelID*3+2] is the position vector
