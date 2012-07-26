@@ -1,0 +1,5 @@
+device,true_color=24,decomposed=0,retain=2
+window,/free,colors=256,xsize=400,ysize=300
+loadct,39
+
+

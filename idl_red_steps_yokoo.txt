@@ -1,0 +1,110 @@
+read_data_r,r6
+find_tbkg,r6,10500,12000
+mask=[0,1]
+fit_energy,r6,3800,4100
+e_rebin,r6,ert,spert,espert,tbkg=0.001,ei=197.96,emin=-10,emax=180,nepts=381,mask=mask,/eff
+detectorangle,detang
+findphi,r6.big_y,detang,phi
+rings,phi,spert,espert,rtsig,rtesig,0,147,147,tth,eff=eff,mask=mask
+q_interp,ert,tth,transpose(rtsig),qbinrt,sqe_rt6
+69.98
+91
+0
+9
+loadct,5
+% Frans typically uses color table 39
+device,decomposed=0
+tvim,sqe_rt,xrange=qbinrt,yrange=ert,range=[0,10],aspect=1
+tvim,alog(sqe_rt),xrange=qbinrt,yrange=ert,range=[0,.04],aspect=1
+tvimzoom,xbnds=[0.1,4],ybnds=[0,80],sqe_rt6,xrange=qbinrt,yrange=ert,range=[0,5],aspect=1
+% This may not work
+phin=(phi[0:39,*]+phi[1:40,*])/2
+plot,qbinrt,total(sqe_rt[*,115:120],2),yrange=[0,10],psym=-4
+save_spe2ac,ert,phin,spert,espert,mask=mask
+
+
+filename='~\lumsden\test.png'
+write_png,filename,tvrd(TRUE=1)
+
+
+
+%10m small angle configuration  
+%SrRuO3
+
+read_data_r,str
+find_tbkg,str,10500,12000
+mask=[0,23,24,39]
+fit_energy,r6,3800,4100
+e_rebin06_10m,str,e11,spe11,espe11,tbkg=0.001,ei=197.935,emin=-10,emax=175,nepts=200,mask=mask,/eff
+detectorangle_10m,detang10m
+findphi_10m,str.big_y,detang10m,phi10m
+rings,phi10m,spe11,espe11,sig11,esig11,0,147,147,tth,eff=eff,mask=mask
+q_interp1,e11,tth,transpose(sig11),transpose(esig11),qbin11,sqe_11,esqe_11
+197.9
+401
+0
+10
+
+q_interp,e11,tth,transpose(sig11),qbin11,sqe_11
+197.9
+401
+0 10
+
+tvim,sqe_11,xrange=qbin11,yrange=e11,range=[0,10],aspect=1
+tvimzoom,xbnds=[0.1,2],ybnds=[0,50],sqe_11,xrange=qbin11,yrange=e11,range=[0,2.5],aspect=1
+quick_rebin06_10m,str,e1,spe1,espe1,tbkg=0.001,ei=197.935,emin=-10,emax=175,nepts=200,mask=[0],/eff,hmin=4,hmax=35
+
+tvim,str.tof,/scale,aspect=1,range=[0,500],xrange=str.tof_time
+tvim,spe1[*,0:39],xrange=e1,/scale,aspect=1,range=[0,50]
+
+phin=(phi10m[0:39,*]+phi10m[1:40,*])/2
+save_spe2ac,e11,phin,spe11,espe11,mask=mask
+
+
+%add two data
+read_data_r,str1
+read_data_r,str2
+sum_raw_data,str1,str2,str
+
+
+%For 1D cut and ascii file
+
+sum_sqw,sqe_11,esqe_11,qbin11,e11,2,5,10,xout,yout,eout,2.64
+
+plot,xout,yout,psym=-6
+oplot,xout1,yout1
+
+plot,xout,yout,xrange=[0,10],yrange=[0,1]
+oploterr,xout,yout,eout
+
+save_cut,xout,yout,eout
+
+
+
+ls -l
+more
+emacs
+
+
+IDL> read_data_r,van
+% Loaded DLM: HDF.
+Run number:            5
+vanadium 1mm cylinder , T0 on, 2 - 20ms dt=0.005
+2006-10-07 10:23:10-0700
+2006-10-07 10:53:58-0700
+  5.50881e+06
+IDL> tvim,total(van.big,2),aspect=1,/scale
+% Compiled module: CONGRID.
+IDL> tvim,total(van.big[*,*,0:39],2),aspect=1,/scale
+IDL> plot,total(total(van.big[200:220,*,0:39],1),1)
+IDL> plot,total(total(van.big[1200:1220,*,0:39],1),1)
+IDL> plot,total(total(van.big[1200:1220,*,0:39],1),1),psym=-6
+IDL> plot,total(total(van.big[*,*,0:39],1),1),psym=-6
+IDL> plot,total(van.big[*,*,5],1),psym=-6
+IDL> plot,total(van.big[1000:2000,*,5],1),psym=-6
+IDL> tvim,total(van.big[1000:2000,*,0:39],1)
+IDL> tvim,transpose(total(van.big[1000:2000,*,0:39],1))
+IDL> tvim,transpose(total(van.big[1000:2000,*,0:39],1)),/scale
+IDL> tvim,transpose(total(van.big[1000:2000,*,0:39],1)),/scale,range=[0,500]
+IDL> plot,total(van.big[1000:2000,*,12],1),psym=-6
+IDL> plot,total(van.big[*,*,12],1),psym=-6
