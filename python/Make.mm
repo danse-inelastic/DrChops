@@ -16,13 +16,9 @@ PROJECT = drchops
 # directory structure
 
 BUILD_DIRS = \
-    lib \
-    pyext \
-    python \
+    drchops \
 
 OTHER_DIRS = \
-    tests \
-    examples
 
 RECURSE_DIRS = $(BUILD_DIRS) $(OTHER_DIRS)
 
