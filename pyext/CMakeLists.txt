@@ -1,12 +1,13 @@
 # ------------- Modify these -------------
 set ( SRC_FILES 
   ${PYBINDING_NAME}.cc
+  IpixE2IphiE_bdgs.cc
+  Itof2IE_batch_bdgs.cc
+  Zt2Zxy_bdgs.cc
   bindings.cc
   exceptions.cc
-  getdataptr.cc
   misc.cc
-  wrapdataptr.cc
-  Iterator1D_Example.cc
+  numpy_support.cc
   )
 # ----------------------------------------
 
@@ -27,5 +28,5 @@ link_directories(${CMAKE_BINARY_DIR}/lib)
 add_library(${MOD_NAME} SHARED ${SRC_FILES})
 target_link_libraries(${MOD_NAME} ${PYTHON_LIBRARY} -l"${LIB_NAME}")
 set_target_properties(${MOD_NAME} PROPERTIES PREFIX "") # dont need "lib" prefix
-set_target_properties(${MOD_NAME} PROPERTIES LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/python/modules/${PARENT_PATH}/${PROJECT_NAME}") # install to python directory
+set_target_properties(${MOD_NAME} PROPERTIES LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/python/modules/${PROJECT_NAME}") # install to python directory
 set_target_properties(${MOD_NAME} PROPERTIES SKIP_BUILD_RPATH "ON")

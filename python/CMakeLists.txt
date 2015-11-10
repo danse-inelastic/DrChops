@@ -1,7 +1,4 @@
 # ------------- Modify these -------------
-set (SRC_FILES
-  __init__.py
-  )
 # ----------------------------------------
 
 # not needed any more
@@ -13,13 +10,7 @@ set (SRC_FILES
 # configure_file("MANIFEST.in" "MANIFEST.in")
 
 # copy all python source over to build directory
-foreach (py ${SRC_FILES})
-  configure_file(
-    "${PROJECT_NAME}/${py}"
-    "modules/${PARENT_PATH}/${PROJECT_NAME}/${py}"
-    )
-endforeach (py)
-# message(STATUS "src: ${SRC_PATHS}")
+file(COPY ${PROJECT_NAME} DESTINATION "modules/")
 
 # install
 install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/modules/
