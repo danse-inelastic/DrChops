@@ -19,9 +19,13 @@ execute_process(
   COMMAND ${CMAKE_COMMAND} -E touch ${CMAKE_BINARY_DIR}/lib/include/portinfo
 )
 
+# -D
+add_definitions(-DUSE_DANSE_NAMESPACE )
+
 # -I and -L
 include_directories(${PYTHON_INCLUDE_DIRS})
 include_directories(${CMAKE_BINARY_DIR}/lib/include)
+include_directories( ${DEPLOYMENT_PREFIX}/include )
 link_directories(${CMAKE_BINARY_DIR}/lib)
 
 # compile shared library

@@ -39,8 +39,12 @@ set ( INC_FILES
 set ( EXPORT_HEADERS ${INC_FILES} )
 # ----------------------------------------
 
+# defines
+add_definitions(-DUSE_DANSE_NAMESPACE )
+
 # include python headers
 include_directories( ${PYTHON_INCLUDE_DIRS} )
+include_directories( ${DEPLOYMENT_PREFIX}/include )
 
 # export headers from this project
 foreach (header ${EXPORT_HEADERS})
