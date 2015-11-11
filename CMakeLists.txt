@@ -1,7 +1,7 @@
 cmake_minimum_required (VERSION 2.6)
 project (drchops)
 
-set(VERSION "0.1")
+set(VERSION "2.0alpha")
 set(AUTHOR "Jiao Lin")
 set(AUTHOR_EMAILE "jiao.lin@gmail.com")
 set(VENDOR "DANSE")
@@ -9,15 +9,16 @@ set(SUMMARY "Direct geometry TOF neutron spectrometer reduction")
 set(LICENSE "BSD")
 set(RPM_APP_GROUP "Development/Tools")
 set(GITHUB_URL "https://github.com/danse-inelastic/DrChops")
+set(GITHUB_BRANCH "2-alpha")
 
 # packaging with the help of docker and packagecloud
 # package repository at packagecloud
 set (PKGCLOUD_USERNAME "danse")
 set (PKGCLOUD_REPO "ins")
 # dependencies
-set (DOCKER_PKGING_DEPS_DEB "python-numpy danse.ins")
-set (DOCKER_PKGING_DEPS_RPM "numpy danse.ins")
-set (DOCKER_PKGING_TEST_SRPM ". /opt/danse/bin/setup-danse.sh && python -c 'import histogram as p; print p'")
+set (DOCKER_PKGING_DEPS_DEB "python-numpy danse.ins journal histogram")
+set (DOCKER_PKGING_DEPS_RPM "numpy danse.ins journal histogram")
+set (DOCKER_PKGING_TEST_SRPM ". /opt/danse/bin/setup-danse.sh && python -c 'import drchops as p; print p'")
 set (DOCKER_PKGING_TEST_RPM ${DOCKER_PKGING_TEST_SRPM})
 set (DOCKER_PKGING_TEST_DEB ${DOCKER_PKGING_TEST_SRPM})
 
