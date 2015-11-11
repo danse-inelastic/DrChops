@@ -1,0 +1,36 @@
+# ------------- Modify these -------------
+set ( SRC_FILES 
+  ${PYBINDING_NAME}.cc
+  IpixE2IphiE_bdgs.cc
+  Itof2IE_batch_bdgs.cc
+  Zt2Zxy_bdgs.cc
+  bindings.cc
+  exceptions.cc
+  misc.cc
+  numpy_support.cc
+  )
+# ----------------------------------------
+
+# alias
+set ( MOD_NAME ${PYBINDING_NAME} )
+
+# create empty portinfo (pyre-config thing)
+execute_process(
+  COMMAND ${CMAKE_COMMAND} -E touch ${CMAKE_BINARY_DIR}/lib/include/portinfo
+)
+
+# -D
+add_definitions(-DUSE_DANSE_NAMESPACE )
+
+# -I and -L
+include_directories(${PYTHON_INCLUDE_DIRS})
+include_directories(${CMAKE_BINARY_DIR}/lib/include)
+include_directories( ${DEPLOYMENT_PREFIX}/include )
+link_directories(${CMAKE_BINARY_DIR}/lib)
+
+# compile shared library
+add_library(${MOD_NAME} SHARED ${SRC_FILES})
+target_link_libraries(${MOD_NAME} ${PYTHON_LIBRARY} -l"${LIB_NAME}")
+set_target_properties(${MOD_NAME} PROPERTIES PREFIX "") # dont need "lib" prefix
+set_target_properties(${MOD_NAME} PROPERTIES LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/python/modules/${PROJECT_NAME}") # install to python directory
+set_target_properties(${MOD_NAME} PROPERTIES SKIP_BUILD_RPATH "ON")
