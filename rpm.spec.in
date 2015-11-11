@@ -32,7 +32,7 @@ cd ..
 rm -rf build_tree
 mkdir build_tree
 cd build_tree
-cmake -DCMAKE_INSTALL_PREFIX=%{rpmprefix} ../%{srcdirname}
+cmake -DCMAKE_INSTALL_PREFIX=%{rpmprefix} -DDEPLOYMENT_PREFIX=%{prefix} ../%{srcdirname}
 make
 
 %install 
