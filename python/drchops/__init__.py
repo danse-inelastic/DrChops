@@ -1,21 +1,10 @@
 #!/usr/bin/env python
 # 
-#  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# 
-#                                    Jiao Lin
-#                        California Institute of Technology
-#                        (C) 2005-2008  All Rights Reserved
-# 
-#  <LicenseText>
-# 
-#  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# 
+
+__version__ = "2.0.1"
 
 def copyright():
-    return "drchops pyre module: Copyright (c) 2005-2008 Jiao Lin";
+    return "drchops python module: Copyright (c) 2005-2016 Jiao Lin";
 
-
-# version
-__id__ = "$Id$"
 
 #  End of file 
