@@ -1,7 +1,7 @@
 cmake_minimum_required (VERSION 2.6)
 project (drchops)
 
-set(VERSION "2.0alpha")
+set(VERSION "2.0.2")
 set(AUTHOR "Jiao Lin")
 set(AUTHOR_EMAILE "jiao.lin@gmail.com")
 set(VENDOR "DANSE")
@@ -9,7 +9,7 @@ set(SUMMARY "Direct geometry TOF neutron spectrometer reduction")
 set(LICENSE "BSD")
 set(RPM_APP_GROUP "Development/Tools")
 set(GITHUB_URL "https://github.com/danse-inelastic/DrChops")
-set(GITHUB_BRANCH "2-alpha")
+set(GITHUB_BRANCH "2.0.2")
 set (HOMEPAGE ${GITHUB_URL})
 
 # packaging with the help of docker and packagecloud
