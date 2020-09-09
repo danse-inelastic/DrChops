@@ -1,0 +1,45 @@
+sudo: false
+# dist: trusty
+
+language: python
+
+python:
+  - 2.7
+
+branches:
+  only:
+    - 2-alpha
+
+before_install:
+  - if [[ ${TRAVIS_PYTHON_VERSION:0:1} == "2" ]]; then wget http://repo.continuum.io/miniconda/Miniconda2-latest-Linux-x86_64.sh -O miniconda.sh; else wget http://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh; fi
+  - chmod +x miniconda.sh
+  - ./miniconda.sh -b -p /home/travis/mc
+  - export PATH=/home/travis/mc/bin:$PATH
+
+install:
+  - export GIT_FULL_HASH=`git rev-parse HEAD`
+  - export GIT_VER=`git describe --tags`
+  - export VERSION=`python -c "print '$GIT_VER'.split('-')[0][1:]"`
+  - echo ${TRAVIS_PYTHON_VERSION}
+  - conda config --set always_yes true
+  - conda update conda
+  - conda config --add channels conda-forge
+  - conda config --add channels mcvine
+  - conda create -n testenv python=$TRAVIS_PYTHON_VERSION anaconda-client future pytest gxx_linux-64=7 cmake numpy danse.ins journal histogram pyre
+  - source activate testenv
+  - conda config --set anaconda_upload no
+  - export SRC=$PWD
+  - export PREFIX=$CONDA_PREFIX
+  - mkdir build
+  - cd build
+  - cmake -DCONDA_BUILD=TRUE -DCMAKE_INSTALL_PREFIX=$PREFIX -DDEPLOYMENT_PREFIX=$PREFIX .. && make && make install
+  - cd -
+
+script:
+  - cd tests
+  - python -c "import drchops.drchops"
+
+notifications:
+  email:
+    on_success: change
+    on_failure: always
