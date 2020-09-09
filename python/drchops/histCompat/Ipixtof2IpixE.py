@@ -51,7 +51,7 @@ def Ipixtof2IpixE(
     # make sure input histogram has the right unit
     Iunit = Ipixtof.unit()
     try: Iunit + 1
-    except: raise RuntimeError, "intensities of I(*,tof) histogram should be unitless"
+    except: raise RuntimeError("intensities of I(*,tof) histogram should be unitless")
 
     import drchops.units as units
     microsecond = units.time.microsecond
@@ -70,7 +70,7 @@ def Ipixtof2IpixE(
 
     if IpixE is None:
         if Eaxis is None:
-            raise ValueError, "Neither IpixE nor Eaxis is supplied"
+            raise ValueError("Neither IpixE nor Eaxis is supplied")
         from histogram import histogram
         IpixE = histogram('I(pix,E)', pixaxes+[Eaxis])
     else:
