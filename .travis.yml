@@ -37,7 +37,7 @@ install:
 
 script:
   - cd tests
-  - python -c "import drchops.drchops"
+  - python -c "import drchops"
 
 notifications:
   email:
