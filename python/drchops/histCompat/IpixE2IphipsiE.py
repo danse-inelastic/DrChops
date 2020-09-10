@@ -52,18 +52,18 @@ def IpixE2IphipsiE(
 
     Iunit = IpixE.unit()
     try: Iunit + 1
-    except: raise RuntimeError, "intensities of I(*,tof) histogram should be unitless"
+    except: raise RuntimeError("intensities of I(*,tof) histogram should be unitless")
     #
     saunit = solidangle_pix.unit()
     try: saunit + 1
-    except: raise RuntimeError, 'solid angle histogram should be unitless'
+    except: raise RuntimeError('solid angle histogram should be unitless')
 
     pixaxis = IpixE.axisFromName('pixelID')
     Eaxis = IpixE.axisFromName('energy')
 
     if IphipsiE is None:
         if phiaxis is None or psiaxis is None:
-            raise ValueError, "Neither IphipsiE nor (phiaxis,psiaxis) is supplied"
+            raise ValueError("Neither IphipsiE nor (phiaxis,psiaxis) is supplied")
         from histogram import histogram
         IphipsiE = histogram('I(phi,psi,E)', [phiaxis, psiaxis, Eaxis])
     else:

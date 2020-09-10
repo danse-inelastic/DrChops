@@ -29,7 +29,7 @@ set (CONDA_PKGING_BUILD_DEPS "numpy danse.ins journal histogram")
 set (CONDA_PKGING_RUN_DEPS "numpy danse.ins journal histogram pyre")
 
 # variables
-set (PYBINDING_NAME "${PROJECT_NAME}module")
+set (PYBINDING_NAME "_${PROJECT_NAME}")
 set (LIB_NAME "${PROJECT_NAME}")
 set (PKG_NAME "${PROJECT_NAME}")
 

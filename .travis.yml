@@ -5,6 +5,7 @@ language: python
 
 python:
   - 2.7
+  - 3.8
 
 branches:
   only:
@@ -37,7 +38,7 @@ install:
 
 script:
   - cd tests
-  - python -c "import drchops.drchops"
+  - python -c "import drchops"
 
 notifications:
   email:

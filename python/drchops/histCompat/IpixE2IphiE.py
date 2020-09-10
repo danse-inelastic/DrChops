@@ -48,7 +48,7 @@ def IpixE2IphiE(
     # make sure input histogram has the right unit
     Iunit = IpixE.unit()
     try: Iunit + 1
-    except: raise RuntimeError, "intensities of I(*,tof) histogram should be unitless"
+    except: raise RuntimeError("intensities of I(*,tof) histogram should be unitless")
 
     import drchops.units as units
     degree = units.angle.degree
@@ -63,7 +63,7 @@ def IpixE2IphiE(
 
     if IphiE is None:
         if phiaxis is None:
-            raise ValueError, "Neither IphiE nor phiaxis is supplied"
+            raise ValueError("Neither IphiE nor phiaxis is supplied")
         from histogram import histogram
         IphiE = histogram('I(phi,E)', [phiaxis, Eaxis])
     else:

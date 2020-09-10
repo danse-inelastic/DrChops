@@ -23,7 +23,7 @@ execute_process(
 add_definitions(-DUSE_DANSE_NAMESPACE )
 
 # -I and -L
-execute_process(COMMAND python -c "import numpy, os; print os.path.join(os.path.dirname(numpy.__file__), 'core', 'include')" OUTPUT_VARIABLE NUMPY_INCLUDE_DIR)
+execute_process(COMMAND python -c "from __future__ import print_function; import numpy, os; print(os.path.join(os.path.dirname(numpy.__file__), 'core', 'include'))" OUTPUT_VARIABLE NUMPY_INCLUDE_DIR)
 include_directories( ${PYTHON_INCLUDE_DIRS} ${NUMPY_INCLUDE_DIR})
 include_directories(${CMAKE_BINARY_DIR}/lib/include)
 include_directories( ${DEPLOYMENT_PREFIX}/include )
