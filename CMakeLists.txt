@@ -1,7 +1,7 @@
 cmake_minimum_required (VERSION 2.6)
 project (drchops)
 
-set(VERSION "2.0.2")
+set(VERSION "2.0.3")
 set(AUTHOR "Jiao Lin")
 set(AUTHOR_EMAILE "jiao.lin@gmail.com")
 set(VENDOR "DANSE")
