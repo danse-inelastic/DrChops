@@ -54,7 +54,7 @@ set(CMAKE_MODULE_PATH ${PROJECT_BINARY_DIR}/cmake_utils)
 include(System)
 
 # ABI
-add_definitions(-D_GLIBCXX_USE_CXX11_ABI=0)
+# add_definitions(-D_GLIBCXX_USE_CXX11_ABI=0)
 
 #list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}")
 
